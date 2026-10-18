@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "modelDirs": ["models/opt/", "models/"],
+  "models": {
+    "merchant":     { "candidates": ["merchant", "npc_elder"], "anims": ["idle", "walk", "run"], "height": 1.75, "yaw": -90, "core": true },
+    "berserker":    { "candidates": ["hero_warrior"], "anims": ["idle", "walk", "run"], "height": 1.85, "yaw": -90, "core": true },
+    "elementalist": { "candidates": ["hero_mage", "hero_shaman"], "anims": ["idle", "walk", "run"], "height": 1.75, "yaw": -90 },
+    "juggernaut":   { "candidates": ["hero_sura"], "anims": ["idle", "walk", "run"], "height": 2.0, "yaw": -90 },
+    "golem":        { "candidates": ["mob_golem"], "anims": ["idle", "walk"], "height": 2.1, "yaw": -90 },
+    "anvil":        { "candidates": ["workstation_anvil"], "height": 1.1 },
+    "tree":         { "candidates": ["prop_tree"], "height": 6.5 },
+    "rock":         { "candidates": ["prop_rock"], "height": 1.3 },
+    "tower":        { "candidates": ["bld_tower"], "height": 5.5 },
+    "shrine":       { "candidates": ["prop_shrine"], "height": 3.2 }
+  },
+  "audio": {
+    "coin": "audio/coin.mp3", "pop": "audio/pop.mp3", "drop": "audio/stack_drop.mp3", "anvil": "audio/anvil.mp3", "brew": "audio/brew.mp3",
+    "scribe": "audio/scribe.mp3", "fling": "audio/coin_fling.mp3", "padFill": "audio/pad_fill.mp3", "unlock": "audio/unlock.mp3",
+    "angry": "audio/angry.mp3", "golemStep": "audio/golem_step.mp3", "frenzy": "audio/frenzy.mp3", "upgrade": "audio/upgrade.mp3",
+    "click": "audio/ui_click.mp3", "sale": "audio/quest_complete.mp3", "trash": "audio/potion.mp3", "fanfare": "audio/victory.mp3"
+  },
+  "music": { "sanctuary": ["audio/bgm_sanctuary.mp3", "audio/bgm_field.mp3"], "title": ["audio/bgm_title.mp3"] },
+  "voice": {
+    "berserker_need": "audio/voice/berserker_need_{lang}.mp3", "berserker_lane": "audio/voice/berserker_lane_{lang}.mp3",
+    "berserker_angry": "audio/voice/berserker_angry_{lang}.mp3", "elementalist_need": "audio/voice/elementalist_need_{lang}.mp3",
+    "elementalist_tome": "audio/voice/elementalist_tome_{lang}.mp3", "elementalist_angry": "audio/voice/elementalist_angry_{lang}.mp3",
+    "juggernaut_need": "audio/voice/juggernaut_need_{lang}.mp3", "juggernaut_angry": "audio/voice/juggernaut_angry_{lang}.mp3",
+    "merchant_sale1": "audio/voice/merchant_sale1_{lang}.mp3", "merchant_sale2": "audio/voice/merchant_sale2_{lang}.mp3",
+    "merchant_sale3": "audio/voice/merchant_sale3_{lang}.mp3", "merchant_unlock": "audio/voice/merchant_unlock_{lang}.mp3"
+  },
+  "video": { "intro": "img/intro_web.mp4", "victory": "img/victory_web.mp4" },
+  "icons": {
+    "blade": "img/item_blade.webp", "flask": "img/item_flask.webp", "shield": "img/item_shield.webp", "tome": "img/item_tome.webp",
+    "golem": "img/icon_golem.webp", "frenzy": "img/icon_frenzy.webp", "coin": "img/icon_coin.webp"
+  }
+}

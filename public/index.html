@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Sanctuary Merchant</title><meta name="description" content="Forge rune blades, stack potions and serve impatient champions in this 3D fantasy arcade idle shop game.">
+<meta name="theme-color" content="#1b2418">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<style>
+:root{--gold:#ffd27a;--ink:#1b2418;--panel:rgba(20,24,18,.78);--line:rgba(255,210,122,.45)}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--ink);color:#fff;font:600 15px/1.3 Nunito,system-ui,sans-serif;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+canvas#game{position:fixed;inset:0;width:100%;height:100%;display:block}
+#labels{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:4}
+button{font:inherit;cursor:pointer;border:0}
+/* world labels */
+.wlabel{position:absolute;left:0;top:0;white-space:nowrap;font:800 12px Nunito;text-shadow:0 1px 3px #000,0 0 2px #000;color:#f6eedd;will-change:transform}
+.wlabel.small{opacity:.85}.wlabel.zone{display:none}
+.wlabel.pad{display:flex;flex-direction:column;align-items:center;font:900 18px Nunito;color:var(--gold)}
+.wlabel.pad img{width:20px;height:20px;vertical-align:-4px;margin-right:3px}.wlabel.pad small{font:800 11px Nunito;color:#f6eedd}
+.bubble{position:absolute;left:0;top:0;display:flex;align-items:center;gap:4px;padding:4px 8px 4px 4px;border-radius:22px;background:#fffdf6;color:#3a2a18;box-shadow:0 3px 8px rgba(0,0,0,.4);font:900 14px Nunito;will-change:transform}
+.bubble::after{content:'';position:absolute;left:50%;bottom:-6px;margin-left:-6px;border:6px solid transparent;border-top-color:#fffdf6;border-bottom:0}
+.bubble svg{width:30px;height:30px;transform:rotate(-90deg)}.bubble circle{fill:none;stroke-width:5}.bubble .bg{stroke:#e8e0cc}.bubble .fg{stroke-linecap:round;transition:stroke-dashoffset .25s}
+.bubble .want{display:flex;align-items:center}.bubble img{width:28px;height:28px;object-fit:contain}
+.bubble b{font-size:20px;padding:0 4px}.bubble .mad{color:#e03a2a}.bubble .happy{color:#e8476a}
+.splat{position:absolute;transform:translate(-50%,-50%);font:900 20px Nunito;color:var(--gold);text-shadow:0 2px 0 #7a4a00,0 0 8px #000;animation:splat 1s ease-out forwards;pointer-events:none}
+.splat.tip{color:#7fffb0;font-size:18px}.splat.mad{color:#ff5a4a;font-size:30px}.splat.warn{color:#ff8a6a;font-size:16px}
+@keyframes splat{0%{opacity:0;margin-top:0;scale:.5}15%{opacity:1;scale:1.25}100%{opacity:0;margin-top:-60px;scale:1}}
+#stackBadge{position:fixed;left:0;top:0;z-index:5;pointer-events:none;padding:1px 8px;border-radius:10px;background:rgba(0,0,0,.6);font:900 13px Nunito}#stackBadge.full{background:#c0392b}
+/* HUD */
+#hud{position:fixed;inset:0;z-index:10;pointer-events:none}#hud>*{pointer-events:auto}
+#goldPill{position:absolute;top:max(10px,env(safe-area-inset-top));left:12px;display:flex;align-items:center;gap:8px;padding:6px 16px 6px 6px;border-radius:30px;background:var(--panel);border:2px solid var(--line);font:900 24px Nunito;color:var(--gold);text-shadow:0 2px 0 #5a3a00}
+#goldPill img{width:34px;height:34px;border-radius:50%}#goldPill.bump{animation:bump .25s}@keyframes bump{50%{transform:scale(1.15)}}
+#topBtns{position:absolute;top:max(10px,env(safe-area-inset-top));right:12px;display:flex;gap:8px}
+.ibtn{width:44px;height:44px;border-radius:50%;background:var(--panel);border:2px solid var(--line);color:#fff;font:900 15px Nunito}
+#boosts{position:absolute;right:12px;top:calc(max(10px,env(safe-area-inset-top)) + 58px);display:flex;flex-direction:column;gap:10px}
+.boost{position:relative;width:74px;padding:6px 4px 4px;border-radius:16px;background:linear-gradient(#5a3fb8,#30217a);border:2px solid #b8a4ff;color:#fff;text-align:center;font:900 11px Nunito;box-shadow:0 4px 0 #1a1048}
+.boost img{width:40px;height:40px;display:block;margin:0 auto 2px;object-fit:contain}.boost small{position:absolute;top:-8px;right:-6px;padding:1px 6px;border-radius:8px;background:#ffd27a;color:#3a2400;font:900 10px Nunito}
+.boost:disabled{filter:saturate(.4) brightness(.8)}.boost.golem{background:linear-gradient(#3f8a4a,#1f4a28);border-color:#9fffb0;box-shadow:0 4px 0 #0f2a14}
+#upgrades{position:absolute;left:50%;bottom:calc(max(14px,env(safe-area-inset-bottom)) + 60px);transform:translate(-50%,30px);opacity:0;pointer-events:none;transition:.25s;padding:12px;border-radius:18px;background:var(--panel);border:2px solid #9fffb0;width:min(420px,94vw)}
+#upgrades.show{transform:translate(-50%,0);opacity:1;pointer-events:auto}#upgrades h3{margin:0 0 8px;text-align:center;font:900 16px Cinzel;color:#9fffb0}
+#upList{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.up{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border-radius:12px;background:linear-gradient(#3f8a4a,#1f4a28);color:#fff;box-shadow:0 3px 0 #0f2a14}
+.up b{font-size:13px}.up .lv{font-size:11px;opacity:.85}.up .cost{font:900 15px Nunito;color:var(--gold);display:flex;align-items:center;gap:3px}.up .cost img{width:16px}.up:disabled{filter:grayscale(.7) brightness(.7)}
+#toast{position:absolute;left:50%;top:22%;transform:translateX(-50%) scale(.9);opacity:0;transition:.25s;padding:10px 18px;border-radius:14px;background:var(--panel);border:2px solid var(--line);font:800 16px Nunito;text-align:center;max-width:90vw;pointer-events:none}
+#toast.show{opacity:1;transform:translateX(-50%) scale(1)}
+#joy{position:fixed;z-index:9;width:110px;height:110px;margin:-55px 0 0 -55px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.35);pointer-events:none}
+#joy i{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px;border-radius:50%;background:rgba(255,210,122,.75)}
+/* title / overlays */
+#title{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:radial-gradient(ellipse at center,rgba(40,52,30,.82),rgba(12,16,10,.97));transition:opacity .5s}
+#title.gone{opacity:0}#title h1{margin:0;font:900 clamp(38px,9vw,84px) Cinzel;color:var(--gold);text-align:center;line-height:1;text-shadow:0 4px 0 #6b4a12,0 0 30px rgba(255,210,122,.4)}
+#title p{margin:0 0 18px;font:800 clamp(15px,3.5vw,20px) Nunito;color:#f6eedd}
+#loadBar{width:min(320px,70vw);height:10px;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden}#loadFill{height:100%;width:0;background:linear-gradient(90deg,#b8862f,var(--gold));transition:width .2s}
+#playBtn{padding:14px 56px;border-radius:40px;background:linear-gradient(#ffe39a,#d9a03a);color:#3a2400;font:900 28px Cinzel;box-shadow:0 6px 0 #7a4a00,0 0 30px rgba(255,210,122,.5);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{transform:scale(1.05)}}
+#resume{position:fixed;inset:0;z-index:25;display:grid;place-items:center;background:rgba(0,0,0,.55);font:900 24px Nunito}
+.cutscene{position:fixed;inset:0;z-index:40;background:#000;opacity:0;transition:opacity .45s;display:grid;place-items:center}.cutscene.show{opacity:1}
+.cutscene video{width:100%;height:100%;object-fit:cover}.cs-title{position:absolute;bottom:14%;font:900 clamp(28px,6vw,60px) Cinzel;color:var(--gold);text-shadow:0 3px 12px #000}
+.cs-skip{position:absolute;right:18px;bottom:18px;padding:8px 18px;border-radius:20px;background:rgba(0,0,0,.55);color:#fff;border:1px solid rgba(255,255,255,.4)}
+/* CrazyGames responsive banner slots */
+#crazygames-banner-container-leaderboard{position:fixed;left:50%;bottom:4px;transform:translateX(-50%);width:728px;height:90px;z-index:8}
+@media(max-width:600px){#goldPill{font-size:20px}#goldPill img{width:28px;height:28px}.boost{width:64px}.boost img{width:34px;height:34px}}
+</style></head><body>
+<canvas id="game"></canvas><div id="labels"></div><div id="stackBadge" hidden></div><div id="joy" hidden><i></i></div>
+<div id="hud" hidden>
+  <div id="goldPill"><img id="coinIcon" alt=""><span id="gold">0</span></div>
+  <div id="topBtns"><button class="ibtn" id="langBtn">EN</button><button class="ibtn" id="muteBtn">🔊</button></div>
+  <div id="boosts">
+    <button class="boost" id="frenzyBtn"><img alt=""><span data-t="frenzy"></span><small>AD</small></button>
+    <button class="boost golem" id="golemBtn"><img alt=""><span data-t="hireGolem"></span><small>AD</small></button>
+  </div>
+  <div id="upgrades"><h3 data-t="upgrades"></h3><div id="upList"></div></div>
+  <div id="toast"></div>
+</div>
+<div id="title"><h1 data-t="title"></h1><p data-t="subtitle"></p><div id="loadBar"><div id="loadFill"></div></div><button id="playBtn" data-t="play" hidden></button></div>
+<div id="resume" hidden data-t="resume"></div>
+<div id="crazygames-banner-container-leaderboard" hidden></div>
+<script type="module" src="./main.js"></script>
+</body></html>

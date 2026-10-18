@@ -8,7 +8,7 @@ A = os.path.join(ROOT, 'public', 'assets')
 ENV = dict(l.strip().split('=', 1) for l in open(os.path.join(ROOT, '.env')) if '=' in l and not l.startswith('#'))
 TRIPO, ELEVEN, HIGGS = ENV['TRIPO_API_KEY'], ENV['ELEVENLABS_API_KEY'], ENV['HIGGSFIELD_API_KEY']
 TRIPO_MIN_BALANCE = int(ENV.get('TRIPO_MIN_BALANCE', 30))
-STYLE = ''  # appended to every Tripo prompt
+STYLE = 'stylized high-fantasy game asset, hand-painted PBR textures, readable silhouette'  # appended to every Tripo prompt
 
 def log(*a): print(time.strftime('%H:%M:%S'), *a, flush=True)
 
@@ -55,7 +55,11 @@ def tripo_task(payload, wait=1800):
 def out_url(o): return o.get('pbr_model') or o.get('model') or o.get('base_model')
 
 # name, prompt, rig type (None = static), animations
-MODELS = []
+MODELS = [  # Sanctuary Merchant: generated when Tripo has credits; the game falls back to existing models until then
+    ('merchant', 'friendly fantasy merchant artisan in leather apron over blue robes, rolled sleeves, belt of tools, T-pose, full body', 'biped', ['idle', 'walk', 'run']),
+    ('workstation_anvil', 'blacksmith anvil on a tree stump with hammer and glowing hot metal, game asset', None, []),
+    ('hero_mage', 'young elementalist mage in flowing violet robes with glowing rune staff, T-pose, full body', 'biped', ['idle', 'walk', 'run']),
+]
 FACES = {}  # per-model face_limit overrides; default 6000 (9000 for names starting with bld_)
 
 def gen_model(name, prompt, rig, anims):
@@ -82,8 +86,28 @@ def gen_model(name, prompt, rig, anims):
 # ---------------- ElevenLabs ----------------
 EB = 'https://api.elevenlabs.io/v1'
 EH = {'xi-api-key': ELEVEN, 'Accept': 'audio/mpeg'}
-SFX = {}    # name: (prompt, seconds)
-MUSIC = {}  # name: prompt
+SFX = {    # name: (prompt, seconds)
+    'pop': ('short satisfying cartoon pop for picking up an item', 0.5), 'stack_drop': ('light wooden clack of an item placed on a counter', 0.5),
+    'anvil': ('blacksmith hammer striking an anvil once, ringing metal', 1), 'brew': ('magical bubbling potion brewing with sparkle', 1.5),
+    'scribe': ('quill scratching on parchment with a soft magic shimmer', 1.2), 'coin_fling': ('handful of gold coins tossed and clinking on stone floor', 1.2),
+    'pad_fill': ('rising magical charging tone', 1.5), 'unlock': ('triumphant magical unlock fanfare with sparkles', 2.5), 'angry': ('frustrated warrior huff and grumble', 1),
+    'golem_step': ('heavy stone golem footstep thud', 0.6), 'frenzy': ('energetic magical power-up whoosh', 1.5), 'upgrade': ('ascending chime power upgrade', 1.2),
+}
+MUSIC = {  # name: prompt
+    'bgm_sanctuary': 'Cozy upbeat fantasy shop music, lute, harp, light percussion and flute, warm and cheerful, seamless loop for an idle game',
+}
+VOICE = 'JBFqnCBsd6RMkjVDRZzb'  # fallback narrator voice
+VOICES = {'berserker': 'pNInz6obpgDQGcFmaJgB', 'elementalist': 'EXAVITQu4vr4xnSDxMaL', 'juggernaut': 'VR6AewLTigWG4xSOukaG', 'merchant': 'JBFqnCBsd6RMkjVDRZzb'}
+VO = {  # voice/<name>_<lang>.mp3: (speaker, EN, TR)
+    'berserker_need': ('berserker', 'I need steel! Now!', 'Çelik lazım! Hemen!'), 'berserker_lane': ('berserker', 'The lane is falling! Hurry up!', 'Koridor düşüyor! Acele et!'),
+    'berserker_angry': ('berserker', 'Too slow! I will fight with my fists!', 'Çok yavaş! Yumruklarımla savaşırım!'),
+    'elementalist_need': ('elementalist', 'My mana runs dry!', 'Manam tükeniyor!'), 'elementalist_tome': ('elementalist', 'A tome of spells, if you please.', 'Bir büyü kitabı lütfen.'),
+    'elementalist_angry': ('elementalist', 'Unbelievable. I will find another sanctuary.', 'İnanılmaz. Başka bir sığınak bulurum.'),
+    'juggernaut_need': ('juggernaut', 'A shield. A big one.', 'Bir kalkan. Büyük olsun.'), 'juggernaut_angry': ('juggernaut', 'Hmph. No shield, no glory.', 'Hıh. Kalkan yoksa zafer de yok.'),
+    'merchant_sale1': ('merchant', 'Another satisfied champion!', 'Bir şampiyon daha memnun!'), 'merchant_sale2': ('merchant', 'Steel for the brave, gold for the shop!', 'Cesurlara çelik, dükkana altın!'),
+    'merchant_sale3': ('merchant', 'Pleasure doing business. Now go win that lane!', 'Sizinle iş yapmak güzel. Şimdi git o koridoru kazan!'),
+    'merchant_unlock': ('merchant', 'Oh, look at that! The sanctuary grows!', 'Şuna bak! Sığınak büyüyor!'),
+}
 
 def gen_sfx(name, text, dur):
     p = os.path.join(A, 'audio', f'{name}.mp3')
@@ -99,6 +123,14 @@ def gen_music(name, prompt):
         log('music api failed, falling back to sound-generation', name, e)
         save(p, req(f'{EB}/sound-generation', {'text': prompt, 'duration_seconds': 22}, EH, raw=True))
 
+def gen_vo(name, who, en, tr):
+    for lang, text in (('en', en), ('tr', tr)):
+        p = os.path.join(A, 'audio', 'voice', f'{name}_{lang}.mp3')
+        if os.path.exists(p): continue
+        try: b = req(f'{EB}/text-to-speech/{VOICES.get(who, VOICE)}', {'text': text, 'model_id': 'eleven_multilingual_v2'}, EH, raw=True)
+        except RuntimeError: b = req(f'{EB}/text-to-speech/{VOICE}', {'text': text, 'model_id': 'eleven_multilingual_v2'}, EH, raw=True)
+        save(p, b)
+
 # ---------------- Higgsfield ----------------
 HB = 'https://platform.higgsfield.ai'
 HH = {'Authorization': f'Key {HIGGS}'}
@@ -113,13 +145,34 @@ def higgs(model, payload, wait=900):
         if d['status'] in ('failed', 'nsfw', 'cancelled'): raise RuntimeError(f'higgsfield {d["status"]}')
     raise TimeoutError(model)
 
-IMAGES = {}  # name: (prompt, aspect ratio)
+ICON = 'single game item icon centered, bold readable silhouette, soft glow, plain dark background, no text, stylized fantasy'
+IMAGES = {  # name: (prompt, aspect ratio)
+    'item_blade': ('rune-engraved steel short sword glowing blue runes, ' + ICON, '1:1'), 'item_flask': ('round glass flask of red vitality potion, glowing, ' + ICON, '1:1'),
+    'item_shield': ('large tower shield of steel with gold rim, ' + ICON, '1:1'), 'item_tome': ('arcane spell tome with glowing purple runes and brass clasp, ' + ICON, '1:1'),
+    'icon_golem': ('friendly small stone golem worker with glowing eyes, ' + ICON, '1:1'), 'icon_frenzy': ('lightning bolt boot with speed lines, ' + ICON, '1:1'),
+    'icon_coin': ('single shiny gold coin with a crown emblem, ' + ICON, '1:1'),
+}
+VIDEOS = {  # name: (still-image prompt, motion prompt) -> img/<name>.mp4
+    'intro': ('Wide cinematic view from a glowing fantasy sanctuary base over a battlefield with three lanes, distant towers, champions charging, magic flashes, '
+              'golden hour, stylized high-fantasy painting', 'fast cinematic push over the battlefield, banners waving, spell flashes'),
+    'victory': ('Cozy fantasy merchant sanctuary shop overflowing with gold coins, glowing runes, happy heroes cheering, warm magical light, stylized high-fantasy painting',
+                'celebratory gold coins raining and sparkles swirling, gentle camera push in'),
+}
 
 def gen_image(name, prompt, ar):
     p = os.path.join(A, 'img', f'{name}.png')
     if os.path.exists(p) or os.path.exists(p[:-4] + '.webp'): return  # icons are shipped as downscaled .webp
     d = higgs('higgsfield-ai/soul/standard', {'prompt': prompt, 'aspect_ratio': ar, 'resolution': '1080p' if ar != '1:1' else '720p'})
     save(p, req(d['images'][0]['url'], raw=True))
+
+def gen_video(name, still, motion):
+    p = os.path.join(A, 'img', f'{name}.mp4')
+    if os.path.exists(p): return
+    d = higgs('higgsfield-ai/soul/standard', {'prompt': still, 'aspect_ratio': '16:9', 'resolution': '1080p'})
+    save(p.replace('.mp4', '.png'), req(d['images'][0]['url'], raw=True))
+    v = higgs('higgsfield-ai/dop/standard', {'image_url': d['images'][0]['url'], 'prompt': motion, 'duration': 3}, wait=1800)
+    url = (v.get('video') or {}).get('url') or (v.get('videos') or [{}])[0].get('url')
+    if url: save(p, req(url, raw=True))
 
 def gen_hero_video():
     p = os.path.join(A, 'img', 'keyart.mp4')
@@ -139,9 +192,9 @@ if __name__ == '__main__':
     what = sys.argv[1] if len(sys.argv) > 1 else 'all'
     jobs = []
     if what in ('audio', 'all'):
-        jobs += [(gen_sfx, k, *v) for k, v in SFX.items()] + [(gen_music, k, v) for k, v in MUSIC.items()]
+        jobs += [(gen_sfx, k, *v) for k, v in SFX.items()] + [(gen_music, k, v) for k, v in MUSIC.items()] + [(gen_vo, k, *v) for k, v in VO.items()]
     if what in ('images', 'all'):
-        jobs += [(gen_image, k, *v) for k, v in IMAGES.items()] + [(gen_hero_video,)]
+        jobs += [(gen_image, k, *v) for k, v in IMAGES.items()] + [(gen_hero_video,)] + [(gen_video, k, *v) for k, v in VIDEOS.items()]
     if jobs: run(jobs, 4)
     if what in ('models', 'all'):  # sequential so the balance guard is accurate
         for m in MODELS:

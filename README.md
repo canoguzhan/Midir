@@ -1,13 +1,26 @@
-# Midir
+# Sanctuary Merchant
 
-A fresh start: no game code yet. These pieces are already in place:
+A 3D arcade-idle game that runs in the browser, built with Three.js for the CrazyGames portal. You play the Sanctuary Artisan: craft weapons, potions and spell tomes, carry them stacked on your head, and serve impatient fantasy champions before they charge into lane. Mouse, keyboard and touch are all supported, in English and Turkish.
 
-- **`public/assets/`** — every asset generated so far (`models/` GLB files, `img/`, `audio/`).
-- **`tools/gen_assets.py`** — the asset pipeline: Tripo3D (models, optionally rigged and animated), ElevenLabs (sound effects and music) and Higgsfield (images and key-art video). Fill in `MODELS`, `SFX`, `MUSIC` and `IMAGES`, then run `python3 tools/gen_assets.py [models|audio|images|all]`. It skips anything that already exists. API keys go in `.env` (see `.env.example`).
-- **Hosting**
-  - `deploy/midir.service`: a systemd unit that runs `server.py` on 127.0.0.1:8080.
-  - `deploy/Caddyfile`: HTTPS and WSS via Caddy.
-  - `vercel.json`: serves `public/` and proxies `/api` to the VPS.
-  - `public/config.js`: tells the client where the API and WebSocket live.
-  - `Dockerfile`: an alternative way to deploy the server.
-- **`tools/autocommit.sh`** — the Claude Code Stop hook that commits and pushes after each turn.
+## Files (`public/`)
+| File | Role |
+|---|---|
+| `index.html` | Game shell, HUD, title screen, CrazyGames banner container |
+| `main.js` | Bootstrap: SDK, then loading progress, title, intro cutscene and play; also the DOM HUD |
+| `GameEngine.js` | World, input (WASD and floating joystick), item stacking physics, stations, customers, coins, pads, golems, upgrades, effects |
+| `AssetManager.js` | Reads `assets/manifest.json`, loads Tripo3D GLBs and their animation clips with procedural fallbacks, reports progress |
+| `CrazyGamesBridge.js` | CrazyGames SDK v3: lifecycle events, midgame and rewarded ads, banners, cloud saves (all no-ops elsewhere) |
+| `SoundManager.js` | Web Audio sound effects with HTML5 Audio fallback, synthesised fallbacks, music, ElevenLabs voice barks |
+| `HiggsfieldCutscene.js` | Fades a video overlay in, allows skipping, then hands control back to the game |
+| `AIServiceBridge.js` | Hook for runtime Tripo3D generation through the server proxy, off by default |
+
+## Assets
+- `tools/gen_assets.py` generates models (Tripo3D), sound effects, music and EN/TR voice lines (ElevenLabs), and icons and cutscenes (Higgsfield). It skips anything that already exists. Keys go in `.env`.
+- `tools/optimize_models.sh` compresses GLBs into `public/assets/models/opt/` (about 10× smaller) and writes `models/index.json`. Run it after generating new models.
+- `public/assets/manifest.json` maps game roles to files. Each model lists candidates, and the first one that exists wins. So once Tripo generates `merchant.glb`, it replaces the stand-in automatically.
+
+## Run
+```bash
+python3 server.py        # http://localhost:8080 (static files; Tripo proxy only when TRIPO_PROXY=1 in .env)
+```
+Gameplay numbers (item prices, craft times, pad costs, customer patience, upgrade costs) are at the top of `GameEngine.js`.
