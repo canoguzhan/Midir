@@ -1,0 +1,11 @@
+{
+  "buildCommand": "",
+  "outputDirectory": "public",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "https://104-207-80-220.sslip.io/api/:path*" }
+  ],
+  "headers": [
+    { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }] }
+  ]
+}

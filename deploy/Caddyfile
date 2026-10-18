@@ -1,0 +1,4 @@
+104-207-80-220.sslip.io {
+	encode gzip
+	reverse_proxy 127.0.0.1:8080
+}

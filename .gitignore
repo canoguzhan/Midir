@@ -1,0 +1,6 @@
+.env
+data/
+*.part
+__pycache__/
+__pycache__/
+*.part
