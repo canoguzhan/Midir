@@ -170,7 +170,8 @@ def gen_video(name, still, motion, secs, style, game):
 
 
 # ---------------- CrazyGames covers (submission form, not shipped in the zip) ----------------
-COVERS = {'landscape': ('16:9', (1920, 1080)), 'portrait': ('2:3', (800, 1200)), 'square': ('1:1', (800, 800))}
+COVERS = {'landscape': ('16:9', (1920, 1080)), 'portrait': ('2:3', (800, 1200)), 'square': ('1:1', (800, 800)),
+          'keyart': ('16:9', (1920, 1080))}  # keyart: same scene without the title, for website heroes and press
 FONTS = ['/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', '/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf']
 
 
@@ -208,7 +209,8 @@ def gen_covers(gdir, prompt, title):
         except RuntimeError:
             if ar != '2:3': raise
             url = higgs_image(p, '3:4')  # fallback aspect, cropped to 2:3 below
-        im = title_overlay(fit_crop(Image.open(io.BytesIO(req(url, raw=True))).convert('RGB'), size), title)
+        im = fit_crop(Image.open(io.BytesIO(req(url, raw=True))).convert('RGB'), size)
+        if kind != 'keyart': im = title_overlay(im, title)
         os.makedirs(os.path.dirname(out), exist_ok=True); im.save(out, 'PNG')
         log('saved', os.path.relpath(out, ROOT), f'{size[0]}x{size[1]}')
 

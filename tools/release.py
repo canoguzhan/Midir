@@ -39,7 +39,8 @@ def ensure_covers(gdir, work, title):
         if not os.path.exists(src):  # fallback: crop a gameplay screenshot and draw the title
             shot = os.path.join(work, 'screenshots', '03.png')
             if not os.path.exists(shot): raise SystemExit(f'no covers/{kind}.png and no screenshot to compose one from')
-            im = factory.title_overlay(factory.fit_crop(Image.open(shot).convert('RGB'), size), title)
+            im = factory.fit_crop(Image.open(shot).convert('RGB'), size)
+            if kind != 'keyart': im = factory.title_overlay(im, title)
             os.makedirs(os.path.dirname(src), exist_ok=True); im.save(src); log('composed', os.path.relpath(src, ROOT))
         out[kind] = src
     return out
@@ -161,7 +162,7 @@ table{{width:100%;border-collapse:collapse;background:var(--panel);border-radius
 .vids{{display:grid;grid-template-columns:16fr 7fr;gap:12px}}@media (max-width:640px){{.vids{{grid-template-columns:1fr}}}}
 video{{width:100%;border-radius:10px;background:#000}}figure{{margin:0}}figcaption{{color:var(--dim);font-size:14px}}
 </style></head><body><main>
-<div class="hero"><img src="{e(media["covers"]["landscape"])}" alt="{e(meta["title"])} key art"></div>
+<div class="hero"><img src="{e(media["keyart"])}" alt="{e(meta["title"])} key art"></div>
 <img class="logo" src="logo.png" alt="{e(meta["title"])} logo">
 <div class="date">Press release · {time.strftime("%B %d, %Y")} · {e(studio["name"])}</div>
 <h1>{e(p.get("headline", meta["title"]))}</h1>
@@ -193,6 +194,7 @@ def main():
     if '--skip-capture' not in sys.argv or not have_frames:
         run(['node', os.path.join(ROOT, 'tools', 'capture.mjs'), slug, work, '--shots', '--video', f'--fps={FPS}', f'--seconds={SECONDS}'])
     covers = ensure_covers(gdir, work, title)
+    keyart = covers.pop('keyart')  # text-free art: press kit key art + website hero; the other three are the submission covers
 
     pkg_name = f'{title} - CrazyGames Package'
     stage = os.path.join(gdir, 'dist', 'package', pkg_name)
@@ -207,7 +209,7 @@ def main():
     make_video(os.path.join(work, 'frames-landscape'), covers['landscape'], (1920, 1080), videos['landscape'])
     make_video(os.path.join(work, 'frames-portrait'), covers['portrait'], (1080, 1620), videos['portrait'])
     make_logo(title, os.path.join(d['6-press-kit'], 'logo.png'))
-    shutil.copy(covers['landscape'], os.path.join(d['6-press-kit'], 'key-art-1920x1080.png'))
+    shutil.copy(keyart, os.path.join(d['6-press-kit'], 'key-art-1920x1080.png'))
     md = press_markdown(meta, studio)
     open(os.path.join(d['6-press-kit'], 'press-release.md'), 'w').write(md)
     open(os.path.join(d['6-press-kit'], 'fact-sheet.md'), 'w').write(f'# {title}: fact sheet\n\n' + '\n'.join(f'- **{k}:** {v}' for k, v in facts(meta, studio) if v) + '\n')
@@ -216,7 +218,7 @@ def main():
     open(os.path.join(stage, 'README.txt'), 'w').write(README.format(title=title, studio=studio['name'], version=version, date=date, files=n_files, size=size))
 
     # press page inside the package (relative links to the package folders)
-    media_pkg = {'covers': {k: f'../3-covers/{COVER_FILES[k]}' for k in covers}, 'screenshots': [f'../5-screenshots/screenshot-{i:02d}.png' for i in range(1, len(shots) + 1)],
+    media_pkg = {'keyart': 'key-art-1920x1080.png', 'covers': {k: f'../3-covers/{COVER_FILES[k]}' for k in covers}, 'screenshots': [f'../5-screenshots/screenshot-{i:02d}.png' for i in range(1, len(shots) + 1)],
                  'videos': {'Landscape 1920x1080': '../4-preview-video/preview-landscape-1920x1080.mp4', 'Portrait 1080x1620': '../4-preview-video/preview-portrait-1080x1620.mp4'}}
     open(os.path.join(d['6-press-kit'], 'press-release.html'), 'w').write(press_html(meta, studio, media_pkg, [('Upload build (.zip)', f'../1-upload/{slug}.zip')]))
 
@@ -235,16 +237,16 @@ def main():
     for k, src in covers.items(): shutil.copy(src, os.path.join(pk, COVER_FILES[k]))
     for i, f in enumerate(shots, 1): shutil.copy(os.path.join(work, 'screenshots', f), os.path.join(pk, f'screenshot-{i:02d}.png'))
     for k, v in videos.items(): shutil.copy(v, os.path.join(pk, os.path.basename(v)))
-    for f in ('logo.png', 'press-release.md', 'fact-sheet.md'): shutil.copy(os.path.join(d['6-press-kit'], f), os.path.join(pk, f))
+    for f in ('logo.png', 'press-release.md', 'fact-sheet.md', 'key-art-1920x1080.png'): shutil.copy(os.path.join(d['6-press-kit'], f), os.path.join(pk, f))
     shutil.copy(os.path.join(d['2-store-listing'], 'store-listing.txt'), os.path.join(pk, 'store-listing.txt'))
-    media_pub = {'covers': {k: COVER_FILES[k] for k in covers}, 'screenshots': [f'screenshot-{i:02d}.png' for i in range(1, len(shots) + 1)],
+    media_pub = {'keyart': 'key-art-1920x1080.png', 'covers': {k: COVER_FILES[k] for k in covers}, 'screenshots': [f'screenshot-{i:02d}.png' for i in range(1, len(shots) + 1)],
                  'videos': {'Landscape 1920x1080': os.path.basename(videos['landscape']), 'Portrait 1080x1620': os.path.basename(videos['portrait'])}}
     links = [(f'Full package (.zip, {mb(full):.0f} MB)', f'../{slug}-full-package.zip'), (f'Upload build (.zip, {mb(upload):.1f} MB)', f'../{slug}-crazygames-upload.zip'),
              ('Store listing (.txt)', 'store-listing.txt'), ('Press release (.md)', 'press-release.md')]
     open(os.path.join(pk, 'index.html'), 'w').write(press_html(meta, studio, media_pub, links))
     write_json(os.path.join(tmp, 'release.json'), {
         'title': title, 'slug': slug, 'version': version, 'date': date, 'description': meta.get('description', ''), 'category': meta.get('category', ''),
-        'cover': f'presskit/{COVER_FILES["landscape"]}', 'presskit': 'presskit/',
+        'cover': f'presskit/{COVER_FILES["landscape"]}', 'hero': 'presskit/key-art-1920x1080.png', 'presskit': 'presskit/',
         'upload': {'file': f'{slug}-crazygames-upload.zip', 'mb': round(mb(upload), 1)}, 'package': {'file': f'{slug}-full-package.zip', 'mb': round(mb(full), 1)}})
     shutil.rmtree(pub, ignore_errors=True); os.replace(tmp, pub)
     log(f'published {pub}  (full package {mb(full):.1f}MB, upload {mb(upload):.1f}MB)')
