@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BroadGamesPro · Browser games studio</title>
+<meta name="description" content="{{ABOUT}}">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/site/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site/style.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="/"><img src="/site/logo.svg" alt=""><span>Broad<b>Games</b>Pro</span></a>
+  <nav><a href="#games">Games</a><a href="#studio">Studio</a>{{NAV_CONTACT}}</nav>
+</header>
+
+{{HERO}}
+
+<main>
+  <section id="games">
+    <div class="sec-head"><h2>Our games</h2><p>Every release ships as a complete CrazyGames package: the upload build, covers, preview videos, screenshots and a press kit.</p></div>
+    {{GAMES}}
+  </section>
+  {{WIP}}
+  <section id="studio" class="studio">
+    <div>
+      <h2>The studio</h2>
+      <p class="lead">{{ABOUT}}</p>
+    </div>
+    <ul class="pillars">
+      <li><span class="ic">⚡</span><b>Instant play</b><small>No downloads, no sign-ups. Our games load in seconds in any modern browser.</small></li>
+      <li><span class="ic">📱</span><b>Desktop &amp; mobile</b><small>Mouse, keyboard and touch controls, tuned for every screen from phone to 4K.</small></li>
+      <li><span class="ic">🎮</span><b>Built for portals</b><small>Ready for CrazyGames, with the SDK, fair ad placement and cloud saves.</small></li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  <div class="brand small"><img src="/site/logo.svg" alt=""><span>Broad<b>Games</b>Pro</span></div>
+  <p>© {{YEAR}} BroadGamesPro · <a href="{{WEBSITE}}">{{WEBSITE_LABEL}}</a>{{FOOTER_CONTACT}}</p>
+</footer>
+</body>
+</html>

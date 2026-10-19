@@ -6,6 +6,7 @@ LIB = os.path.join(ROOT, 'library')        # shared asset library, reused by eve
 GAMES = os.path.join(ROOT, 'games')        # one folder per game
 TEMPLATE = os.path.join(ROOT, 'template')  # starter game copied by new_game.py
 CATALOG = os.path.join(LIB, 'catalog.json')
+RELEASES = os.environ.get('RELEASE_DIR', '/srv/broadgames/releases')  # published packages, served by server.py at /releases/
 
 
 def load_env():

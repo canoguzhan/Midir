@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-19 04:59",
-  "count": 271,
+  "updated": "2026-10-19 05:53",
+  "count": 279,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -399,6 +399,31 @@
       ]
     },
     {
+      "path": "audio/siege_castle_hit.mp3",
+      "prompt": "heavy impact against a stone castle gate, wood cracking, rumble",
+      "game": "merge-siege-defense",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "castle",
+        "hit",
+        "siege"
+      ]
+    },
+    {
+      "path": "audio/siege_merge.mp3",
+      "prompt": "two magical warriors fusing into one, rising shimmering chime with a deep whoosh, satisfying power-up",
+      "game": "merge-siege-defense",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "merge",
+        "siege"
+      ]
+    },
+    {
       "path": "audio/skill_dash.mp3",
       "kind": "audio",
       "kb": 16,
@@ -740,6 +765,84 @@
         "merchant",
         "tr",
         "unlock"
+      ]
+    },
+    {
+      "path": "audio/voice/siege_boss_en.mp3",
+      "prompt": "A siege golem approaches!",
+      "game": "merge-siege-defense",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "boss",
+        "en",
+        "siege"
+      ]
+    },
+    {
+      "path": "audio/voice/siege_boss_tr.mp3",
+      "prompt": "Bir kuşatma golemi yaklaşıyor!",
+      "game": "merge-siege-defense",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 30,
+      "tags": [
+        "boss",
+        "siege",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/siege_fallen_en.mp3",
+      "prompt": "The castle has fallen.",
+      "game": "merge-siege-defense",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 22,
+      "tags": [
+        "en",
+        "fallen",
+        "siege"
+      ]
+    },
+    {
+      "path": "audio/voice/siege_fallen_tr.mp3",
+      "prompt": "Kale düştü.",
+      "game": "merge-siege-defense",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 16,
+      "tags": [
+        "fallen",
+        "siege",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/siege_wave_en.mp3",
+      "prompt": "Here they come!",
+      "game": "merge-siege-defense",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "en",
+        "siege",
+        "wave"
+      ]
+    },
+    {
+      "path": "audio/voice/siege_wave_tr.mp3",
+      "prompt": "Geliyorlar!",
+      "game": "merge-siege-defense",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 15,
+      "tags": [
+        "siege",
+        "tr",
+        "wave"
       ]
     },
     {

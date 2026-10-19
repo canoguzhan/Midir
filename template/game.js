@@ -9,6 +9,9 @@ import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 // ================================================================ CONFIG
 const SAVE_KEY = '{{SLUG}}';
 const STEP = 1 / 60; // fixed simulation step: identical physics at 60/144/165 Hz
+const params = new URLSearchParams(location.search);
+const CAPTURE = params.has('capture'); // deterministic frame stepping for press screenshots + trailer (tools/capture.mjs)
+const AUTOPLAY = CAPTURE || params.has('autoplay'); // a bot plays by itself (trailer footage, balance tests)
 const CFG = {
   arena: 13, playerRadius: 0.55, speed: 7, dashSpeed: 20, dashTime: 0.16, dashCooldown: 1.1,
   coins: 6, coinRadius: 0.8, rockEvery: [1.5, 0.4], rockSpeed: [6, 12], rampSeconds: 90,
@@ -196,7 +199,7 @@ function stripRootMotion(clip, root) {
 
 // ================================================================ WORLD
 const canvas = $('game');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance', preserveDrawingBuffer: CAPTURE });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 const scene = new THREE.Scene(); scene.background = new THREE.Color('#7ec8e3'); scene.fog = new THREE.Fog('#7ec8e3', 30, 60);
 const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 200);
@@ -286,6 +289,12 @@ function moveInput() { // x right, y down on screen == +x, +z in the world (came
   let x = (keys.has('KeyD') || keys.has('ArrowRight') ? 1 : 0) - (keys.has('KeyA') || keys.has('ArrowLeft') ? 1 : 0);
   let y = (keys.has('KeyS') || keys.has('ArrowDown') ? 1 : 0) - (keys.has('KeyW') || keys.has('ArrowUp') ? 1 : 0);
   if (stick.id !== null) { x = stick.x; y = stick.y; }
+  if (AUTOPLAY && coins.length) { // bot: head for the nearest coin, sidestep the nearest boulder
+    const c = coins.reduce((a, b) => (a.position.distanceTo(player.position) < b.position.distanceTo(player.position) ? a : b));
+    x = c.position.x - player.position.x; y = c.position.z - player.position.z;
+    const k = rocks.find((r) => r.position.distanceTo(player.position) < 3.5);
+    if (k) { x += (player.position.x - k.position.x) * 2; y += (player.position.z - k.position.z) * 2; }
+  }
   const l = Math.hypot(x, y); return l > 1 ? { x: x / l, y: y / l } : l < 0.15 ? { x: 0, y: 0 } : { x, y };
 }
 
@@ -396,9 +405,10 @@ function step(dt) {
 // ================================================================ LOOP
 let last = performance.now(), acc = 0;
 const camTarget = new THREE.Vector3();
-function frame(now) {
-  const dt = Math.min(0.1, (now - last) / 1000); last = now;
+function advance(dt) {
   if (state !== State.PAUSED) { acc += dt; while (acc >= STEP) { step(STEP); acc -= STEP; } updateParticles(dt); player.userData.mixer?.update(dt); }
+}
+function render(dt) {
   const portrait = innerHeight > innerWidth ? 1.45 : 1; // pull back so the arena fits narrow screens
   camTarget.copy(player.position).multiplyScalar(0.6).add(CAM_OFFSET.clone().multiplyScalar(portrait));
   camera.position.lerp(camTarget, 1 - Math.exp(-dt * 6));
@@ -406,6 +416,10 @@ function frame(now) {
   camera.position.x += (Math.random() - 0.5) * shakeAmt; camera.position.y += (Math.random() - 0.5) * shakeAmt;
   camera.lookAt(player.position.x * 0.6, 0, player.position.z * 0.6);
   renderer.render(scene, camera);
+}
+function frame(now) {
+  const dt = Math.min(0.1, (now - last) / 1000); last = now;
+  advance(dt); render(dt);
   requestAnimationFrame(frame);
 }
 function resize() { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
@@ -415,7 +429,7 @@ addEventListener('resize', resize);
 async function boot() {
   await initCrazySDK();
   sdkCall((s) => s.game.loadingStart());
-  lang = (crazySdk?.user?.systemInfo?.locale || navigator.language || 'en').slice(0, 2).toLowerCase();
+  lang = (params.get('lang') || crazySdk?.user?.systemInfo?.locale || navigator.language || 'en').slice(0, 2).toLowerCase();
   if (!STRINGS[lang]) lang = 'en';
   document.documentElement.lang = lang; applyI18n(); $('hint').textContent = t(isTouch ? 'hintTouch' : 'hintDesktop');
   initAudio();
@@ -428,6 +442,14 @@ async function boot() {
   sdkCall((s) => s.game.loadingStop());
   $('loading').hidden = true;
   setState(State.MENU);
-  requestAnimationFrame((n) => { last = n; frame(n); });
+  if (CAPTURE) { // capture protocol used by tools/capture.mjs: no rAF loop, the tool drives every frame
+    window.__game = {
+      start: () => startRun(),
+      frame: (dt = 1 / 30) => { advance(dt); render(dt); },
+      skip: (sec) => { for (let s = 0; s < sec; s += STEP) { advance(STEP); if (state === State.GAMEOVER) startRun(); } },
+      info: () => ({ state, score: run?.score }),
+    };
+    render(0);
+  } else requestAnimationFrame((n) => { last = n; frame(n); });
 }
 boot();
