@@ -20,7 +20,7 @@ library/catalog.json     index with the prompt and source game for each asset
 template/                starter game: index.html, style.css, game.js, bake_assets.py, game.json
 games/<slug>/            one folder per game; this folder is exactly what ships (minus bake_assets.py, game.json, covers/, dist/)
 games/<slug>/covers/     the 3 submission covers: landscape 1920x1080, portrait 800x1200, square 800x800
-games/<slug>/dist/       build output: <slug>.zip, playtest screenshots, release work files (gitignored)
+games/<slug>/dist/       build output: <slug>.zip and web/ (the flat upload), playtest screenshots, release work files (gitignored)
 studio.json              studio identity for press kits: BroadGamesPro, https://broadgames.pro, contact email, about text
 tools/                   new_game.py, factory.py, catalog.py, build.py, playtest.mjs, capture.mjs, release.py, balance.py, optimize_models.sh
 server.py                studio site (systemd `midir.service`, Caddy with password at https://broadgames.pro): releases with
@@ -43,8 +43,8 @@ server.py                studio site (systemd `midir.service`, Caddy with passwo
    - **Capture protocol (required for the press kit).** With `?capture=1` the game does not start its rAF loop, turns on its autoplay bot, accepts `?lang=en`, and exposes `window.__game = { start(), frame(dt), skip(seconds), info() }`. `frame` advances and renders exactly one frame; `skip` simulates without rendering. The template shows the pattern. The bot must make the game look good: real merges, kills and progress.
    - Use the bot plus `skip()` from a small Playwright script to tune difficulty. Aim for a first run of roughly 5–10 minutes.
 5. **Verify.** All of these must pass, and you look at the screenshots yourself:
-   - `node tools/playtest.mjs <slug> [--keys=KeyW,Space]` runs headless Chromium at 1216x684 and at 800x450 with touch. It fails on JS errors and writes screenshots to `games/<slug>/dist/shots/`.
-   - `python3 tools/build.py <slug>` runs the CrazyGames checks and creates `games/<slug>/dist/<slug>.zip`.
+   - `python3 tools/build.py <slug>` runs the CrazyGames checks and creates the **flat** upload: `games/<slug>/dist/<slug>.zip`, plus the same files unzipped in `dist/web/`.
+   - `node tools/playtest.mjs <slug> [--keys=KeyW,Space]` then tests that flat build in headless Chromium at 1216x684, at 800x450 with touch, and from a non-localhost host (where the SDK is disabled, as on the studio site). It fails on JS errors and writes screenshots to `games/<slug>/dist/shots/`. Pass `--source` to test the source folder instead.
    - Fix every ERROR. Read every WARN and fix it or explain it.
 6. **Release package + press kit (always, for every game).**
    - Fill in `game.json`: `description`, `controls`, `category`, `tags`, `pegi`, `version`, `capture` (`warmup` seconds before the trailer starts, plus `shots` timings in seconds, where 0 is the menu) and `press` (headline, summary, features, quote).
@@ -79,6 +79,9 @@ server.py                studio site (systemd `midir.service`, Caddy with passwo
   - Initial download (everything loaded before the first `gameplayStart`) must be ≤ 50MB, and ideally ≤ 20MB for mobile.
   - Total ≤ 250MB and ≤ 1500 files.
   - Use relative paths only.
+  - **Uploads are flat: CrazyGames does not allow folders.** `build.py` copies every file to the zip root and rewrites the paths in your HTML, JS and CSS: it strips directory prefixes such as `assets/models/`, rebuilds the Three.js import map, and turns relative JS imports into `./name.js`. So:
+    - every shipped file name must be unique across all folders (`build.py` stops if two collide);
+    - write asset paths as plain strings or templates that contain the full directory (`assets/audio/voice/x_{lang}.mp3`), never folder names assembled at runtime from parts.
   - Keep GLBs under 2–3MB each (use the `opt/` copies), and lazy-load extras after gameplay starts.
   - The game must run smoothly on a 4GB-RAM Chromebook.
 - **Layout and input:**

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-// Headless smoke test: node tools/playtest.mjs <slug> [--keys=KeyW,KeyD,Space] [--seconds=4]
-// Serves games/<slug>/ on a random localhost port, loads it in Chromium at a CrazyGames desktop size (1216x684) and the
-// mobile size (800x450, touch), clicks #btnPlay, holds the given keys, and saves screenshots to games/<slug>/dist/shots/.
+// Headless smoke test: node tools/playtest.mjs <slug> [--keys=KeyW,KeyD,Space] [--seconds=4] [--source]
+// Serves the flat upload build games/<slug>/dist/web/ (run tools/build.py first; --source serves games/<slug>/ instead)
+// on a random port, loads it in Chromium at a CrazyGames desktop size (1216x684), the mobile size (800x450, touch) and from
+// a non-localhost host, clicks #btnPlay, holds the given keys, and saves screenshots to games/<slug>/dist/shots/.
 // Exits 1 on page errors, console errors or failed local requests. Missing assets that fall back procedurally are listed.
 import { createRequire } from 'node:module';
 import { createServer } from 'node:http';
@@ -20,10 +21,15 @@ const { chromium } = (() => {
 
 const slug = process.argv[2];
 if (!slug) { console.error('usage: node tools/playtest.mjs <slug> [--keys=KeyW,KeyD,Space] [--seconds=4]'); process.exit(2); }
-const opt = Object.fromEntries(process.argv.slice(3).map((a) => a.replace(/^--/, '').split('=')));
+const opt = Object.fromEntries(process.argv.slice(3).map((a) => { const [k, v] = a.replace(/^--/, '').split('='); return [k, v ?? true]; }));
 const keys = (opt.keys || 'KeyW,KeyD').split(','), seconds = Number(opt.seconds || 4);
-const dir = path.join(ROOT, 'games', slug), shots = path.join(dir, 'dist', 'shots');
-await stat(path.join(dir, 'index.html')).catch(() => { console.error(`games/${slug}/index.html not found`); process.exit(2); });
+const gameDir = path.join(ROOT, 'games', slug), shots = path.join(gameDir, 'dist', 'shots');
+const dir = opt.source ? gameDir : path.join(gameDir, 'dist', 'web');
+await stat(path.join(dir, 'index.html')).catch(() => {
+  console.error(opt.source ? `games/${slug}/index.html not found` : `no flat build in games/${slug}/dist/web/: run python3 tools/build.py ${slug} first (or pass --source)`);
+  process.exit(2);
+});
+console.log(`testing ${opt.source ? 'source' : 'flat upload build'}: ${path.relative(ROOT, dir)}/`);
 await mkdir(shots, { recursive: true });
 
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.glb': 'model/gltf-binary',

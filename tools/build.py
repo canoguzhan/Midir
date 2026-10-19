@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Check a game against the CrazyGames requirements and package it for upload.
 
-  python3 tools/build.py <slug>        -> games/<slug>/dist/<slug>.zip (index.html at the zip root)
+  python3 tools/build.py <slug>        -> games/<slug>/dist/<slug>.zip + dist/web/ (flat: every file at the root,
+                                          because CrazyGames uploads do not allow folders)
 
 Ships everything in games/<slug>/ except bake_assets.py, game.json, covers/, dist/ and dotfiles.
 Errors block the zip; warnings are printed for review. Limits: https://docs.crazygames.com/requirements/technical/"""
-import os, re, shutil, subprocess, sys, zipfile
+import json, os, re, shutil, subprocess, sys, zipfile
 from common import game_dir, read_json
 
 EXCLUDE_TOP = {'bake_assets.py', 'game.json', 'covers', 'dist', 'notes.md', '__pycache__'}
@@ -25,6 +26,47 @@ def shipped(gdir):
             if f.startswith('.') or f.endswith(('.part', '.pyc')) or (rel_d == '.' and f in EXCLUDE_TOP): continue
             out.append(os.path.normpath(os.path.join(rel_d, f)).replace(os.sep, '/'))
     return sorted(out)
+
+
+IMPORT_RE = re.compile(r'''((?:\bfrom|\bimport)\s*\(?\s*)(['"])(\.{1,2}/[^'"]+)\2''')
+
+
+def flatten(gdir, files, out_dir):
+    """CrazyGames uploads are flat (no folders): copy every shipped file to out_dir/<basename> and rewrite paths.
+    Own html/js/css: directory prefixes ("assets/models/", "./assets/vendor/three/") are stripped, so literal,
+    templated ("voice_{lang}.mp3") and computed paths all resolve. The <script type="importmap"> is rebuilt so
+    "three/addons/<sub>/x.js" maps to "./x.js". Every .js file's relative imports ("../utils/x.js") become "./x.js"."""
+    by_name = {}
+    for f in files:
+        b = os.path.basename(f)
+        if b in by_name: raise ValueError(f'flat upload: {f} and {by_name[b]} share the file name {b}; rename one')
+        by_name[b] = f
+    dirs = sorted({os.path.dirname(f) + '/' for f in files if '/' in f}, key=len, reverse=True)
+    shutil.rmtree(out_dir, ignore_errors=True); os.makedirs(out_dir)
+
+    def flat_importmap(m):
+        data = json.loads(m.group(2)); imports = {}
+        for k, v in data.get('imports', {}).items():
+            target = os.path.normpath(v).replace(os.sep, '/').lstrip('./') if v not in ('./', '.') else ''
+            if k.endswith('/'):  # prefix mapping: one entry per sub-folder under the target, all pointing at the root
+                imports[k] = './'
+                for f in files:
+                    if target and f.startswith(target + '/') and '/' in f[len(target) + 1:]:
+                        imports[k + os.path.dirname(f[len(target) + 1:]) + '/'] = './'
+            else: imports[k] = './' + os.path.basename(v)
+        return m.group(1) + json.dumps({'imports': imports}) + m.group(3)
+
+    for f in files:
+        src, dst = os.path.join(gdir, f), os.path.join(out_dir, os.path.basename(f))
+        own = f.endswith(('.html', '.js', '.css')) and not f.startswith('assets/vendor/')
+        if not f.endswith(('.html', '.js', '.css')): shutil.copy2(src, dst); continue
+        s = open(src, encoding='utf-8').read()
+        if own:
+            s = re.sub(r'(<script type="importmap">)(.*?)(</script>)', flat_importmap, s, flags=re.S)
+            for d in dirs: s = s.replace('./' + d, './').replace(d, '')
+        if f.endswith('.js'): s = IMPORT_RE.sub(lambda m: f'{m.group(1)}{m.group(2)}./{os.path.basename(m.group(3))}{m.group(2)}', s)
+        open(dst, 'w', encoding='utf-8').write(s)
+    return sorted(os.listdir(out_dir))
 
 
 def main():
@@ -97,12 +139,14 @@ def main():
     for e in errors: print('ERROR', e)
     if errors: print(f'\n{len(errors)} error(s): not packaged'); sys.exit(1)
 
+    web = os.path.join(gdir, 'dist', 'web')
+    try: flat = flatten(gdir, files, web)
+    except ValueError as e: print('ERROR', e); print('\n1 error(s): not packaged'); sys.exit(1)
     out = os.path.join(gdir, 'dist', f'{slug}.zip')
-    os.makedirs(os.path.dirname(out), exist_ok=True)
     with zipfile.ZipFile(out + '.part', 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as z:
-        for f in files: z.write(os.path.join(gdir, f), f)
+        for f in flat: z.write(os.path.join(web, f), f)
     os.replace(out + '.part', out)
-    print(f'\npackaged {len(files)} files, {mb:.1f}MB -> games/{slug}/dist/{slug}.zip ({os.path.getsize(out) / 2 ** 20:.1f}MB zipped)')
+    print(f'\npackaged {len(flat)} files (flat), {mb:.1f}MB -> games/{slug}/dist/{slug}.zip ({os.path.getsize(out) / 2 ** 20:.1f}MB zipped); unzipped copy in dist/web/')
     print(f'upload: https://developer.crazygames.com  ·  title "{meta.get("title", slug)}"  ·  covers in games/{slug}/covers/')
 
 

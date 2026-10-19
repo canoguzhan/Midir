@@ -10,8 +10,8 @@ python3 tools/new_game.py "Fox Dash"            # scaffold games/fox-dash/ from 
 python3 tools/catalog.py search fox             # find reusable library assets
 python3 games/fox-dash/bake_assets.py --dry     # what would be reused / generated
 python3 games/fox-dash/bake_assets.py           # bake assets (+ the 3 submission covers)
-node tools/playtest.mjs fox-dash                # headless Chromium smoke test + screenshots
-python3 tools/build.py fox-dash                 # CrazyGames checks -> games/fox-dash/dist/fox-dash.zip
+python3 tools/build.py fox-dash                 # CrazyGames checks -> flat upload games/fox-dash/dist/fox-dash.zip (no folders)
+node tools/playtest.mjs fox-dash                # headless Chromium smoke test of that flat build + screenshots
 python3 tools/release.py fox-dash               # full package + press kit (videos, screenshots, store listing) -> website
 python3 server.py                               # preview: http://localhost:8080/
 python3 tools/balance.py                        # API credits left
