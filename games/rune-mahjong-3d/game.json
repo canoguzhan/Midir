@@ -1,0 +1,35 @@
+{
+  "title": "Rune Mahjong 3D",
+  "slug": "rune-mahjong-3d",
+  "version": "1.0.0",
+  "blueprint": "A cozy 3D tile-match mahjong: tap free rune tiles from layered piles on an ancient table into a 7-slot tray, and three of a kind vanish. Endless seeded levels (always solvable) grow from small piles into pyramids, diamonds, crosses, rings and twin towers; Undo, Magic and Shuffle boosters bought with coins rescue tight spots. Mouse/touch tapping with keyboard shortcuts. A midgame ad plays between levels on 'Next level'; an optional rewarded ad doubles the coins on the level-cleared screen.",
+  "description": "Match three rune tiles to clear them in this relaxing 3D mahjong puzzle! Tap free tiles from beautifully stacked piles to send them to your tray: three of a kind vanish in a burst of magic. Keep the tray from filling up, chain quick matches into combos, and use Undo, Magic and Shuffle boosters to get out of tight spots. Every level is guaranteed solvable, with new layouts to discover as you climb.",
+  "controls": {
+    "desktop": "Click a free tile to move it to the tray. U or Z: undo. H: magic (auto-match). S: shuffle. Esc: pause.",
+    "mobile": "Tap a free tile to move it to the tray. Use the booster buttons below the tray."
+  },
+  "category": "Puzzle",
+  "tags": ["mahjong", "tile match", "match 3", "puzzle", "3d", "relaxing", "brain", "casual"],
+  "orientation": "landscape",
+  "mobile": true,
+  "languages": ["en", "tr"],
+  "pegi": "PEGI 3",
+  "ads": {
+    "midgame": "When pressing 'Next level' after clearing a level (the SDK caps it at one every 3 minutes)",
+    "rewarded": "Optional 'Double coins' on the level-cleared screen, once per level; hidden when ads are unavailable"
+  },
+  "capture": { "warmup": 40, "shots": [0, 6, 30, 70, 120] },
+  "press": {
+    "headline": "BroadGamesPro launches Rune Mahjong 3D, a relaxing tile-match mahjong puzzle playable instantly in the browser",
+    "summary": "Rune Mahjong 3D brings the cozy satisfaction of tile-match mahjong to a fully 3D fantasy table. Players tap free rune tiles from layered piles, collect three of a kind in their tray and chain quick matches into combos. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
+    "features": [
+      "Relaxing triple-match mahjong on a magical 3D rune table",
+      "Endless hand-tuned and generated levels: pyramids, diamonds, crosses, rings and twin towers",
+      "Every level is guaranteed solvable",
+      "Combo chains with spoken callouts: Great, Excellent, Legendary",
+      "Undo, Magic and Shuffle boosters, earned with coins",
+      "Plays on desktop and mobile with mouse, touch or keyboard; in English and Turkish; progress saves automatically"
+    ],
+    "quote": "Tile-match puzzles are the perfect five-minute escape, so we built one that feels like playing with real carved stones on a magical table, and made sure every single level can be solved."
+  }
+}
