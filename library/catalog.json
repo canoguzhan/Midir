@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-19 07:29",
-  "count": 294,
+  "updated": "2026-10-19 08:23",
+  "count": 306,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -173,6 +173,43 @@
       "kb": 10,
       "tags": [
         "crossbow"
+      ]
+    },
+    {
+      "path": "audio/dash_boss_horn.mp3",
+      "prompt": "deep ominous dungeon war horn with rumbling stone, a boss approaches",
+      "game": "dungeon-dash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 32,
+      "tags": [
+        "boss",
+        "dash",
+        "horn"
+      ]
+    },
+    {
+      "path": "audio/dash_card.mp3",
+      "prompt": "magical card being drawn and revealed with a shimmering whoosh",
+      "game": "dungeon-dash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 13,
+      "tags": [
+        "card",
+        "dash"
+      ]
+    },
+    {
+      "path": "audio/dash_gem.mp3",
+      "prompt": "tiny bright crystal shard pickup tink, magical, short",
+      "game": "dungeon-dash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "dash",
+        "gem"
       ]
     },
     {
@@ -670,6 +707,58 @@
       "tags": [
         "berserker",
         "need",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/dash_boss_en.mp3",
+      "prompt": "The Warden awakens!",
+      "game": "dungeon-dash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 21,
+      "tags": [
+        "boss",
+        "dash",
+        "en"
+      ]
+    },
+    {
+      "path": "audio/voice/dash_boss_tr.mp3",
+      "prompt": "Gardiyan uyanıyor!",
+      "game": "dungeon-dash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 20,
+      "tags": [
+        "boss",
+        "dash",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/dash_survived_en.mp3",
+      "prompt": "You survived the dungeon!",
+      "game": "dungeon-dash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 25,
+      "tags": [
+        "dash",
+        "en",
+        "survived"
+      ]
+    },
+    {
+      "path": "audio/voice/dash_survived_tr.mp3",
+      "prompt": "Zindandan sağ çıktın!",
+      "game": "dungeon-dash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 26,
+      "tags": [
+        "dash",
+        "survived",
         "tr"
       ]
     },
@@ -1975,10 +2064,30 @@
       ]
     },
     {
+      "path": "visuals/class_assassin_card.webp",
+      "kind": "image",
+      "kb": 19,
+      "tags": [
+        "assassin",
+        "card",
+        "class"
+      ]
+    },
+    {
       "path": "visuals/class_shaman.png",
       "kind": "image",
       "kb": 4478,
       "tags": [
+        "class",
+        "shaman"
+      ]
+    },
+    {
+      "path": "visuals/class_shaman_card.webp",
+      "kind": "image",
+      "kb": 20,
+      "tags": [
+        "card",
         "class",
         "shaman"
       ]
@@ -1993,10 +2102,30 @@
       ]
     },
     {
+      "path": "visuals/class_sura_card.webp",
+      "kind": "image",
+      "kb": 29,
+      "tags": [
+        "card",
+        "class",
+        "sura"
+      ]
+    },
+    {
       "path": "visuals/class_warrior.png",
       "kind": "image",
       "kb": 2808,
       "tags": [
+        "class",
+        "warrior"
+      ]
+    },
+    {
+      "path": "visuals/class_warrior_card.webp",
+      "kind": "image",
+      "kb": 24,
+      "tags": [
+        "card",
         "class",
         "warrior"
       ]
@@ -2026,6 +2155,18 @@
       "tags": [
         "crate",
         "scrap"
+      ]
+    },
+    {
+      "path": "visuals/dungeon_floor.webp",
+      "prompt": "seamless tileable top-down texture of old dark dungeon stone floor tiles with moss in the cracks and faint glowing blue rune carvings, even lighting, no shadows, no perspective, flat orthographic view, game texture",
+      "game": "dungeon-dash",
+      "source": "higgsfield",
+      "kind": "image",
+      "kb": 96,
+      "tags": [
+        "dungeon",
+        "floor"
       ]
     },
     {

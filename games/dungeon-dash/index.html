@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Dungeon Dash</title>
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+<script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="dmg"></div>
+
+<div id="hud" hidden>
+  <div class="xpbar"><i id="xpFill"></i><span><span data-i18n="lv">Lv</span> <b id="lvl">1</b></span></div>
+  <div class="hud-row">
+    <div class="hp"><div class="hpbar"><i id="hpFill"></i></div><b id="hpText">100</b></div>
+    <div class="timer" id="timer">0:00</div>
+    <div class="right">
+      <div class="pill"><span class="skull">☠</span><b id="kills">0</b></div>
+      <div class="pill"><img src="assets/visuals/icon_coin.webp" alt="" onerror="this.remove()"><b id="gold">0</b></div>
+      <button id="btnPause" class="icon" aria-label="Pause">II</button>
+    </div>
+  </div>
+  <div id="kit"></div>
+</div>
+<div id="joystick" hidden><div class="knob"></div></div>
+<div id="banner" hidden></div>
+
+<section id="levelup" class="screen soft" hidden>
+  <h2 data-i18n="levelUp">Level up!</h2>
+  <p class="sub" data-i18n="choose">Choose an upgrade</p>
+  <div id="cards"></div>
+</section>
+
+<section id="menu" class="screen" hidden>
+  <h1>Dungeon <span>Dash</span></h1>
+  <p class="sub" data-i18n="pickHero">Choose your hero</p>
+  <div id="heroes"></div>
+  <p class="stats"><span><img src="assets/visuals/icon_trophy.webp" alt="" onerror="this.remove()"><span data-i18n="best">Best</span> <b id="bestTime">0:00</b></span>
+    <span><img src="assets/visuals/icon_coin.webp" alt="" onerror="this.remove()"><b class="bank">0</b></span></p>
+  <div class="row"><button id="btnPlay" class="big" data-i18n="play">Play</button><button id="btnArmory" data-i18n="armory">Armory</button></div>
+  <p class="hint" id="hint"></p>
+</section>
+
+<section id="armory" class="screen" hidden>
+  <h2 data-i18n="armory">Armory</h2>
+  <p class="stats"><span><img src="assets/visuals/icon_coin.webp" alt="" onerror="this.remove()"><b class="bank">0</b></span></p>
+  <div id="upgrades"></div>
+  <button id="btnArmoryBack" data-i18n="back">Back</button>
+</section>
+
+<section id="paused" class="screen" hidden>
+  <h2 data-i18n="paused">Paused</h2>
+  <button id="btnResume" class="big" data-i18n="resume">Resume</button>
+  <button id="btnQuit" data-i18n="giveUp">Give up</button>
+</section>
+
+<section id="over" class="screen" hidden>
+  <h2 id="overTitle">Defeated</h2>
+  <div class="results">
+    <div><small data-i18n="survived">Survived</small><b id="rTime">0:00</b></div>
+    <div><small data-i18n="killsWord">Kills</small><b id="rKills">0</b></div>
+    <div><small data-i18n="level">Level</small><b id="rLevel">1</b></div>
+  </div>
+  <p class="reward"><img src="assets/visuals/icon_coin.webp" alt="" onerror="this.remove()">+<b id="rGold">0</b> <span id="newBest" data-i18n="newBest" hidden>New best!</span></p>
+  <button id="btnDouble" class="rewarded" data-i18n="double" hidden>▶ Double gold</button>
+  <button id="btnAgain" class="big" data-i18n="again">Play again</button>
+  <div class="row"><button id="btnOverArmory" data-i18n="armory">Armory</button><button id="btnMenu" data-i18n="menu">Menu</button></div>
+</section>
+
+<div id="loading"><div class="ltitle">Dungeon Dash</div><div class="bar"><i id="loadBar"></i></div></div>
+<div id="toast" hidden></div>
+<script type="module" src="game.js"></script>
+</body>
+</html>
