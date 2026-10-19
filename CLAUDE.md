@@ -29,7 +29,7 @@ server.py                studio site (systemd `midir.service`, Caddy with passwo
 ```
 
 ## Workflow: "make me a game about X"
-1. **Concept.** Pick an original title and theme with no existing IP, brands or characters. Choose 3D (Three.js template) or 2D (Canvas; see below). Write a 2–3 sentence blueprint covering theme, core loop, controls and ad triggers, and put it in `game.json` → `blueprint`.
+1. **Concept.** Read the **Quality gate** section below first. Pick an original, distinctive title and theme with no existing IP, brands or characters, and fill `game.json` → `quality` before writing code. Choose 3D (Three.js template) or 2D (Canvas; see below). Write a 2–3 sentence blueprint covering theme, core loop, controls and ad triggers, and put it in `game.json` → `blueprint`.
 2. **Scaffold.** `python3 tools/new_game.py "Title"` creates `games/<slug>/` and links the template's reused assets (free).
 3. **Assets: reuse before you generate.**
    - Search with `python3 tools/catalog.py search <words>` and `python3 tools/catalog.py list <kind>`.
@@ -46,9 +46,10 @@ server.py                studio site (systemd `midir.service`, Caddy with passwo
    - `python3 tools/build.py <slug>` runs the CrazyGames checks and creates the **flat** upload: `games/<slug>/dist/<slug>.zip`, plus the same files unzipped in `dist/web/`.
    - `node tools/playtest.mjs <slug> [--keys=KeyW,Space]` then tests that flat build in headless Chromium at 1216x684, at 800x450 with touch, and from a non-localhost host (where the SDK is disabled, as on the studio site). It fails on JS errors and writes screenshots to `games/<slug>/dist/shots/`. Pass `--source` to test the source folder instead.
    - Fix every ERROR. Read every WARN and fix it or explain it.
+   - Go through the **Quality gate** review below with the screenshots open, and record what you found and fixed in `game.json` → `quality.visual_review`.
 6. **Release package + press kit (always, for every game).**
    - Fill in `game.json`: `description`, `controls`, `category`, `tags`, `pegi`, `version`, `capture` (`warmup` seconds before the trailer starts, plus `shots` timings in seconds, where 0 is the menu) and `press` (headline, summary, features, quote).
-   - Then run `python3 tools/release.py <slug>`. It takes 20–30 minutes on this 1-core server, so run it in the background. It produces and publishes:
+   - `quality` must be filled honestly (`build.py` blocks template text). Then run `python3 tools/release.py <slug>`. It takes 20–30 minutes on this 1-core server, so run it in the background. It produces and publishes:
      - `<slug>-crazygames-upload.zip`, the build to upload;
      - `<slug>-full-package.zip`, with `1-upload/`, `2-store-listing/store-listing.txt`, `3-covers/`, `4-preview-video/` (1920x1080 and 1080x1620, ~15.5 s, no audio, opening on the cover), `5-screenshots/`, `6-press-kit/` (press release md and html, fact sheet, logo, key art) and `README.txt`;
      - a press page at `/releases/<slug>/presskit/`.
@@ -101,6 +102,30 @@ server.py                studio site (systemd `midir.service`, Caddy with passwo
 - **Saves:** store the high score (and progress) with the SDK `data` module, mirrored to `localStorage`.
 - **State flow:** `BOOT → MENU → PLAYING ⇄ PAUSED → GAMEOVER`. Add juice: screen shake, particle bursts and punchy SFX.
 - **Covers:** no borders, and no text except the game title. `factory.py` draws the title.
+
+## Quality gate (why Merge Siege Defense was rejected)
+CrazyGames rejected **merge-siege-defense** (2026-10-19) even though it passed every technical check. Its SDK, ads, sizes and paths were all fine. What failed was quality: a generic genre name, a painted AI cover full of melted figures that showed a castle scene the game doesn't have, heroes standing in T-pose on the menu, a flat red-tinted golem, realistic low-poly models mixed with a cartoon cover, menu text overlapping the board, system fonts, no onboarding beyond a line of key hints, and Esc bound to pause. Do not rebuild or resubmit that game. Every new game must clear this bar (from https://docs.crazygames.com/requirements/quality/ and /gameplay/):
+
+- **Distinct concept, not a reskin.** Name the top 3 CrazyGames games in the genre and write the twist that sets yours apart in `quality.hook`. Avoid the most saturated hyper-casual templates unless the twist is real.
+- **Distinctive name.** Don't use a name made only of genre words, like "Merge Siege Defense", "Tower Defense" or "Chess". `build.py` rejects those. The name and imagery must also say clearly what the game is.
+- **One coherent art style** across models, UI, icons, VFX and covers: no realistic and cartoony mix, no painted and 3D mix, no mixed resolutions. Choose a look in `STYLE` and `quality.art_style`, and choose library assets that match it. A procedural or flat-shaded look done consistently beats mismatched AI assets.
+- **Clean models.** No T-poses: every visible character plays an idle animation, including on the menu. Hit flashes are short emissive pulses, not a full flat tint. Check that nothing z-fights, clips or floats.
+- **Polished UI.** Use the bundled fonts (`library/fonts`: Lilita One for titles and buttons, Nunito for UI). The template wires them in. Menu text must never overlap gameplay elements. Big, clearly labeled buttons with no delay on them. Readable at 800x450 and at every listed iframe size.
+- **Onboarding inside gameplay.** The first session teaches by doing (a guided first level, a ghost hand, a highlighted target, at most a few words per step), within 30 seconds, and can be skipped. Show controls as visual key and mouse icons, not a line of text.
+- **Content depth.** Give at least 10 minutes of varied play: a level or wave curve, unlocks and upgrades, bosses or new mechanics that keep appearing. No repetitive filler. Describe it in `quality.content`.
+- **Honest covers.** Covers show the game's real characters, setting and style, matching the screenshots. Look at every cover at full size and regenerate any that have AI artifacts (melted hands or faces, garbled crowds, fake text). The only text allowed is the title, drawn in the display font.
+- **Comfortable audio.** Keep levels consistent, nothing too loud, and music that suits the setting.
+- **Restricted keys.** Never bind Escape (it exits fullscreen) or Ctrl/Cmd+W. Use P plus an on-screen pause button. Prefer arrow keys alongside WASD (AZERTY users).
+- **Basic Launch has ads disabled.** The game must play fully with no ads: no frozen screens between levels, and no rewarded buttons that do nothing (hide them).
+- **Readable at every size**, physics the same at 60, 144 and 165 Hz, no errors or crashes, PEGI 12, and English text that is correct and natural.
+
+Review checklist before reporting (open each screenshot, cover and video frame yourself, and fix before release):
+1. Menu: are characters animated (not T-posed), is there no overlapping text, and does it use the display font?
+2. Gameplay at 1216x684 and at 800x450: is every label readable and is the goal obvious without reading?
+3. First 30 seconds as a new player: does the onboarding show what to do?
+4. Is the style consistent between the cover, menu and gameplay?
+5. Covers: no artifacts, they show real gameplay elements, and the title is in the display font.
+6. At 5 minutes in (`skip()`): is something new still happening?
 
 ## 2D games
 Drop the `importmap` and the Three.js imports. Draw on the `<canvas id="game">` with a 2D context scaled to `devicePixelRatio`. Set `three=False` in the game's `bake()` call so the vendor folder isn't shipped. Use `VISUALS` (Higgsfield stills and sprites, saved as WebP) instead of `MODELS`. Keep the same SDK, AUDIO and INPUT sections and the same state machine.

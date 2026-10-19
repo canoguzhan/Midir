@@ -3,13 +3,13 @@
 
   python3 tools/catalog.py                 rescan library/ and print a summary
   python3 tools/catalog.py search sword    find assets whose path, tags or prompt match every word
-  python3 tools/catalog.py list audio      list every asset of a kind (model, anim, audio, voice, music, image, video, vendor)
+  python3 tools/catalog.py list audio      list every asset of a kind (model, anim, audio, voice, music, image, video, font, vendor)
 
 Each entry keeps its generation metadata (prompt, game that created it), so later games can reuse assets by meaning."""
 import os, re, sys, time
 from common import LIB, CATALOG, read_json, write_json
 
-KINDS = {'.glb': 'model', '.mp3': 'audio', '.wav': 'audio', '.ogg': 'audio', '.png': 'image', '.webp': 'image', '.jpg': 'image', '.mp4': 'video', '.webm': 'video'}
+KINDS = {'.glb': 'model', '.mp3': 'audio', '.wav': 'audio', '.ogg': 'audio', '.png': 'image', '.webp': 'image', '.jpg': 'image', '.mp4': 'video', '.webm': 'video', '.woff2': 'font'}
 
 
 def kind_of(rel):

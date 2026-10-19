@@ -19,6 +19,8 @@ REUSE = [  # library files shipped as-is (paths as in tools/catalog.py output, w
     'models/prop_rock.glb', 'models/prop_tree.glb',
     'audio/coin.mp3', 'audio/hit.mp3', 'audio/skill_dash.mp3', 'audio/defeat.mp3', 'audio/ui_click.mp3', 'audio/bgm_field.mp3',
     'visuals/icon_coin.webp',
+    'fonts/lilita-one-latin-400-normal.woff2', 'fonts/lilita-one-latin-ext-400-normal.woff2',  # bundled OFL fonts used by style.css
+    'fonts/nunito-latin-800-normal.woff2', 'fonts/nunito-latin-ext-800-normal.woff2',
 ]
 
 MODELS = [  # Tripo3D: dict(name, prompt, rig=None|'biped'|'quadruped', anims=['idle', 'walk', 'run'], faces=6000)

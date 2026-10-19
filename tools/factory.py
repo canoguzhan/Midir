@@ -172,7 +172,8 @@ def gen_video(name, still, motion, secs, style, game):
 # ---------------- CrazyGames covers (submission form, not shipped in the zip) ----------------
 COVERS = {'landscape': ('16:9', (1920, 1080)), 'portrait': ('2:3', (800, 1200)), 'square': ('1:1', (800, 800)),
           'keyart': ('16:9', (1920, 1080))}  # keyart: same scene without the title, for website heroes and press
-FONTS = ['/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', '/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf']
+FONTS = [os.path.join(LIB, 'fonts', 'lilita-one-latin-400-normal.woff2'),  # stylized title font (covers must not use a plain system font)
+         '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', '/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf']
 
 
 def fit_crop(im, size):
@@ -195,7 +196,9 @@ def title_overlay(im, title):
         size -= 4
     sw = max(2, size // 12)
     x0, y0, x1, y1 = d.textbbox((0, 0), title, font=f, stroke_width=sw)
-    d.text(((im.width - (x1 - x0)) / 2 - x0, im.height * 0.93 - y1), title, font=f, fill='white', stroke_width=sw, stroke_fill='black')
+    x, y = (im.width - (x1 - x0)) / 2 - x0, im.height * 0.93 - y1
+    d.text((x + sw, y + sw * 1.5), title, font=f, fill=(0, 0, 0, 150), stroke_width=sw, stroke_fill=(0, 0, 0, 150))
+    d.text((x, y), title, font=f, fill=(255, 214, 82), stroke_width=sw, stroke_fill=(48, 24, 0))
     return im
 
 

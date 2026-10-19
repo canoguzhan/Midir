@@ -5,7 +5,7 @@
   "blueprint": "2-3 sentences: theme, core loop, controls, and where the midgame and rewarded ads trigger.",
   "description": "Store-page description for the CrazyGames submission form (2-4 sentences, no links).",
   "controls": {
-    "desktop": "WASD / Arrow keys to move, Space to dash, Esc to pause",
+    "desktop": "WASD / Arrow keys to move, Space to dash, P to pause",
     "mobile": "Drag anywhere on the left to move, tap the button to dash"
   },
   "category": "Casual",
@@ -23,6 +23,14 @@
   "ads": {
     "midgame": "Before a new run starts after a game over (the SDK caps it at one every 3 minutes)",
     "rewarded": "Optional 'Double coins' on the game-over screen, once per run; hidden when ads are unavailable"
+  },
+  "quality": {
+    "hook": "What makes this game different from the top 3 CrazyGames games in its genre (name them). A reskin of an existing game is not a hook.",
+    "onboarding": "How a first-time player learns the game inside gameplay within 30 seconds (guided first level, ghost hand, highlighted target), and how it can be skipped.",
+    "art_style": "One coherent look for models, UI, icons and covers (e.g. 'chunky low-poly, flat pastel shading, Lilita One titles'). No realistic/cartoon or painted/3D mix.",
+    "content": "Depth that keeps players for 10+ minutes: number of levels/waves, unlocks, upgrades, bosses, difficulty curve.",
+    "name_check": "Why the title is distinctive and not easily confused with other games (no plain genre words like 'Merge Defense' or 'Chess').",
+    "visual_review": "Screenshots and covers you looked at, and the problems you found and fixed: T-poses, z-fighting, unlit or flat-tinted models, overlapping text, unreadable UI at 800x450, AI artifacts on covers."
   },
   "capture": {
     "warmup": 20,

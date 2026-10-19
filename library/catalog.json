@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-19 09:34",
-  "count": 311,
+  "updated": "2026-10-19 23:37",
+  "count": 315,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -1175,6 +1175,58 @@
       "tags": [
         "growl",
         "wolf"
+      ]
+    },
+    {
+      "path": "fonts/lilita-one-latin-400-normal.woff2",
+      "kind": "font",
+      "kb": 10,
+      "tags": [
+        "400",
+        "fonts",
+        "latin",
+        "lilita",
+        "normal",
+        "one"
+      ]
+    },
+    {
+      "path": "fonts/lilita-one-latin-ext-400-normal.woff2",
+      "kind": "font",
+      "kb": 1,
+      "tags": [
+        "400",
+        "ext",
+        "fonts",
+        "latin",
+        "lilita",
+        "normal",
+        "one"
+      ]
+    },
+    {
+      "path": "fonts/nunito-latin-800-normal.woff2",
+      "kind": "font",
+      "kb": 16,
+      "tags": [
+        "800",
+        "fonts",
+        "latin",
+        "normal",
+        "nunito"
+      ]
+    },
+    {
+      "path": "fonts/nunito-latin-ext-800-normal.woff2",
+      "kind": "font",
+      "kb": 15,
+      "tags": [
+        "800",
+        "ext",
+        "fonts",
+        "latin",
+        "normal",
+        "nunito"
       ]
     },
     {

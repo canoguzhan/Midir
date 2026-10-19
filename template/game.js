@@ -30,10 +30,10 @@ const ASSETS = {
 const STRINGS = {
   en: { play: 'Play', best: 'Best', paused: 'Paused', resume: 'Resume', menu: 'Menu', gameOver: 'Game Over', again: 'Play again',
     double: '▶ Double coins', newBest: 'New best!', doubled: 'Coins doubled!', adUnavailable: 'Ad not available right now',
-    hintDesktop: 'WASD / Arrow keys to move · Space to dash · Esc to pause', hintTouch: 'Drag to move · tap ⚡ to dash' },
+    hintDesktop: 'WASD / Arrow keys to move · Space to dash · P to pause', hintTouch: 'Drag to move · tap ⚡ to dash' },
   tr: { play: 'Oyna', best: 'En iyi', paused: 'Duraklatıldı', resume: 'Devam', menu: 'Menü', gameOver: 'Oyun Bitti', again: 'Tekrar oyna',
     double: '▶ Altınları ikiye katla', newBest: 'Yeni rekor!', doubled: 'Altınlar ikiye katlandı!', adUnavailable: 'Şu anda reklam yok',
-    hintDesktop: 'WASD / Ok tuşları ile hareket · Boşluk ile atıl · Esc ile duraklat', hintTouch: 'Hareket için sürükle · atılmak için ⚡' },
+    hintDesktop: 'WASD / Ok tuşları ile hareket · Boşluk ile atıl · P ile duraklat', hintTouch: 'Hareket için sürükle · atılmak için ⚡' },
 };
 let lang = 'en';
 const t = (k) => STRINGS[lang]?.[k] ?? STRINGS.en[k] ?? k;
@@ -268,7 +268,7 @@ addEventListener('keydown', (e) => {
   if (e.repeat) return;
   keys.add(e.code); unlockAudio();
   if (e.code === 'Space' && state === State.PLAYING) dash();
-  if (e.code === 'Escape' || e.code === 'KeyP') togglePause();
+  if (e.code === 'KeyP') togglePause(); // never Escape: on CrazyGames it exits fullscreen
   if ((e.code === 'Enter' || e.code === 'Space') && state === State.MENU) $('btnPlay').click();
 });
 addEventListener('keyup', (e) => keys.delete(e.code));
