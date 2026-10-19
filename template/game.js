@@ -43,8 +43,12 @@ function applyI18n() { document.querySelectorAll('[data-i18n]').forEach((el) => 
 let crazySdk = null, sdkEnv = 'disabled', gameplayActive = false, adsFailed = false;
 
 async function initCrazySDK() {
+  // CrazyGames always embeds games in an iframe. Standalone (our own site, other hosts) the SDK is "disabled":
+  // init() takes ~7 s and most getters throw, so skip it there. localhost and ?useLocalSdk keep the SDK's local test mode.
+  const embedded = (() => { try { return window.self !== window.top; } catch { return true; } })();
+  const sdkHost = embedded || ['localhost', '127.0.0.1'].includes(location.hostname) || params.has('useLocalSdk');
   try {
-    if (window.CrazyGames?.SDK) {
+    if (window.CrazyGames?.SDK && sdkHost) {
       await window.CrazyGames.SDK.init(); // resolves to undefined: the SDK object itself is window.CrazyGames.SDK
       crazySdk = window.CrazyGames.SDK; sdkEnv = crazySdk.environment; // 'crazygames' | 'local' | 'disabled'
     }
@@ -55,6 +59,7 @@ async function initCrazySDK() {
 const sdkReady = () => !!crazySdk && sdkEnv !== 'disabled';
 const adsAvailable = () => sdkReady() && !adsFailed && !!crazySdk.ad;
 function sdkCall(fn) { if (!sdkReady()) return; try { fn(crazySdk); } catch (e) { console.warn('[CrazyGames]', e); } }
+function sdkLocale() { if (!sdkReady()) return null; try { return crazySdk.user?.systemInfo?.locale || null; } catch { return null; } }
 function applySdkSettings(s) { if (s?.muteAudio) muteAudio('sdk'); else unmuteAudio('sdk'); } // platform mute overrides everything
 
 function onGameplayStart() { if (gameplayActive) return; gameplayActive = true; sdkCall((s) => s.game.gameplayStart()); }
@@ -429,7 +434,7 @@ addEventListener('resize', resize);
 async function boot() {
   await initCrazySDK();
   sdkCall((s) => s.game.loadingStart());
-  lang = (params.get('lang') || crazySdk?.user?.systemInfo?.locale || navigator.language || 'en').slice(0, 2).toLowerCase();
+  lang = (params.get('lang') || sdkLocale() || navigator.language || 'en').slice(0, 2).toLowerCase();
   if (!STRINGS[lang]) lang = 'en';
   document.documentElement.lang = lang; applyI18n(); $('hint').textContent = t(isTouch ? 'hintTouch' : 'hintDesktop');
   initAudio();
