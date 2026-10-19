@@ -1,0 +1,35 @@
+{
+  "title": "Merge Siege Defense",
+  "slug": "merge-siege-defense",
+  "version": "1.0.0",
+  "blueprint": "A 3D merge tower-defense: summon heroes onto a 5x3 grid in front of your castle and drag matching heroes together to fuse them into one of ten stronger tiers, while endless waves of wolves and siege golems march down the road. Mouse/touch drag-and-drop with keyboard shortcuts (Space summon, M auto-merge, F speed). A midgame ad plays after every boss wave and between runs; an optional rewarded ad doubles the gems earned on the game-over screen.",
+  "description": "Hold the castle! Summon heroes, drag two matching heroes together to merge them into a stronger one, and climb through ten hero tiers, from humble Recruit to mighty Celestial. Wolves rush, stone golems march and a siege golem boss storms the gate every fifth wave. Spend the gems you win in the Armory on permanent upgrades and push your best wave even higher.",
+  "controls": {
+    "desktop": "Drag a hero onto a matching hero to merge. Space: summon a hero. M: auto-merge. F: toggle 2x speed. Esc: pause.",
+    "mobile": "Tap Summon, then drag a hero onto a matching hero to merge them."
+  },
+  "category": "Strategy",
+  "tags": ["merge", "tower defense", "3d", "idle", "castle", "fantasy", "strategy", "casual"],
+  "orientation": "landscape",
+  "mobile": true,
+  "languages": ["en", "tr"],
+  "pegi": "PEGI 7 (mild fantasy violence)",
+  "ads": {
+    "midgame": "After every boss wave (5, 10, 15, ...) and when starting a new run from the game-over screen; the SDK caps it at one every 3 minutes",
+    "rewarded": "Optional 'Double gems' on the game-over screen, once per run; hidden when ads are unavailable"
+  },
+  "capture": { "warmup": 75, "shots": [0, 20, 75, 150, 300] },
+  "press": {
+    "headline": "BroadGamesPro launches Merge Siege Defense, a 3D merge tower-defense playable instantly in the browser",
+    "summary": "Merge Siege Defense blends the satisfying drag-and-merge loop of merge games with classic castle defense. Players summon heroes, fuse matching pairs into ten increasingly powerful tiers and hold the gate against endless waves of wolves and siege golems. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
+    "features": [
+      "Drag-and-merge combat: fuse matching heroes to climb ten tiers, from Recruit to Celestial",
+      "Endless waves of wolves and golems, with a siege golem boss every fifth wave",
+      "Permanent Armory upgrades bought with gems: damage, walls, starting gold and summon luck",
+      "Full 3D fantasy battlefield with animated heroes, spell bolts and screen-shaking impacts",
+      "Plays on desktop and mobile with mouse, keyboard or touch; in English and Turkish",
+      "Instant play in the browser, and progress is saved automatically"
+    ],
+    "quote": "We wanted the instant satisfaction of a merge game with the tension of a last stand at the gate. Every merge feels like a power spike, and every boss wave puts it to the test."
+  }
+}

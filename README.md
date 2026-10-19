@@ -12,6 +12,7 @@ python3 games/fox-dash/bake_assets.py --dry     # what would be reused / generat
 python3 games/fox-dash/bake_assets.py           # bake assets (+ the 3 submission covers)
 node tools/playtest.mjs fox-dash                # headless Chromium smoke test + screenshots
 python3 tools/build.py fox-dash                 # CrazyGames checks -> games/fox-dash/dist/fox-dash.zip
+python3 tools/release.py fox-dash               # full package + press kit (videos, screenshots, store listing) -> website
 python3 server.py                               # preview: http://localhost:8080/
 python3 tools/balance.py                        # API credits left
 ```

@@ -56,9 +56,13 @@ def main():
             if not m.group(0).startswith(ALLOWED_URLS): warns.append(f'{f}: external URL {m.group(0)[:80]} (no cross-promotion; bundle assets locally)')
 
     # asset references: missing files fall back procedurally (warn), unreferenced files are dead weight (warn)
-    refs = set(re.findall(r'''(?<![\w/.])\.?/?(assets/[\w@./-]+\.\w{2,4})''', alltext))
+    refs = set(re.findall(r'''(?<![\w/.])\.?/?(assets/[\w@./{}-]+\.\w{2,4})''', alltext))
+    patterns = [re.compile('^' + re.sub(r'\\\{\w+\\\}', r'[^/]+', re.escape(r)) + '$') for r in refs if '{' in r]  # e.g. voice_{lang}.mp3
     for r in sorted(refs):
-        if r not in files: warns.append(f'referenced but missing (procedural fallback will be used): {r}')
+        if '{' in r:
+            if not any(p.match(f) for p in patterns for f in files): warns.append(f'referenced but missing (procedural fallback will be used): {r}')
+        elif r not in files: warns.append(f'referenced but missing (procedural fallback will be used): {r}')
+    refs |= {f for f in files if any(p.match(f) for p in patterns)}
     vendor_used = 'assets/vendor/three' in alltext
     unused = [f for f in files if f.startswith('assets/') and not f.startswith('assets/vendor/') and f not in refs]
     if unused: warns.append(f'{len(unused)} shipped asset(s) never referenced: ' + ', '.join(unused[:8]) + (' …' if len(unused) > 8 else ''))

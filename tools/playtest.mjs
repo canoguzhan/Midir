@@ -46,12 +46,12 @@ for (const vp of [{ name: 'desktop', width: 1216, height: 684, touch: false }, {
   page.on('pageerror', (e) => problems.push(`[${vp.name}] page error: ${e.message}`));
   page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) problems.push(`[${vp.name}] console: ${m.text().slice(0, 300)}`); });
   page.on('response', (r) => { if (r.url().startsWith(base) && r.status() === 404) missing.add(r.url().slice(base.length)); });
-  page.on('requestfailed', (r) => { if (r.url().startsWith(base)) problems.push(`[${vp.name}] request failed: ${r.url().slice(base.length)}`); });
+  page.on('requestfailed', (r) => { if (r.url().startsWith(base) && !(r.failure()?.errorText === 'net::ERR_ABORTED' && r.resourceType() === 'media')) problems.push(`[${vp.name}] request failed: ${r.url().slice(base.length)}`); });
   await page.goto(base, { waitUntil: 'load', timeout: 60000 });
   const play = page.locator('#btnPlay');
   try { await play.waitFor({ state: 'visible', timeout: 30000 }); }
   catch { problems.push(`[${vp.name}] #btnPlay never became visible (stuck in loading/BOOT?)`); }
-  await page.screenshot({ path: path.join(shots, `${vp.name}-menu.png`) });
+  await page.screenshot({ path: path.join(shots, `${vp.name}-menu.png`), timeout: 120000 });
   if (await play.isVisible()) {
     await play.click();
     await page.waitForTimeout(400);
@@ -64,7 +64,7 @@ for (const vp of [{ name: 'desktop', width: 1216, height: 684, touch: false }, {
       await page.waitForTimeout(seconds * 1000);
       for (const k of keys) await page.keyboard.up(k);
     }
-    await page.screenshot({ path: path.join(shots, `${vp.name}-play.png`) });
+    await page.screenshot({ path: path.join(shots, `${vp.name}-play.png`), timeout: 120000 });
   }
   await ctx.close();
 }

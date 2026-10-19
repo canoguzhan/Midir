@@ -1,6 +1,7 @@
 {
   "title": "{{TITLE}}",
   "slug": "{{SLUG}}",
+  "version": "1.0.0",
   "blueprint": "2-3 sentences: theme, core loop, controls, and where the midgame and rewarded ads trigger.",
   "description": "Store-page description for the CrazyGames submission form (2-4 sentences, no links).",
   "controls": {
@@ -8,12 +9,37 @@
     "mobile": "Drag anywhere on the left to move, tap the button to dash"
   },
   "category": "Casual",
-  "tags": ["3d", "arcade", "casual"],
+  "tags": [
+    "3d",
+    "arcade",
+    "casual"
+  ],
   "orientation": "landscape",
   "mobile": true,
-  "languages": ["en"],
+  "languages": [
+    "en"
+  ],
+  "pegi": "PEGI 7",
   "ads": {
     "midgame": "Before a new run starts after a game over (the SDK caps it at one every 3 minutes)",
     "rewarded": "Optional 'Double coins' on the game-over screen, once per run; hidden when ads are unavailable"
+  },
+  "capture": {
+    "warmup": 20,
+    "shots": [
+      0,
+      8,
+      20,
+      35,
+      50
+    ]
+  },
+  "press": {
+    "headline": "{studio} launches {title}, a ... playable instantly in the browser",
+    "summary": "2-3 sentences for journalists: what it is, why it is fun, where to play.",
+    "features": [
+      "5-6 concrete feature bullets"
+    ],
+    "quote": "One quote from the studio team about the idea behind the game."
   }
 }
