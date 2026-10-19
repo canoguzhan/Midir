@@ -33,7 +33,7 @@ def releases():
         for slug in os.listdir(RELEASES):
             r = load(os.path.join(RELEASES, slug, 'release.json'))
             if r: out.append(r)
-    return sorted(out, key=lambda r: r.get('date', ''), reverse=True)
+    return sorted(out, key=lambda r: (r.get('date', ''), r.get('published', '')), reverse=True)  # newest release first: it becomes the hero
 
 
 def homepage():

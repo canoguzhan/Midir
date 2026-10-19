@@ -246,7 +246,7 @@ def main():
              ('Store listing (.txt)', 'store-listing.txt'), ('Press release (.md)', 'press-release.md')]
     open(os.path.join(pk, 'index.html'), 'w').write(press_html(meta, studio, media_pub, links))
     write_json(os.path.join(tmp, 'release.json'), {
-        'title': title, 'slug': slug, 'version': version, 'date': date, 'description': meta.get('description', ''), 'category': meta.get('category', ''),
+        'title': title, 'slug': slug, 'version': version, 'date': date, 'published': time.strftime('%Y-%m-%dT%H:%M:%S'), 'description': meta.get('description', ''), 'category': meta.get('category', ''),
         'cover': f'presskit/{COVER_FILES["landscape"]}', 'hero': 'presskit/key-art-1920x1080.png', 'presskit': 'presskit/',
         'upload': {'file': f'{slug}-crazygames-upload.zip', 'mb': round(mb(upload), 1)}, 'package': {'file': f'{slug}-full-package.zip', 'mb': round(mb(full), 1)}})
     shutil.rmtree(pub, ignore_errors=True); os.replace(tmp, pub)
