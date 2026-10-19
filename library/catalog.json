@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-19 06:51",
-  "count": 289,
+  "updated": "2026-10-19 07:29",
+  "count": 294,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -16,6 +16,18 @@
       "kb": 16,
       "tags": [
         "anvil"
+      ]
+    },
+    {
+      "path": "audio/bgm_alchemy.mp3",
+      "prompt": "Cozy relaxing fantasy alchemy shop music, gentle harp, soft celesta, light pizzicato strings and warm pads, calm puzzle game loop",
+      "game": "potion-sort-3d",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "alchemy",
+        "bgm"
       ]
     },
     {
@@ -371,6 +383,42 @@
       "kb": 24,
       "tags": [
         "potion"
+      ]
+    },
+    {
+      "path": "audio/potion_complete.mp3",
+      "prompt": "bright magical chime as a potion bottle fills with a single color, shimmering sparkle, rewarding",
+      "game": "potion-sort-3d",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "complete",
+        "potion"
+      ]
+    },
+    {
+      "path": "audio/potion_cork.mp3",
+      "prompt": "cork popping into a glass bottle with a tiny magical sparkle",
+      "game": "potion-sort-3d",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "cork",
+        "potion"
+      ]
+    },
+    {
+      "path": "audio/potion_pour.mp3",
+      "prompt": "short glugging pour of thick magical liquid from a glass flask into another, bubbly, satisfying",
+      "game": "potion-sort-3d",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "potion",
+        "pour"
       ]
     },
     {
@@ -1812,6 +1860,19 @@
         "module",
         "three",
         "vendor"
+      ]
+    },
+    {
+      "path": "visuals/alchemy_lab_bg.webp",
+      "prompt": "cozy fantasy alchemist workshop interior, wooden shelves with glowing colorful potion bottles softly out of focus, warm candlelight, stone wall, magical dust particles, shallow depth of field, empty wooden counter in the foreground center, no text",
+      "game": "potion-sort-3d",
+      "source": "higgsfield",
+      "kind": "image",
+      "kb": 112,
+      "tags": [
+        "alchemy",
+        "bg",
+        "lab"
       ]
     },
     {

@@ -1,0 +1,35 @@
+{
+  "title": "Potion Sort 3D",
+  "slug": "potion-sort-3d",
+  "version": "1.0.0",
+  "blueprint": "A cozy 3D color-sort puzzle in an alchemist's workshop: tap a glass flask, then another, to pour its top layers of potion; liquid only lands on the same color or in an empty flask, and the goal is one color per flask. Endless seeded levels are verified by a built-in solver, growing from 3 to 12 colors; Undo, Hint (the solver's next move) and an Extra flask help out. Mouse/touch tapping plus number keys. A midgame ad plays between levels on 'Next level'; an optional rewarded ad doubles the coins on the level-cleared screen.",
+  "description": "Sort the potions! Tap a flask, then tap another to pour. Liquid only lands on the same color or in an empty flask, so plan your pours to give every flask a single shimmering color. Corks pop, sparkles fly and the colors pile up as you climb from three potions to twelve. Every level is guaranteed solvable, and Undo, Hint and Extra Flask boosters are there when you get stuck.",
+  "controls": {
+    "desktop": "Click a flask, then click another to pour (or press the flask's number key, 1-9 and 0). U or Z: undo. H: hint. F: extra flask. R: restart. Esc: pause.",
+    "mobile": "Tap a flask, then tap another to pour. Use the buttons at the bottom for Undo, Hint and an extra flask."
+  },
+  "category": "Puzzle",
+  "tags": ["sort", "water sort", "color sort", "puzzle", "3d", "relaxing", "brain", "casual"],
+  "orientation": "landscape",
+  "mobile": true,
+  "languages": ["en", "tr"],
+  "pegi": "PEGI 3",
+  "ads": {
+    "midgame": "When pressing 'Next level' after clearing a level (the SDK caps it at one every 3 minutes)",
+    "rewarded": "Optional 'Double coins' on the level-cleared screen, once per level; hidden when ads are unavailable"
+  },
+  "capture": { "warmup": 28, "shots": [0, 4, 28, 60, 100] },
+  "press": {
+    "headline": "BroadGamesPro launches Potion Sort 3D, a cozy color-sorting puzzle playable instantly in the browser",
+    "summary": "Potion Sort 3D turns the hugely popular color-sort puzzle into a warm, fully 3D alchemist's workshop. Players tilt glass flasks to pour layered potions until every flask holds a single color. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
+    "features": [
+      "Satisfying 3D pouring: flasks tilt, potions stream and corks pop when a color is complete",
+      "Endless levels from 3 to 12 colors, each checked by a built-in solver so every one can be beaten",
+      "Undo, Hint and Extra Flask boosters, earned with coins",
+      "Star ratings for efficient solutions",
+      "Cozy original alchemy soundtrack and workshop setting",
+      "Plays on desktop and mobile with mouse, touch or number keys; in English and Turkish; progress saves automatically"
+    ],
+    "quote": "Color sorting is one of the most relaxing puzzle mechanics there is. We wanted every single pour to feel tactile and magical, and we made sure every level our generator deals can actually be solved."
+  }
+}
