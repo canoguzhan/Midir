@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Potion Sort 3D</title>
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+<script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js"}}</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="fx"></div>
+
+<div id="hud" hidden>
+  <div class="hud-top">
+    <div class="pill"><span data-i18n="level">Level</span> <b id="levelNum">1</b></div>
+    <div class="pill"><span data-i18n="moves">Moves</span> <b id="moves">0</b></div>
+    <div class="spacer"></div>
+    <div class="pill coins"><img src="assets/visuals/icon_coin.webp" alt="" onerror="this.remove()"><b id="coins">0</b></div>
+    <button id="btnPause" class="icon" aria-label="Pause">II</button>
+  </div>
+  <div class="boosters">
+    <button id="bUndo" class="booster" data-key="undo"><span class="ic">↶</span><span class="lbl" data-i18n="undo">Undo</span><i class="count"></i></button>
+    <button id="bHint" class="booster" data-key="hint"><span class="ic">✦</span><span class="lbl" data-i18n="hint">Hint</span><i class="count"></i></button>
+    <button id="bFlask" class="booster" data-key="flask"><span class="ic">⚗</span><span class="lbl" data-i18n="flask">+ Flask</span><i class="count"></i></button>
+    <button id="bRestart" class="booster plain" aria-label="Restart"><span class="ic">⟲</span><span class="lbl" data-i18n="restartShort">Restart</span></button>
+  </div>
+</div>
+<div id="banner" hidden></div>
+
+<section id="menu" class="screen" hidden>
+  <h1>Potion <span>Sort</span><small>3D</small></h1>
+  <p class="sub"><span data-i18n="level">Level</span> <b class="menuLevel">1</b> · <img src="assets/visuals/icon_coin.webp" alt="" onerror="this.remove()"><b class="menuCoins">0</b></p>
+  <button id="btnPlay" class="big" data-i18n="play">Play</button>
+  <p class="hint" id="howto" data-i18n="howto">Tap a flask, then tap another to pour. Liquid only lands on the same color or in an empty flask. Sort every flask to one color!</p>
+</section>
+
+<section id="paused" class="screen" hidden>
+  <h2 data-i18n="paused">Paused</h2>
+  <button id="btnResume" class="big" data-i18n="resume">Resume</button>
+  <div class="row"><button id="btnRestart" data-i18n="restart">Restart level</button><button id="btnQuit" data-i18n="menu">Menu</button></div>
+</section>
+
+<section id="win" class="screen" hidden>
+  <h2 data-i18n="cleared">Potions sorted!</h2>
+  <div class="stars"><i>★</i><i>★</i><i>★</i></div>
+  <p class="sub" id="winMoves"></p>
+  <p class="reward"><img src="assets/visuals/icon_coin.webp" alt="" onerror="this.remove()">+<b id="winCoins">0</b></p>
+  <button id="btnDouble" class="rewarded" data-i18n="double" hidden>▶ Double coins</button>
+  <button id="btnNext" class="big" data-i18n="next">Next level</button>
+</section>
+
+<section id="stuck" class="screen" hidden>
+  <h2 data-i18n="stuck">No moves left!</h2>
+  <p class="sub" data-i18n="stuckSub">Undo a few pours, add an extra flask, or start over.</p>
+  <div class="row"><button id="btnStuckUndo" class="rewarded" data-i18n="undo">Undo</button><button id="btnStuckFlask" class="rewarded" data-i18n="flask">+ Flask</button></div>
+  <button id="btnStuckRestart" class="big" data-i18n="restart">Restart level</button>
+</section>
+
+<div id="loading"><div class="ltitle">Potion Sort 3D</div><div class="bar"><i id="loadBar"></i></div></div>
+<div id="toast" hidden></div>
+<script type="module" src="game.js"></script>
+</body>
+</html>
