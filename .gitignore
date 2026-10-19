@@ -2,5 +2,6 @@
 data/
 *.part
 __pycache__/
-__pycache__/
-*.part
+node_modules/
+games/*/dist/
+.claude/
