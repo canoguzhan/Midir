@@ -7,12 +7,17 @@
 Ships everything in games/<slug>/ except bake_assets.py, game.json, covers/, dist/ and dotfiles.
 Errors block the zip; warnings are printed for review. Limits: https://docs.crazygames.com/requirements/technical/"""
 import json, os, re, shutil, subprocess, sys, zipfile
-from common import game_dir, read_json
+from common import ROOT, game_dir, read_json
 
 EXCLUDE_TOP = {'bake_assets.py', 'game.json', 'covers', 'dist', 'notes.md', '__pycache__'}
 MAX_FILES, MAX_TOTAL_MB, MAX_INITIAL_MB, MOBILE_INITIAL_MB = 1500, 250, 50, 20
 SECRETS = re.compile(r'tsk_[A-Za-z0-9]{20,}|sk_[a-f0-9]{40,}|xi-api-key|api\.tripo3d\.ai|api\.elevenlabs\.io|platform\.higgsfield\.ai|_API_KEY|HF_KEY')
 ALLOWED_URLS = ('https://sdk.crazygames.com/',)
+QUALITY_KEYS = ('hook', 'onboarding', 'art_style', 'content', 'name_check', 'visual_review')  # game.json -> quality; see CLAUDE.md "Quality gate"
+GENERIC_WORDS = {'merge', 'defense', 'defence', 'tower', 'idle', 'clicker', 'run', 'runner', 'rush', 'dash', 'sort', 'puzzle', 'match', 'match3', '3d', '2d',
+                 'io', 'game', 'games', 'simulator', 'shooter', 'racing', 'race', 'car', 'cars', 'stack', 'jump', 'battle', 'war', 'arena', 'survival',
+                 'survivor', 'survivors', 'master', 'hero', 'heroes', 'siege', 'castle', 'block', 'blocks', 'online', 'mahjong', 'solitaire', 'chess',
+                 'the', 'of', 'and', 'a', 'super', 'mega', 'pro', 'clash', 'craft', 'merger', 'tycoon', 'farm', 'pet', 'pets', 'fight', 'legends'}
 COVER_SIZES = {'landscape': (1920, 1080), 'portrait': (800, 1200), 'square': (800, 800)}
 
 
@@ -87,6 +92,8 @@ def main():
         if call not in alltext: errors.append(f'SDK {call}() never called')
     if 'muteAudio' not in alltext: warns.append('game.settings.muteAudio is not handled (required for Full Launch)')
     if 'requestFullscreen' in alltext: errors.append('custom fullscreen is prohibited (CrazyGames provides it)')
+    if re.search(r"""['"]Escape['"]""", alltext): errors.append('Escape is bound to a game action: on CrazyGames it exits fullscreen (use P and an on-screen pause button)')
+    if '@font-face' not in alltext: warns.append('no @font-face: the UI uses system fonts, which reads as unpolished (reuse library/fonts/)')
     if 'user-select' not in alltext: warns.append('add user-select: none to body CSS (prevents the mobile magnifier/selection)')
 
     # no keys, no backend, relative paths only
@@ -98,7 +105,7 @@ def main():
             if not m.group(0).startswith(ALLOWED_URLS): warns.append(f'{f}: external URL {m.group(0)[:80]} (no cross-promotion; bundle assets locally)')
 
     # asset references: missing files fall back procedurally (warn), unreferenced files are dead weight (warn)
-    refs = set(re.findall(r'''(?<![\w/.])\.?/?(assets/[\w@./{}$-]+\.\w{2,4})''', alltext))
+    refs = set(re.findall(r'''(?<![\w/.])\.?/?(assets/[\w@./{}$-]+\.\w{2,5})''', alltext))
     patterns = [re.compile('^' + re.sub(r'(?:\\\$)?\\\{\w+\\\}', r'[^/]+', re.escape(r)) + '$') for r in refs if '{' in r]  # voice_{lang}.mp3, `${name}.webp`
     for r in sorted(refs):
         if '{' in r:
@@ -134,6 +141,16 @@ def main():
             if not os.path.exists(p): warns.append(f'covers/{k}.png missing ({size[0]}x{size[1]}): set COVERS in bake_assets.py and run it'); continue
             if Image.open(p).size != size: errors.append(f'covers/{k}.png is {Image.open(p).size}, needs {size}')
     except ImportError: warns.append('Pillow not installed: cover sizes not checked')
+
+    # store metadata + quality gate (CrazyGames rejects low-quality, generic or unclear games; docs.crazygames.com/requirements/quality/)
+    if not meta.get('description') or 'Store-page description' in meta.get('description', ''): errors.append('game.json: description missing (required at submission)')
+    if not (meta.get('controls') or {}).get('desktop'): errors.append('game.json: controls.desktop missing (required at submission)')
+    q, tq = meta.get('quality') or {}, (read_json(os.path.join(ROOT, 'template', 'game.json'), {}) or {}).get('quality', {})
+    for k in QUALITY_KEYS:
+        v = str(q.get(k, '')).strip()
+        if len(v) < 40 or v == tq.get(k): errors.append(f'game.json: quality.{k} is missing or still the template text (fill it honestly; see CLAUDE.md "Quality gate")')
+    words = re.findall(r'[a-z0-9]+', meta.get('title', slug).lower())
+    if words and all(w in GENERIC_WORDS for w in words): errors.append(f'title "{meta.get("title", slug)}" is only genre words: pick a distinctive name (CrazyGames: must not be easily confused with other games)')
 
     for w in warns: print('WARN ', w)
     for e in errors: print('ERROR', e)
