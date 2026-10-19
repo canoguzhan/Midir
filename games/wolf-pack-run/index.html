@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Wolf Pack Run</title>
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+<script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="fx"></div>
+<div id="packCount" hidden>0</div>
+
+<div id="hud" hidden>
+  <div class="hud-top">
+    <div class="pill"><span data-i18n="level">Level</span> <b id="levelNum">1</b></div>
+    <div class="progress"><i id="progFill"></i><span class="boss">☠</span></div>
+    <div class="pill"><img src="assets/visuals/icon_coin.webp" alt="" onerror="this.remove()"><b id="coins">0</b></div>
+    <button id="btnPause" class="icon" aria-label="Pause">II</button>
+  </div>
+  <div id="bossbar" hidden><span data-i18n="boss">Stone Warden</span><div class="bar"><i id="bossFill"></i></div></div>
+  <div id="dragHint" hidden><span>⟵</span><b data-i18n="drag">Drag to steer</b><span>⟶</span></div>
+</div>
+<div id="banner" hidden></div>
+
+<section id="menu" class="screen" hidden>
+  <h1>Wolf <span>Pack</span><small>RUN</small></h1>
+  <p class="sub"><span data-i18n="level">Level</span> <b class="menuLevel">1</b> · <img src="assets/visuals/icon_coin.webp" alt="" onerror="this.remove()"><b class="bank">0</b></p>
+  <button id="btnPlay" class="big" data-i18n="play">Play</button>
+  <div id="shop"></div>
+  <p class="hint" id="hint"></p>
+</section>
+
+<section id="paused" class="screen" hidden>
+  <h2 data-i18n="paused">Paused</h2>
+  <button id="btnResume" class="big" data-i18n="resume">Resume</button>
+  <div class="row"><button id="btnRestart" data-i18n="restart">Restart</button><button id="btnQuit" data-i18n="menu">Menu</button></div>
+</section>
+
+<section id="win" class="screen" hidden>
+  <h2 data-i18n="win">The Warden falls!</h2>
+  <p class="sub" id="winInfo"></p>
+  <p class="reward"><img src="assets/visuals/icon_coin.webp" alt="" onerror="this.remove()">+<b id="winCoins">0</b></p>
+  <button id="btnDouble" class="rewarded" data-i18n="double" hidden>▶ Double coins</button>
+  <button id="btnNext" class="big" data-i18n="next">Next level</button>
+  <button id="btnWinMenu" data-i18n="upgrades">Upgrades</button>
+</section>
+
+<section id="lose" class="screen" hidden>
+  <h2 id="loseTitle" data-i18n="lost">Pack lost!</h2>
+  <p class="sub" id="loseInfo"></p>
+  <p class="reward"><img src="assets/visuals/icon_coin.webp" alt="" onerror="this.remove()">+<b id="loseCoins">0</b></p>
+  <button id="btnRetry" class="big" data-i18n="retry">Try again</button>
+  <button id="btnLoseMenu" data-i18n="upgrades">Upgrades</button>
+</section>
+
+<div id="loading"><div class="ltitle">Wolf Pack Run</div><div class="bar"><i id="loadBar"></i></div></div>
+<div id="toast" hidden></div>
+<script type="module" src="game.js"></script>
+</body>
+</html>

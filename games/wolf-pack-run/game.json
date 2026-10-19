@@ -1,0 +1,35 @@
+{
+  "title": "Wolf Pack Run",
+  "slug": "wolf-pack-run",
+  "version": "1.0.0",
+  "blueprint": "A 3D crowd runner: steer a wolf pack down a forest road, pick the better of two number gates (+, -, ×, ÷), dodge spike fields and swinging saws, overrun rival red packs and bring enough wolves to topple the Stone Warden boss at the end. Endless seeded levels whose boss is sized from the best possible path, so every level is winnable. Drag or A/D/arrows to steer. A midgame ad plays between levels on 'Next level'; an optional rewarded ad doubles the coins on the win screen.",
+  "description": "Lead the pack! Steer your wolves through magic gates to multiply them into a howling horde, dodge spike traps and spinning saws, and crash through rival packs on your way down the forest road. At the end the giant Stone Warden is waiting, and only a big enough pack can bring it down. Spend your coins on a bigger starting pack, sharper fangs and richer rewards, and see how many wolves you can lead home.",
+  "controls": {
+    "desktop": "Drag with the mouse, or use A / D or the Left / Right arrows, to steer the pack. Esc: pause.",
+    "mobile": "Drag left and right anywhere on the screen to steer the pack."
+  },
+  "category": "Casual",
+  "tags": ["runner", "crowd", "3d", "wolves", "casual", "math", "hyper casual", "animals"],
+  "orientation": "landscape",
+  "mobile": true,
+  "languages": ["en", "tr"],
+  "pegi": "PEGI 3",
+  "ads": {
+    "midgame": "When pressing 'Next level' after winning a level (the SDK caps it at one every 3 minutes)",
+    "rewarded": "Optional 'Double coins' on the win screen, once per level; hidden when ads are unavailable"
+  },
+  "capture": { "warmup": 6, "shots": [0, 4, 11, 19.6, 45] },
+  "press": {
+    "headline": "BroadGamesPro launches Wolf Pack Run, a 3D crowd runner with hundreds of wolves, playable instantly in the browser",
+    "summary": "Wolf Pack Run puts a howling wolf pack at the heart of the hugely popular crowd-runner genre. Players steer through number gates to multiply their pack, dodge traps, battle rival packs and charge a giant Stone Warden at the end of every road. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
+    "features": [
+      "Hundreds of fully animated 3D wolves running together",
+      "Math gates (+, -, ×, ÷) that grow or shrink your pack in an instant",
+      "Spike traps, spinning saws and rival red packs to outsmart",
+      "A Stone Warden boss at the end of every level",
+      "Endless levels, each guaranteed winnable, plus permanent upgrades",
+      "Plays on desktop and mobile with drag, mouse or keyboard; in English and Turkish; progress saves automatically"
+    ],
+    "quote": "Crowd runners are all about that rush of watching your army explode in size. We wanted it to feel like a real pack of wolves, so every single wolf on screen is fully animated, even when there are hundreds of them."
+  }
+}

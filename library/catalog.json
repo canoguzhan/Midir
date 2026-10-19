@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-19 08:23",
-  "count": 306,
+  "updated": "2026-10-19 09:34",
+  "count": 311,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -82,6 +82,19 @@
       "tags": [
         "bgm",
         "title"
+      ]
+    },
+    {
+      "path": "audio/bgm_wolf_run.mp3",
+      "prompt": "Energetic upbeat folk-rock chase music, driving drums, fiddle and electric guitar, adventurous and fun, seamless loop for a runner game",
+      "game": "wolf-pack-run",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1407,
+      "tags": [
+        "bgm",
+        "run",
+        "wolf"
       ]
     },
     {
@@ -331,6 +344,30 @@
       ]
     },
     {
+      "path": "audio/gate_bad.mp3",
+      "prompt": "descending sad whoosh with a soft thud, negative",
+      "game": "wolf-pack-run",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 13,
+      "tags": [
+        "bad",
+        "gate"
+      ]
+    },
+    {
+      "path": "audio/gate_good.mp3",
+      "prompt": "bright magical whoosh and rising chime, positive power-up",
+      "game": "wolf-pack-run",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 13,
+      "tags": [
+        "gate",
+        "good"
+      ]
+    },
+    {
       "path": "audio/gatling.mp3",
       "kind": "audio",
       "kb": 19,
@@ -387,6 +424,18 @@
       "kb": 24,
       "tags": [
         "mortar"
+      ]
+    },
+    {
+      "path": "audio/pack_howl.mp3",
+      "prompt": "a pack of wolves howling together, rousing, outdoors, short",
+      "game": "wolf-pack-run",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 35,
+      "tags": [
+        "howl",
+        "pack"
       ]
     },
     {
@@ -503,6 +552,18 @@
         "rune",
         "tray",
         "warn"
+      ]
+    },
+    {
+      "path": "audio/saw_whoosh.mp3",
+      "prompt": "heavy spinning blade whooshing past, metallic",
+      "game": "wolf-pack-run",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 13,
+      "tags": [
+        "saw",
+        "whoosh"
       ]
     },
     {
