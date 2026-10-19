@@ -38,16 +38,18 @@ const server = createServer(async (req, res) => {
 await new Promise((r) => server.once('listening', r));
 const base = `http://127.0.0.1:${server.address().port}/`;
 
-const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--autoplay-policy=no-user-gesture-required'] });
+const browser = await chromium.launch({ args: ['--host-resolver-rules=MAP game.test 127.0.0.1', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--autoplay-policy=no-user-gesture-required'] });
 const problems = [], missing = new Set();
-for (const vp of [{ name: 'desktop', width: 1216, height: 684, touch: false }, { name: 'mobile', width: 800, height: 450, touch: true }]) {
+// 'standalone' loads from a non-localhost host, like the studio site: the CrazyGames SDK is disabled there and must not break boot
+for (const vp of [{ name: 'desktop', width: 1216, height: 684, touch: false }, { name: 'mobile', width: 800, height: 450, touch: true }, { name: 'standalone', width: 1216, height: 684, touch: false, host: 'game.test' }]) {
   const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, hasTouch: vp.touch, isMobile: vp.touch, deviceScaleFactor: 1 });
   const page = await ctx.newPage();
   page.on('pageerror', (e) => problems.push(`[${vp.name}] page error: ${e.message}`));
   page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) problems.push(`[${vp.name}] console: ${m.text().slice(0, 300)}`); });
-  page.on('response', (r) => { if (r.url().startsWith(base) && r.status() === 404) missing.add(r.url().slice(base.length)); });
+  page.on('response', (r) => { const u = r.url().replace(vp.host || '127.0.0.1', '127.0.0.1'); if (u.startsWith(base) && r.status() === 404) missing.add(u.slice(base.length)); });
   page.on('requestfailed', (r) => { if (r.url().startsWith(base) && !(r.failure()?.errorText === 'net::ERR_ABORTED' && r.resourceType() === 'media')) problems.push(`[${vp.name}] request failed: ${r.url().slice(base.length)}`); });
-  await page.goto(base, { waitUntil: 'load', timeout: 60000 });
+  const url = vp.host ? base.replace('127.0.0.1', vp.host) : base;
+  await page.goto(url, { waitUntil: 'load', timeout: 60000 });
   const play = page.locator('#btnPlay');
   try { await play.waitFor({ state: 'visible', timeout: 30000 }); }
   catch { problems.push(`[${vp.name}] #btnPlay never became visible (stuck in loading/BOOT?)`); }
