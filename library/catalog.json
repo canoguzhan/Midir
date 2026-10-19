@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-19 05:53",
-  "count": 279,
+  "updated": "2026-10-19 06:51",
+  "count": 289,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -380,6 +380,44 @@
       "tags": [
         "complete",
         "quest"
+      ]
+    },
+    {
+      "path": "audio/rune_match.mp3",
+      "prompt": "three magical runes clearing with a bright sparkling chime and soft whoosh, rewarding",
+      "game": "rune-mahjong-3d",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "match",
+        "rune"
+      ]
+    },
+    {
+      "path": "audio/rune_tile_tap.mp3",
+      "prompt": "light satisfying click of a polished stone mahjong tile being picked up, crisp",
+      "game": "rune-mahjong-3d",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "rune",
+        "tap",
+        "tile"
+      ]
+    },
+    {
+      "path": "audio/rune_tray_warn.mp3",
+      "prompt": "soft low warning chime, gentle tension, magical",
+      "game": "rune-mahjong-3d",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 13,
+      "tags": [
+        "rune",
+        "tray",
+        "warn"
       ]
     },
     {
@@ -765,6 +803,84 @@
         "merchant",
         "tr",
         "unlock"
+      ]
+    },
+    {
+      "path": "audio/voice/rune_excellent_en.mp3",
+      "prompt": "Excellent!",
+      "game": "rune-mahjong-3d",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 12,
+      "tags": [
+        "en",
+        "excellent",
+        "rune"
+      ]
+    },
+    {
+      "path": "audio/voice/rune_excellent_tr.mp3",
+      "prompt": "Mükemmel!",
+      "game": "rune-mahjong-3d",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "excellent",
+        "rune",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/rune_great_en.mp3",
+      "prompt": "Great!",
+      "game": "rune-mahjong-3d",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 11,
+      "tags": [
+        "en",
+        "great",
+        "rune"
+      ]
+    },
+    {
+      "path": "audio/voice/rune_great_tr.mp3",
+      "prompt": "Harika!",
+      "game": "rune-mahjong-3d",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 15,
+      "tags": [
+        "great",
+        "rune",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/rune_legendary_en.mp3",
+      "prompt": "Legendary!",
+      "game": "rune-mahjong-3d",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 13,
+      "tags": [
+        "en",
+        "legendary",
+        "rune"
+      ]
+    },
+    {
+      "path": "audio/voice/rune_legendary_tr.mp3",
+      "prompt": "Efsanevi!",
+      "game": "rune-mahjong-3d",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "legendary",
+        "rune",
+        "tr"
       ]
     },
     {
@@ -2468,6 +2584,19 @@
       "tags": [
         "region",
         "varkhal"
+      ]
+    },
+    {
+      "path": "visuals/rune_table_bg.webp",
+      "prompt": "top-down view of an ancient mystical wooden table with faint glowing blue runes carved around the edges, candles and soft magical haze at the corners, empty center, dark vignette, no text, no objects in the middle",
+      "game": "rune-mahjong-3d",
+      "source": "higgsfield",
+      "kind": "image",
+      "kb": 101,
+      "tags": [
+        "bg",
+        "rune",
+        "table"
       ]
     },
     {

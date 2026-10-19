@@ -98,8 +98,8 @@ def main():
             if not m.group(0).startswith(ALLOWED_URLS): warns.append(f'{f}: external URL {m.group(0)[:80]} (no cross-promotion; bundle assets locally)')
 
     # asset references: missing files fall back procedurally (warn), unreferenced files are dead weight (warn)
-    refs = set(re.findall(r'''(?<![\w/.])\.?/?(assets/[\w@./{}-]+\.\w{2,4})''', alltext))
-    patterns = [re.compile('^' + re.sub(r'\\\{\w+\\\}', r'[^/]+', re.escape(r)) + '$') for r in refs if '{' in r]  # e.g. voice_{lang}.mp3
+    refs = set(re.findall(r'''(?<![\w/.])\.?/?(assets/[\w@./{}$-]+\.\w{2,4})''', alltext))
+    patterns = [re.compile('^' + re.sub(r'(?:\\\$)?\\\{\w+\\\}', r'[^/]+', re.escape(r)) + '$') for r in refs if '{' in r]  # voice_{lang}.mp3, `${name}.webp`
     for r in sorted(refs):
         if '{' in r:
             if not any(p.match(f) for p in patterns for f in files): warns.append(f'referenced but missing (procedural fallback will be used): {r}')

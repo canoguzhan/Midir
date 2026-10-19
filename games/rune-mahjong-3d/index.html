@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Rune Mahjong 3D</title>
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+<script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="fx"></div>
+
+<div id="hud" hidden>
+  <div class="hud-top">
+    <div class="pill level"><span data-i18n="level">Level</span> <b id="levelNum">1</b></div>
+    <div class="pill tiles"><span data-i18n="tilesLeft">Tiles</span> <b id="tilesLeft">0</b></div>
+    <div class="spacer"></div>
+    <div class="pill coins"><img src="assets/visuals/icon_coin.webp" alt="" onerror="this.remove()"><b id="coins">0</b></div>
+    <button id="btnPause" class="icon" aria-label="Pause">II</button>
+  </div>
+  <div class="hud-bottom">
+    <div id="tray"><div class="slots"></div><div class="items"></div></div>
+    <div class="boosters">
+      <button id="bUndo" class="booster" data-key="undo"><span class="ic">↶</span><span class="lbl" data-i18n="undo">Undo</span><i class="count"></i></button>
+      <button id="bHint" class="booster" data-key="hint"><span class="ic">✦</span><span class="lbl" data-i18n="hint">Magic</span><i class="count"></i></button>
+      <button id="bShuffle" class="booster" data-key="shuffle"><span class="ic">⟳</span><span class="lbl" data-i18n="shuffle">Shuffle</span><i class="count"></i></button>
+    </div>
+  </div>
+</div>
+<div id="combo" hidden></div>
+
+<section id="menu" class="screen" hidden>
+  <h1>Rune <span>Mahjong</span><small>3D</small></h1>
+  <p class="sub"><span data-i18n="level">Level</span> <b class="menuLevel">1</b> · <img src="assets/visuals/icon_coin.webp" alt="" onerror="this.remove()"><b class="menuCoins">0</b></p>
+  <button id="btnPlay" class="big" data-i18n="play">Play</button>
+  <p class="hint" data-i18n="howto">Tap free tiles to move them to the tray. Three of a kind vanish. Don't let the tray fill up!</p>
+</section>
+
+<section id="paused" class="screen" hidden>
+  <h2 data-i18n="paused">Paused</h2>
+  <button id="btnResume" class="big" data-i18n="resume">Resume</button>
+  <div class="row"><button id="btnRestart" data-i18n="restart">Restart level</button><button id="btnQuit" data-i18n="menu">Menu</button></div>
+</section>
+
+<section id="win" class="screen" hidden>
+  <h2 data-i18n="cleared">Level cleared!</h2>
+  <div class="stars"><i>★</i><i>★</i><i>★</i></div>
+  <p class="reward"><img src="assets/visuals/icon_coin.webp" alt="" onerror="this.remove()">+<b id="winCoins">0</b></p>
+  <button id="btnDouble" class="rewarded" data-i18n="double" hidden>▶ Double coins</button>
+  <button id="btnNext" class="big" data-i18n="next">Next level</button>
+</section>
+
+<section id="lose" class="screen" hidden>
+  <h2 data-i18n="full">Tray full!</h2>
+  <p class="sub" data-i18n="fullSub">No more room for runes.</p>
+  <button id="btnLoseUndo" class="rewarded" hidden></button>
+  <button id="btnRetry" class="big" data-i18n="retry">Try again</button>
+  <button id="btnLoseMenu" data-i18n="menu">Menu</button>
+</section>
+
+<div id="loading"><div class="ltitle">Rune Mahjong 3D</div><div class="bar"><i id="loadBar"></i></div></div>
+<div id="toast" hidden></div>
+<script type="module" src="game.js"></script>
+</body>
+</html>
