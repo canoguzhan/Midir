@@ -1,0 +1,35 @@
+{
+  "title": "Dungeon Dash",
+  "slug": "dungeon-dash",
+  "version": "1.0.0",
+  "blueprint": "A 3D survivor-like: pick one of four heroes and survive 10 minutes in a torch-lit dungeon arena while your weapons fire on their own. Kill swarms of wolves and golems, collect XP gems and choose one of three upgrade cards at every level-up (5 weapons, 6 passives, 5 levels each); a Warden boss arrives at 5:00 and 9:00, and gold buys permanent Armory upgrades between runs. WASD/arrows or a floating touch joystick to move, number keys or taps for cards. A midgame ad plays when starting a new run from the results screen; an optional rewarded ad doubles the gold earned on the results screen.",
+  "description": "How long can you survive the dungeon? Choose your hero and fight off endless swarms of wolves and stone golems while your weapons strike on their own. Collect glowing gems to level up and build your perfect loadout from sweeping cleaves, homing daggers, spirit orbs, nova blasts and chain lightning. Face the Warden twice, survive all 10 minutes, and spend your gold in the Armory to come back even stronger.",
+  "controls": {
+    "desktop": "WASD or Arrow keys to move. Weapons attack automatically. 1, 2, 3 or click to pick an upgrade card. Esc: pause.",
+    "mobile": "Drag anywhere to move with the floating joystick. Weapons attack automatically. Tap a card to pick an upgrade."
+  },
+  "category": "Action",
+  "tags": ["survivor", "roguelite", "bullet heaven", "3d", "action", "fantasy", "auto battler", "dungeon"],
+  "orientation": "landscape",
+  "mobile": true,
+  "languages": ["en", "tr"],
+  "pegi": "PEGI 7 (mild fantasy violence)",
+  "ads": {
+    "midgame": "When pressing 'Play again' on the results screen, between runs (the SDK caps it at one every 3 minutes)",
+    "rewarded": "Optional 'Double gold' on the results screen, once per run; hidden when ads are unavailable"
+  },
+  "capture": { "warmup": 290, "shots": [0, 60, 200, 304, 470] },
+  "press": {
+    "headline": "BroadGamesPro launches Dungeon Dash, a 3D survivor-like roguelite playable instantly in the browser",
+    "summary": "Dungeon Dash brings the addictive one-more-run loop of survivor-likes to a fully 3D dungeon. Players pick a hero, dodge through ever-growing swarms of wolves and stone golems while their weapons fire automatically, and build a different loadout every run from level-up cards. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
+    "features": [
+      "Four heroes with unique starting weapons: Warrior, Assassin, Shaman and Sura",
+      "Five auto-firing weapons and six passive skills, each upgradable to level 5",
+      "Hundreds of enemies on screen, elite variants and a Warden boss at 5 and 9 minutes",
+      "Ten-minute runs that ramp from a trickle to a flood",
+      "Permanent Armory upgrades that make every run count",
+      "Plays on desktop and mobile with keyboard or touch joystick; in English and Turkish; progress saves automatically"
+    ],
+    "quote": "We wanted the 'just one more run' feeling of the best survivor games in a form you can start in two seconds in a browser tab, with real 3D heroes and a horde that genuinely fills the screen by minute nine."
+  }
+}
