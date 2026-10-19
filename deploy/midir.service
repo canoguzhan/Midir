@@ -1,5 +1,5 @@
 [Unit]
-Description=Game Factory preview server (gallery of games/)
+Description=BroadGamesPro preview server (gallery of games/)
 After=network-online.target
 
 [Service]

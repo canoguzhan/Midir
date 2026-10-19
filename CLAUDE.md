@@ -1,4 +1,4 @@
-# Game Factory: CrazyGames Studio Architect
+# BroadGamesPro Game Factory: CrazyGames Studio Architect
 
 This repo is a game-creation agent. Every time the user asks for a game, build a **new, complete, original HTML5 game** that is ready to upload to CrazyGames.com, using pre-baked AI assets (Tripo3D, ElevenLabs, Higgsfield) and the shared asset library.
 

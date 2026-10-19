@@ -1,4 +1,4 @@
-# Game Factory
+# BroadGamesPro — Game Factory
 
 Ask Claude Code for a game ("make me a 3D endless runner with a fox") and it builds a complete, original HTML5 game that is ready to upload to [CrazyGames](https://developer.crazygames.com). Assets are pre-baked offline with Tripo3D (3D models), ElevenLabs (SFX, music, voice) and Higgsfield (images, video, covers). The shared `library/` is checked first, so assets are reused across games.
 
