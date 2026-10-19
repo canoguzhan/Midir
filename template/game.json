@@ -1,0 +1,19 @@
+{
+  "title": "{{TITLE}}",
+  "slug": "{{SLUG}}",
+  "blueprint": "2-3 sentences: theme, core loop, controls, and where the midgame and rewarded ads trigger.",
+  "description": "Store-page description for the CrazyGames submission form (2-4 sentences, no links).",
+  "controls": {
+    "desktop": "WASD / Arrow keys to move, Space to dash, Esc to pause",
+    "mobile": "Drag anywhere on the left to move, tap the button to dash"
+  },
+  "category": "Casual",
+  "tags": ["3d", "arcade", "casual"],
+  "orientation": "landscape",
+  "mobile": true,
+  "languages": ["en"],
+  "ads": {
+    "midgame": "Before a new run starts after a game over (the SDK caps it at one every 3 minutes)",
+    "rewarded": "Optional 'Double coins' on the game-over screen, once per run; hidden when ads are unavailable"
+  }
+}

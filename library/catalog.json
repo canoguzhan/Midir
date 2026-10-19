@@ -1,0 +1,2540 @@
+{
+  "updated": "2026-10-19 04:59",
+  "count": 271,
+  "assets": [
+    {
+      "path": "audio/angry.mp3",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "angry"
+      ]
+    },
+    {
+      "path": "audio/anvil.mp3",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "anvil"
+      ]
+    },
+    {
+      "path": "audio/bgm_battle.mp3",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "battle",
+        "bgm"
+      ]
+    },
+    {
+      "path": "audio/bgm_field.mp3",
+      "kind": "music",
+      "kb": 1407,
+      "tags": [
+        "bgm",
+        "field"
+      ]
+    },
+    {
+      "path": "audio/bgm_menu.mp3",
+      "kind": "music",
+      "kb": 1407,
+      "tags": [
+        "bgm",
+        "menu"
+      ]
+    },
+    {
+      "path": "audio/bgm_overtime.mp3",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "bgm",
+        "overtime"
+      ]
+    },
+    {
+      "path": "audio/bgm_sanctuary.mp3",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "bgm",
+        "sanctuary"
+      ]
+    },
+    {
+      "path": "audio/bgm_title.mp3",
+      "kind": "music",
+      "kb": 1407,
+      "tags": [
+        "bgm",
+        "title"
+      ]
+    },
+    {
+      "path": "audio/brew.mp3",
+      "kind": "audio",
+      "kb": 24,
+      "tags": [
+        "brew"
+      ]
+    },
+    {
+      "path": "audio/cannon.mp3",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "cannon"
+      ]
+    },
+    {
+      "path": "audio/capture.mp3",
+      "kind": "audio",
+      "kb": 24,
+      "tags": [
+        "capture"
+      ]
+    },
+    {
+      "path": "audio/card_pick.mp3",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "card",
+        "pick"
+      ]
+    },
+    {
+      "path": "audio/click.mp3",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "click"
+      ]
+    },
+    {
+      "path": "audio/club.mp3",
+      "kind": "audio",
+      "kb": 10,
+      "tags": [
+        "club"
+      ]
+    },
+    {
+      "path": "audio/coin.mp3",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "coin"
+      ]
+    },
+    {
+      "path": "audio/coin_fling.mp3",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "coin",
+        "fling"
+      ]
+    },
+    {
+      "path": "audio/countdown.mp3",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "countdown"
+      ]
+    },
+    {
+      "path": "audio/crate_open.mp3",
+      "kind": "audio",
+      "kb": 32,
+      "tags": [
+        "crate",
+        "open"
+      ]
+    },
+    {
+      "path": "audio/crossbow.mp3",
+      "kind": "audio",
+      "kb": 10,
+      "tags": [
+        "crossbow"
+      ]
+    },
+    {
+      "path": "audio/defeat.mp3",
+      "kind": "audio",
+      "kb": 47,
+      "tags": [
+        "defeat"
+      ]
+    },
+    {
+      "path": "audio/deploy.mp3",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "deploy"
+      ]
+    },
+    {
+      "path": "audio/elder_done_en.mp3",
+      "kind": "audio",
+      "kb": 49,
+      "tags": [
+        "done",
+        "elder",
+        "en"
+      ]
+    },
+    {
+      "path": "audio/elder_done_tr.mp3",
+      "kind": "audio",
+      "kb": 45,
+      "tags": [
+        "done",
+        "elder",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/elder_greet_en.mp3",
+      "kind": "audio",
+      "kb": 89,
+      "tags": [
+        "elder",
+        "en",
+        "greet"
+      ]
+    },
+    {
+      "path": "audio/elder_greet_tr.mp3",
+      "kind": "audio",
+      "kb": 80,
+      "tags": [
+        "elder",
+        "greet",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/elder_quest_en.mp3",
+      "kind": "audio",
+      "kb": 64,
+      "tags": [
+        "elder",
+        "en",
+        "quest"
+      ]
+    },
+    {
+      "path": "audio/elder_quest_tr.mp3",
+      "kind": "audio",
+      "kb": 71,
+      "tags": [
+        "elder",
+        "quest",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/engine_horn.mp3",
+      "kind": "audio",
+      "kb": 47,
+      "tags": [
+        "engine",
+        "horn"
+      ]
+    },
+    {
+      "path": "audio/explosion.mp3",
+      "kind": "audio",
+      "kb": 32,
+      "tags": [
+        "explosion"
+      ]
+    },
+    {
+      "path": "audio/fire_barrage.mp3",
+      "kind": "audio",
+      "kb": 32,
+      "tags": [
+        "barrage",
+        "fire"
+      ]
+    },
+    {
+      "path": "audio/footstep.mp3",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "footstep"
+      ]
+    },
+    {
+      "path": "audio/frenzy.mp3",
+      "kind": "audio",
+      "kb": 24,
+      "tags": [
+        "frenzy"
+      ]
+    },
+    {
+      "path": "audio/gatling.mp3",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "gatling"
+      ]
+    },
+    {
+      "path": "audio/golem_roar.mp3",
+      "kind": "audio",
+      "kb": 47,
+      "tags": [
+        "golem",
+        "roar"
+      ]
+    },
+    {
+      "path": "audio/golem_step.mp3",
+      "kind": "audio",
+      "kb": 10,
+      "tags": [
+        "golem",
+        "step"
+      ]
+    },
+    {
+      "path": "audio/hammer.mp3",
+      "kind": "audio",
+      "kb": 13,
+      "tags": [
+        "hammer"
+      ]
+    },
+    {
+      "path": "audio/hit.mp3",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "hit"
+      ]
+    },
+    {
+      "path": "audio/level_up.mp3",
+      "kind": "audio",
+      "kb": 47,
+      "tags": [
+        "level",
+        "up"
+      ]
+    },
+    {
+      "path": "audio/mortar.mp3",
+      "kind": "audio",
+      "kb": 24,
+      "tags": [
+        "mortar"
+      ]
+    },
+    {
+      "path": "audio/pad_fill.mp3",
+      "kind": "audio",
+      "kb": 24,
+      "tags": [
+        "fill",
+        "pad"
+      ]
+    },
+    {
+      "path": "audio/pop.mp3",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "pop"
+      ]
+    },
+    {
+      "path": "audio/portal.mp3",
+      "kind": "audio",
+      "kb": 47,
+      "tags": [
+        "portal"
+      ]
+    },
+    {
+      "path": "audio/potion.mp3",
+      "kind": "audio",
+      "kb": 24,
+      "tags": [
+        "potion"
+      ]
+    },
+    {
+      "path": "audio/quest_complete.mp3",
+      "kind": "audio",
+      "kb": 32,
+      "tags": [
+        "complete",
+        "quest"
+      ]
+    },
+    {
+      "path": "audio/scribe.mp3",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "scribe"
+      ]
+    },
+    {
+      "path": "audio/shock.mp3",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "shock"
+      ]
+    },
+    {
+      "path": "audio/skill_dash.mp3",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "dash",
+        "skill"
+      ]
+    },
+    {
+      "path": "audio/skill_fire.mp3",
+      "kind": "audio",
+      "kb": 32,
+      "tags": [
+        "fire",
+        "skill"
+      ]
+    },
+    {
+      "path": "audio/skill_heal.mp3",
+      "kind": "audio",
+      "kb": 32,
+      "tags": [
+        "heal",
+        "skill"
+      ]
+    },
+    {
+      "path": "audio/skill_slam.mp3",
+      "kind": "audio",
+      "kb": 32,
+      "tags": [
+        "skill",
+        "slam"
+      ]
+    },
+    {
+      "path": "audio/stack_drop.mp3",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "drop",
+        "stack"
+      ]
+    },
+    {
+      "path": "audio/sword_swing.mp3",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "swing",
+        "sword"
+      ]
+    },
+    {
+      "path": "audio/thunder.mp3",
+      "kind": "audio",
+      "kb": 24,
+      "tags": [
+        "thunder"
+      ]
+    },
+    {
+      "path": "audio/tower_down.mp3",
+      "kind": "audio",
+      "kb": 47,
+      "tags": [
+        "down",
+        "tower"
+      ]
+    },
+    {
+      "path": "audio/ui_click.mp3",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "click",
+        "ui"
+      ]
+    },
+    {
+      "path": "audio/unlock.mp3",
+      "kind": "audio",
+      "kb": 39,
+      "tags": [
+        "unlock"
+      ]
+    },
+    {
+      "path": "audio/upgrade.mp3",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "upgrade"
+      ]
+    },
+    {
+      "path": "audio/victory.mp3",
+      "kind": "audio",
+      "kb": 63,
+      "tags": [
+        "victory"
+      ]
+    },
+    {
+      "path": "audio/voice/berserker_angry_en.mp3",
+      "kind": "voice",
+      "kb": 45,
+      "tags": [
+        "angry",
+        "berserker",
+        "en"
+      ]
+    },
+    {
+      "path": "audio/voice/berserker_angry_tr.mp3",
+      "kind": "voice",
+      "kb": 38,
+      "tags": [
+        "angry",
+        "berserker",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/berserker_lane_en.mp3",
+      "kind": "voice",
+      "kb": 26,
+      "tags": [
+        "berserker",
+        "en",
+        "lane"
+      ]
+    },
+    {
+      "path": "audio/voice/berserker_lane_tr.mp3",
+      "kind": "voice",
+      "kb": 30,
+      "tags": [
+        "berserker",
+        "lane",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/berserker_need_en.mp3",
+      "kind": "voice",
+      "kb": 26,
+      "tags": [
+        "berserker",
+        "en",
+        "need"
+      ]
+    },
+    {
+      "path": "audio/voice/berserker_need_tr.mp3",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "berserker",
+        "need",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/elementalist_angry_en.mp3",
+      "kind": "voice",
+      "kb": 38,
+      "tags": [
+        "angry",
+        "elementalist",
+        "en"
+      ]
+    },
+    {
+      "path": "audio/voice/elementalist_angry_tr.mp3",
+      "kind": "voice",
+      "kb": 37,
+      "tags": [
+        "angry",
+        "elementalist",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/elementalist_need_en.mp3",
+      "kind": "voice",
+      "kb": 22,
+      "tags": [
+        "elementalist",
+        "en",
+        "need"
+      ]
+    },
+    {
+      "path": "audio/voice/elementalist_need_tr.mp3",
+      "kind": "voice",
+      "kb": 21,
+      "tags": [
+        "elementalist",
+        "need",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/elementalist_tome_en.mp3",
+      "kind": "voice",
+      "kb": 30,
+      "tags": [
+        "elementalist",
+        "en",
+        "tome"
+      ]
+    },
+    {
+      "path": "audio/voice/elementalist_tome_tr.mp3",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "elementalist",
+        "tome",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/juggernaut_angry_en.mp3",
+      "kind": "voice",
+      "kb": 30,
+      "tags": [
+        "angry",
+        "en",
+        "juggernaut"
+      ]
+    },
+    {
+      "path": "audio/voice/juggernaut_angry_tr.mp3",
+      "kind": "voice",
+      "kb": 40,
+      "tags": [
+        "angry",
+        "juggernaut",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/juggernaut_need_en.mp3",
+      "kind": "voice",
+      "kb": 26,
+      "tags": [
+        "en",
+        "juggernaut",
+        "need"
+      ]
+    },
+    {
+      "path": "audio/voice/juggernaut_need_tr.mp3",
+      "kind": "voice",
+      "kb": 27,
+      "tags": [
+        "juggernaut",
+        "need",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/merchant_sale1_en.mp3",
+      "kind": "voice",
+      "kb": 30,
+      "tags": [
+        "en",
+        "merchant",
+        "sale1"
+      ]
+    },
+    {
+      "path": "audio/voice/merchant_sale1_tr.mp3",
+      "kind": "voice",
+      "kb": 26,
+      "tags": [
+        "merchant",
+        "sale1",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/merchant_sale2_en.mp3",
+      "kind": "voice",
+      "kb": 37,
+      "tags": [
+        "en",
+        "merchant",
+        "sale2"
+      ]
+    },
+    {
+      "path": "audio/voice/merchant_sale2_tr.mp3",
+      "kind": "voice",
+      "kb": 36,
+      "tags": [
+        "merchant",
+        "sale2",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/merchant_sale3_en.mp3",
+      "kind": "voice",
+      "kb": 46,
+      "tags": [
+        "en",
+        "merchant",
+        "sale3"
+      ]
+    },
+    {
+      "path": "audio/voice/merchant_sale3_tr.mp3",
+      "kind": "voice",
+      "kb": 53,
+      "tags": [
+        "merchant",
+        "sale3",
+        "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/merchant_unlock_en.mp3",
+      "kind": "voice",
+      "kb": 43,
+      "tags": [
+        "en",
+        "merchant",
+        "unlock"
+      ]
+    },
+    {
+      "path": "audio/voice/merchant_unlock_tr.mp3",
+      "kind": "voice",
+      "kb": 27,
+      "tags": [
+        "merchant",
+        "tr",
+        "unlock"
+      ]
+    },
+    {
+      "path": "audio/wolf_death.mp3",
+      "kind": "audio",
+      "kb": 32,
+      "tags": [
+        "death",
+        "wolf"
+      ]
+    },
+    {
+      "path": "audio/wolf_growl.mp3",
+      "kind": "audio",
+      "kb": 32,
+      "tags": [
+        "growl",
+        "wolf"
+      ]
+    },
+    {
+      "path": "models/bld_king.glb",
+      "kind": "model",
+      "kb": 3356,
+      "tags": [
+        "bld",
+        "king"
+      ]
+    },
+    {
+      "path": "models/bld_outpost.glb",
+      "kind": "model",
+      "kb": 3538,
+      "tags": [
+        "bld",
+        "outpost"
+      ]
+    },
+    {
+      "path": "models/bld_tower.glb",
+      "kind": "model",
+      "kb": 3476,
+      "tags": [
+        "bld",
+        "tower"
+      ]
+    },
+    {
+      "path": "models/hero_assassin@idle.glb",
+      "kind": "anim",
+      "kb": 3469,
+      "tags": [
+        "assassin",
+        "hero",
+        "idle"
+      ]
+    },
+    {
+      "path": "models/hero_assassin@run.glb",
+      "kind": "anim",
+      "kb": 3316,
+      "tags": [
+        "assassin",
+        "hero",
+        "run"
+      ]
+    },
+    {
+      "path": "models/hero_assassin@slash.glb",
+      "kind": "anim",
+      "kb": 3377,
+      "tags": [
+        "assassin",
+        "hero",
+        "slash"
+      ]
+    },
+    {
+      "path": "models/hero_assassin@walk.glb",
+      "kind": "anim",
+      "kb": 3330,
+      "tags": [
+        "assassin",
+        "hero",
+        "walk"
+      ]
+    },
+    {
+      "path": "models/hero_shaman@idle.glb",
+      "kind": "anim",
+      "kb": 3555,
+      "tags": [
+        "hero",
+        "idle",
+        "shaman"
+      ]
+    },
+    {
+      "path": "models/hero_shaman@run.glb",
+      "kind": "anim",
+      "kb": 3402,
+      "tags": [
+        "hero",
+        "run",
+        "shaman"
+      ]
+    },
+    {
+      "path": "models/hero_shaman@slash.glb",
+      "kind": "anim",
+      "kb": 3462,
+      "tags": [
+        "hero",
+        "shaman",
+        "slash"
+      ]
+    },
+    {
+      "path": "models/hero_shaman@walk.glb",
+      "kind": "anim",
+      "kb": 3415,
+      "tags": [
+        "hero",
+        "shaman",
+        "walk"
+      ]
+    },
+    {
+      "path": "models/hero_sura@idle.glb",
+      "kind": "anim",
+      "kb": 3248,
+      "tags": [
+        "hero",
+        "idle",
+        "sura"
+      ]
+    },
+    {
+      "path": "models/hero_sura@run.glb",
+      "kind": "anim",
+      "kb": 3096,
+      "tags": [
+        "hero",
+        "run",
+        "sura"
+      ]
+    },
+    {
+      "path": "models/hero_sura@slash.glb",
+      "kind": "anim",
+      "kb": 3157,
+      "tags": [
+        "hero",
+        "slash",
+        "sura"
+      ]
+    },
+    {
+      "path": "models/hero_sura@walk.glb",
+      "kind": "anim",
+      "kb": 3109,
+      "tags": [
+        "hero",
+        "sura",
+        "walk"
+      ]
+    },
+    {
+      "path": "models/hero_warrior@idle.glb",
+      "kind": "anim",
+      "kb": 3709,
+      "tags": [
+        "hero",
+        "idle",
+        "warrior"
+      ]
+    },
+    {
+      "path": "models/hero_warrior@run.glb",
+      "kind": "anim",
+      "kb": 3557,
+      "tags": [
+        "hero",
+        "run",
+        "warrior"
+      ]
+    },
+    {
+      "path": "models/hero_warrior@slash.glb",
+      "kind": "anim",
+      "kb": 3618,
+      "tags": [
+        "hero",
+        "slash",
+        "warrior"
+      ]
+    },
+    {
+      "path": "models/hero_warrior@walk.glb",
+      "kind": "anim",
+      "kb": 3569,
+      "tags": [
+        "hero",
+        "walk",
+        "warrior"
+      ]
+    },
+    {
+      "path": "models/midir_engine.glb",
+      "kind": "model",
+      "kb": 3551,
+      "tags": [
+        "engine",
+        "midir"
+      ]
+    },
+    {
+      "path": "models/mob_golem@idle.glb",
+      "kind": "anim",
+      "kb": 4137,
+      "tags": [
+        "golem",
+        "idle",
+        "mob"
+      ]
+    },
+    {
+      "path": "models/mob_golem@slash.glb",
+      "kind": "anim",
+      "kb": 4045,
+      "tags": [
+        "golem",
+        "mob",
+        "slash"
+      ]
+    },
+    {
+      "path": "models/mob_golem@walk.glb",
+      "kind": "anim",
+      "kb": 3998,
+      "tags": [
+        "golem",
+        "mob",
+        "walk"
+      ]
+    },
+    {
+      "path": "models/mob_wolf@walk.glb",
+      "kind": "anim",
+      "kb": 3674,
+      "tags": [
+        "mob",
+        "walk",
+        "wolf"
+      ]
+    },
+    {
+      "path": "models/npc_elder@idle.glb",
+      "kind": "anim",
+      "kb": 3600,
+      "tags": [
+        "elder",
+        "idle",
+        "npc"
+      ]
+    },
+    {
+      "path": "models/opt/bld_king.glb",
+      "kind": "model",
+      "kb": 264,
+      "tags": [
+        "bld",
+        "king"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/bld_outpost.glb",
+      "kind": "model",
+      "kb": 309,
+      "tags": [
+        "bld",
+        "outpost"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/bld_tower.glb",
+      "kind": "model",
+      "kb": 240,
+      "tags": [
+        "bld",
+        "tower"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/hero_assassin@idle.glb",
+      "kind": "anim",
+      "kb": 366,
+      "tags": [
+        "assassin",
+        "hero",
+        "idle"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/hero_assassin@run.glb",
+      "kind": "anim",
+      "kb": 340,
+      "tags": [
+        "assassin",
+        "hero",
+        "run"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/hero_assassin@slash.glb",
+      "kind": "anim",
+      "kb": 362,
+      "tags": [
+        "assassin",
+        "hero",
+        "slash"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/hero_assassin@walk.glb",
+      "kind": "anim",
+      "kb": 348,
+      "tags": [
+        "assassin",
+        "hero",
+        "walk"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/hero_shaman@idle.glb",
+      "kind": "anim",
+      "kb": 355,
+      "tags": [
+        "hero",
+        "idle",
+        "shaman"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/hero_shaman@run.glb",
+      "kind": "anim",
+      "kb": 329,
+      "tags": [
+        "hero",
+        "run",
+        "shaman"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/hero_shaman@slash.glb",
+      "kind": "anim",
+      "kb": 350,
+      "tags": [
+        "hero",
+        "shaman",
+        "slash"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/hero_shaman@walk.glb",
+      "kind": "anim",
+      "kb": 336,
+      "tags": [
+        "hero",
+        "shaman",
+        "walk"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/hero_sura@idle.glb",
+      "kind": "anim",
+      "kb": 342,
+      "tags": [
+        "hero",
+        "idle",
+        "sura"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/hero_sura@run.glb",
+      "kind": "anim",
+      "kb": 316,
+      "tags": [
+        "hero",
+        "run",
+        "sura"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/hero_sura@slash.glb",
+      "kind": "anim",
+      "kb": 338,
+      "tags": [
+        "hero",
+        "slash",
+        "sura"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/hero_sura@walk.glb",
+      "kind": "anim",
+      "kb": 323,
+      "tags": [
+        "hero",
+        "sura",
+        "walk"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/hero_warrior@idle.glb",
+      "kind": "anim",
+      "kb": 388,
+      "tags": [
+        "hero",
+        "idle",
+        "warrior"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/hero_warrior@run.glb",
+      "kind": "anim",
+      "kb": 363,
+      "tags": [
+        "hero",
+        "run",
+        "warrior"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/hero_warrior@slash.glb",
+      "kind": "anim",
+      "kb": 384,
+      "tags": [
+        "hero",
+        "slash",
+        "warrior"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/hero_warrior@walk.glb",
+      "kind": "anim",
+      "kb": 369,
+      "tags": [
+        "hero",
+        "walk",
+        "warrior"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/midir_engine.glb",
+      "kind": "model",
+      "kb": 348,
+      "tags": [
+        "engine",
+        "midir"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/mob_golem@idle.glb",
+      "kind": "anim",
+      "kb": 387,
+      "tags": [
+        "golem",
+        "idle",
+        "mob"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/mob_golem@slash.glb",
+      "kind": "anim",
+      "kb": 384,
+      "tags": [
+        "golem",
+        "mob",
+        "slash"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/mob_golem@walk.glb",
+      "kind": "anim",
+      "kb": 369,
+      "tags": [
+        "golem",
+        "mob",
+        "walk"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/mob_wolf@walk.glb",
+      "kind": "anim",
+      "kb": 348,
+      "tags": [
+        "mob",
+        "walk",
+        "wolf"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/npc_elder@idle.glb",
+      "kind": "anim",
+      "kb": 431,
+      "tags": [
+        "elder",
+        "idle",
+        "npc"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/prop_house.glb",
+      "kind": "model",
+      "kb": 387,
+      "tags": [
+        "house",
+        "prop"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/prop_rock.glb",
+      "kind": "model",
+      "kb": 384,
+      "tags": [
+        "prop",
+        "rock"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/prop_shrine.glb",
+      "kind": "model",
+      "kb": 291,
+      "tags": [
+        "prop",
+        "shrine"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/prop_tree.glb",
+      "kind": "model",
+      "kb": 307,
+      "tags": [
+        "prop",
+        "tree"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/wpn_abyssedge.glb",
+      "kind": "model",
+      "kb": 236,
+      "tags": [
+        "abyssedge",
+        "wpn"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/wpn_battlesword.glb",
+      "kind": "model",
+      "kb": 173,
+      "tags": [
+        "battlesword",
+        "wpn"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/wpn_cursedblade.glb",
+      "kind": "model",
+      "kb": 257,
+      "tags": [
+        "cursedblade",
+        "wpn"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/wpn_dragonsword.glb",
+      "kind": "model",
+      "kb": 245,
+      "tags": [
+        "dragonsword",
+        "wpn"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/wpn_irondagger.glb",
+      "kind": "model",
+      "kb": 184,
+      "tags": [
+        "irondagger",
+        "wpn"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/wpn_ironsword.glb",
+      "kind": "model",
+      "kb": 211,
+      "tags": [
+        "ironsword",
+        "wpn"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/wpn_shadowfang.glb",
+      "kind": "model",
+      "kb": 191,
+      "tags": [
+        "shadowfang",
+        "wpn"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/wpn_soulreaver.glb",
+      "kind": "model",
+      "kb": 252,
+      "tags": [
+        "soulreaver",
+        "wpn"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/opt/wpn_viperblade.glb",
+      "kind": "model",
+      "kb": 281,
+      "tags": [
+        "viperblade",
+        "wpn"
+      ],
+      "note": "compressed (meshopt); ship this one"
+    },
+    {
+      "path": "models/prop_house.glb",
+      "kind": "model",
+      "kb": 4050,
+      "tags": [
+        "house",
+        "prop"
+      ]
+    },
+    {
+      "path": "models/prop_rock.glb",
+      "kind": "model",
+      "kb": 5476,
+      "tags": [
+        "prop",
+        "rock"
+      ]
+    },
+    {
+      "path": "models/prop_shrine.glb",
+      "kind": "model",
+      "kb": 4200,
+      "tags": [
+        "prop",
+        "shrine"
+      ]
+    },
+    {
+      "path": "models/prop_tree.glb",
+      "kind": "model",
+      "kb": 4057,
+      "tags": [
+        "prop",
+        "tree"
+      ]
+    },
+    {
+      "path": "models/wpn_abyssedge.glb",
+      "kind": "model",
+      "kb": 4065,
+      "tags": [
+        "abyssedge",
+        "wpn"
+      ]
+    },
+    {
+      "path": "models/wpn_battlesword.glb",
+      "kind": "model",
+      "kb": 3266,
+      "tags": [
+        "battlesword",
+        "wpn"
+      ]
+    },
+    {
+      "path": "models/wpn_cursedblade.glb",
+      "kind": "model",
+      "kb": 4149,
+      "tags": [
+        "cursedblade",
+        "wpn"
+      ]
+    },
+    {
+      "path": "models/wpn_dragonsword.glb",
+      "kind": "model",
+      "kb": 3516,
+      "tags": [
+        "dragonsword",
+        "wpn"
+      ]
+    },
+    {
+      "path": "models/wpn_irondagger.glb",
+      "kind": "model",
+      "kb": 3561,
+      "tags": [
+        "irondagger",
+        "wpn"
+      ]
+    },
+    {
+      "path": "models/wpn_ironsword.glb",
+      "kind": "model",
+      "kb": 3130,
+      "tags": [
+        "ironsword",
+        "wpn"
+      ]
+    },
+    {
+      "path": "models/wpn_shadowfang.glb",
+      "kind": "model",
+      "kb": 3315,
+      "tags": [
+        "shadowfang",
+        "wpn"
+      ]
+    },
+    {
+      "path": "models/wpn_soulreaver.glb",
+      "kind": "model",
+      "kb": 4151,
+      "tags": [
+        "soulreaver",
+        "wpn"
+      ]
+    },
+    {
+      "path": "models/wpn_viperblade.glb",
+      "kind": "model",
+      "kb": 4254,
+      "tags": [
+        "viperblade",
+        "wpn"
+      ]
+    },
+    {
+      "path": "vendor/three/LICENSE",
+      "kind": "vendor",
+      "kb": 1,
+      "tags": [
+        "license",
+        "three",
+        "vendor"
+      ]
+    },
+    {
+      "path": "vendor/three/addons/libs/meshopt_decoder.module.js",
+      "kind": "vendor",
+      "kb": 24,
+      "tags": [
+        "addons",
+        "decoder",
+        "libs",
+        "meshopt",
+        "module",
+        "three",
+        "vendor"
+      ]
+    },
+    {
+      "path": "vendor/three/addons/loaders/GLTFLoader.js",
+      "kind": "vendor",
+      "kb": 107,
+      "tags": [
+        "addons",
+        "gltfloader",
+        "loaders",
+        "three",
+        "vendor"
+      ]
+    },
+    {
+      "path": "vendor/three/addons/utils/BufferGeometryUtils.js",
+      "kind": "vendor",
+      "kb": 31,
+      "tags": [
+        "addons",
+        "buffergeometryutils",
+        "three",
+        "utils",
+        "vendor"
+      ]
+    },
+    {
+      "path": "vendor/three/addons/utils/SkeletonUtils.js",
+      "kind": "vendor",
+      "kb": 8,
+      "tags": [
+        "addons",
+        "skeletonutils",
+        "three",
+        "utils",
+        "vendor"
+      ]
+    },
+    {
+      "path": "vendor/three/three.module.min.js",
+      "kind": "vendor",
+      "kb": 675,
+      "tags": [
+        "min",
+        "module",
+        "three",
+        "vendor"
+      ]
+    },
+    {
+      "path": "visuals/card_barrage.webp",
+      "kind": "image",
+      "kb": 16,
+      "tags": [
+        "barrage",
+        "card"
+      ]
+    },
+    {
+      "path": "visuals/card_crossbow.webp",
+      "kind": "image",
+      "kb": 18,
+      "tags": [
+        "card",
+        "crossbow"
+      ]
+    },
+    {
+      "path": "visuals/card_gatling.webp",
+      "kind": "image",
+      "kb": 8,
+      "tags": [
+        "card",
+        "gatling"
+      ]
+    },
+    {
+      "path": "visuals/card_grunts.webp",
+      "kind": "image",
+      "kb": 11,
+      "tags": [
+        "card",
+        "grunts"
+      ]
+    },
+    {
+      "path": "visuals/card_juggernaut.webp",
+      "kind": "image",
+      "kb": 16,
+      "tags": [
+        "card",
+        "juggernaut"
+      ]
+    },
+    {
+      "path": "visuals/card_knight.webp",
+      "kind": "image",
+      "kb": 23,
+      "tags": [
+        "card",
+        "knight"
+      ]
+    },
+    {
+      "path": "visuals/card_mortar.webp",
+      "kind": "image",
+      "kb": 11,
+      "tags": [
+        "card",
+        "mortar"
+      ]
+    },
+    {
+      "path": "visuals/card_sapper.webp",
+      "kind": "image",
+      "kb": 23,
+      "tags": [
+        "card",
+        "sapper"
+      ]
+    },
+    {
+      "path": "visuals/card_thunderclap.webp",
+      "kind": "image",
+      "kb": 12,
+      "tags": [
+        "card",
+        "thunderclap"
+      ]
+    },
+    {
+      "path": "visuals/card_valkyrie.webp",
+      "kind": "image",
+      "kb": 19,
+      "tags": [
+        "card",
+        "valkyrie"
+      ]
+    },
+    {
+      "path": "visuals/class_assassin.png",
+      "kind": "image",
+      "kb": 3480,
+      "tags": [
+        "assassin",
+        "class"
+      ]
+    },
+    {
+      "path": "visuals/class_shaman.png",
+      "kind": "image",
+      "kb": 4478,
+      "tags": [
+        "class",
+        "shaman"
+      ]
+    },
+    {
+      "path": "visuals/class_sura.png",
+      "kind": "image",
+      "kb": 3915,
+      "tags": [
+        "class",
+        "sura"
+      ]
+    },
+    {
+      "path": "visuals/class_warrior.png",
+      "kind": "image",
+      "kb": 2808,
+      "tags": [
+        "class",
+        "warrior"
+      ]
+    },
+    {
+      "path": "visuals/crate_gold.webp",
+      "kind": "image",
+      "kb": 3,
+      "tags": [
+        "crate",
+        "gold"
+      ]
+    },
+    {
+      "path": "visuals/crate_iron.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "crate",
+        "iron"
+      ]
+    },
+    {
+      "path": "visuals/crate_scrap.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "crate",
+        "scrap"
+      ]
+    },
+    {
+      "path": "visuals/hero.mp4",
+      "kind": "video",
+      "kb": 8830,
+      "tags": [
+        "hero"
+      ]
+    },
+    {
+      "path": "visuals/hero.png",
+      "kind": "image",
+      "kb": 2446,
+      "tags": [
+        "hero"
+      ]
+    },
+    {
+      "path": "visuals/icon_attack.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "attack",
+        "icon"
+      ]
+    },
+    {
+      "path": "visuals/icon_coin.png",
+      "kind": "image",
+      "kb": 615,
+      "tags": [
+        "coin",
+        "icon"
+      ]
+    },
+    {
+      "path": "visuals/icon_coin.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "coin",
+        "icon"
+      ]
+    },
+    {
+      "path": "visuals/icon_elixir.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "elixir",
+        "icon"
+      ]
+    },
+    {
+      "path": "visuals/icon_frenzy.png",
+      "kind": "image",
+      "kb": 294,
+      "tags": [
+        "frenzy",
+        "icon"
+      ]
+    },
+    {
+      "path": "visuals/icon_frenzy.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "frenzy",
+        "icon"
+      ]
+    },
+    {
+      "path": "visuals/icon_gem.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "gem",
+        "icon"
+      ]
+    },
+    {
+      "path": "visuals/icon_gold.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "gold",
+        "icon"
+      ]
+    },
+    {
+      "path": "visuals/icon_golem.png",
+      "kind": "image",
+      "kb": 519,
+      "tags": [
+        "golem",
+        "icon"
+      ]
+    },
+    {
+      "path": "visuals/icon_golem.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "golem",
+        "icon"
+      ]
+    },
+    {
+      "path": "visuals/icon_potion_hp.webp",
+      "kind": "image",
+      "kb": 3,
+      "tags": [
+        "hp",
+        "icon",
+        "potion"
+      ]
+    },
+    {
+      "path": "visuals/icon_potion_mp.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "icon",
+        "mp",
+        "potion"
+      ]
+    },
+    {
+      "path": "visuals/icon_trophy.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "icon",
+        "trophy"
+      ]
+    },
+    {
+      "path": "visuals/intro.mp4",
+      "kind": "video",
+      "kb": 14962,
+      "tags": [
+        "intro"
+      ]
+    },
+    {
+      "path": "visuals/intro.png",
+      "kind": "image",
+      "kb": 2099,
+      "tags": [
+        "intro"
+      ]
+    },
+    {
+      "path": "visuals/intro_web.mp4",
+      "kind": "video",
+      "kb": 1571,
+      "tags": [
+        "intro",
+        "web"
+      ]
+    },
+    {
+      "path": "visuals/item_abyssedge.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "abyssedge",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_abyssmail.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "abyssmail",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_battlesword.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "battlesword",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_blade.png",
+      "kind": "image",
+      "kb": 595,
+      "tags": [
+        "blade",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_blade.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "blade",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_coppernecklace.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "coppernecklace",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_cursedblade.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "cursedblade",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_darkmail.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "darkmail",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_dragonplate.webp",
+      "kind": "image",
+      "kb": 4,
+      "tags": [
+        "dragonplate",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_dragonsword.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "dragonsword",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_flask.png",
+      "kind": "image",
+      "kb": 247,
+      "tags": [
+        "flask",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_flask.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "flask",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_goldbracelet.webp",
+      "kind": "image",
+      "kb": 3,
+      "tags": [
+        "goldbracelet",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_ironbracelet.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "ironbracelet",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_irondagger.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "irondagger",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_ironhelm.webp",
+      "kind": "image",
+      "kb": 3,
+      "tags": [
+        "ironhelm",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_ironplate.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "ironplate",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_ironsword.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "ironsword",
+        "item"
+      ]
+    },
+    {
+      "path": "visuals/item_jadefan.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "item",
+        "jadefan"
+      ]
+    },
+    {
+      "path": "visuals/item_jaderobe.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "item",
+        "jaderobe"
+      ]
+    },
+    {
+      "path": "visuals/item_knighthelm.webp",
+      "kind": "image",
+      "kb": 3,
+      "tags": [
+        "item",
+        "knighthelm"
+      ]
+    },
+    {
+      "path": "visuals/item_leatherboots.webp",
+      "kind": "image",
+      "kb": 3,
+      "tags": [
+        "item",
+        "leatherboots"
+      ]
+    },
+    {
+      "path": "visuals/item_leathervest.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "item",
+        "leathervest"
+      ]
+    },
+    {
+      "path": "visuals/item_pearlearrings.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "item",
+        "pearlearrings"
+      ]
+    },
+    {
+      "path": "visuals/item_phoenixbell.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "item",
+        "phoenixbell"
+      ]
+    },
+    {
+      "path": "visuals/item_phoenixrobe.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "item",
+        "phoenixrobe"
+      ]
+    },
+    {
+      "path": "visuals/item_potion_hp.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "hp",
+        "item",
+        "potion"
+      ]
+    },
+    {
+      "path": "visuals/item_potion_mp.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "item",
+        "mp",
+        "potion"
+      ]
+    },
+    {
+      "path": "visuals/item_rubynecklace.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "item",
+        "rubynecklace"
+      ]
+    },
+    {
+      "path": "visuals/item_sapphireearrings.webp",
+      "kind": "image",
+      "kb": 4,
+      "tags": [
+        "item",
+        "sapphireearrings"
+      ]
+    },
+    {
+      "path": "visuals/item_shadowfang.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "item",
+        "shadowfang"
+      ]
+    },
+    {
+      "path": "visuals/item_shadowgarb.webp",
+      "kind": "image",
+      "kb": 3,
+      "tags": [
+        "item",
+        "shadowgarb"
+      ]
+    },
+    {
+      "path": "visuals/item_shield.png",
+      "kind": "image",
+      "kb": 656,
+      "tags": [
+        "item",
+        "shield"
+      ]
+    },
+    {
+      "path": "visuals/item_shield.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "item",
+        "shield"
+      ]
+    },
+    {
+      "path": "visuals/item_silkrobe.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "item",
+        "silkrobe"
+      ]
+    },
+    {
+      "path": "visuals/item_soulmail.webp",
+      "kind": "image",
+      "kb": 3,
+      "tags": [
+        "item",
+        "soulmail"
+      ]
+    },
+    {
+      "path": "visuals/item_soulreaver.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "item",
+        "soulreaver"
+      ]
+    },
+    {
+      "path": "visuals/item_steelplate.webp",
+      "kind": "image",
+      "kb": 3,
+      "tags": [
+        "item",
+        "steelplate"
+      ]
+    },
+    {
+      "path": "visuals/item_swiftboots.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "item",
+        "swiftboots"
+      ]
+    },
+    {
+      "path": "visuals/item_tome.png",
+      "kind": "image",
+      "kb": 1095,
+      "tags": [
+        "item",
+        "tome"
+      ]
+    },
+    {
+      "path": "visuals/item_tome.webp",
+      "kind": "image",
+      "kb": 3,
+      "tags": [
+        "item",
+        "tome"
+      ]
+    },
+    {
+      "path": "visuals/item_towershield.webp",
+      "kind": "image",
+      "kb": 3,
+      "tags": [
+        "item",
+        "towershield"
+      ]
+    },
+    {
+      "path": "visuals/item_viperblade.webp",
+      "kind": "image",
+      "kb": 0,
+      "tags": [
+        "item",
+        "viperblade"
+      ]
+    },
+    {
+      "path": "visuals/item_vipergarb.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "item",
+        "vipergarb"
+      ]
+    },
+    {
+      "path": "visuals/item_woodfan.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "item",
+        "woodfan"
+      ]
+    },
+    {
+      "path": "visuals/item_woodshield.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "item",
+        "woodshield"
+      ]
+    },
+    {
+      "path": "visuals/keyart.mp4",
+      "kind": "video",
+      "kb": 13943,
+      "tags": [
+        "keyart"
+      ]
+    },
+    {
+      "path": "visuals/keyart.webp",
+      "kind": "image",
+      "kb": 135,
+      "tags": [
+        "keyart"
+      ]
+    },
+    {
+      "path": "visuals/region_ionel.png",
+      "kind": "image",
+      "kb": 3305,
+      "tags": [
+        "ionel",
+        "region"
+      ]
+    },
+    {
+      "path": "visuals/region_solaris.png",
+      "kind": "image",
+      "kb": 2490,
+      "tags": [
+        "region",
+        "solaris"
+      ]
+    },
+    {
+      "path": "visuals/region_varkhal.png",
+      "kind": "image",
+      "kb": 2927,
+      "tags": [
+        "region",
+        "varkhal"
+      ]
+    },
+    {
+      "path": "visuals/skill_assassin_1.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "assassin",
+        "skill"
+      ]
+    },
+    {
+      "path": "visuals/skill_assassin_2.webp",
+      "kind": "image",
+      "kb": 1,
+      "tags": [
+        "assassin",
+        "skill"
+      ]
+    },
+    {
+      "path": "visuals/skill_assassin_3.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "assassin",
+        "skill"
+      ]
+    },
+    {
+      "path": "visuals/skill_assassin_4.webp",
+      "kind": "image",
+      "kb": 3,
+      "tags": [
+        "assassin",
+        "skill"
+      ]
+    },
+    {
+      "path": "visuals/skill_shaman_1.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "shaman",
+        "skill"
+      ]
+    },
+    {
+      "path": "visuals/skill_shaman_2.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "shaman",
+        "skill"
+      ]
+    },
+    {
+      "path": "visuals/skill_shaman_3.webp",
+      "kind": "image",
+      "kb": 3,
+      "tags": [
+        "shaman",
+        "skill"
+      ]
+    },
+    {
+      "path": "visuals/skill_shaman_4.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "shaman",
+        "skill"
+      ]
+    },
+    {
+      "path": "visuals/skill_sura_1.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "skill",
+        "sura"
+      ]
+    },
+    {
+      "path": "visuals/skill_sura_2.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "skill",
+        "sura"
+      ]
+    },
+    {
+      "path": "visuals/skill_sura_3.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "skill",
+        "sura"
+      ]
+    },
+    {
+      "path": "visuals/skill_sura_4.webp",
+      "kind": "image",
+      "kb": 3,
+      "tags": [
+        "skill",
+        "sura"
+      ]
+    },
+    {
+      "path": "visuals/skill_warrior_1.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "skill",
+        "warrior"
+      ]
+    },
+    {
+      "path": "visuals/skill_warrior_2.webp",
+      "kind": "image",
+      "kb": 2,
+      "tags": [
+        "skill",
+        "warrior"
+      ]
+    },
+    {
+      "path": "visuals/skill_warrior_3.webp",
+      "kind": "image",
+      "kb": 3,
+      "tags": [
+        "skill",
+        "warrior"
+      ]
+    },
+    {
+      "path": "visuals/skill_warrior_4.webp",
+      "kind": "image",
+      "kb": 3,
+      "tags": [
+        "skill",
+        "warrior"
+      ]
+    },
+    {
+      "path": "visuals/victory.mp4",
+      "kind": "video",
+      "kb": 22788,
+      "tags": [
+        "victory"
+      ]
+    },
+    {
+      "path": "visuals/victory.png",
+      "kind": "image",
+      "kb": 3857,
+      "tags": [
+        "victory"
+      ]
+    },
+    {
+      "path": "visuals/victory_web.mp4",
+      "kind": "video",
+      "kb": 2958,
+      "tags": [
+        "victory",
+        "web"
+      ]
+    }
+  ]
+}

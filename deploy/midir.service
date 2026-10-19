@@ -1,5 +1,5 @@
 [Unit]
-Description=Midir MMORPG game server
+Description=Game Factory preview server (gallery of games/)
 After=network-online.target
 
 [Service]
