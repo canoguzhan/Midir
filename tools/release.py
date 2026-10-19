@@ -119,7 +119,8 @@ README = """{title}: CrazyGames submission package ({studio}, v{version}, {date}
 
 Upload at https://developer.crazygames.com, step by step:
 
-1-upload/            The game build. Upload this zip as the HTML5 game files (index.html is at the zip root).
+1-upload/            The game build: a flat zip (every file at the root, no folders, as CrazyGames requires).
+                     Upload it, or its files, as the HTML5 game files.
 2-store-listing/     Copy each field from store-listing.txt into the submission form (title, description,
                      controls, category, tags, orientation, languages).
 3-covers/            The three required cover images: landscape 1920x1080, portrait 800x1200, square 800x800.
