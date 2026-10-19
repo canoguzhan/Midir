@@ -1,4 +1,17 @@
-104-207-80-220.sslip.io {
+# /etc/caddy/Caddyfile — BroadGamesPro preview site, password protected (HTTP Basic Auth, user: broadgames).
+# The real file holds the bcrypt hash; generate one with: caddy hash-password --plaintext '<password>'
+(protected) {
+	basicauth {
+		broadgames <bcrypt-hash>
+	}
 	encode gzip
 	reverse_proxy 127.0.0.1:8080
+}
+
+broadgames.pro, 104-207-80-220.sslip.io {
+	import protected
+}
+
+www.broadgames.pro {
+	redir https://broadgames.pro{uri} permanent
 }

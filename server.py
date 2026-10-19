@@ -25,9 +25,9 @@ def gallery():
         z = f' · <a href="/games/{s}/dist/{s}.zip">zip</a>' if os.path.exists(os.path.join(GAMES, slug, 'dist', f'{slug}.zip')) else ''
         rows.append(f'<li><a href="/games/{s}/"><b>{title}</b></a>{z}<br><small>{html.escape(meta.get("description", ""))[:160]}</small></li>')
     body = ''.join(rows) or '<li>No games yet. Ask Claude for one.</li>'
-    return ('<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Game Factory</title>'
+    return ('<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>BroadGamesPro</title>'
             '<style>body{font:16px system-ui;max-width:720px;margin:40px auto;padding:0 16px;background:#14161c;color:#e8e8ee}'
-            'a{color:#8ab4ff}li{margin:0 0 18px}small{color:#9aa}</style><h1>Game Factory</h1><ul>' + body + '</ul>').encode()
+            'a{color:#8ab4ff}li{margin:0 0 18px}small{color:#9aa}</style><h1>BroadGamesPro</h1><p style="color:#9aa;margin-top:-8px">Games in development</p><ul>' + body + '</ul>').encode()
 
 
 class Handler(SimpleHTTPRequestHandler):
