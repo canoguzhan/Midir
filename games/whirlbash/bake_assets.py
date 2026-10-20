@@ -46,6 +46,8 @@ SFX = {  # ElevenLabs sound generation: name: (prompt, seconds)
     'whirl_anchor': ('heavy metal clamp locking onto a floor, deep clunk with a short chain rattle and low hum, toy-like', 0.9),
     'whirl_shutter': ('mechanical arena trapdoor sliding, quick motorized whirr ending in a solid clack', 1.0),
     'whirl_zone': ('electric force field closing in, low buzzing warning pulse with a rising tone, arcade', 1.2),
+    'whirl_pull': ('giant magnet powering up, deep wobbling electromagnetic hum swelling and pulling, arcade sci-fi, toy-like', 2.2),
+    'whirl_confetti': ('festive confetti cannon pop followed by a short sparkly shower and a tiny crowd cheer', 1.5),
 }
 
 MUSIC = {  # ElevenLabs music: name: prompt  (start names with bgm_)
@@ -66,6 +68,9 @@ VOICE = {  # ElevenLabs TTS: name: dict(speaker='narrator'|'male'|'female'|'deep
     'wb_lasttop': dict(speaker='male', en='Last Top Spinning!', tr='Son Dönen Topaç!'),
     'wb_victory': dict(speaker='male', en='Victory! You are the last top spinning!', tr='Zafer! Son dönen topaç sensin!'),
     'wb_levelup': dict(speaker='male', en='Level up!', tr='Seviye atladın!'),
+    'wb_magnetar': dict(speaker='male', en='The Magnetar has entered the arena!', tr='Manyetar arenaya çıktı!'),
+    'wb_teamwin': dict(speaker='male', en='Your team wins!', tr='Takımın kazandı!'),
+    'wb_teams': dict(speaker='male', en='Team battle!', tr='Takım savaşı!'),
     'wb_go': dict(speaker='male', en='Three, two, one... Spin!', tr='Üç, iki, bir... Dön!'),
 }
 

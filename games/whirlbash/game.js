@@ -24,13 +24,13 @@ const SFX_FILES = {
   puBlast: 'assets/audio/skill_slam.mp3', puShield: 'assets/audio/skill_heal.mp3', puMagnet: 'assets/audio/portal.mp3', puTurbo: 'assets/audio/frenzy.mp3',
   puTake: 'assets/audio/gate_good.mp3', puLost: 'assets/audio/gate_bad.mp3',
   puAnchor: 'assets/audio/whirl_anchor.mp3', puDecoy: 'assets/audio/pop.mp3', champion: 'assets/audio/whirl_champion.mp3', perfect: 'assets/audio/whirl_perfect.mp3',
-  shutter: 'assets/audio/whirl_shutter.mp3', zone: 'assets/audio/whirl_zone.mp3', levelUp: 'assets/audio/level_up.mp3', victory: 'assets/audio/victory.mp3', mission: 'assets/audio/quest_complete.mp3',
+  shutter: 'assets/audio/whirl_shutter.mp3', zone: 'assets/audio/whirl_zone.mp3', pull: 'assets/audio/whirl_pull.mp3', confetti: 'assets/audio/whirl_confetti.mp3', levelUp: 'assets/audio/level_up.mp3', victory: 'assets/audio/victory.mp3', mission: 'assets/audio/quest_complete.mp3',
 };
 const VOICE_FILES = { // {lang} is filled in at boot (en / tr)
   ringout: 'assets/audio/voice/wb_ringout_{lang}.mp3', topple: 'assets/audio/voice/wb_topple_{lang}.mp3', leader: 'assets/audio/voice/wb_leader_{lang}.mp3',
   storm: 'assets/audio/voice/wb_storm_{lang}.mp3', tilt: 'assets/audio/voice/wb_tilt_{lang}.mp3', overdrive: 'assets/audio/voice/wb_overdrive_{lang}.mp3',
   go: 'assets/audio/voice/wb_go_{lang}.mp3', champion: 'assets/audio/voice/wb_champion_{lang}.mp3', champdown: 'assets/audio/voice/wb_champdown_{lang}.mp3',
-  perfect: 'assets/audio/voice/wb_perfect_{lang}.mp3', lasttop: 'assets/audio/voice/wb_lasttop_{lang}.mp3', victory: 'assets/audio/voice/wb_victory_{lang}.mp3', levelup: 'assets/audio/voice/wb_levelup_{lang}.mp3',
+  perfect: 'assets/audio/voice/wb_perfect_{lang}.mp3', magnetar: 'assets/audio/voice/wb_magnetar_{lang}.mp3', teamwin: 'assets/audio/voice/wb_teamwin_{lang}.mp3', teams: 'assets/audio/voice/wb_teams_{lang}.mp3', lasttop: 'assets/audio/voice/wb_lasttop_{lang}.mp3', victory: 'assets/audio/voice/wb_victory_{lang}.mp3', levelup: 'assets/audio/voice/wb_levelup_{lang}.mp3',
 };
 const MUSIC = { arena: 'assets/audio/bgm_whirl_arena.mp3', showdown: 'assets/audio/bgm_whirl_showdown.mp3' }; // showdown: Last Top Spinning and the Champion
 
@@ -80,6 +80,18 @@ const STRINGS = {
     perfect: 'Perfect!', zoneSoon: 'Ring closes in {n}s', zoneClosing: 'The ring is closing!', zoneSub: 'Stay inside or lose spin fast', left: 'left',
     lastTopGo: 'Last Top Spinning!', lastTopSub: 'No respawns. Be the last top in the ring.', playingNow: '{n} playing now', inviteFriends: 'Invite friends',
     st_short_atk: 'ATK', st_short_def: 'DEF', st_short_sta: 'STA', st_short_spd: 'SPD',
+    settings: 'Settings', music: 'Music', sound: 'Sound', graphics: 'Graphics', gfx_auto: 'Auto', gfx_high: 'High', gfx_low: 'Fast',
+    mode_teams: 'Teams', modeName_teams: 'Teams', seg_orbit: 'Orbit', arena_orbit: 'Orbit Ring', arenaSub_orbit: 'The pits travel round the rim',
+    arenaDay: 'Arena of the Day: 2× XP', xp2: '2× XP', t_none: 'None', t_sparkle: 'Sparkle', t_bubble: 'Bubbles', t_frost: 'Frost', t_flame: 'Flame', t_rainbow: 'Rainbow', tab_trail: 'Trail',
+    magnetar: 'The Magnetar', magnetarIn: 'The Magnetar has entered!', magnetarSub: 'It pulls everything in. Beat it for +{n} points', bossDown: 'Boss down!',
+    teamBlue: 'Blue', teamRed: 'Red', teamsGo: 'Team battle!', teamsSub: 'Blue vs Red: knockouts score for your team', yourTeam: 'You are on {t}',
+    teamWin: 'Your team wins!', teamLose: 'Your team lost', teamDraw: 'Draw!', teamScore: 'Blue {a} : {b} Red', respawning: 'Back in {n}...',
+    watching: 'Watching {n}', nextRound: 'Next round in {n}s', roundLive: 'Round in progress: you join the next one', roundWinner: '{n} wins the round!',
+    yourName: 'Your name', todayTop: "Today's top 10", topEmpty: 'No scores yet today: be the first!', topYou: "You're #{p} on today's board!", topNeed: "Today's top 10 starts at {s}",
+    m_teams: 'Win a Teams match', m_champion: 'Defeat a boss',
+    h_perfect: 'Charge from point blank for a PERFECT hit', h_boss_champion: 'Knock out the Champion for a big bounty. Watch its slam!', h_boss_magnetar: 'The Magnetar pulls you in: dash out, or use Anchor',
+    h_zone: 'Stay inside the ring: outside, your spin drains fast', h_arena_turntable: 'Ride the spinning disc to recharge your spin', h_arena_shutter: 'Flashing doors are about to open or close',
+    h_arena_orbit: 'The pits move round the rim: watch your back', h_teams: 'Hit the red team. Teammates cannot hurt you', h_respawn: 'In Teams you come back after a knockout', tip: 'Tip',
   },
   tr: {
     play: 'Oyna', garage: 'Garaj', done: 'Tamam', best: 'En iyi', tagline: 'Dön. Çarpış. Rakiplerini pistten at!', paused: 'Duraklatıldı', resume: 'Devam',
@@ -125,6 +137,18 @@ const STRINGS = {
     perfect: 'Mükemmel!', zoneSoon: 'Halka {n} sn içinde daralıyor', zoneClosing: 'Halka daralıyor!', zoneSub: 'İçeride kal yoksa dönüşün hızla biter', left: 'kaldı',
     lastTopGo: 'Son Dönen Topaç!', lastTopSub: 'Yeniden doğma yok. Halkada kalan son topaç ol.', playingNow: 'Şu an {n} kişi oynuyor', inviteFriends: 'Arkadaşlarını davet et',
     st_short_atk: 'SAL', st_short_def: 'SAV', st_short_sta: 'DAY', st_short_spd: 'HIZ',
+    settings: 'Ayarlar', music: 'Müzik', sound: 'Ses', graphics: 'Grafik', gfx_auto: 'Otomatik', gfx_high: 'Yüksek', gfx_low: 'Hızlı',
+    mode_teams: 'Takımlar', modeName_teams: 'Takımlar', seg_orbit: 'Yörünge', arena_orbit: 'Yörünge Halkası', arenaSub_orbit: 'Çukurlar kenar boyunca döner',
+    arenaDay: 'Günün Arenası: 2× XP', xp2: '2× XP', t_none: 'Yok', t_sparkle: 'Pırıltı', t_bubble: 'Baloncuk', t_frost: 'Ayaz', t_flame: 'Alev', t_rainbow: 'Gökkuşağı', tab_trail: 'İz',
+    magnetar: 'Manyetar', magnetarIn: 'Manyetar arenaya çıktı!', magnetarSub: 'Her şeyi kendine çeker. Yen: +{n} puan', bossDown: 'Boss düştü!',
+    teamBlue: 'Mavi', teamRed: 'Kırmızı', teamsGo: 'Takım savaşı!', teamsSub: 'Mavi - Kırmızı: nakavtlar takımına puan yazar', yourTeam: 'Takımın: {t}',
+    teamWin: 'Takımın kazandı!', teamLose: 'Takımın kaybetti', teamDraw: 'Berabere!', teamScore: 'Mavi {a} : {b} Kırmızı', respawning: '{n} sn sonra dönüyorsun...',
+    watching: '{n} izleniyor', nextRound: 'Sonraki tur {n} sn sonra', roundLive: 'Tur sürüyor: bir sonrakine katılacaksın', roundWinner: 'Turu {n} kazandı!',
+    yourName: 'Adın', todayTop: 'Bugünün ilk 10’u', topEmpty: 'Bugün henüz skor yok: ilk sen ol!', topYou: 'Bugünün listesinde {p}. sıradasın!', topNeed: 'Bugünün ilk 10’una girmek için {s} gerek',
+    m_teams: 'Bir Takımlar maçı kazan', m_champion: 'Bir boss yen',
+    h_perfect: 'Yakından atılırsan MÜKEMMEL vuruş yaparsın', h_boss_champion: 'Şampiyonu nakavt et, büyük ödülü al. Yere vuruşuna dikkat!', h_boss_magnetar: 'Manyetar seni çeker: atılarak kaç ya da Çapa kullan',
+    h_zone: 'Halkanın içinde kal: dışarıda dönüşün hızla biter', h_arena_turntable: 'Dönüşünü doldurmak için dönen tablaya bin', h_arena_shutter: 'Yanıp sönen kapaklar açılmak ya da kapanmak üzere',
+    h_arena_orbit: 'Çukurlar kenarda dönüyor: arkanı kolla', h_teams: 'Kırmızı takıma vur. Takım arkadaşların sana zarar veremez', h_respawn: 'Takımlar modunda nakavttan sonra geri dönersin', tip: 'İpucu',
   },
 };
 let lang = 'en';
@@ -201,6 +225,10 @@ function inviteLinkFor(code) {
   if (sdkReady()) try { const link = crazySdk.game.inviteLink({ roomId: code }); if (link) return link; } catch {}
   const u = new URL(location.href); u.search = ''; u.searchParams.set('room', code); return u.toString();
 }
+async function sdkToken() { // a signed CrazyGames user token: the game server reads the verified username from it
+  if (!sdkReady()) return null;
+  try { if (!crazySdk.user?.isUserAccountAvailable) return null; return (await crazySdk.user.getUserToken()) || null; } catch { return null; }
+}
 const sdkRoom = (info) => sdkCall((s) => s.game.updateRoom?.(info));
 const sdkLeftRoom = () => sdkCall((s) => s.game.leftRoom?.());
 async function sdkUsername() { // CrazyGames username when logged in (required to be shown in multiplayer); guests get a server-made name
@@ -219,7 +247,7 @@ const SYNTH = { // [waveform, startHz, endHz, seconds, gain]
   puTake: ['triangle', 700, 1400, 0.25, 0.12], puLost: ['triangle', 600, 200, 0.4, 0.12],
   puAnchor: ['square', 160, 60, 0.4, 0.14], puDecoy: ['sine', 900, 300, 0.15, 0.1], champion: ['sawtooth', 110, 220, 1.2, 0.14], perfect: ['triangle', 1400, 2400, 0.25, 0.12],
   shutter: ['square', 300, 140, 0.35, 0.08], zone: ['sawtooth', 120, 260, 0.8, 0.08], levelUp: ['triangle', 520, 1560, 0.6, 0.14], victory: ['triangle', 660, 1320, 1, 0.14],
-  mission: ['triangle', 880, 1760, 0.4, 0.12],
+  mission: ['triangle', 880, 1760, 0.4, 0.12], pull: ['sine', 90, 180, 1.2, 0.12], confetti: ['triangle', 1200, 2400, 0.4, 0.1],
 };
 const audio = { ctx: null, master: null, buffers: {}, music: null, track: 'arena', tracks: {}, wantMusic: false, musicVol: 0.3, muted: new Set(), voices: 0, hum: null, last: {} };
 
@@ -276,38 +304,46 @@ function playMusic(vol = audio.musicVol, track = audio.track) { // track: 'arena
     if (el === undefined && MUSIC[track]) { el = new Audio(MUSIC[track]); el.loop = true; el.onerror = () => { audio.tracks[track] = null; if (audio.music === el) audio.music = null; }; audio.tracks[track] = el; }
     audio.music = el || null; if (audio.music) { audio.music.currentTime = 0; audio.music.playbackRate = 1; }
   }
-  if (audio.music) { audio.music.volume = vol; if (!audio.muted.size) audio.music.play().catch(() => {}); }
+  if (audio.music) { audio.music.volume = clamp(vol * (save.vol?.music ?? 1), 0, 1); if (!audio.muted.size) audio.music.play().catch(() => {}); }
 }
 function muteAudio(reason = 'ad') { audio.muted.add(reason); applyMute(); }
 function unmuteAudio(reason = 'ad') { audio.muted.delete(reason); applyMute(); }
 function applyMute() {
   const m = audio.muted.size > 0;
-  if (audio.master) audio.master.gain.value = m ? 0 : 1;
+  if (audio.master) audio.master.gain.value = m ? 0 : (save.vol?.sfx ?? 1); // the Sound slider scales every effect and voice
   if (audio.music) { if (m) audio.music.pause(); else if (audio.wantMusic) audio.music.play().catch(() => {}); }
 }
 
 // ================================================================ SAVE
 const DEFAULT_SAVE = () => ({
-  best: 0, gears: 0, runs: 0, tut: false, shake: true, level: 1, xp: 0, mode: 'endless', arena: 'bowl',
-  owned: { crown: ['halo'], core: ['gyro'], tip: ['dome'], paint: ['sun', 'coral', 'mint'] },
-  sel: { crown: 'halo', core: 'gyro', tip: 'dome', paint: 'sun' },
+  best: 0, gears: 0, runs: 0, tut: false, shake: true, level: 1, xp: 0, mode: 'endless', arena: 'bowl', onlineKind: 'endless',
+  owned: { crown: ['halo'], core: ['gyro'], tip: ['dome'], paint: ['sun', 'coral', 'mint'], trail: ['none'] },
+  sel: { crown: 'halo', core: 'gyro', tip: 'dome', paint: 'sun', trail: 'none' },
+  vol: { music: 0.8, sfx: 0.9 }, gfx: 'auto', hints: {}, nick: null,
   missions: { day: '', list: [] }, rec: { score: 0, kos: 0, ringouts: 0, lead: 0, peak: 0, time: 0, wins: 0 },
 });
 let save = DEFAULT_SAVE();
 function loadSave() {
   const d = DEFAULT_SAVE(), s = loadData(`${SAVE_KEY}:save`, null) || {};
-  save = { ...d, ...s, owned: { ...d.owned, ...(s.owned || {}) }, sel: { ...d.sel, ...(s.sel || {}) }, missions: { ...d.missions, ...(s.missions || {}) }, rec: { ...d.rec, ...(s.rec || {}) } };
+  save = { ...d, ...s, owned: { ...d.owned, ...(s.owned || {}) }, sel: { ...d.sel, ...(s.sel || {}) }, missions: { ...d.missions, ...(s.missions || {}) }, rec: { ...d.rec, ...(s.rec || {}) },
+    vol: { ...d.vol, ...(s.vol || {}) }, hints: { ...(s.hints || {}) } };
   save.rec.score = Math.max(save.rec.score, save.best); // saves from before 1.3 only kept the best score
   if (!Array.isArray(save.missions.list)) save.missions = d.missions;
+  for (const [lv, [kind, id]] of Object.entries(LEVEL_REWARDS)) if (save.level >= lv && PARTS[kind] && !save.owned[kind].includes(id)) save.owned[kind].push(id); // rewards added after a player passed that level
+  const nk = save.nick; if (!nk || !S.NAME_A.includes(nk.a) || !S.NAME_B.includes(nk.b)) save.nick = randomNick();
 }
+const randomNick = () => ({ a: S.NAME_A[(Math.random() * S.NAME_A.length) | 0], b: S.NAME_B[(Math.random() * S.NAME_B.length) | 0], n: 1 + ((Math.random() * 99) | 0) });
+const pickedName = () => `${save.nick.a}${save.nick.b}${save.nick.n || ''}`;
 const persist = () => saveData(`${SAVE_KEY}:save`, save);
 
 // ================================================================ PROGRESS (player level + XP, level rewards, daily missions, personal records)
 const xpFor = (lv) => 120 + 80 * (lv - 1); // XP to go from lv to lv + 1: the first levels come after one or two runs
-const LEVEL_REWARDS = { 2: ['mode', 'last'], 3: ['arena', 'turntable'], 4: ['paint', 'sky'], 5: ['arena', 'shutter'], 6: ['paint', 'ruby'], 7: ['tip', 'grip'], 8: ['crown', 'razor'], 9: ['paint', 'jade'], 10: ['core', 'heart'], 12: ['crown', 'comet'], 15: ['paint', 'aurora'] };
-const UNLOCK_LV = { mode: { endless: 1, last: 2 }, arena: { bowl: 1, turntable: 3, shutter: 5 } };
+const LEVEL_REWARDS = { 2: ['mode', 'last'], 3: ['arena', 'turntable'], 4: ['mode', 'teams'], 5: ['arena', 'shutter'], 6: ['paint', 'ruby'], 7: ['arena', 'orbit'], 8: ['crown', 'razor'], 9: ['paint', 'jade'],
+  10: ['core', 'heart'], 11: ['trail', 'flame'], 12: ['crown', 'comet'], 13: ['tip', 'grip'], 14: ['trail', 'rainbow'], 15: ['paint', 'aurora'] };
+const UNLOCK_LV = { mode: { endless: 1, last: 2, teams: 4 }, arena: { bowl: 1, turntable: 3, shutter: 5, orbit: 7 } };
+const arenaOfDay = () => S.ARENA_IDS[Math.floor(Date.now() / 86_400_000) % S.ARENA_IDS.length]; // double XP there today
 const isUnlocked = (kind, id) => save.level >= (UNLOCK_LV[kind]?.[id] ?? 1);
-const rewardName = ([kind, id]) => (kind === 'mode' ? t('rw_mode', { x: t('modeName_' + id) }) : kind === 'arena' ? t('rw_arena', { x: t('arena_' + id) }) : t('rw_part', { x: t((kind === 'paint' ? 'c_' : 'p_') + id) }));
+const rewardName = ([kind, id]) => (kind === 'mode' ? t('rw_mode', { x: t('modeName_' + id) }) : kind === 'arena' ? t('rw_arena', { x: t('arena_' + id) }) : t('rw_part', { x: t((kind === 'paint' ? 'c_' : kind === 'trail' ? 't_' : 'p_') + id) }));
 function addXP(n) { // returns the level-ups it caused: [{ lv, reward, gears }]
   const ups = []; save.xp += Math.max(0, Math.round(n));
   while (save.xp >= xpFor(save.level)) {
@@ -322,7 +358,7 @@ function addXP(n) { // returns the level-ups it caused: [{ lv, reward, gears }]
 const MISSIONS = [
   { id: 'ringouts', n: 2, run: true, gears: 40 }, { id: 'kos', n: 6, gears: 40 }, { id: 'sparks', n: 200, gears: 30 }, { id: 'leader', n: 1, run: true, gears: 50 },
   { id: 'lead', n: 45, gears: 50 }, { id: 'powers', n: 5, gears: 30 }, { id: 'perfect', n: 4, gears: 40 }, { id: 'survive', n: 3, run: true, gears: 50 },
-  { id: 'peak', n: 400, run: true, gears: 40 }, { id: 'champion', n: 1, gears: 80, lv: 3 }, { id: 'lasttop', n: 1, gears: 60, lv: 2 }, { id: 'online', n: 1, gears: 40 },
+  { id: 'peak', n: 400, run: true, gears: 40 }, { id: 'champion', n: 1, gears: 80, lv: 3 }, { id: 'lasttop', n: 1, gears: 60, lv: 2 }, { id: 'online', n: 1, gears: 40 }, { id: 'teams', n: 1, gears: 60, lv: 4 },
 ];
 const MISSION_XP = 60;
 const missionDef = (id) => MISSIONS.find((m) => m.id === id);
@@ -348,14 +384,26 @@ function progress(id, inc, runValue) {
     if (m.p >= def.n) completeMission(m, def);
   }
 }
-let missionPopTimer = 0;
+// One notice card at a time near the bottom of the screen: finished missions and first-time hints queue up for it
+let missionPopTimer = 0; const notices = [];
+function notice(n) { notices.push(n); if (missionPopTimer <= 0) nextNotice(); }
+function nextNotice() {
+  const n = notices.shift(), el = $('missionPop'); if (!n) { el.hidden = true; return; }
+  $('missionPopIcon').setAttribute('href', `#i-${n.icon}`); $('missionPopSmall').textContent = n.small; $('missionPopText').textContent = n.text; $('missionPopGears').textContent = n.extra || '';
+  el.classList.toggle('hint', !!n.hint); el.hidden = true; void el.offsetWidth; el.hidden = false; missionPopTimer = n.secs || 2.8;
+  if (n.sfx) playSfx(n.sfx, 0.7);
+}
 function completeMission(m, def) {
   m.done = true; m.p = def.n; save.gears += def.gears;
   const ups = addXP(MISSION_XP); if (run) { run.missionsDone.push(m.id); run.levelUps.push(...ups); run.xpEarned += MISSION_XP; }
   persist();
-  $('missionPopText').textContent = missionText(m.id); $('missionPopGears').textContent = `+${def.gears}`;
-  const el = $('missionPop'); el.hidden = true; void el.offsetWidth; el.hidden = false; missionPopTimer = 2.8;
-  playSfx('mission', 0.7); refreshMenu();
+  notice({ icon: 'check', small: t('missionDone'), text: missionText(m.id), extra: `+${def.gears}`, sfx: 'mission' }); refreshMenu();
+}
+// first-time hints: each one shows once per player, in play, as a few words
+function hint(id) {
+  if (CAPTURE || run?.tutorial || save.hints[id] || state !== State.PLAYING) return;
+  save.hints[id] = 1; persist();
+  notice({ icon: 'bulb', small: t('tip'), text: t('h_' + id), hint: true, secs: 4.5 });
 }
 const missionText = (id) => t('m_' + id, { n: missionDef(id).n });
 const missionLeft = () => save.missions.list.filter((m) => !m.done).length;
@@ -377,6 +425,22 @@ renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.A
 const scene = new THREE.Scene(); scene.background = new THREE.Color('#15123a'); scene.fog = new THREE.Fog('#15123a', 60, 130);
 const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 300);
 let shakeAmt = 0;
+// Graphics: High (shadows, sharp) or Fast (no shadows, 1x pixels, fewer particles). Auto picks Fast on small-memory devices and
+// drops to Fast if a run stays under ~30 fps. Capture mode always renders High.
+let sunLight = null, gfxLow = null, autoLow = !CAPTURE && !!navigator.deviceMemory && navigator.deviceMemory <= 4, fpsAcc = 0, fpsN = 0;
+function applyGfx() {
+  const low = !CAPTURE && (save.gfx === 'low' || (save.gfx === 'auto' && autoLow));
+  if (low === gfxLow) return; gfxLow = low;
+  renderer.setPixelRatio(low ? Math.min(devicePixelRatio, 1) : Math.min(devicePixelRatio, 1.75));
+  renderer.shadowMap.enabled = !low; if (sunLight) sunLight.castShadow = !low;
+  scene.traverse((o) => { if (o.material) for (const m of [].concat(o.material)) m.needsUpdate = true; });
+  resize();
+}
+function watchFps(dt) { // Auto: a slow device switches itself to Fast once
+  if (save.gfx !== 'auto' || autoLow || CAPTURE || state !== State.PLAYING) { fpsAcc = fpsN = 0; return; }
+  fpsAcc += dt; fpsN++;
+  if (fpsAcc > 5) { if (fpsAcc / fpsN > 1 / 30) { autoLow = true; applyGfx(); } fpsAcc = fpsN = 0; }
+}
 const rand = (a, b) => a + Math.random() * (b - a);
 let crowd = null, crowdBase = [], beams = [], chevrons = null, zoneWall = null, zoneFloor = null, arenaView = null, stripeTex = null, glowTex = null;
 
@@ -388,7 +452,7 @@ function canvasTex(w, h, draw) {
 // The stadium around the bowl never changes: lights, stands + crowd, sky, light beams, tilt chevrons, the Last Top ring wall.
 function buildStadium() {
   scene.add(new THREE.HemisphereLight('#c9d0ff', '#2a1d4a', 1.25));
-  const sun = new THREE.DirectionalLight('#ffffff', 2.3); sun.position.set(10, 30, 14); sun.castShadow = true;
+  const sun = new THREE.DirectionalLight('#ffffff', 2.3); sun.position.set(10, 30, 14); sun.castShadow = true; sunLight = sun;
   sun.shadow.mapSize.set(2048, 2048); Object.assign(sun.shadow.camera, { left: -28, right: 28, top: 28, bottom: -28, near: 1, far: 80 }); sun.shadow.bias = -0.0005;
   scene.add(sun);
   const rimLight = new THREE.DirectionalLight('#ff7fd0', 0.6); rimLight.position.set(-20, 10, -20); scene.add(rimLight);
@@ -453,6 +517,7 @@ const ARENA_LOOK = {
   bowl: { floor: ['#3a52d6', '#2738a8', '#1b2580'], line: '140, 165, 255', skirt: '#1a1850', base: '#2b2a72' },
   turntable: { floor: ['#6d4be0', '#5233b8', '#38207f'], line: '205, 180, 255', skirt: '#231650', base: '#3a2878' },
   shutter: { floor: ['#1f9db0', '#16798f', '#0e5366'], line: '160, 240, 255', skirt: '#0d2f42', base: '#173f5c' },
+  orbit: { floor: ['#2fa36c', '#22805a', '#145a3c'], line: '170, 255, 210', skirt: '#0f3a2a', base: '#1d4f3c' },
 };
 const DOOR_UP = bowlY(R) + 0.45, DOOR_DOWN = bowlY(R) - 2.6;
 function planarUV(geo, size) { const pos = geo.attributes.position, uv = geo.attributes.uv; for (let i = 0; i < pos.count; i++) uv.setXY(i, pos.getX(i) / (2 * size) + 0.5, pos.getZ(i) / (2 * size) + 0.5); }
@@ -575,6 +640,7 @@ function animateArena(dt) {
     if (v.phase !== phase) { if (v.phase >= 0 && state === State.PLAYING) playSfx('shutter', 0.45); v.phase = phase; }
   }
   if (v.disc) v.disc.rotation.y = -tm * def.turnW; // same sense as the physics: angle grows from +x toward +z
+  if (def.pitSpin) v.group.rotation.y = -tm * def.pitSpin; // Orbit Ring: walls and pits travel round together
 }
 
 // ================================================================ TOPS (procedural meshes: tip + core + crown + cap, all spinning)
@@ -669,14 +735,24 @@ function viewFor(tp) {
   const mesh = buildTopMesh(tp.parts, tp.parts.paint, me ? '#ffffff' : tp.boss ? '#ffc531' : '#ffe8c2');
   if (me) { mesh.ring.material.color.set('#ffc531'); mesh.ring.material.opacity = 0.85; }
   if (mine) mesh.ring.material.opacity = 0.25;
-  if (tp.boss) { // the Champion: a gold spike crown and a hot aura ring
+  const teamCol = tp.team != null ? TEAM_COLOR[tp.team] : null;
+  if (teamCol && !me) { mesh.ring.material.color.set(teamCol); mesh.ring.material.opacity = 0.75; }
+  let pullRing = null;
+  if (tp.bossKind === 'magnetar') { // the Magnetar: two violet orbit rings and a pull ripple
+    mesh.ring.material.color.set('#c27bff'); mesh.ring.material.opacity = 0.9;
+    const glow = new THREE.MeshStandardMaterial({ color: '#c27bff', emissive: '#a77bff', emissiveIntensity: 0.9, roughness: 0.3 }); mesh.mats.push(glow);
+    for (const [r, tx, tz] of [[1.15, 0.5, 0], [1.3, 0, 0.6]]) { const o = new THREE.Mesh(new THREE.TorusGeometry(r, 0.05, 8, 48), glow); o.position.y = 0.5; o.rotation.set(Math.PI / 2 + tx, 0, tz); o.userData.orbit = true; mesh.tilt.add(o); }
+    pullRing = new THREE.Mesh(cached('pullRing', () => new THREE.RingGeometry(0.94, 1, 72).rotateX(-Math.PI / 2)), new THREE.MeshBasicMaterial({ color: '#c27bff', transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
+    pullRing.position.y = 0.06; pullRing.visible = false; mesh.root.add(pullRing); mesh.mats.push(pullRing.material);
+  } else if (tp.boss) { // the Champion: a gold spike crown and a hot aura ring
     mesh.ring.material.color.set('#ff8a3d'); mesh.ring.material.opacity = 0.9;
     const gold = new THREE.MeshStandardMaterial({ color: '#ffc531', roughness: 0.25, metalness: 0.7, emissive: '#ff8a3d', emissiveIntensity: 0.35 }); mesh.mats.push(gold);
     for (let k = 0; k < 8; k++) { const sp = new THREE.Mesh(cached('spike', () => new THREE.ConeGeometry(0.11, 0.42, 8)), gold); const a = (k / 8) * Math.PI * 2; sp.position.set(Math.cos(a) * 0.92, 0.56, Math.sin(a) * 0.92); sp.rotation.set(Math.sin(a) * 1.2, 0, -Math.cos(a) * 1.2); sp.castShadow = true; mesh.spin.add(sp); }
     const band = new THREE.Mesh(cached('band', () => new THREE.TorusGeometry(0.4, 0.06, 8, 32).rotateX(Math.PI / 2)), gold); band.position.y = 0.86; mesh.spin.add(band);
   }
   const who = owner || tp, name = tp.boss ? t('champion') : mine ? t('decoy') : who.id === meId ? t('you') : who.name; // a decoy wears its owner's name tag (yours reads "Decoy")
-  const label = labelSprite(name, tp.boss ? '#ffc531' : mine ? '#b9b6dc' : who.id === meId ? '#ffc531' : who.human ? '#9ee7ff' : '#ffffff', mode === 'online' && who.human && who.id !== meId && !mine);
+  const teamLabel = teamCol && who.id !== meId && !mine && player?.team != null ? (who.team === player.team ? '#9ee7ff' : '#ffb3be') : null; // Teams: friends blue, rivals red
+  const label = labelSprite(name, tp.bossKind === 'magnetar' ? '#d9b8ff' : tp.boss ? '#ffc531' : mine ? '#b9b6dc' : who.id === meId ? '#ffc531' : teamLabel || (who.human ? '#9ee7ff' : '#ffffff'), mode === 'online' && who.human && who.id !== meId && !mine);
   const bubble = new THREE.Mesh(cached('bubble', () => new THREE.SphereGeometry(1.35, 24, 16)), new THREE.MeshBasicMaterial({ color: PU_COLOR.shield, transparent: true, opacity: 0.25, depthWrite: false, blending: THREE.AdditiveBlending }));
   bubble.position.y = 0.45; bubble.visible = false; mesh.root.add(bubble); mesh.mats.push(bubble.material);
   const field = new THREE.Mesh(cached('field', () => new THREE.TorusGeometry(1.8, 0.05, 6, 48).rotateX(Math.PI / 2)), new THREE.MeshBasicMaterial({ color: PU_COLOR.magnet, transparent: true, opacity: 0.7, depthWrite: false }));
@@ -684,7 +760,7 @@ function viewFor(tp) {
   const anchor = new THREE.Mesh(cached('anchorRing', () => new THREE.TorusGeometry(1.25, 0.16, 8, 40).rotateX(Math.PI / 2)), new THREE.MeshStandardMaterial({ color: '#c9d3e6', metalness: 0.8, roughness: 0.25, emissive: PU_COLOR.anchor, emissiveIntensity: 0.5 }));
   anchor.position.y = 0.12; anchor.visible = false; mesh.root.add(anchor); mesh.mats.push(anchor.material);
   scene.add(mesh.root, label);
-  v = { mesh, label, prec: Math.random() * 6, tp, bubble, field, anchor, trailT: 0, flash: 0, labelScale: tp.boss ? 1.35 : 1 }; views.set(tp.id, v); return v;
+  v = { mesh, label, prec: Math.random() * 6, tp, bubble, field, anchor, pullRing, trailT: 0, cosT: 0, cosI: 0, hop: 0, flash: 0, labelScale: tp.boss ? 1.35 : 1 }; views.set(tp.id, v); return v;
 }
 function dropView(id) {
   const v = views.get(id); if (!v) return;
@@ -697,6 +773,7 @@ const infoOf = (id) => (id ? S.topById(world, id) || views.get(id)?.tp || known.
 function refreshPlayer() { const p = S.topById(world, meId); if (p) player = p; }
 
 // Power-up orbs: a glowing glass ball with the power's icon, a light beam and a floor ring; they blink before they vanish.
+const TEAM_COLOR = ['#4cb8ff', '#ff5d73']; // Blue, Red
 const PU_COLOR = { blast: '#ff8a3d', shield: '#4cb8ff', magnet: '#c27bff', turbo: '#3ee0a1', anchor: '#7f8fc4', decoy: '#ff7ce0' };
 const orbs = new Map(), iconTex = {};
 function powerIcon(kind) { // the same SVG path as the HUD icon, drawn white on a canvas
@@ -752,6 +829,7 @@ const particles = [], pGeo = new THREE.BoxGeometry(0.1, 0.1, 0.32), pMats = {};
 const pMat = (c) => (pMats[c] ??= new THREE.MeshBasicMaterial({ color: c, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
 function burst(pos, color, n = 14, speed = 6, up = 1) {
   if (quietFx()) return;
+  if (gfxLow) n = Math.ceil(n / 2);
   for (let i = 0; i < n; i++) {
     let p = particles.find((q) => !q.visible);
     if (!p) { if (particles.length > 360) return; p = new THREE.Mesh(pGeo, pMat(color)); p.userData.v = new THREE.Vector3(); particles.push(p); scene.add(p); }
@@ -802,6 +880,13 @@ function placePops() {
     q.el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%) scale(${sc.toFixed(3)})`; q.el.style.opacity = k > 0.7 ? ((1 - k) / 0.3).toFixed(3) : '1';
   }
 }
+function confetti() { // a win: confetti over your top, a hop, the crowd on its feet
+  if (!player) return;
+  const p = pos3(player.x, player.z, 2.6);
+  for (const c of ['#ffc531', '#ff5d73', '#3ee0a1', '#4cb8ff', '#a77bff']) burst(p, c, 14, 9, 1.6);
+  setTimeout(() => { if (player) for (const c of ['#ffe066', '#ff7ce0', '#9ee7ff']) burst(pos3(player.x, player.z, 3), c, 12, 8, 1.8); }, 450);
+  playSfx('confetti', 0.8); cheer(); const v = views.get(player.id); if (v) v.hop = 0.6;
+}
 let lastPerfectVoice = -99;
 function perfectFx(x, z) { // my dash connected at full speed from point blank
   const p = pos3(x, z, 0.6);
@@ -832,7 +917,7 @@ addEventListener('keydown', (e) => {
   if (e.code === 'Space' && state === State.PLAYING) playerDash();
   if (e.code === 'KeyE' && state === State.PLAYING) playerUse();
   if (e.code === 'KeyP') togglePause(); // never Escape: on CrazyGames it exits fullscreen
-  if ((e.code === 'Enter' || e.code === 'Space') && state === State.MENU) $('btnPlay').click();
+  if ((e.code === 'Enter' || e.code === 'Space') && state === State.MENU && !settingsOpen) $('btnPlay').click();
 });
 addEventListener('keyup', (e) => keys.delete(e.code));
 addEventListener('blur', () => keys.clear());
@@ -884,7 +969,7 @@ function playerInput() { // x/z world direction; the camera has no yaw, so scree
 }
 
 // ================================================================ STATE (BOOT -> MENU <-> GARAGE / LOBBY / PROFILE, -> PLAYING <-> PAUSED -> GAMEOVER)
-const State = { BOOT: 'BOOT', MENU: 'MENU', GARAGE: 'GARAGE', LOBBY: 'LOBBY', PROFILE: 'PROFILE', PLAYING: 'PLAYING', PAUSED: 'PAUSED', GAMEOVER: 'GAMEOVER', COVER: 'COVER' };
+const State = { BOOT: 'BOOT', MENU: 'MENU', GARAGE: 'GARAGE', LOBBY: 'LOBBY', PROFILE: 'PROFILE', PLAYING: 'PLAYING', PAUSED: 'PAUSED', GAMEOVER: 'GAMEOVER', SPECTATE: 'SPECTATE', COVER: 'COVER' }; // SPECTATE: online, watching a round until the next one
 const inMenus = (s = state) => s === State.MENU || s === State.GARAGE || s === State.LOBBY || s === State.PROFILE;
 const wantTrack = () => ((state === State.PLAYING || state === State.PAUSED) && world && (world.mode === 'last' || world.tops.some((tp) => tp.boss)) ? 'showdown' : 'arena');
 let state = State.BOOT, run = null, simTime = 0, dashQueued = false, useQueued = false;
@@ -893,7 +978,7 @@ function setState(s) {
   state = s;
   $('menu').hidden = s !== State.MENU; $('garage').hidden = s !== State.GARAGE; $('lobby').hidden = s !== State.LOBBY; $('profile').hidden = s !== State.PROFILE;
   $('paused').hidden = s !== State.PAUSED; $('gameover').hidden = s !== State.GAMEOVER;
-  $('hud').hidden = !(s === State.PLAYING || s === State.PAUSED);
+  $('hud').hidden = !(s === State.PLAYING || s === State.PAUSED || s === State.SPECTATE); $('hud').classList.toggle('spectating', s === State.SPECTATE);
   $('btnAction').hidden = !(s === State.PLAYING && isTouch);
   $('dashKey').hidden = isTouch;
   updatePowerUI();
@@ -901,7 +986,9 @@ function setState(s) {
   $('btnOverGarage').hidden = mode === 'online';
   if (s !== State.PLAYING) { stick.id = null; stick.x = stick.y = 0; $('joystick').hidden = true; }
   if (s !== State.PLAYING && s !== State.PAUSED) { $('coach').hidden = true; $('countdown').hidden = true; $('banner').hidden = true; bannerTimer = 0; }
-  if (s === State.PLAYING) onGameplayStart(); else onGameplayStop(); // stop on every break: menus, pause, game over
+  if (s === State.PLAYING) onGameplayStart(); else onGameplayStop(); // stop on every break: menus, pause, game over, waiting for a round
+  if (s !== State.PLAYING) { notices.length = 0; missionPopTimer = 0; $('missionPop').hidden = true; } // notices belong to play: never over a menu or the results
+  if (s !== State.GAMEOVER) { $('btnRetry').disabled = false; $('btnRetry').textContent = t('again'); $('overTop').hidden = true; }
   if (inMenus(s)) { playMusic(0.2, 'arena'); camera.clearViewOffset(); }
   if (s === State.MENU) fetchOnlineCount();
   if (s === State.PLAYING) playMusic(0.32, wantTrack());
@@ -934,6 +1021,10 @@ click('btnOverInvite', () => shareInvite());
 click('btnPause', () => togglePause());
 click('btnResume', () => togglePause());
 click('btnShake', () => { save.shake = save.shake === false; persist(); refreshShakeButton(); });
+click('btnSettings', () => openSettings());
+click('btnPauseSettings', () => openSettings());
+click('btnSettingsDone', () => closeSettings());
+click('btnSpecLeave', () => leaveToMenu());
 click('btnQuit', () => { leaveToMenu(); });
 click('btnMenu', () => { leaveToMenu(); }); // navigation: never an ad here
 click('btnRetry', () => triggerMidgameAd(() => (mode === 'online' ? onlinePlayAgain() : startRun()))); // between runs: the right moment for a midgame ad
@@ -942,8 +1033,10 @@ click('btnDouble', () => {
   triggerRewardedAd(() => { save.gears += run.gearsEarned; persist(); run.gearsEarned *= 2; $('overGears').textContent = run.gearsEarned; toast(t('doubled')); playSfx('unlock'); refreshMenu(); }, () => {});
 });
 click('btnSkipTut', () => finishTutorial(true));
-click('btnQuick', () => connectOnline({ t: 'join', mode: 'quick' }));
-click('btnCreate', () => connectOnline({ t: 'join', mode: 'create' }));
+click('btnQuick', () => connectOnline({ t: 'join', mode: 'quick', kind: save.onlineKind }));
+click('btnCreate', () => connectOnline({ t: 'join', mode: 'create', kind: save.onlineKind }));
+click('btnNameDice', () => { save.nick = randomNick(); persist(); renderNamePicker(); });
+for (const id of ['nameA', 'nameB', 'nameN']) $(id).addEventListener('change', () => { save.nick = { a: $('nameA').value, b: $('nameB').value, n: Number($('nameN').value) || 0 }; persist(); });
 click('btnJoinCode', () => joinByCode($('codeInput').value));
 click('btnLobbyBack', () => { closeOnline(); setState(State.MENU); });
 click('btnInvite', () => shareInvite());
@@ -958,7 +1051,22 @@ function controlsHTML() {
 }
 const curMode = () => (isUnlocked('mode', save.mode) ? save.mode : 'endless');
 const curArena = () => (isUnlocked('arena', save.arena) ? save.arena : 'bowl');
-const displayName = (tp) => (tp.boss ? t('champion') : tp.id === meId ? t('you') : tp.name);
+const displayName = (tp) => (tp.boss ? t(tp.bossKind === 'magnetar' ? 'magnetar' : 'champion') : tp.id === meId ? t('you') : tp.name);
+// ---- settings: music + sound volume, graphics quality, camera shake (an overlay over the menu or the pause card)
+let settingsOpen = false;
+function openSettings() { settingsOpen = true; $('settings').hidden = false; renderSettings(); }
+function closeSettings() { settingsOpen = false; $('settings').hidden = true; persist(); }
+function renderSettings() {
+  $('volMusic').value = Math.round(save.vol.music * 100); $('volSfx').value = Math.round(save.vol.sfx * 100);
+  $('volMusicVal').textContent = $('volMusic').value; $('volSfxVal').textContent = $('volSfx').value;
+  $('gfxSeg').innerHTML = ['auto', 'high', 'low'].map((g) => `<button class="${save.gfx === g ? 'on' : ''}" data-g="${g}" role="radio" aria-checked="${save.gfx === g}">${t('gfx_' + g)}</button>`).join('');
+  $('gfxSeg').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { playSfx('click', 0.5); save.gfx = b.dataset.g; applyGfx(); renderSettings(); }));
+  refreshShakeButton();
+}
+$('volMusic').addEventListener('input', () => { save.vol.music = $('volMusic').value / 100; $('volMusicVal').textContent = $('volMusic').value; if (audio.music) audio.music.volume = clamp(audio.musicVol * save.vol.music, 0, 1); });
+$('volSfx').addEventListener('input', () => { save.vol.sfx = $('volSfx').value / 100; $('volSfxVal').textContent = $('volSfx').value; applyMute(); });
+$('volSfx').addEventListener('change', () => { unlockAudio(); playSfx('spark', 0.8); });
+for (const id of ['volMusic', 'volSfx']) $(id).addEventListener('keydown', (e) => e.stopPropagation()); // arrow keys move the slider, not the game
 function refreshMenu() {
   $('menuBest').textContent = save.best; $('menuGears').textContent = save.gears; $('garageGears').textContent = save.gears;
   const affordable = Object.entries(PARTS).some(([kind, list]) => list.some((p) => !p.hidden && !p.lvl && !save.owned[kind].includes(p.id) && p.cost <= save.gears));
@@ -974,7 +1082,8 @@ function renderSegs() { // mode + arena pickers: locked choices show the level t
   const seg = (box, kind, ids, label, cur) => {
     $(box).innerHTML = ids.map((id) => {
       const lv = UNLOCK_LV[kind][id], open = save.level >= lv, on = cur === id;
-      return `<button class="${on ? 'on' : ''} ${open ? '' : 'locked'}" data-id="${id}" role="radio" aria-checked="${on}">${open ? '' : '<svg><use href="#i-lock"/></svg>'}${t(label + id)}${open ? '' : ` <small>${t('lockedLv', { n: lv })}</small>`}</button>`;
+      const day = kind === 'arena' && id === arenaOfDay() ? `<span class="tag" title="${t('arenaDay')}">${t('xp2')}</span>` : ''; // Arena of the Day
+      return `<button class="${on ? 'on' : ''} ${open ? '' : 'locked'}" data-id="${id}" role="radio" aria-checked="${on}">${open ? '' : '<svg><use href="#i-lock"/></svg>'}${t(label + id)}${open ? '' : ` <small>${t('lockedLv', { n: lv })}</small>`}${day}</button>`;
     }).join('');
     $(box).querySelectorAll('button').forEach((b) => b.addEventListener('click', () => pickSeg(kind, b.dataset.id)));
   };
@@ -988,6 +1097,7 @@ function pickSeg(kind, id) {
   save[kind] = id; persist();
   if (kind === 'arena') { toMenuWorld(); toast(`${t('arena_' + id)}: ${t('arenaSub_' + id)}`); }
   else if (id === 'last') toast(t('lastTopSub'));
+  else if (id === 'teams') toast(t('teamsSub'));
   renderSegs();
 }
 function openProfile() { setState(State.PROFILE); renderProfile(); }
@@ -1003,16 +1113,33 @@ function renderProfile() { // daily missions, the next level reward, personal re
   $('nextReward').innerHTML = next ? t('nextReward', { n: next, x: `<b>${rewardName(LEVEL_REWARDS[next])}</b>` }) : t('allRewards');
   $('recordList').innerHTML = RECORDS.map((k) => `<div><small>${t('rec_' + k)}</small><b>${recValue(k, save.rec[k] || 0)}</b></div>`).join('');
 }
-// "N playing now" on the Play online button: a tiny one-off question to the game server
-let onlineN = 0, countAt = -1e9;
-function fetchOnlineCount() {
-  if (CAPTURE || params.has('nocount') || performance.now() - countAt < 30000) return;
+// "N playing now" on the Play online button and today's top 10 in the lobby: one short question to the game server
+let onlineN = 0, countAt = -1e9, dailyTop = null;
+function fetchOnlineCount(force = false) {
+  if (CAPTURE || params.has('nocount') || performance.now() - countAt < (force ? 5000 : 30000)) return;
   countAt = performance.now();
   let ws; try { ws = new WebSocket(MP_URL); } catch { return; }
-  const kill = setTimeout(() => { try { ws.close(); } catch {} }, 8000);
-  ws.onopen = () => ws.send(JSON.stringify({ t: 'count' }));
-  ws.onmessage = (m) => { try { const d = JSON.parse(m.data); if (d.t === 'count') { onlineN = Number(d.n) || 0; showOnlineCount(); } } catch {} clearTimeout(kill); ws.close(); };
+  const kill = setTimeout(() => { try { ws.close(); } catch {} }, 8000); let got = 0;
+  ws.onopen = () => { ws.send(JSON.stringify({ t: 'count' })); ws.send(JSON.stringify({ t: 'top' })); };
+  ws.onmessage = (m) => {
+    try { const d = JSON.parse(m.data); if (d.t === 'count') { onlineN = Number(d.n) || 0; showOnlineCount(); got++; } if (d.t === 'top') { dailyTop = d; renderTop(); got++; } } catch {}
+    if (got >= 2) { clearTimeout(kill); ws.close(); }
+  };
   ws.onerror = () => {};
+}
+function renderTop() { // the lobby list; my name is highlighted
+  const list = dailyTop?.list || [], me = net.name || pickedName();
+  $('topList').innerHTML = list.length ? list.map((e) => `<li class="${e.n === me ? 'me' : ''}">${escapeHTML(e.n)}<b>${Math.round(e.s)}</b></li>`).join('') : `<li class="empty">${t('topEmpty')}</li>`;
+}
+function renderNamePicker() {
+  const opt = (v, txt, on) => `<option value="${v}"${on ? ' selected' : ''}>${txt}</option>`;
+  $('nameA').innerHTML = S.NAME_A.map((w) => opt(w, w, w === save.nick.a)).join('');
+  $('nameB').innerHTML = S.NAME_B.map((w) => opt(w, w, w === save.nick.b)).join('');
+  $('nameN').innerHTML = opt(0, '–', !save.nick.n) + Array.from({ length: 99 }, (_, i) => opt(i + 1, i + 1, save.nick.n === i + 1)).join('');
+}
+function renderLobbySeg() {
+  $('lobbySeg').innerHTML = S.MODES.map((k) => `<button class="${save.onlineKind === k ? 'on' : ''}" data-k="${k}" role="radio" aria-checked="${save.onlineKind === k}">${t('mode_' + k)}</button>`).join('');
+  $('lobbySeg').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { playSfx('click', 0.5); save.onlineKind = b.dataset.k; persist(); renderLobbySeg(); }));
 }
 function showOnlineCount() { const el = $('onlineCount'); el.hidden = !(onlineN > 0); el.textContent = t('playingNow', { n: onlineN }); }
 const refreshShakeButton = () => { $('btnShake').textContent = t(save.shake === false ? 'shakeOff' : 'shakeOn'); };
@@ -1024,11 +1151,12 @@ let garageTab = 'crown';
 function openGarage() { setState(State.GARAGE); renderGarage(); }
 function renderGarage() {
   $('garageGears').textContent = save.gears;
-  $('garageTabs').innerHTML = ['crown', 'core', 'tip', 'paint'].map((k) => `<button data-tab="${k}" class="${k === garageTab ? 'on' : ''}">${t('tab_' + k)}</button>`).join('');
+  $('garageTabs').innerHTML = S.PART_KINDS.map((k) => `<button data-tab="${k}" class="${k === garageTab ? 'on' : ''}">${t('tab_' + k)}</button>`).join('');
   $('garageParts').innerHTML = PARTS[garageTab].filter((p) => !p.hidden).map((p) => {
     const owned = save.owned[garageTab].includes(p.id), on = save.sel[garageTab] === p.id;
-    const label = garageTab === 'paint' ? t('c_' + p.id) : t('p_' + p.id);
-    const desc = garageTab === 'paint' ? `<span class="swatch" style="background:${p.c}"></span>` : `<small>${t('d_' + p.id)}</small>`;
+    const label = garageTab === 'paint' ? t('c_' + p.id) : garageTab === 'trail' ? t('t_' + p.id) : t('p_' + p.id);
+    const trailBg = garageTab === 'trail' ? (p.c.length ? `linear-gradient(90deg, ${p.c.length > 1 ? p.c.join(', ') : `${p.c[0]}, ${p.c[0]}`})` : 'rgba(255,255,255,.08)') : '';
+    const desc = garageTab === 'paint' ? `<span class="swatch" style="background:${p.c}"></span>` : garageTab === 'trail' ? `<span class="swatch trail" style="background:${trailBg}"></span>` : `<small>${t('d_' + p.id)}</small>`;
     const status = on ? `<small>${t('equipped')}</small>` : owned ? `<small>${t('owned')}</small>` : p.lvl ? `<span class="lvl"><svg><use href="#i-star"/></svg>${t('lockedLv', { n: p.lvl })}</span>` : `<span class="cost ${save.gears < p.cost ? 'no' : ''}"><svg><use href="#i-lock"/></svg>${p.cost}</span>`;
     return `<button class="part ${on ? 'on' : ''} ${owned ? '' : 'locked'}" data-id="${p.id}"><b>${label}</b>${desc}${status}</button>`;
   }).join('');
@@ -1042,7 +1170,7 @@ function renderGarage() {
   });
 }
 function previewPart(kind, id) { // a gold outline on each stat bar shows what that part would change
-  const ds = kind && kind !== 'paint' ? displayStats({ ...save.sel, [kind]: id }) : null;
+  const ds = kind && kind !== 'paint' && kind !== 'trail' ? displayStats({ ...save.sel, [kind]: id }) : null;
   $('garageStats').querySelectorAll('s').forEach((el) => { el.hidden = !ds; if (ds) el.style.width = `${Math.round(ds[el.dataset.k] * 100)}%`; });
 }
 function selectPart(kind, id) {
@@ -1060,8 +1188,9 @@ function selectPart(kind, id) {
 }
 async function openLobby() {
   setState(State.LOBBY); $('lobbyStatus').textContent = ''; $('lobbyStatus').classList.remove('bad');
-  const name = await sdkUsername();
-  $('lobbyName').textContent = name ? t('playingAs', { n: name }) : t('guestAuto');
+  renderLobbySeg(); renderNamePicker(); renderTop(); fetchOnlineCount(true);
+  const name = await sdkUsername(); // a CrazyGames account name is required when there is one; otherwise the player picks a name from the word lists
+  $('lobbyName').textContent = name ? t('playingAs', { n: name }) : ''; $('lobbyName').hidden = !name; $('nameRow').hidden = !!name;
 }
 
 let boardTimer = 0;
@@ -1069,7 +1198,8 @@ function renderBoard() {
   const list = S.rankList(world), me = list.findIndex((tp) => tp.id === meId), rows = [];
   const row = (tp, i, extra = '') => {
     const mine = tp.id === meId, person = mode === 'online' && tp.human && !mine ? '<svg class="hu"><use href="#i-user"/></svg>' : '';
-    return `<li class="${mine ? 'me' : tp.boss ? 'boss' : tp.human ? 'hu' : ''} ${extra}"><span>${i === 0 ? '<svg><use href="#i-crown"/></svg>' : i + 1 + '.'}</span><i class="sw" style="background:${topColor(tp)}"></i>${person}${escapeHTML(displayName(tp))}<b>${Math.round(tp.spin)}</b></li>`;
+    const sw = tp.team != null ? `<i class="tm" style="background:${TEAM_COLOR[tp.team]}"></i>` : `<i class="sw" style="background:${topColor(tp)}"></i>`; // Teams: a team bar instead of the paint dot
+    return `<li class="${mine ? 'me' : tp.boss ? 'boss' : tp.human ? 'hu' : ''} ${extra}"><span>${i === 0 ? '<svg><use href="#i-crown"/></svg>' : i + 1 + '.'}</span>${sw}${person}${escapeHTML(displayName(tp))}<b>${Math.round(tp.spin)}</b></li>`;
   };
   const n = isShort() ? 3 : 5;
   list.slice(0, n).forEach((tp, i) => rows.push(row(tp, i)));
@@ -1096,22 +1226,30 @@ function updateHUD() {
   $('score').textContent = p.score; $('kos').textContent = p.kos;
   const cd = p.cd > 0 ? 1 - p.cd / CFG.dashCooldown : 1;
   $('dashKey').style.setProperty('--cd', cd.toFixed(3)); $('btnAction').style.setProperty('--cd', cd.toFixed(3));
+  if (world.mode === 'last') $('spinBar').classList.toggle('low', p.spin < 30 || Math.hypot(p.x, p.z) > S.zoneR(world));
+  updatePowerUI();
+}
+function updateChips() { // top-centre chips: event, boss, Last Top ring, Teams score, who you are watching (also while knocked out)
   const ev = world.event;
   if (ev) { $('eventChip').hidden = false; $('eventName').textContent = t('ev_' + ev.id).replace('!', ''); $('eventTime').textContent = `${Math.max(0, Math.ceil(ev.t))}s`; }
   else $('eventChip').hidden = true;
   if (mode === 'online') { $('roomCode').textContent = net.code; $('roomInfo').textContent = `${t('players', { n: net.players })} · ${Math.round(net.rtt)} ms`; }
-  const boss = world.tops.find((tp) => tp.boss && (alive(tp) || tp.state === 'spawn')); // the Champion's spin, and how long it stays
+  const boss = world.tops.find((tp) => tp.boss && (alive(tp) || tp.state === 'spawn')); // the boss's spin, and how long it stays
   $('bossChip').hidden = !boss;
-  if (boss) { $('bossBar').style.width = `${Math.round(clamp(boss.spin / Math.max(1, boss.peak), 0, 1) * 100)}%`; $('bossTime').textContent = boss.bossT != null ? `${Math.max(0, Math.ceil(boss.bossT))}s` : ''; }
+  if (boss) { $('bossChip').querySelector('b').textContent = displayName(boss); $('bossBar').style.width = `${Math.round(clamp(boss.spin / Math.max(1, boss.peak), 0, 1) * 100)}%`; $('bossTime').textContent = boss.bossT != null ? `${Math.max(0, Math.ceil(boss.bossT))}s` : ''; }
   const last = world.mode === 'last'; // Last Top Spinning: tops left + the closing ring
   $('leftPill').hidden = !last; $('zoneChip').hidden = !last;
   if (last) {
     $('leftN').textContent = world.tops.filter((tp) => !isDecoy(tp) && tp.state !== 'dead').length; $('leftLabel').textContent = t('left');
     const before = CFG.zoneStart - world.time, chip = $('zoneChip');
     chip.classList.toggle('closing', before <= 0); $('zoneText').textContent = before > 0 ? t('zoneSoon', { n: Math.ceil(before) }) : t('zoneClosing');
-    $('spinBar').classList.toggle('low', p.spin < 30 || Math.hypot(p.x, p.z) > S.zoneR(world));
   }
-  updatePowerUI();
+  const teams = world.mode === 'teams'; $('teamChip').hidden = !teams;
+  if (teams) { const left = Math.max(0, Math.ceil(world.roundEnd - world.time)); $('team0').textContent = world.teamScore[0]; $('team1').textContent = world.teamScore[1]; $('teamTime').textContent = `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`; }
+  const watch = spectateTarget(), spec = $('specChip');
+  const waiting = state === State.SPECTATE && net.rp ? (net.rp.ph === 'play' ? t('roundLive') : t('nextRound', { n: Math.ceil(net.rp.t) })) : '';
+  spec.hidden = !(watch && watch.id !== meId) && !waiting;
+  if (!spec.hidden) $('specText').textContent = [waiting, watch && watch.id !== meId ? t('watching', { n: displayName(watch) }) : ''].filter(Boolean).join(' · ');
 }
 let powerShown = '';
 function updatePowerUI() { // the held power-up: an icon with a 10 s ring; it must be used before the ring runs out
@@ -1219,10 +1357,18 @@ function handleEvent(e) {
       break;
     }
     case 'boss': {
-      const b = infoOf(e.id);
-      banner(t('championIn'), t('championSub', { n: CFG.bossPoints }), false, 2.6); playSfx('champion', 0.8); voice('champion'); cheer();
-      if (b) { shockwave(b.x, bowlY(Math.hypot(b.x, b.z)), b.z, 6, '#ffc531'); burst(pos3(b.x, b.z, 1), '#ffc531', 26, 9); }
+      const b = infoOf(e.id), kind = e.kind || b?.bossKind || 'champion', mag = kind === 'magnetar', col = mag ? '#c27bff' : '#ffc531';
+      banner(t(mag ? 'magnetarIn' : 'championIn'), t(mag ? 'magnetarSub' : 'championSub', { n: CFG.bossPoints }), false, 2.6); playSfx('champion', 0.8); voice(mag ? 'magnetar' : 'champion'); cheer();
+      if (b) { shockwave(b.x, bowlY(Math.hypot(b.x, b.z)), b.z, 6, col); burst(pos3(b.x, b.z, 1), col, 26, 9); }
       if (state === State.PLAYING) playMusic(audio.musicVol, 'showdown');
+      setTimeout(() => hint('boss_' + kind), 2800);
+      break;
+    }
+    case 'pull': if (e.on && tp) playSfx('pull', 0.9 * nearVol(tp.x, tp.z)); break;
+    case 'teamWin': {
+      world.teamScore = e.scores || world.teamScore;
+      if (run && !run.over && player) endRun({ how: e.team < 0 ? 'teamdraw' : e.team === player.team ? 'teamwin' : 'teamlose', score: player.score, kos: player.kos, peak: player.peak }, null);
+      else toast(e.team < 0 ? t('teamDraw') : `${t(e.team ? 'teamRed' : 'teamBlue')}!`);
       break;
     }
     case 'bossLeave':
@@ -1233,6 +1379,7 @@ function handleEvent(e) {
       break;
     case 'win': // Last Top Spinning: the last top standing
       if (e.id === meId && run && !run.over && player) endRun({ how: 'win', score: player.score, kos: player.kos, peak: player.peak }, null);
+      else if (mode === 'online' && tp) toast(t('roundWinner', { n: displayName(tp) }));
       break;
     case 'elim': onElim(e); break;
     case 'event': onEventStart(e); break;
@@ -1241,7 +1388,8 @@ function handleEvent(e) {
   }
 }
 function dashFx(tp, dx, dz) {
-  burst(pos3(tp.x - dx * tp.r, tp.z - dz * tp.r), tp.id === meId ? '#ffe066' : '#ffffff', 8, 4, 0.4);
+  const trail = tp.parts?.trail && tp.parts.trail !== 'none' ? part('trail', tp.parts.trail).c[0] : null; // your trail colours your dash too
+  burst(pos3(tp.x - dx * tp.r, tp.z - dz * tp.r), trail || (tp.id === meId ? '#ffe066' : '#ffffff'), 8, 4, 0.4);
   playSfx('dash', tp.id === meId ? 0.7 : 0.35 * nearVol(tp.x, tp.z));
 }
 function onElim(e) {
@@ -1249,18 +1397,23 @@ function onElim(e) {
   if (e.how === 'topple') { const p = pos3(e.x, e.z, 0.5); burst(p, topColor(victim), 22, 7); shockwave(e.x, p.y - 0.4, e.z, (victim.r || 1) * 3, topColor(victim)); }
   feed(killer, victim, e.how);
   if (e.killer && e.killer === meId) {
-    if (e.boss) { banner(t('champDown'), `+${e.pts}`, false, 2.4); voice('champdown'); bump('champion'); hitStop = Math.max(hitStop, 0.12); }
+    if (e.boss) { banner(t(e.boss === 'magnetar' ? 'bossDown' : 'champDown'), `+${e.pts}`, false, 2.4); voice('champdown'); bump('champion'); hitStop = Math.max(hitStop, 0.12); }
     else { banner(t(e.how === 'ringout' ? 'ringout' : 'topple'), e.wasLeader ? t('leaderDown') : `+${e.pts}`); voice(e.how === 'ringout' ? 'ringout' : 'topple'); }
     playSfx('cheer', 0.55); cheer(); shake(0.1);
     bump('kos'); if (e.how === 'ringout') bump('ringouts');
-  } else if (e.boss) { banner(t('champDown'), '', false, 1.8); cheer(); }
+  } else if (e.boss) { banner(t(e.boss === 'magnetar' ? 'bossDown' : 'champDown'), '', false, 1.8); cheer(); }
   if (e.boss) setTimeout(() => { if (state === State.PLAYING) playMusic(audio.musicVol, wantTrack()); }, 0);
-  if (e.id === meId && run && !run.over) endRun(e, killer);
+  if (e.id === meId && run && !run.over) {
+    if (world.mode === 'teams') { // Teams: you come back after a short wait; the run ends with the round
+      run.respawnT = CFG.respawn; run.spectate = killer?.id || 0; stopHum();
+      banner(t('respawning', { n: CFG.respawn }), '', true, 1.6); hint('respawn');
+    } else endRun(e, killer);
+  }
 }
 function onEventStart(e) {
-  if (mode === 'online') world.event = { id: e.id, t: e.t ?? S.EVENT_DUR[e.id], pit: e.pit, ang: world.pits[e.pit] };
+  if (mode === 'online') world.event = { id: e.id, t: e.t ?? S.EVENT_DUR[e.id], pit: e.pit, ang: S.pitAng(world, e.pit) };
   banner(t('ev_' + e.id), t(`ev_${e.id}Sub`), e.id === 'tilt', 2.2); playSfx('event', 0.7); voice(e.id);
-  if (e.id === 'tilt') { chevrons.visible = true; chevrons.rotation.y = -world.pits[e.pit]; }
+  if (e.id === 'tilt') { chevrons.visible = true; chevrons.rotation.y = -(world.event?.ang ?? S.pitAng(world, e.pit)); }
   if (e.id === 'overdrive' && audio.music) audio.music.playbackRate = 1.08;
 }
 function onEventEnd(e) {
@@ -1288,6 +1441,20 @@ function toMenuWorld() {
   world.events.length = 0; crownSprite.visible = false; chevrons.visible = false;
 }
 function leaveToMenu() { if (run && !run.over) persist(); closeOnline(); toMenuWorld(); setState(State.MENU); refreshMenu(); } // keep mission progress from a quit run
+function modeHints() { // first time in a mode or arena: a few words on what is different
+  if (!world || state !== State.PLAYING) return;
+  if (world.mode === 'last') hint('zone'); if (world.mode === 'teams') hint('teams'); if (world.arenaId !== 'bowl') hint('arena_' + world.arenaId);
+}
+function spectateTarget() { // who the camera follows when it is not you: your knocker for a moment, the leader while waiting for a round
+  if (state === State.SPECTATE) return S.topById(world, world.leader) || world.tops.find(alive) || null;
+  if (run && (run.over || run.respawnT > 0) && run.spectate) { const k = S.topById(world, run.spectate); if (k && (alive(k) || k.state === 'spawn')) return k; }
+  return null;
+}
+function respawnPlayer() { // solo Teams: back in after the wait, keeping your score
+  const [x, z] = S.freeSpot(world), old = player;
+  const np = S.addTop(world, { parts: save.sel, name: 'You', human: true, x, z, team: old?.team ?? 0 });
+  np.score = old?.score || 0; np.kos = old?.kos || 0; meId = np.id; player = np; run.spectate = 0; startHum();
+}
 const newRun = (extra = {}) => ({
   time: 0, countdown: 0, gearsEarned: 0, slow: 0, over: false, overTimer: 0, how: '', killer: null, leaderSaid: -99, happy: false, bestRank: 99, isBest: false,
   tutorial: false, tutStep: -1, tutMoved: 0, tutSparks: 0, tutDashHit: false, tutT: 0, dummyId: 0,
@@ -1300,7 +1467,7 @@ function startRun(opts = {}) {
   const gameMode = tutorial ? 'endless' : opts.mode || curMode(), arena = tutorial ? 'bowl' : opts.arena || curArena(); // the first run is the tutorial in the Grand Bowl
   world = S.createWorld({ arena, mode: gameMode }); buildArena(arena);
   world.eventsOn = world.powersOn = !tutorial; world.bossOn = gameMode === 'endless' && !tutorial; world.frozen = !CAPTURE;
-  if (CAPTURE) world.bossAt = Number(params.get('boss')) || 35; // the trailer and screenshots get to see the Champion
+  if (CAPTURE) { world.bossAt = Number(params.get('boss')) || 35; if (params.get('bosskind') === 'magnetar') world.bossCount = 1; } // the trailer and screenshots get to see a boss
   player = S.addTop(world, { parts: save.sel, name: 'You', human: true }); meId = player.id;
   if (tutorial) { player.noDecay = true; player.dmgTaken = 0.3; }
   for (let i = 0; i < CFG.bots; i++) { const b = S.spawnBot(world, { ring: i, avoidPaint: save.sel.paint }); b.timer = 0.6 + Math.random() * 0.6; if (tutorial) b.ai = 'passive'; }
@@ -1313,9 +1480,13 @@ function startRun(opts = {}) {
 }
 const soloInput = (tp) => (tp.id !== meId ? null : AUTOPLAY ? S.botMove(world, tp, STEP) : { ...playerInput(), dash: takeDash(), use: takeUse() });
 function endRun(e, killer) {
-  run.over = true; run.how = e.how; run.killer = killer; run.won = e.how === 'win';
-  Object.assign(player, { score: e.score ?? player.score, kos: e.kos ?? player.kos, peak: e.peak ?? player.peak, state: run.won ? player.state : 'dead' });
+  run.over = true; run.how = e.how; run.killer = killer; run.won = e.how === 'win' || e.how === 'teamwin';
+  const teamEnd = e.how.startsWith('team');
+  Object.assign(player, { score: e.score ?? player.score, kos: e.kos ?? player.kos, peak: e.peak ?? player.peak, state: run.won || teamEnd ? player.state : 'dead' });
   stopHum(); playSfx(run.won ? 'victory' : 'over', 0.7);
+  if (run.won) { confetti(); if (teamEnd) voice('teamwin'); }
+  if (e.how === 'teamwin') bump('teams');
+  if (killer && !run.won) run.spectate = killer.id; // watch who got you for a moment
   const last = world.mode === 'last';
   if (last) { run.place = run.won ? 1 : world.tops.filter((tp) => !isDecoy(tp) && tp.id !== meId && tp.state !== 'dead').length + 1; if (run.won) { voice('victory'); save.rec.wins++; } }
   const placeBonus = last ? Math.max(0, run.field - run.place) : 0;
@@ -1328,16 +1499,19 @@ function endRun(e, killer) {
   if (mode === 'online') bump('online');
   setStat('survive', run.time / 60); setStat('peak', player.peak);
   run.records = checkRecords({ score: player.score, kos: player.kos, ringouts: run.stats.ringouts || 0, lead: run.stats.lead || 0, peak: Math.round(player.peak), time: Math.floor(run.time) });
-  const xp = Math.round(player.score * 0.5 + player.kos * 8 + run.time / 5 + placeBonus * 6 + (run.won ? 60 : 0));
+  let xp = Math.round(player.score * 0.5 + player.kos * 8 + run.time / 5 + placeBonus * 6 + (run.won ? 60 : 0));
+  run.dayBonus = world.arenaId === arenaOfDay(); if (run.dayBonus) xp *= 2; // Arena of the Day
   run.xpEarned += xp; run.levelUps.push(...addXP(xp));
   persist();
-  run.overTimer = run.won ? 1.8 : 1.2;
+  run.overTimer = run.won ? 2.2 : run.spectate ? 2.6 : 1.2;
 }
 function showResults() {
   const r = run, k = r.killer, last = world.mode === 'last';
-  $('overTitle').textContent = t(r.won ? 'victory' : 'eliminated'); $('gameover').querySelector('.results').classList.toggle('win', r.won);
+  const teamEnd = r.how.startsWith('team');
+  $('overTitle').textContent = teamEnd ? t(r.how === 'teamwin' ? 'teamWin' : r.how === 'teamlose' ? 'teamLose' : 'teamDraw') : t(r.won ? 'victory' : 'eliminated');
+  $('gameover').querySelector('.results').classList.toggle('win', r.won);
   const by = k ? t(r.how === 'ringout' ? 'byRingout' : 'byTopple', { n: displayName(k) }) : t(r.how === 'ringout' ? 'selfRingout' : 'selfTopple');
-  $('overBy').textContent = r.won ? t('lastStanding') : last ? `${t('outPlace', { p: r.place, n: r.field })} · ${by}` : by;
+  $('overBy').textContent = teamEnd ? t('teamScore', { a: world.teamScore[0], b: world.teamScore[1] }) : r.won ? t('lastStanding') : last ? `${t('outPlace', { p: r.place, n: r.field })} · ${by}` : by;
   $('finalScore').textContent = player.score; $('overBest').textContent = save.best; $('newBest').hidden = !r.isBest;
   $('overRankLabel').textContent = t(last ? 'place' : 'rank'); $('overRank').textContent = last ? `#${r.place}` : `#${r.bestRank < 99 ? r.bestRank : '-'}`;
   $('overKos').textContent = player.kos; $('overPeak').textContent = Math.round(player.peak);
@@ -1351,10 +1525,12 @@ function showResults() {
   const chips = [
     ...r.levelUps.map((u) => `<span class="lvup"><svg><use href="#i-star"/></svg>${t('levelUp')} ${t('lv', { n: u.lv })}${u.reward ? ' · ' + rewardName(u.reward) : ' · ' + t('rw_gears', { n: u.gears })}</span>`),
     ...r.records.slice(0, 2).map((key) => `<span class="rec"><svg><use href="#i-crown"/></svg>${t('newRecord', { x: `${t('rec_' + key)} ${recValue(key, save.rec[key])}` })}</span>`),
+    ...(r.dayBonus ? [`<span class="rec"><svg><use href="#i-star"/></svg>${t('arenaDay')}</span>`] : []),
     ...r.missionsDone.map((id) => `<span><svg><use href="#i-check"/></svg>${missionText(id)}</span>`),
   ];
   $('overChips').innerHTML = chips.slice(0, 5).join('');
   setState(State.GAMEOVER); refreshMenu();
+  if (mode === 'online') { netSend({ t: 'top' }); if (net.kind !== 'endless') $('btnRetry').disabled = true; } // round rooms bring you back by themselves
   if (r.levelUps.length) setTimeout(() => { if (state === State.GAMEOVER) { playSfx('levelUp', 0.8); voice('levelup'); } }, 500);
 }
 function tickRun(dt) {
@@ -1362,16 +1538,20 @@ function tickRun(dt) {
   if (run.countdown > 0) {
     const before = Math.ceil(run.countdown); run.countdown -= dt; const after = Math.ceil(run.countdown);
     const cd = $('countdown');
-    boardTimer -= dt; if (boardTimer <= 0) { boardTimer = 0.25; renderBoard(); }
+    boardTimer -= dt; if (boardTimer <= 0) { boardTimer = 0.25; renderBoard(); updateChips(); }
     if (run.countdown <= 0) {
       world.frozen = false; if (run.tutorial) nextTutStep();
-      if (world.mode === 'last' && mode === 'solo') { banner(t('lastTopGo'), t('lastTopSub'), false, 2.4); voice('lasttop'); }
+      if (world.mode === 'last') { banner(t('lastTopGo'), t('lastTopSub'), false, 2.4); voice('lasttop'); }
+      if (world.mode === 'teams' && player) { banner(t('teamsGo'), t('yourTeam', { t: t(player.team ? 'teamRed' : 'teamBlue') }), false, 2.4); voice('teams'); }
+      setTimeout(modeHints, 2600);
       cd.textContent = t('go'); cd.classList.remove('tick'); void cd.offsetWidth; cd.classList.add('tick'); setTimeout(() => { cd.hidden = true; }, 600);
     } else if (before !== after || cd.hidden) { cd.hidden = false; cd.textContent = String(after); cd.classList.remove('tick'); void cd.offsetWidth; cd.classList.add('tick'); playSfx('count', 0.5); }
     return;
   }
   if (run.over) { run.overTimer -= dt; if (run.overTimer <= 0 && state === State.PLAYING) showResults(); }
   else run.time += dt;
+  if (run.respawnT > 0 && !run.over) { run.respawnT -= dt; if (run.respawnT <= 0 && mode === 'solo') respawnPlayer(); } // online, the server sends you back in
+  if (!run.over && !run.tutorial && run.time > 15) hint('perfect');
   if (!run.over && player && alive(player)) {
     const rk = S.rankList(world).findIndex((tp) => tp.id === meId) + 1; if (rk > 0) run.bestRank = Math.min(run.bestRank, rk);
     if (world.leader === meId) bump('lead', dt); // time at #1 (a mission and a record)
@@ -1379,7 +1559,7 @@ function tickRun(dt) {
     if (world.mode === 'last' && !run.zoneWarned && world.time >= CFG.zoneStart) { run.zoneWarned = true; banner(t('zoneClosing'), t('zoneSub'), true, 2.4); playSfx('zone', 0.7); }
   }
   if (run.tutorial) tickTutorial(dt);
-  boardTimer -= dt; if (boardTimer <= 0 && state === State.PLAYING) { boardTimer = 0.25; renderBoard(); }
+  boardTimer -= dt; if (boardTimer <= 0 && state === State.PLAYING) { boardTimer = 0.25; renderBoard(); updateChips(); }
   if (state === State.PLAYING && player && alive(player)) updateHUD();
 }
 
@@ -1438,8 +1618,8 @@ function connectOnline(joinMsg) {
   net.ws = ws;
   ws.onopen = async () => {
     net.opened = true;
-    const name = await Promise.race([sdkUsername(), new Promise((r) => setTimeout(() => r(null), 3000))]); // never wait long for the account lookup
-    if (net.ws === ws) ws.send(JSON.stringify({ ...joinMsg, name, parts: save.sel }));
+    const tok = await Promise.race([sdkToken(), new Promise((r) => setTimeout(() => r(null), 3000))]); // never wait long for the account lookup
+    if (net.ws === ws) ws.send(JSON.stringify({ ...joinMsg, name: pickedName(), tok, parts: save.sel })); // the server shows the verified CrazyGames name, else the picked one
   };
   ws.onmessage = (m) => { if (net.ws !== ws) return; let d; try { d = JSON.parse(m.data); } catch { return; } onNet(d); };
   ws.onclose = () => {
@@ -1468,7 +1648,8 @@ function onNet(d) {
   switch (d.t) {
     case 'err': onlineFail(d.e === 'noroom' ? 'noRoom' : d.e === 'full' ? 'roomFull' : 'connFail'); break;
     case 'welcome': enterOnline(d); break;
-    case 'you': meId = d.id; startOnlineLife(); break;
+    case 'you': meId = d.id; startOnlineLife(d.cd || 0); break;
+    case 'top': dailyTop = d; renderTop(); if (state === State.GAMEOVER) renderOverTop(); break;
     case 's': onSnapshot(d); break;
     case 'p': { const rtt = performance.now() - d.c; net.rtt = net.rtt ? net.rtt * 0.8 + rtt * 0.2 : rtt; break; }
     case 'count': onlineN = Number(d.n) || 0; showOnlineCount(); break;
@@ -1481,35 +1662,48 @@ function mirrorTop(info) {
     id: info.id, name: info.name, human: !!info.human, parts, stats: S.statsOf(parts), x: 0, z: 0, vx: 0, vz: 0, spin: CFG.startSpin, peak: CFG.startSpin,
     r: 1, mass: 1, state: 'spawn', timer: 0.6, fallY: 0, fallV: 0, dashT: 0, cd: 0, shield: 0, kos: 0, score: 0, hitWob: 0, faceX: 0, faceZ: 1, age: 0, placed: false,
   };
-  if (info.boss) { tp.boss = true; tp.parts.paint = 'champ'; }
+  if (info.boss) { tp.boss = true; tp.bossKind = info.boss === 'magnetar' ? 'magnetar' : 'champion'; tp.parts.paint = tp.bossKind === 'magnetar' ? 'magnetar' : 'champ'; }
+  if (info.team != null) tp.team = info.team;
   if (info.decoy) { tp.ai = 'decoy'; tp.decoyOf = info.decoy; }
   S.updateMass(tp); world.tops.push(tp); remember(tp);
 }
 function mirrorSpark([i, x, z, vx, vz, fall, big]) { const s = world.sparks[i]; if (s) Object.assign(s, { on: true, x, z, vx, vz, fall, big, y: 0.4 + fall }); }
 function enterOnline(d) {
   stopHum(); clearViews(); mode = 'online'; run = null; player = null; meId = 0;
-  Object.assign(net, { status: 'in', code: d.code, priv: d.priv, name: d.name, players: d.players, snaps: [], offset: null, srvMe: null, me: null });
+  Object.assign(net, { status: 'in', code: d.code, priv: d.priv, name: d.name, players: d.players, snaps: [], offset: null, srvMe: null, me: null, kind: d.kind || 'endless', rp: d.rp || null });
   $('roomCode').textContent = d.code; $('roomInfo').textContent = t('players', { n: d.players });
-  world = S.createWorld({ bots: 0, sparks: 0, arena: d.arena }); world.events.length = 0; world.time = d.tm; buildArena(world.arenaId);
+  world = S.createWorld({ bots: 0, sparks: 0, arena: d.arena, mode: net.kind }); world.events.length = 0; world.time = d.tm; buildArena(world.arenaId);
+  if (d.ts) world.teamScore = d.ts;
   for (const info of d.tops) mirrorTop(info);
   for (const sp of d.sparks) mirrorSpark(sp);
-  world.event = d.ev ? { ...d.ev, ang: world.pits[d.ev.pit] } : null; world.leader = d.leader;
+  world.event = d.ev ? { ...d.ev, ang: S.pitAng(world, d.ev.pit) } : null; world.leader = d.leader;
   world.powerups = (d.pu || []).map((q) => ({ ...q, t: CFG.powerLife }));
-  chevrons.visible = world.event?.id === 'tilt'; if (chevrons.visible) chevrons.rotation.y = -world.pits[world.event.pit];
+  chevrons.visible = world.event?.id === 'tilt'; if (chevrons.visible) chevrons.rotation.y = -world.event.ang;
   net.joinable = d.players < 10; sdkRoom({ roomId: d.code, isJoinable: net.joinable, inviteParams: { roomId: d.code } });
-  if (d.priv) toast(t('shareCode', { c: d.code }));
+  if (d.priv && state === State.LOBBY) toast(t('shareCode', { c: d.code }));
+  if (net.kind !== 'endless' && net.rp && net.rp.ph !== 'count') { boardTimer = 0; setState(State.SPECTATE); } // a round is on: watch until the next one
 }
-function startOnlineLife() {
-  run = newRun({ online: true }); player = S.topById(world, meId) || player;
+function startOnlineLife(cd = 0) {
+  const respawn = run && !run.over && world.mode === 'teams'; // Teams: the same run goes on after a knockout
+  player = S.topById(world, meId) || player;
+  if (respawn) { run.respawnT = 0; run.spectate = 0; startHum(); return; }
+  run = newRun({ online: true, countdown: cd, field: 12 });
   $('feed').innerHTML = ''; boardTimer = 0;
   setState(State.PLAYING); startHum(); playSfx('launch', 0.8);
+  if (!cd) setTimeout(modeHints, 1500);
 }
 function onlinePlayAgain() { if (net.status === 'in') netSend({ t: 'play', parts: save.sel }); else leaveToMenu(); }
+function renderOverTop() { // online results: where you stand on today's board
+  const list = dailyTop?.list || [], i = list.findIndex((e) => e.n === net.name), el = $('overTop');
+  el.hidden = mode !== 'online' || (!list.length && i < 0);
+  el.textContent = i >= 0 ? t('topYou', { p: i + 1 }) : list.length >= 10 ? t('topNeed', { s: Math.round(list[list.length - 1].s) + 1 }) : '';
+  if (!el.textContent) el.hidden = true;
+}
 function onSnapshot(d) {
   const now = performance.now() / 1000, off = d.tm - now;
   net.offset = net.offset == null ? off : net.offset + (off - net.offset) * 0.05; // smoothed server clock
   if (off > net.offset + 0.25) net.offset = off; // big lag spike recovered: jump forward
-  world.time = d.tm; net.players = d.n;
+  world.time = d.tm; net.players = d.n; net.rp = d.rp || null; if (d.ts) world.teamScore = d.ts;
   for (const e of d.ev) { if (e.type === 'add') mirrorTop(e); else handleEvent(e); }
   for (const sp of d.sp) mirrorSpark(sp);
   const seen = new Map();
@@ -1526,6 +1720,7 @@ function onSnapshot(d) {
     if (!tp.placed) { tp.x = a[1]; tp.z = a[2]; tp.placed = true; }
     tp.spin = a[5]; tp.peak = Math.max(tp.peak, tp.spin); tp.shield = a[7] & 2 ? 1 : 0; tp.dashT = a[7] & 1 ? 0.1 : 0; S.updateMass(tp);
     const fxk = FX_NAME[(a[7] >> 2) & 7]; if (tp.id !== meId) tp.fx = fxk ? { kind: fxk, t: tp.fx?.t || 1 } : null;
+    tp.pulling = a[7] & 32 ? 1 : 0; // the Magnetar is pulling
     if (tp.id === meId) net.srvMe = { tm: d.tm, x: a[1], z: a[2], vx: a[3], vz: a[4] };
   }
   world.tops = world.tops.filter((tp) => seen.has(tp.id) || ((tp.state === 'falling' || tp.state === 'toppling') && tp.timer > 0)); // let a fall finish locally
@@ -1548,7 +1743,7 @@ function netStep(dt) { // per fixed step while online: local animation, my predi
     if (tp.state === 'falling' || tp.state === 'toppling') S.animateDying(tp, dt);
     else if (tp.state === 'spawn') tp.timer = Math.max(0, tp.timer - dt);
   }
-  const me = S.topById(world, meId), playing = state === State.PLAYING && run && !run.over;
+  const me = S.topById(world, meId), playing = state === State.PLAYING && run && !run.over && !(run.countdown > 0); // the server holds everyone during a round's countdown
   let inp = { x: 0, y: 0 };
   if (me && alive(me) && playing) {
     inp = playerInput();
@@ -1589,11 +1784,19 @@ async function shareInvite() {
 }
 
 // ================================================================ LOOP (fixed-step simulation, render sync, calm camera)
-let last = performance.now(), acc = 0;
+let last = performance.now(), acc = 0, uiTimer = 0;
 const camPos = new THREE.Vector3(0, 30, 24), camLook = new THREE.Vector3(), lookGoal = new THREE.Vector3();
 function step(dt) {
   simTime += dt;
-  if (mode === 'online') { if (net.status === 'in') netStep(dt); tickRun(dt); return; }
+  if (mode === 'online') {
+    if (net.status === 'in') netStep(dt);
+    tickRun(dt);
+    if ((state === State.SPECTATE || state === State.GAMEOVER) && (uiTimer -= dt) <= 0) { // waiting for a round: board, chips, the next-round countdown
+      uiTimer = 0.25; if (state === State.SPECTATE) { renderBoard(); updateChips(); }
+      if (state === State.GAMEOVER && net.kind !== 'endless' && net.rp) $('btnRetry').textContent = net.rp.ph === 'end' ? t('nextRound', { n: Math.ceil(net.rp.t) }) : t('roundLive');
+    }
+    return;
+  }
   if (state === State.PLAYING || state === State.GAMEOVER) {
     S.step(world, dt, soloInput);
     for (const e of world.events) handleEvent(e);
@@ -1611,7 +1814,7 @@ function advance(dt) {
   refreshPlayer();
   updateParticles(sdt); updateWaves(sdt);
   if (bannerTimer > 0) { bannerTimer -= dt; if (bannerTimer <= 0) $('banner').hidden = true; }
-  if (missionPopTimer > 0) { missionPopTimer -= dt; if (missionPopTimer <= 0) $('missionPop').hidden = true; }
+  if (missionPopTimer > 0) { missionPopTimer -= dt; if (missionPopTimer <= 0) nextNotice(); }
   tickPops(dt);
   if (state === State.PLAYING && run && player && alive(player)) {
     const sp = Math.hypot(player.vx, player.vz);
@@ -1623,6 +1826,7 @@ function syncTop(tp, v, dt) {
   let y = bowlY(Math.min(r, R));
   if (tp.state === 'spawn') y += Math.max(0, tp.timer) * 9;
   if (tp.state === 'falling') y = tp.fallY;
+  if (v.hop > 0) { v.hop = Math.max(0, v.hop - dt); y += Math.sin((1 - v.hop / 0.6) * Math.PI) * 1.4 * s; } // victory hop
   m.root.scale.setScalar(s); m.root.position.set(tp.x, y, tp.z);
   const spinFrac = clamp(tp.spin / 220, 0, 1);
   const omega = tp.state === 'toppling' ? tp.timer * 10 : 9 + 28 * spinFrac;
@@ -1641,9 +1845,19 @@ function syncTop(tp, v, dt) {
   if (v.flash > 0) v.flash = Math.max(0, v.flash - dt); m.mats[0].emissiveIntensity = v.flash * 3.5; // hit flash: a short white pulse, never a flat tint
   m.blur.material.color.set(fx === 'turbo' ? PU_COLOR.turbo : topColor(tp));
   if (fx === 'turbo' && (v.trailT -= dt) <= 0) { v.trailT = 0.06; burst(new THREE.Vector3(tp.x, y + 0.3 * s, tp.z), PU_COLOR.turbo, 2, 1.5, 0.2); }
+  const trail = alive(tp) && tp.parts.trail && tp.parts.trail !== 'none' ? part('trail', tp.parts.trail).c : null; // cosmetic trail while moving
+  if (trail?.length && sp > 2.2 && (v.cosT -= dt) <= 0 && state !== State.COVER) {
+    v.cosT = me ? 0.05 : 0.1;
+    if (me || Math.hypot(tp.x - camLook.x, tp.z - camLook.z) < 22) burst(new THREE.Vector3(tp.x - (tp.vx / sp) * s * 0.8, y + 0.25 * s, tp.z - (tp.vz / sp) * s * 0.8), trail[v.cosI++ % trail.length], me ? 2 : 1, 1.2, 0.15);
+  }
+  if (v.pullRing) { // the Magnetar's pull: rings that keep shrinking in toward it
+    const on = alive(tp) && tp.pulling > 0; v.pullRing.visible = on;
+    if (on) { const k = 1 - ((simTime * 1.3) % 1); v.pullRing.scale.setScalar((CFG.pullRadius * k + 1) / s); v.pullRing.material.opacity = 0.75 * (1 - k * 0.6); }
+    m.tilt.children.forEach((o) => { if (o.userData.orbit) o.rotation.z += dt * (on ? 6 : 1.5); });
+  }
   if (me) m.ring.material.opacity = tp.cd <= 0 ? 0.7 + 0.25 * Math.sin(simTime * 8) : 0.4;
   m.ring.visible = tp.state === 'alive' && !(tp.shield > 0 && Math.sin(simTime * 30) < -0.3);
-  v.label.visible = state !== State.COVER && (state === State.PLAYING || state === State.GAMEOVER || state === State.PAUSED);
+  v.label.visible = state !== State.COVER && (state === State.PLAYING || state === State.GAMEOVER || state === State.PAUSED || state === State.SPECTATE);
   v.label.position.set(tp.x, y + 0.95 * s + 0.75, tp.z);
   const ls = (2.5 + s * 0.4) * (isShort() ? 1.3 : 1) * v.labelScale; v.label.scale.set(ls, ls * 0.22, 1); // the phone camera sits further back
   v.tp = tp;
@@ -1655,7 +1869,7 @@ function render(dt) {
   syncOrbs(dt);
   renderSparks();
   const lead = S.topById(world, world.leader);
-  if (lead && alive(lead) && (state === State.PLAYING || state === State.GAMEOVER || state === State.PAUSED)) {
+  if (lead && alive(lead) && (state === State.PLAYING || state === State.GAMEOVER || state === State.PAUSED || state === State.SPECTATE)) {
     crownSprite.visible = true; crownSprite.position.set(lead.x, views.get(lead.id).mesh.root.position.y + 0.95 * lead.r + 1.55, lead.z); const cs = 0.9 + lead.r * 0.15; crownSprite.scale.set(cs, cs, 1);
   } else crownSprite.visible = false;
   // stadium life
@@ -1667,7 +1881,7 @@ function render(dt) {
   }
   for (const b of beams) { b.rotation.z = Math.sin(simTime * 0.4 + b.userData.a) * 0.35; b.rotation.x = Math.cos(simTime * 0.3 + b.userData.a) * 0.35; }
   animateArena(dt);
-  const zr = S.zoneR(world), showZone = zr < R + 1 && (state === State.PLAYING || state === State.PAUSED || state === State.GAMEOVER);
+  const zr = S.zoneR(world), showZone = zr < R + 1 && (state === State.PLAYING || state === State.PAUSED || state === State.GAMEOVER || state === State.SPECTATE);
   zoneWall.visible = showZone && zr > 0.05; zoneFloor.visible = showZone;
   if (zoneWall.visible) { zoneWall.scale.set(zr, 1, zr); zoneWall.position.y = bowlY(Math.min(zr, R)) - 0.25; zoneWall.children[0].material.opacity = 0.55 + 0.25 * Math.sin(simTime * 5); }
   if (showZone) { zoneFloor.material.uniforms.zr.value = zr; zoneFloor.material.uniforms.time.value = simTime; }
@@ -1688,10 +1902,11 @@ function updateCamera(dt) {
   } else {
     // Calm follow: a small velocity lead and smoothed look target, so knock-backs and topples do not whip the view around
     camera.clearViewOffset();
-    const s = player ? player.r : 1, zoom = (1 + (s - 1) * 0.45) * (portrait ? 1.55 : 1) * (isShort() && !portrait ? 1.3 : 1);
-    const px = player ? player.x : 0, pz = player ? player.z : 0;
-    const lead = state === State.PLAYING && player && alive(player) ? 0.12 : 0;
-    lookGoal.set(px + (player?.vx || 0) * lead, 0, pz + (player?.vz || 0) * lead);
+    const focus = spectateTarget() || player; // your top, or who you are watching
+    const s = focus ? Math.min(focus.r, 2) : 1, zoom = (1 + (s - 1) * 0.45) * (portrait ? 1.55 : 1) * (isShort() && !portrait ? 1.3 : 1);
+    const px = focus ? focus.x : 0, pz = focus ? focus.z : 0;
+    const lead = state === State.PLAYING && focus && alive(focus) ? 0.12 : 0;
+    lookGoal.set(px + (focus?.vx || 0) * lead, 0, pz + (focus?.vz || 0) * lead);
     camLook.lerp(lookGoal, 1 - Math.exp(-dt * 4));
     const over = state === State.GAMEOVER ? 1.25 : 1;
     camPos.set(camLook.x, 15 * zoom * over, camLook.z + 12.5 * zoom * over);
@@ -1703,7 +1918,7 @@ function updateCamera(dt) {
 }
 function frame(now) {
   const dt = Math.min(0.1, (now - last) / 1000); last = now; lastFrameAt = performance.now();
-  advance(dt); render(dt);
+  advance(dt); render(dt); watchFps(dt);
   requestAnimationFrame(frame);
 }
 function resize() { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
@@ -1712,7 +1927,7 @@ addEventListener('resize', resize);
 // ================================================================ COVER (tools/game_covers.py: honest key art rendered from the game itself)
 function stageCover(kind) {
   state = State.COVER; document.body.classList.add('cover');
-  for (const id of ['menu', 'garage', 'lobby', 'profile', 'paused', 'gameover', 'hud', 'banner', 'coach', 'countdown', 'toast', 'btnAction', 'joystick', 'missionPop']) $(id).hidden = true;
+  for (const id of ['menu', 'garage', 'lobby', 'profile', 'settings', 'paused', 'gameover', 'hud', 'banner', 'coach', 'countdown', 'toast', 'btnAction', 'joystick', 'missionPop']) $(id).hidden = true;
   camera.clearViewOffset(); clearViews(); mode = 'solo';
   world = S.createWorld({ bots: 0, sparks: 0 }); buildArena('bowl'); zoneWall.visible = zoneFloor.visible = false;
   player = S.addTop(world, { parts: { crown: 'razor', core: 'heart', tip: 'needle', paint: 'sun' }, name: 'You', human: true, spin: 220, x: -1.15, z: 0.3, spawn: false }); meId = player.id; player.hitWob = 0.12;
@@ -1742,10 +1957,10 @@ async function boot() {
     document.fonts?.load('800 32px UI').catch(() => {}), document.fonts?.load('32px Display').catch(() => {})];
   let done = 0; jobs.forEach((p) => Promise.resolve(p).finally(() => { done++; $('loadBar').style.width = `${(100 * done) / jobs.length}%`; }));
   await Promise.race([Promise.all(jobs), new Promise((r) => setTimeout(r, 12000))]); // never hang on a slow asset
-  buildStadium(); initSparks(); scene.add(crownSprite);
+  buildStadium(); initSparks(); scene.add(crownSprite); applyMute();
   toMenuWorld();
   $('menuControls').innerHTML = controlsHTML(); refreshMenu(); refreshShakeButton();
-  resize();
+  resize(); applyGfx();
   sdkCall((s) => s.game.loadingStop());
   $('loading').hidden = true;
   setState(State.MENU);
@@ -1755,7 +1970,7 @@ async function boot() {
       frame: (dt = 1 / 30) => { advance(dt); render(dt); },
       skip: (sec) => { for (let s = 0; s < sec; s += STEP) { advance(STEP); if (state === State.GAMEOVER) startRun(); } refreshPlayer(); updateCamera(3); }, // the camera catches up for the shot
       sim: (sec) => { for (let s = 0; s < sec; s += STEP) { advance(STEP); if (run?.over) break; } }, // balance tests: stops when the run ends
-      info: () => ({ how: run?.how, state, score: player?.score, spin: player?.spin, time: run?.time, kos: player?.kos, rank: run?.bestRank, over: run?.over, mode: world?.mode, arena: world?.arenaId, place: run?.place, won: run?.won, boss: !!world?.tops.some((tp) => tp.boss), level: save.level }),
+      info: () => ({ how: run?.how, state, score: player?.score, spin: player?.spin, time: run?.time, kos: player?.kos, rank: run?.bestRank, over: run?.over, mode: world?.mode, arena: world?.arenaId, place: run?.place, won: run?.won, boss: !!world?.tops.some((tp) => tp.boss), level: save.level, me: meId, teams: world?.teamScore, respawnT: run?.respawnT }),
       cover: (kind) => stageCover(kind),
       orb: (k, dx = 3, dz = 0) => { if (player) S.spawnPowerup(world, k, [player.x + dx, player.z + dz]); world.events.length = 0; }, // screenshots of the power-up orbs
     };

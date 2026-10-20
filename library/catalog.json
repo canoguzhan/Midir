@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-20 11:42",
-  "count": 358,
+  "updated": "2026-10-20 14:08",
+  "count": 366,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -1342,6 +1342,32 @@
       ]
     },
     {
+      "path": "audio/voice/wb_magnetar_en.mp3",
+      "prompt": "The Magnetar has entered the arena!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 30,
+      "tags": [
+        "en",
+        "magnetar",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_magnetar_tr.mp3",
+      "prompt": "Manyetar arenaya çıktı!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "magnetar",
+        "tr",
+        "wb"
+      ]
+    },
+    {
       "path": "audio/voice/wb_overdrive_en.mp3",
       "prompt": "Overdrive!",
       "game": "whirlbash",
@@ -1441,6 +1467,58 @@
       "kb": 23,
       "tags": [
         "storm",
+        "tr",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_teams_en.mp3",
+      "prompt": "Team battle!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "en",
+        "teams",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_teams_tr.mp3",
+      "prompt": "Takım savaşı!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 18,
+      "tags": [
+        "teams",
+        "tr",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_teamwin_en.mp3",
+      "prompt": "Your team wins!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 20,
+      "tags": [
+        "en",
+        "teamwin",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_teamwin_tr.mp3",
+      "prompt": "Takımın kazandı!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 21,
+      "tags": [
+        "teamwin",
         "tr",
         "wb"
       ]
@@ -1585,6 +1663,18 @@
       ]
     },
     {
+      "path": "audio/whirl_confetti.mp3",
+      "prompt": "festive confetti cannon pop followed by a short sparkly shower and a tiny crowd cheer",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 24,
+      "tags": [
+        "confetti",
+        "whirl"
+      ]
+    },
+    {
       "path": "audio/whirl_dash.mp3",
       "prompt": "spinning top surging forward, rising high-pitched whirr and air whoosh, fast",
       "game": "whirlbash",
@@ -1641,6 +1731,18 @@
       "kb": 11,
       "tags": [
         "perfect",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/whirl_pull.mp3",
+      "prompt": "giant magnet powering up, deep wobbling electromagnetic hum swelling and pulling, arcade sci-fi, toy-like",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 35,
+      "tags": [
+        "pull",
         "whirl"
       ]
     },
