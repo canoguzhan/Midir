@@ -9,7 +9,13 @@
 }
 
 broadgames.pro, 104-207-80-220.sslip.io {
-	import protected
+	# online game rooms (mp/whirlbash.mjs) must be reachable without the password: CrazyGames players connect here
+	handle /mp/* {
+		reverse_proxy 127.0.0.1:8090
+	}
+	handle {
+		import protected
+	}
 }
 
 www.broadgames.pro {

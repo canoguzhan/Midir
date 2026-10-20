@@ -1,29 +1,20 @@
-// Whirlbash: spinning-top arena brawler (io-style, against bots). Sections: CONFIG, I18N, SDK, AUDIO, SAVE, PARTS, WORLD,
-// TOPS, SPARKS, FX, INPUT, STATE, UI, GAMEPLAY, AI, EVENTS, TUTORIAL, LOOP, COVER, BOOT.
-// Every top, the arena and the icons are procedural (one coherent toy-plastic look); audio loads from ./assets/ with synth
-// fallbacks. No API keys, no backend calls: this folder ships to CrazyGames as a static bundle.
+// Whirlbash: spinning-top arena brawler (io-style). Solo against bots, or online against real players with bots filling
+// the empty seats. The rules live in sim.js (shared with the multiplayer server, mp/whirlbash.mjs); this file is the view:
+// Three.js scene, UI, audio, input, the solo run, the online client and the CrazyGames SDK. Sections: CONFIG, I18N, SDK,
+// AUDIO, SAVE, WORLD, TOPS, SPARKS, FX, INPUT, STATE, UI, EVENTS, SOLO, TUTORIAL, ONLINE, LOOP, COVER, BOOT.
+// Every top, the arena and the icons are procedural; audio loads from ./assets/ with synth fallbacks. No API keys in here.
 import * as THREE from 'three';
+import * as S from './sim.js';
 
 // ================================================================ CONFIG
 const SAVE_KEY = 'whirlbash';
-const STEP = 1 / 60; // fixed simulation step: identical physics at 60/144/165 Hz
+const STEP = S.STEP;
 const params = new URLSearchParams(location.search);
 const CAPTURE = params.has('capture'); // deterministic frame stepping for press screenshots + trailer (tools/capture.mjs)
 const AUTOPLAY = CAPTURE || params.has('autoplay'); // the player's top is driven by the bot brain (trailer footage, balance tests)
-const CFG = {
-  arenaR: 24, pitCount: 3, pitHalf: 0.16, bowlLift: 0.7, bowlPull: 2.2,
-  bots: 11, sparks: 130, sparkMax: 220, sparkValue: 4, magnet: 1.4,
-  startSpin: 100, maxSpin: 1500, decay: 0.7, decayGrowth: 1 / 500, dashCost: 1.5,
-  accel: 24, maxSpeed: 8.5, damping: 1.4,
-  dashSpeed: 14, dashTime: 0.32, dashCooldown: 1.7,
-  restitution: 0.8, repel: 5, grind: 1.2, clashBase: 0.5, clashSpeed: 0.5, bumpSpeed: 3.5, dashMul: 1.7, maxHit: 22, shield: 2.5, pairCooldown: 0.9,
-  wallBounce: 0.55, wallLoss: 0.25,
-  ringoutSteal: 0.35, toppleDrop: 0.45, koPoints: 40, ringoutPoints: 60,
-  eventFirst: 30, eventEvery: 38, tiltForce: 5.5, overdrive: 1.35,
-  respawn: 3, aggroRamp: 120, graceTime: 18,
-};
-const R = CFG.arenaR;
-const PIT_ANGLES = Array.from({ length: CFG.pitCount }, (_, i) => -Math.PI / 2 + (i * Math.PI * 2) / CFG.pitCount + Math.PI / CFG.pitCount);
+const { CFG, R, PIT_ANGLES, PARTS, part, bowlY, angDiff, clamp, alive } = S;
+const MP_URL = /^wss?:\/\//.test(params.get('mp') || '') ? params.get('mp') : 'wss://broadgames.pro/mp/whirlbash'; // online arena (?mp= for local tests)
+const INTERP = 0.12; // online: other tops are drawn this far in the past, between two server snapshots
 const SFX_FILES = {
   clash: 'assets/audio/whirl_clash.mp3', clashHeavy: 'assets/audio/whirl_clash_heavy.mp3', dash: 'assets/audio/whirl_dash.mp3',
   ringout: 'assets/audio/whirl_ringout.mp3', topple: 'assets/audio/whirl_topple.mp3', hum: 'assets/audio/whirl_hum.mp3',
@@ -59,6 +50,11 @@ const STRINGS = {
     p_heart: 'Heartcore', d_heart: 'Spins much longer',
     p_dome: 'Dome', d_dome: 'Steady control', p_grip: 'Grip', d_grip: 'Sharp turns', p_glide: 'Glide', d_glide: 'High top speed', p_needle: 'Needle', d_needle: 'Loses spin slower',
     c_sun: 'Sunburst', c_coral: 'Coral', c_mint: 'Mint', c_sky: 'Sky', c_violet: 'Violet', c_lime: 'Lime', c_tangerine: 'Tangerine', c_snow: 'Snow',
+    playOnline: 'Play online', online: 'Online', quickMatch: 'Quick match', createRoom: 'Private room', joinCode: 'Join with a code', join: 'Join', back: 'Back',
+    noAccount: 'No account needed. You face real players, and bots fill the empty seats.', playingAs: 'You play as {n}', guestAuto: 'You get a guest name automatically',
+    connecting: 'Connecting…', connFail: 'Could not reach the online arena. Try again, or play solo.', connLost: 'Connection lost', noRoom: 'No room with that code',
+    roomFull: 'That room is full', room: 'Room', invite: 'Invite', linkCopied: 'Invite link copied!', shareCode: 'Room code {c}: share it with friends',
+    players: '{n} online', codePh: 'CODE', shakeOn: 'Camera shake: on', shakeOff: 'Camera shake: off',
   },
   tr: {
     play: 'Oyna', garage: 'Garaj', done: 'Tamam', best: 'En iyi', tagline: 'Dön. Çarpış. Rakiplerini pistten at!', paused: 'Duraklatıldı', resume: 'Devam',
@@ -79,6 +75,11 @@ const STRINGS = {
     p_heart: 'Kalp', d_heart: 'Çok daha uzun döner',
     p_dome: 'Kubbe', d_dome: 'Sabit kontrol', p_grip: 'Tutuş', d_grip: 'Keskin dönüşler', p_glide: 'Kayış', d_glide: 'Yüksek azami hız', p_needle: 'İğne', d_needle: 'Dönüşünü yavaş kaybeder',
     c_sun: 'Güneş', c_coral: 'Mercan', c_mint: 'Nane', c_sky: 'Gök', c_violet: 'Menekşe', c_lime: 'Misket', c_tangerine: 'Mandalina', c_snow: 'Kar',
+    playOnline: 'Çevrimiçi oyna', online: 'Çevrimiçi', quickMatch: 'Hızlı maç', createRoom: 'Özel oda', joinCode: 'Kodla katıl', join: 'Katıl', back: 'Geri',
+    noAccount: 'Hesap gerekmez. Gerçek oyunculara karşı oynarsın, boş yerleri botlar doldurur.', playingAs: 'Oyuncu adın: {n}', guestAuto: 'Sana otomatik bir misafir adı verilir',
+    connecting: 'Bağlanıyor…', connFail: 'Çevrimiçi arenaya ulaşılamadı. Tekrar dene ya da tek başına oyna.', connLost: 'Bağlantı koptu', noRoom: 'Bu kodla bir oda yok',
+    roomFull: 'Bu oda dolu', room: 'Oda', invite: 'Davet et', linkCopied: 'Davet bağlantısı kopyalandı!', shareCode: 'Oda kodu {c}: arkadaşlarınla paylaş',
+    players: '{n} çevrimiçi', codePh: 'KOD', shakeOn: 'Kamera sarsıntısı: açık', shakeOff: 'Kamera sarsıntısı: kapalı',
   },
 };
 let lang = 'en';
@@ -146,6 +147,20 @@ function loadData(key, fallback) {
   if (sdkReady() && crazySdk.data) try { v = crazySdk.data.getItem(key); } catch {}
   if (v == null) try { v = localStorage.getItem(key); } catch {}
   try { return v == null ? fallback : JSON.parse(v); } catch { return fallback; }
+}
+
+// Multiplayer bits of the SDK: invite links, room status for the CrazyGames friends UI, instant multiplayer, usernames.
+function sdkInviteParam(k) { if (!sdkReady()) return null; try { return crazySdk.game.getInviteParam?.(k) ?? null; } catch { return null; } }
+function sdkInstantMultiplayer() { if (!sdkReady()) return false; try { return !!crazySdk.game.isInstantMultiplayer; } catch { return false; } }
+function inviteLinkFor(code) {
+  if (sdkReady()) try { const link = crazySdk.game.inviteLink({ roomId: code }); if (link) return link; } catch {}
+  const u = new URL(location.href); u.search = ''; u.searchParams.set('room', code); return u.toString();
+}
+const sdkRoom = (info) => sdkCall((s) => s.game.updateRoom?.(info));
+const sdkLeftRoom = () => sdkCall((s) => s.game.leftRoom?.());
+async function sdkUsername() { // CrazyGames username when logged in (required to be shown in multiplayer); guests get a server-made name
+  if (!sdkReady()) return null;
+  try { if (!crazySdk.user?.isUserAccountAvailable) return null; const u = await crazySdk.user.getUser(); return u?.username || null; } catch { return null; }
 }
 
 // ================================================================ AUDIO (Web Audio SFX + synthesized fallbacks, HTML5 music)
@@ -218,7 +233,7 @@ function applyMute() {
 
 // ================================================================ SAVE
 const DEFAULT_SAVE = () => ({
-  best: 0, gears: 0, runs: 0, tut: false,
+  best: 0, gears: 0, runs: 0, tut: false, shake: true,
   owned: { crown: ['halo'], core: ['gyro'], tip: ['dome'], paint: ['sun', 'coral', 'mint'] },
   sel: { crown: 'halo', core: 'gyro', tip: 'dome', paint: 'sun' },
 });
@@ -229,45 +244,6 @@ function loadSave() {
 }
 const persist = () => saveData(`${SAVE_KEY}:save`, save);
 
-// ================================================================ PARTS (garage: crown = attack ring, core = weight disk, tip = movement)
-const PARTS = {
-  crown: [
-    { id: 'halo', cost: 0, atk: 1, def: 1, spd: 1 },
-    { id: 'razor', cost: 150, atk: 1.35, def: 0.85, spd: 1 },
-    { id: 'bastion', cost: 150, atk: 0.85, def: 1.4, spd: 0.96 },
-    { id: 'comet', cost: 400, atk: 1.2, def: 0.95, spd: 1.08 },
-  ],
-  core: [
-    { id: 'gyro', cost: 0, mass: 1, sta: 1, spd: 1 },
-    { id: 'iron', cost: 180, mass: 1.4, sta: 0.95, spd: 0.9 },
-    { id: 'feather', cost: 180, mass: 0.75, sta: 1, spd: 1.12 },
-    { id: 'heart', cost: 450, mass: 1, sta: 1.45, spd: 1 },
-  ],
-  tip: [
-    { id: 'dome', cost: 0, acc: 1, spd: 1, sta: 1 },
-    { id: 'grip', cost: 120, acc: 1.4, spd: 0.92, sta: 1 },
-    { id: 'glide', cost: 120, acc: 0.85, spd: 1.2, sta: 1 },
-    { id: 'needle', cost: 300, acc: 0.9, spd: 1, sta: 1.3 },
-  ],
-  paint: [
-    { id: 'sun', cost: 0, c: '#ffc531' }, { id: 'coral', cost: 0, c: '#ff5d73' }, { id: 'mint', cost: 0, c: '#3ee0a1' }, { id: 'sky', cost: 80, c: '#4cb8ff' },
-    { id: 'violet', cost: 80, c: '#a77bff' }, { id: 'lime', cost: 80, c: '#b6f03c' }, { id: 'tangerine', cost: 120, c: '#ff8a3d' }, { id: 'snow', cost: 120, c: '#eef1f8' },
-  ],
-};
-const part = (kind, id) => PARTS[kind].find((p) => p.id === id) || PARTS[kind][0];
-function statsOf(p) {
-  const c = part('crown', p.crown), k = part('core', p.core), tp = part('tip', p.tip);
-  return { atk: c.atk, def: c.def, mass: k.mass, sta: k.sta * tp.sta, spd: c.spd * k.spd * tp.spd, acc: tp.acc };
-}
-function displayStats(p) { // 0..1 bars for the garage
-  const s = statsOf(p), n = (v) => Math.max(0.05, Math.min(1, (v - 0.6) / 1.0));
-  return { atk: n(s.atk), def: n(s.def * Math.sqrt(s.mass)), sta: n(s.sta), spd: n(s.spd * Math.pow(s.acc, 0.4)) };
-}
-const randomParts = () => ({
-  crown: PARTS.crown[(Math.random() * 4) | 0].id, core: PARTS.core[(Math.random() * 4) | 0].id, tip: PARTS.tip[(Math.random() * 4) | 0].id,
-  paint: PARTS.paint[(Math.random() * PARTS.paint.length) | 0].id,
-});
-
 // ================================================================ WORLD (night stadium: glossy cobalt bowl, bumper walls, three glowing pits)
 const $ = (id) => document.getElementById(id);
 const canvas = $('game');
@@ -277,9 +253,6 @@ renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.A
 const scene = new THREE.Scene(); scene.background = new THREE.Color('#15123a'); scene.fog = new THREE.Fog('#15123a', 60, 130);
 const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 300);
 let shakeAmt = 0;
-const bowlY = (r) => CFG.bowlLift * Math.min(1, (r / R) ** 2);
-const angDiff = (a, b) => Math.atan2(Math.sin(a - b), Math.cos(a - b));
-const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const rand = (a, b) => a + Math.random() * (b - a);
 let crowd = null, crowdBase = [], beams = [], chevrons = null, pitGlows = [];
 
@@ -458,75 +431,39 @@ const crownSprite = (() => {
   const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthTest: false, transparent: true })); s.renderOrder = 11; s.visible = false; return s;
 })();
 
-const SYL_A = ['Vor', 'Zip', 'Kra', 'Spi', 'Nim', 'Bly', 'Rax', 'Tor', 'Fen', 'Glim', 'Whi', 'Zor', 'Bri', 'Quo', 'Lux', 'Pyr', 'Dex', 'Mo', 'Sky', 'Jet', 'Rio', 'Kai', 'Nova', 'Pix', 'Zee', 'Ori', 'Bo', 'Tam'];
-const SYL_B = ['tex', 'nix', 'dle', 'ra', 'zo', 'lo', 'ka', 'vin', 'bolt', 'spin', 'wick', 'rex', 'dash', 'fy', 'mo', 'ny', 'ro', 'lix', 'ton', 'whirl'];
-function botName() {
-  for (let i = 0; i < 20; i++) {
-    const n = SYL_A[(Math.random() * SYL_A.length) | 0] + SYL_B[(Math.random() * SYL_B.length) | 0] + (Math.random() < 0.15 ? String(10 + ((Math.random() * 89) | 0)) : '');
-    if (!tops.some((tp) => tp.name === n)) return n;
-  }
-  return 'Top' + ((Math.random() * 999) | 0);
+// One view (mesh + name label) per top in the current world; views appear and disappear with the world's tops.
+let world = null, meId = 0, player = null, mode = 'solo'; // player: my top (kept after it is eliminated, for the results + camera)
+const views = new Map();
+const topColor = (tp) => part('paint', tp.parts.paint).c;
+function viewFor(tp) {
+  let v = views.get(tp.id);
+  if (v) return v;
+  const me = tp.id === meId, mesh = buildTopMesh(tp.parts, tp.parts.paint, me ? '#ffffff' : '#ffe8c2');
+  if (me) { mesh.ring.material.color.set('#ffc531'); mesh.ring.material.opacity = 0.85; }
+  const label = labelSprite(me ? t('you') : tp.name, me ? '#ffc531' : tp.human ? '#9ee7ff' : '#ffffff');
+  scene.add(mesh.root, label);
+  v = { mesh, label, prec: Math.random() * 6, tp }; views.set(tp.id, v); return v;
 }
-
-const tops = []; let player = null, topId = 0;
-const radiusOf = (spin) => 0.55 + 0.45 * Math.sqrt(Math.max(0, spin) / 100);
-function makeTop({ parts, name, isPlayer = false, spin = CFG.startSpin }) {
-  const accent = isPlayer ? '#ffffff' : '#ffe8c2';
-  const mesh = buildTopMesh(parts, parts.paint, accent);
-  if (isPlayer) { mesh.ring.material.color.set('#ffc531'); mesh.ring.material.opacity = 0.85; }
-  const tp = {
-    id: ++topId, name, isPlayer, parts, color: part('paint', parts.paint).c, stats: statsOf(parts), mesh,
-    x: 0, z: 0, vx: 0, vz: 0, spin, peak: spin, r: radiusOf(spin), mass: 1, state: 'alive', timer: 0, fallY: 0, fallV: 0,
-    dashT: 0, cd: 0, shield: 0, kos: 0, score: 0, lastHitBy: null, lastHitT: -99, hitWob: 0, prec: Math.random() * 6, faceX: 0, faceZ: 1,
-    think: 0, goal: { x: 0, z: 0, dash: false }, skill: 0.6, aggro: 0.6, ai: 'normal', label: null, bestRank: 99,
-  };
-  tp.label = labelSprite(isPlayer ? t('you') : name, isPlayer ? '#ffc531' : '#ffffff'); scene.add(tp.label);
-  scene.add(mesh.root); tops.push(tp); updateMass(tp); return tp;
+function dropView(id) {
+  const v = views.get(id); if (!v) return;
+  disposeTopMesh(v.mesh); scene.remove(v.label); v.label.material.map.dispose(); v.label.material.dispose(); views.delete(id);
 }
-function updateMass(tp) { tp.r = radiusOf(tp.spin); tp.mass = tp.r * tp.r * tp.stats.mass; }
-function removeTop(tp) {
-  disposeTopMesh(tp.mesh); scene.remove(tp.label); tp.label.material.map.dispose(); tp.label.material.dispose();
-  const i = tops.indexOf(tp); if (i >= 0) tops.splice(i, 1);
-}
-function rebuildPlayerMesh() {
-  if (!player) return;
-  disposeTopMesh(player.mesh);
-  player.parts = { ...save.sel }; player.stats = statsOf(player.parts); player.color = part('paint', player.parts.paint).c;
-  player.mesh = buildTopMesh(player.parts, player.parts.paint, '#ffffff'); player.mesh.ring.material.color.set('#ffc531'); player.mesh.ring.material.opacity = 0.85;
-  scene.add(player.mesh.root); updateMass(player);
-}
-const alive = (tp) => tp.state === 'alive';
+function clearViews() { for (const id of [...views.keys()]) dropView(id); }
+const infoOf = (id) => (id ? S.topById(world, id) || views.get(id)?.tp || null : null); // tops that just left the world keep their view one more frame
+function refreshPlayer() { const p = S.topById(world, meId); if (p) player = p; }
 
 // ================================================================ SPARKS (instanced pickups: grow your spin)
-const sparks = []; let sparkMesh = null;
+let sparkMesh = null;
 function initSparks() {
   sparkMesh = new THREE.InstancedMesh(new THREE.OctahedronGeometry(0.3), new THREE.MeshStandardMaterial({ color: '#ffe066', emissive: '#ffb000', emissiveIntensity: 1.1, roughness: 0.3, metalness: 0.2 }), CFG.sparkMax);
   sparkMesh.castShadow = false; sparkMesh.frustumCulled = false; scene.add(sparkMesh);
-  for (let i = 0; i < CFG.sparkMax; i++) sparks.push({ on: false, x: 0, z: 0, y: 0.4, vx: 0, vz: 0, fall: 0, ph: Math.random() * 6, big: 0 });
-}
-function addSpark(x, z, { vx = 0, vz = 0, fall = 0, big = 0 } = {}) {
-  const s = sparks.find((q) => !q.on); if (!s) return null;
-  const r = Math.hypot(x, z), lim = R - 1.2; if (r > lim) { x *= lim / r; z *= lim / r; }
-  Object.assign(s, { on: true, x, z, vx, vz, fall, big, y: 0.4 + fall }); return s;
-}
-function randomSparkSpot(maxR = R - 1.8) { const a = Math.random() * Math.PI * 2, r = Math.sqrt(Math.random()) * maxR; return [Math.cos(a) * r, Math.sin(a) * r]; }
-function updateSparks(dt) {
-  for (const s of sparks) {
-    if (!s.on) continue;
-    s.ph += dt * 3;
-    if (s.fall > 0) { s.fall = Math.max(0, s.fall - dt * 9); s.y = 0.4 + s.fall; continue; }
-    if (s.vx || s.vz) {
-      s.x += s.vx * dt; s.z += s.vz * dt; const k = Math.exp(-3 * dt); s.vx *= k; s.vz *= k;
-      if (Math.abs(s.vx) + Math.abs(s.vz) < 0.05) s.vx = s.vz = 0;
-      const r = Math.hypot(s.x, s.z), lim = R - 1.2; if (r > lim) { s.x *= lim / r; s.z *= lim / r; s.vx = s.vz = 0; }
-    }
-  }
 }
 const sparkTmp = new THREE.Object3D();
 function renderSparks() {
-  for (let i = 0; i < sparks.length; i++) {
+  const sparks = world.sparks;
+  for (let i = 0; i < CFG.sparkMax; i++) {
     const s = sparks[i];
-    if (!s.on) sparkTmp.scale.setScalar(0);
+    if (!s?.on) sparkTmp.scale.setScalar(0);
     else {
       const sc = (s.big ? 1.25 + 0.25 * Math.sin(s.ph * 2) : 1) * (s.fall > 0 ? 0.8 : 1);
       sparkTmp.position.set(s.x, bowlY(Math.hypot(s.x, s.z)) + s.y + Math.sin(s.ph) * 0.1, s.z); sparkTmp.rotation.set(0, s.ph, 0); sparkTmp.scale.setScalar(sc);
@@ -540,6 +477,7 @@ function renderSparks() {
 const particles = [], pGeo = new THREE.BoxGeometry(0.1, 0.1, 0.32), pMats = {};
 const pMat = (c) => (pMats[c] ??= new THREE.MeshBasicMaterial({ color: c, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
 function burst(pos, color, n = 14, speed = 6, up = 1) {
+  if (quietFx()) return;
   for (let i = 0; i < n; i++) {
     let p = particles.find((q) => !q.visible);
     if (!p) { if (particles.length > 360) return; p = new THREE.Mesh(pGeo, pMat(color)); p.userData.v = new THREE.Vector3(); particles.push(p); scene.add(p); }
@@ -557,7 +495,9 @@ function updateParticles(dt) {
 }
 const waves = [];
 function shockwave(x, y, z, size = 2, color = '#ffffff') {
+  if (quietFx()) return;
   let w = waves.find((q) => !q.visible);
+  if (!w && waves.length >= 24) return;
   if (!w) { w = new THREE.Mesh(cached('wave', () => new THREE.RingGeometry(0.85, 1, 40).rotateX(-Math.PI / 2)), new THREE.MeshBasicMaterial({ transparent: true, blending: THREE.AdditiveBlending, depthWrite: false })); waves.push(w); scene.add(w); }
   w.material.color.set(color); w.visible = true; w.position.set(x, y + 0.1, z); w.userData = { life: 0.4, size };
 }
@@ -567,7 +507,7 @@ function updateWaves(dt) {
     const k = 1 - w.userData.life / 0.4; w.scale.setScalar(0.5 + k * w.userData.size); w.material.opacity = 1 - k;
   }
 }
-function shake(a) { if (!CAPTURE || a < 0.5) shakeAmt = Math.max(shakeAmt, a); }
+function shake(a) { if (save.shake !== false && !CAPTURE) shakeAmt = Math.max(shakeAmt, Math.min(a, 0.3)); } // small and smooth: big jolts make people motion sick
 const nearVol = (x, z) => (player ? clamp(1.25 - Math.hypot(x - player.x, z - player.z) / 22, 0.12, 1) : 0.5);
 
 // ================================================================ INPUT (keyboard, mouse steering + click dash, touch joystick + button)
@@ -618,20 +558,23 @@ function playerInput() { // x/z world direction; the camera has no yaw, so scree
   const l = Math.hypot(x, y); return l > 1 ? { x: x / l, y: y / l } : l < 0.12 ? { x: 0, y: 0 } : { x, y };
 }
 
-// ================================================================ STATE (BOOT -> MENU <-> GARAGE, MENU -> PLAYING <-> PAUSED -> GAMEOVER)
-const State = { BOOT: 'BOOT', MENU: 'MENU', GARAGE: 'GARAGE', PLAYING: 'PLAYING', PAUSED: 'PAUSED', GAMEOVER: 'GAMEOVER', COVER: 'COVER' };
-let state = State.BOOT, run = null, simTime = 0;
+// ================================================================ STATE (BOOT -> MENU <-> GARAGE / LOBBY, -> PLAYING <-> PAUSED -> GAMEOVER)
+const State = { BOOT: 'BOOT', MENU: 'MENU', GARAGE: 'GARAGE', LOBBY: 'LOBBY', PLAYING: 'PLAYING', PAUSED: 'PAUSED', GAMEOVER: 'GAMEOVER', COVER: 'COVER' };
+let state = State.BOOT, run = null, simTime = 0, dashQueued = false;
 
 function setState(s) {
   state = s;
-  $('menu').hidden = s !== State.MENU; $('garage').hidden = s !== State.GARAGE; $('paused').hidden = s !== State.PAUSED; $('gameover').hidden = s !== State.GAMEOVER;
+  $('menu').hidden = s !== State.MENU; $('garage').hidden = s !== State.GARAGE; $('lobby').hidden = s !== State.LOBBY;
+  $('paused').hidden = s !== State.PAUSED; $('gameover').hidden = s !== State.GAMEOVER;
   $('hud').hidden = !(s === State.PLAYING || s === State.PAUSED);
   $('btnAction').hidden = !(s === State.PLAYING && isTouch);
   $('dashKey').hidden = isTouch;
+  $('roomChip').hidden = mode !== 'online';
+  $('btnOverGarage').hidden = mode === 'online';
   if (s !== State.PLAYING) { stick.id = null; stick.x = stick.y = 0; $('joystick').hidden = true; }
-  if (s !== State.PLAYING && s !== State.PAUSED) { $('coach').hidden = true; $('countdown').hidden = true; }
+  if (s !== State.PLAYING && s !== State.PAUSED) { $('coach').hidden = true; $('countdown').hidden = true; $('banner').hidden = true; bannerTimer = 0; }
   if (s === State.PLAYING) onGameplayStart(); else onGameplayStop(); // stop on every break: menus, pause, game over
-  if (s === State.MENU || s === State.GARAGE) { playMusic(0.2); camera.clearViewOffset(); }
+  if (s === State.MENU || s === State.GARAGE || s === State.LOBBY) { playMusic(0.2); camera.clearViewOffset(); }
   if (s === State.PLAYING) playMusic(0.32);
   if (s === State.PAUSED || s === State.MENU || s === State.GAMEOVER) updateHum(0, 1);
 }
@@ -641,25 +584,36 @@ function togglePause() {
 }
 function blockUI(on) { document.body.style.pointerEvents = on ? 'none' : ''; }
 let toastTimer = 0;
-function toast(msg) { const el = $('toast'); el.textContent = msg; el.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.hidden = true; }, 2000); }
+function toast(msg) { const el = $('toast'); el.textContent = msg; el.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.hidden = true; }, 2400); }
 const click = (id, fn) => $(id).addEventListener('click', () => { unlockAudio(); playSfx('click', 0.6); fn(); });
+function playerDash() { if (state === State.PLAYING && run && !(run.countdown > 0) && player && alive(player)) dashQueued = true; }
+const takeDash = () => { const d = dashQueued; dashQueued = false; return d; };
 
 click('btnPlay', () => startRun());
+click('btnOnline', () => openLobby());
 click('btnGarage', () => openGarage());
-click('btnOverGarage', () => { resetArena(); openGarage(); });
+click('btnOverGarage', () => { toMenuWorld(); openGarage(); });
 click('btnGarageDone', () => { setState(State.MENU); refreshMenu(); });
 click('btnPause', () => togglePause());
 click('btnResume', () => togglePause());
-click('btnQuit', () => { endRunSilently(); setState(State.MENU); refreshMenu(); });
-click('btnMenu', () => { resetArena(); setState(State.MENU); refreshMenu(); }); // navigation: never an ad here
-click('btnRetry', () => triggerMidgameAd(() => startRun())); // between runs: the right moment for a midgame ad
+click('btnShake', () => { save.shake = save.shake === false; persist(); refreshShakeButton(); });
+click('btnQuit', () => { leaveToMenu(); });
+click('btnMenu', () => { leaveToMenu(); }); // navigation: never an ad here
+click('btnRetry', () => triggerMidgameAd(() => (mode === 'online' ? onlinePlayAgain() : startRun()))); // between runs: the right moment for a midgame ad
 click('btnDouble', () => {
   $('btnDouble').hidden = true;
   triggerRewardedAd(() => { save.gears += run.gearsEarned; persist(); run.gearsEarned *= 2; $('overGears').textContent = run.gearsEarned; toast(t('doubled')); playSfx('unlock'); refreshMenu(); }, () => {});
 });
 click('btnSkipTut', () => finishTutorial(true));
+click('btnQuick', () => connectOnline({ t: 'join', mode: 'quick' }));
+click('btnCreate', () => connectOnline({ t: 'join', mode: 'create' }));
+click('btnJoinCode', () => joinByCode($('codeInput').value));
+click('btnLobbyBack', () => { closeOnline(); setState(State.MENU); });
+click('btnInvite', () => shareInvite());
+$('codeInput').addEventListener('keydown', (e) => { e.stopPropagation(); if (e.code === 'Enter') joinByCode($('codeInput').value); });
+$('codeInput').addEventListener('input', () => { $('codeInput').value = $('codeInput').value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 5); });
 
-// ================================================================ UI (menu, garage, HUD, leaderboard, feed, banners)
+// ================================================================ UI (menu, garage, lobby, HUD, leaderboard, feed, banners)
 function controlsHTML() {
   const k = (s) => `<span class="key">${s}</span>`;
   if (isTouch) return `<span><svg><use href="#i-move"/></svg>${t('ctlDrag')}</span><span><svg class="gold"><use href="#i-dash"/></svg>${t('ctlTap')}</span>`;
@@ -669,6 +623,11 @@ function refreshMenu() {
   $('menuBest').textContent = save.best; $('menuGears').textContent = save.gears; $('garageGears').textContent = save.gears;
   const affordable = Object.entries(PARTS).some(([kind, list]) => list.some((p) => !save.owned[kind].includes(p.id) && p.cost <= save.gears));
   $('garageDot').hidden = !affordable;
+}
+const refreshShakeButton = () => { $('btnShake').textContent = t(save.shake === false ? 'shakeOff' : 'shakeOn'); };
+function displayStats(p) { // 0..1 bars for the garage
+  const s = S.statsOf(p), n = (v) => Math.max(0.05, Math.min(1, (v - 0.6) / 1.0));
+  return { atk: n(s.atk), def: n(s.def * Math.sqrt(s.mass)), sta: n(s.sta), spd: n(s.spd * Math.pow(s.acc, 0.4)) };
 }
 let garageTab = 'crown';
 function openGarage() { setState(State.GARAGE); renderGarage(); }
@@ -693,25 +652,35 @@ function selectPart(kind, id) {
     if (save.gears < p.cost) { toast(t('notEnough')); playSfx('wall', 0.6); return; }
     save.gears -= p.cost; save.owned[kind].push(id); toast(t('unlocked')); playSfx('unlock', 0.8);
   } else playSfx('upgrade', 0.5);
-  save.sel[kind] = id; persist(); rebuildPlayerMesh(); renderGarage(); refreshMenu();
-  if (player) { burst(new THREE.Vector3(player.x, 1, player.z), '#ffe066', 18, 5); shockwave(player.x, bowlY(0), player.z, 3, '#ffc531'); }
+  save.sel[kind] = id; persist(); renderGarage(); refreshMenu();
+  if (player) { // the garage preview is my top in the menu world: give it the new part
+    player.parts = S.cleanParts(save.sel); player.stats = S.statsOf(player.parts); S.updateMass(player); dropView(player.id);
+    burst(new THREE.Vector3(player.x, 1, player.z), '#ffe066', 18, 5); shockwave(player.x, bowlY(0), player.z, 3, '#ffc531');
+  }
+}
+async function openLobby() {
+  setState(State.LOBBY); $('lobbyStatus').textContent = ''; $('lobbyStatus').classList.remove('bad');
+  const name = await sdkUsername();
+  $('lobbyName').textContent = name ? t('playingAs', { n: name }) : t('guestAuto');
 }
 
-let boardTimer = 0, leader = null;
-function rankList() { return tops.filter((tp) => alive(tp) || tp.state === 'spawn').sort((a, b) => b.spin - a.spin); }
+let boardTimer = 0;
 function renderBoard() {
-  const list = rankList(), me = list.indexOf(player), rows = [];
-  const row = (tp, i, extra = '') => `<li class="${tp.isPlayer ? 'me' : ''} ${extra}"><span>${i === 0 ? '<svg><use href="#i-crown"/></svg>' : i + 1 + '.'}</span><i class="sw" style="background:${tp.color}"></i>${escapeHTML(tp.isPlayer ? t('you') : tp.name)}<b>${Math.round(tp.spin)}</b></li>`;
+  const list = S.rankList(world), me = list.findIndex((tp) => tp.id === meId), rows = [];
+  const row = (tp, i, extra = '') => {
+    const mine = tp.id === meId;
+    return `<li class="${mine ? 'me' : tp.human ? 'hu' : ''} ${extra}"><span>${i === 0 ? '<svg><use href="#i-crown"/></svg>' : i + 1 + '.'}</span><i class="sw" style="background:${topColor(tp)}"></i>${escapeHTML(mine ? t('you') : tp.name)}<b>${Math.round(tp.spin)}</b></li>`;
+  };
   list.slice(0, 5).forEach((tp, i) => rows.push(row(tp, i)));
-  if (me >= 5) rows.push(row(player, me, 'gap'));
+  if (me >= 5) rows.push(row(list[me], me, 'gap'));
   $('board').innerHTML = rows.join('');
 }
-const escapeHTML = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const escapeHTML = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 function feed(killer, victim, how) {
   if (CAPTURE && !killer) return;
-  const el = document.createElement('div'), name = (tp) => `<b style="color:${tp.isPlayer ? '#ffc531' : tp.color}">${escapeHTML(tp.isPlayer ? t('you') : tp.name)}</b>`;
+  const el = document.createElement('div'), name = (tp) => `<b style="color:${tp.id === meId ? '#ffc531' : topColor(tp)}">${escapeHTML(tp.id === meId ? t('you') : tp.name)}</b>`;
   el.innerHTML = killer ? `${name(killer)}<em>${t(how === 'ringout' ? 'feedRing' : 'feedTopple')}</em>${name(victim)}` : `${name(victim)}<em>${t(how === 'ringout' ? 'fell' : 'spunOut')}</em>`;
-  if (killer?.isPlayer || victim.isPlayer) el.className = 'me';
+  if (killer?.id === meId || victim.id === meId) el.className = 'me';
   const f = $('feed'); f.prepend(el); while (f.children.length > 4) f.lastChild.remove();
   setTimeout(() => el.remove(), 4500);
 }
@@ -726,232 +695,141 @@ function updateHUD() {
   $('score').textContent = p.score; $('kos').textContent = p.kos;
   const cd = p.cd > 0 ? 1 - p.cd / CFG.dashCooldown : 1;
   $('dashKey').style.setProperty('--cd', cd.toFixed(3)); $('btnAction').style.setProperty('--cd', cd.toFixed(3));
-  if (run.event) { $('eventChip').hidden = false; $('eventName').textContent = t('ev_' + run.event.id).replace('!', ''); $('eventTime').textContent = `${Math.ceil(run.event.t)}s`; }
+  const ev = world.event;
+  if (ev) { $('eventChip').hidden = false; $('eventName').textContent = t('ev_' + ev.id).replace('!', ''); $('eventTime').textContent = `${Math.max(0, Math.ceil(ev.t))}s`; }
   else $('eventChip').hidden = true;
+  if (mode === 'online') { $('roomCode').textContent = net.code; $('roomInfo').textContent = `${t('players', { n: net.players })} · ${Math.round(net.rtt)} ms`; }
 }
 
-// ================================================================ GAMEPLAY
-function resetArena() {
-  stopHum();
-  for (const tp of [...tops]) if (!tp.isPlayer) removeTop(tp);
-  for (const s of sparks) s.on = false;
-  pendingRespawns.length = 0;
-  for (let i = 0; i < CFG.sparks; i++) addSpark(...randomSparkSpot());
-  if (player) Object.assign(player, { x: 0, z: 0, vx: 0, vz: 0, spin: CFG.startSpin, peak: CFG.startSpin, state: 'alive', dashT: 0, cd: 0 });
-  if (player) { player.mesh.root.visible = true; player.label.visible = true; updateMass(player); }
-  for (let i = 0; i < CFG.bots; i++) spawnBot({ ring: i, idle: true });
-  run = null; leader = null; crownSprite.visible = false; chevrons.visible = false;
+// ================================================================ EVENTS (what the world reports -> particles, sounds, banners; same for solo and online)
+const pos3 = (x, z, up = 0.4) => new THREE.Vector3(x, bowlY(Math.hypot(x, z)) + up, z);
+let lastFrameAt = 0;
+const quietFx = () => document.hidden || (mode === 'online' && performance.now() - lastFrameAt > 250);
+function handleEvent(e) {
+  const tp = infoOf(e.id);
+  switch (e.type) {
+    case 'land':
+      if (!tp) break;
+      if (!CAPTURE) playSfx('launch', 0.5 * nearVol(tp.x, tp.z));
+      burst(pos3(tp.x, tp.z, 0.1), '#cfd8ff', 10, 4, 0.5); shockwave(tp.x, bowlY(Math.hypot(tp.x, tp.z)), tp.z, tp.r * 2.2, '#cfd8ff');
+      break;
+    case 'dash':
+      if (tp && !(mode === 'online' && e.id === meId)) dashFx(tp, e.dx, e.dz); // my own dash already played when I pressed it
+      break;
+    case 'wall':
+      playSfx('wall', clamp(e.vn / 12, 0.2, 0.8) * nearVol(e.x, e.z)); burst(pos3(e.x, e.z, 0.5), '#ffe8c2', 4 + (e.vn | 0), 4);
+      break;
+    case 'clash': {
+      const mine = e.a === meId || e.b === meId, cy = 0.55 * Math.min(infoOf(e.a)?.r ?? 1, infoOf(e.b)?.r ?? 1), p = pos3(e.x, e.z, cy);
+      burst(p, '#fff2a8', Math.min(26, 6 + (e.rel | 0) * 2), 6 + e.rel * 0.4);
+      burst(p, e.heavy ? '#ff9a3d' : '#7fd8ff', e.heavy ? 10 : 4, 5);
+      if (e.heavy) shockwave(e.x, p.y - 0.4, e.z, 2.5 + e.rel * 0.15, '#ffd27a');
+      playSfx(e.heavy ? 'clashHeavy' : 'clash', (mine ? 1 : nearVol(e.x, e.z) * 0.6) * clamp(0.4 + e.rel / 14, 0.4, 1), e.heavy ? 1 : 1.1);
+      if (mine && e.heavy) shake(0.15);
+      if (mode === 'online') for (const id of [e.a, e.b]) { const o = S.topById(world, id); if (o) o.hitWob = Math.min(0.45, o.hitWob + (e.heavy ? 0.3 : 0.12)); }
+      if (run?.tutorial && run.tutStep === 2 && run.dummyId && [e.a, e.b].includes(meId) && [e.a, e.b].includes(run.dummyId) && (e.a === meId ? e.aDash : e.bDash)) run.tutDashHit = true;
+      break;
+    }
+    case 'spark': {
+      const s = world.sparks[e.i], x = e.x ?? s?.x, z = e.z ?? s?.z;
+      if (mode === 'online' && s) s.on = false;
+      if (x != null) burst(pos3(x, z, 0.5), '#ffe066', 4, 3);
+      if (e.id === meId) { playSfx('spark', 0.45, 0.9 + Math.random() * 0.3); if (run?.tutorial) run.tutSparks++; }
+      break;
+    }
+    case 'fall':
+      if (!tp) break;
+      playSfx('ringout', e.id === meId ? 1 : 0.8 * nearVol(tp.x, tp.z));
+      if (e.id === meId && run) { run.slow = 1.1; shake(0.2); }
+      break;
+    case 'topple':
+      if (!tp) break;
+      playSfx('topple', e.id === meId ? 1 : 0.7 * nearVol(tp.x, tp.z));
+      if (e.id === meId && run) { run.slow = 1.1; shake(0.15); }
+      break;
+    case 'elim': onElim(e); break;
+    case 'event': onEventStart(e); break;
+    case 'eventEnd': onEventEnd(e); break;
+    case 'leader': onLeader(e.id); break;
+  }
 }
-function spawnBot({ ring = -1, idle = false, spin = null } = {}) {
-  const parts = randomParts();
-  if (player && parts.paint === player.parts.paint) parts.paint = PARTS.paint[(PARTS.paint.findIndex((p) => p.id === parts.paint) + 3) % PARTS.paint.length].id;
-  const tm = run ? run.time : 0;
-  const s = spin ?? Math.round(rand(80, 115) + Math.random() * Math.min(420, tm * 1.6));
-  const b = makeTop({ parts, name: botName(), spin: s });
-  let x, z;
-  if (ring >= 0) { const a = (ring / CFG.bots) * Math.PI * 2 + 0.3, r = 9 + (ring % 3) * 4; x = Math.cos(a) * r; z = Math.sin(a) * r; }
-  else for (let k = 0; k < 20; k++) { [x, z] = randomSparkSpot(R - 6); if (!player || Math.hypot(x - player.x, z - player.z) > 9) break; }
-  Object.assign(b, { x, z, skill: rand(0.35, 0.95), aggro: rand(0.4, 1), ai: idle ? 'idle' : 'normal' });
-  if (!idle) { b.state = 'spawn'; b.timer = 0.6; }
-  return b;
+function dashFx(tp, dx, dz) {
+  burst(pos3(tp.x - dx * tp.r, tp.z - dz * tp.r), tp.id === meId ? '#ffe066' : '#ffffff', 8, 4, 0.4);
+  playSfx('dash', tp.id === meId ? 0.7 : 0.35 * nearVol(tp.x, tp.z));
 }
+function onElim(e) {
+  const victim = infoOf(e.id) || { id: e.id, name: '?', parts: S.cleanParts({}), r: 1 }, killer = infoOf(e.killer);
+  if (e.how === 'topple') { const p = pos3(e.x, e.z, 0.5); burst(p, topColor(victim), 22, 7); shockwave(e.x, p.y - 0.4, e.z, (victim.r || 1) * 3, topColor(victim)); }
+  feed(killer, victim, e.how);
+  if (e.killer && e.killer === meId) {
+    banner(t(e.how === 'ringout' ? 'ringout' : 'topple'), e.wasLeader ? t('leaderDown') : `+${e.pts}`); voice(e.how === 'ringout' ? 'ringout' : 'topple');
+    playSfx('cheer', 0.55); cheer(); shake(0.1);
+  }
+  if (e.id === meId && run && !run.over) endRun(e, killer);
+}
+function onEventStart(e) {
+  if (mode === 'online') world.event = { id: e.id, t: e.t ?? S.EVENT_DUR[e.id], pit: e.pit };
+  banner(t('ev_' + e.id), t(`ev_${e.id}Sub`), e.id === 'tilt', 2.2); playSfx('event', 0.7); voice(e.id);
+  if (e.id === 'tilt') { chevrons.visible = true; chevrons.rotation.y = -PIT_ANGLES[e.pit]; }
+  if (e.id === 'overdrive' && audio.music) audio.music.playbackRate = 1.08;
+}
+function onEventEnd(e) {
+  if (mode === 'online') world.event = null;
+  if (e.id === 'tilt') chevrons.visible = false;
+  if (e.id === 'overdrive' && audio.music) audio.music.playbackRate = 1;
+}
+function onLeader(id) {
+  world.leader = id;
+  if (id && id === meId && run && !run.over && run.time - run.leaderSaid > 12 && run.time > 5) {
+    run.leaderSaid = run.time; banner(t('leader'), '', false, 1.6); voice('leader');
+    if (!run.happy) { run.happy = true; happytime(); }
+  }
+}
+function cheer() { crowdCheer = 2.2; }
+let crowdCheer = 0;
+
+// ================================================================ SOLO (a local world against 11 bots; the menu shows an idle one)
+function toMenuWorld() {
+  stopHum(); clearViews(); mode = 'solo'; run = null;
+  world = S.createWorld(); world.frozen = true;
+  player = S.addTop(world, { parts: save.sel, name: 'You', human: true, spawn: false }); meId = player.id;
+  for (let i = 0; i < CFG.bots; i++) S.spawnBot(world, { ring: i, idle: true, avoidPaint: save.sel.paint });
+  world.events.length = 0; crownSprite.visible = false; chevrons.visible = false;
+}
+function leaveToMenu() { closeOnline(); toMenuWorld(); setState(State.MENU); refreshMenu(); }
+const newRun = (extra = {}) => ({
+  time: 0, countdown: 0, gearsEarned: 0, slow: 0, over: false, overTimer: 0, how: '', killer: null, leaderSaid: -99, happy: false, bestRank: 99, isBest: false,
+  tutorial: false, tutStep: -1, tutMoved: 0, tutSparks: 0, tutDashHit: false, tutT: 0, dummyId: 0, ...extra,
+});
 function startRun() {
-  resetArena();
-  rebuildPlayerMesh();
+  closeOnline(); stopHum(); clearViews(); mode = 'solo';
   const tutorial = !save.tut && !CAPTURE;
-  pairHits.clear();
-  run = {
-    time: 0, countdown: CAPTURE ? 0 : 2.6, score: 0, gearsEarned: 0, slow: 0, over: false, overTimer: 0, how: '', killer: null,
-    nextEvent: CFG.eventFirst, event: null, lastEvent: '', leaderSaid: -99, wasLeader: false, happy: false, bestRank: 99,
-    tutorial, tutStep: -1, tutMoved: 0, tutSparks: 0, tutDashHit: false, tutT: 0, dummy: null,
-  };
-  for (const tp of tops) { if (!tp.isPlayer) { tp.ai = tutorial ? 'passive' : 'normal'; tp.state = 'spawn'; tp.timer = 0.6 + Math.random() * 0.6; } }
-  Object.assign(player, { kos: 0, score: 0, state: 'spawn', timer: 0.6, lastHitBy: null });
+  world = S.createWorld(); world.eventsOn = !tutorial; world.frozen = !CAPTURE;
+  player = S.addTop(world, { parts: save.sel, name: 'You', human: true }); meId = player.id;
+  if (tutorial) { player.noDecay = true; player.dmgTaken = 0.3; }
+  for (let i = 0; i < CFG.bots; i++) { const b = S.spawnBot(world, { ring: i, avoidPaint: save.sel.paint }); b.timer = 0.6 + Math.random() * 0.6; if (tutorial) b.ai = 'passive'; }
+  world.events.length = 0;
+  run = newRun({ countdown: CAPTURE ? 0 : 2.6, tutorial });
   save.runs++; persist();
   $('feed').innerHTML = ''; boardTimer = 0;
   setState(State.PLAYING); startHum();
   if (!CAPTURE) { voice('go'); playSfx('launch', 0.8); }
 }
-function endRunSilently() { stopHum(); if (run) run.over = true; resetArena(); }
-function playerDash() { if (state === State.PLAYING && run && run.countdown <= 0 && alive(player)) dash(player, playerInput()); }
-function dash(tp, dir) {
-  if (tp.cd > 0 || !alive(tp)) return;
-  let dx = dir.x, dz = dir.y;
-  if (!dx && !dz) { const sp = Math.hypot(tp.vx, tp.vz); if (sp > 0.5) { dx = tp.vx / sp; dz = tp.vz / sp; } else { dx = tp.faceX; dz = tp.faceZ; } }
-  const l = Math.hypot(dx, dz) || 1; dx /= l; dz /= l;
-  tp.vx += dx * CFG.dashSpeed; tp.vz += dz * CFG.dashSpeed; tp.dashT = CFG.dashTime; tp.cd = CFG.dashCooldown; tp.spin -= CFG.dashCost;
-  const y = bowlY(Math.hypot(tp.x, tp.z)) + 0.4;
-  burst(new THREE.Vector3(tp.x - dx * tp.r, y, tp.z - dz * tp.r), tp.isPlayer ? '#ffe066' : '#ffffff', 8, 4, 0.4);
-  playSfx('dash', tp.isPlayer ? 0.7 : 0.35 * nearVol(tp.x, tp.z));
-}
-
-function simulate(dt) {
-  const od = run?.event?.id === 'overdrive' ? CFG.overdrive : 1;
-  const tilt = run?.event?.id === 'tilt' ? { x: Math.cos(PIT_ANGLES[run.event.pit]) * CFG.tiltForce, z: Math.sin(PIT_ANGLES[run.event.pit]) * CFG.tiltForce } : null;
-  const frozen = run && run.countdown > 0;
-  for (const tp of tops) {
-    if (tp.state === 'spawn') { tp.timer -= dt; if (tp.timer <= 0) { tp.state = 'alive'; tp.shield = CFG.shield; if (!CAPTURE) playSfx('launch', 0.5 * nearVol(tp.x, tp.z)); burst(new THREE.Vector3(tp.x, bowlY(Math.hypot(tp.x, tp.z)) + 0.1, tp.z), '#cfd8ff', 10, 4, 0.5); shockwave(tp.x, bowlY(Math.hypot(tp.x, tp.z)), tp.z, tp.r * 2.2, '#cfd8ff'); } continue; }
-    if (tp.state === 'falling') { tp.timer -= dt; tp.fallV += 22 * dt; tp.fallY -= tp.fallV * dt; tp.x += tp.vx * dt; tp.z += tp.vz * dt; if (tp.timer <= 0) eliminate(tp, 'ringout'); continue; }
-    if (tp.state === 'toppling') { tp.timer -= dt; const k = Math.exp(-4 * dt); tp.vx *= k; tp.vz *= k; tp.x += tp.vx * dt; tp.z += tp.vz * dt; if (tp.timer <= 0) eliminate(tp, 'topple'); continue; }
-    if (tp.state !== 'alive') continue;
-    // input: player, bot brain, or nothing (menu idle / countdown)
-    let inp = { x: 0, y: 0 };
-    if (!frozen && run && !run.over) {
-      if (tp.isPlayer) inp = AUTOPLAY ? botMove(tp, dt) : playerInput();
-      else if (tp.ai !== 'idle' && tp.ai !== 'dummy') inp = botMove(tp, dt);
-    }
-    if (inp.x || inp.y) { tp.faceX = inp.x; tp.faceZ = inp.y; }
-    const st = tp.stats, lowSpin = tp.spin < 25 ? 0.55 + 0.45 * Math.max(0, tp.spin) / 25 : 1;
-    const maxV = (CFG.maxSpeed * st.spd * od * lowSpin) / (0.8 + 0.2 * tp.r), acc = CFG.accel * st.acc * od;
-    tp.vx += inp.x * acc * dt; tp.vz += inp.y * acc * dt;
-    const r0 = Math.hypot(tp.x, tp.z);
-    if (r0 > 0.01) { const pull = CFG.bowlPull * (r0 / R); tp.vx -= (tp.x / r0) * pull * dt; tp.vz -= (tp.z / r0) * pull * dt; }
-    if (tilt) { tp.vx += tilt.x * dt; tp.vz += tilt.z * dt; }
-    const damp = Math.exp(-CFG.damping * dt); tp.vx *= damp; tp.vz *= damp;
-    const sp = Math.hypot(tp.vx, tp.vz);
-    if (tp.dashT <= 0 && sp > maxV) { const k = Math.max(maxV, sp - 30 * dt) / sp; tp.vx *= k; tp.vz *= k; }
-    tp.x += tp.vx * dt; tp.z += tp.vz * dt;
-    tp.dashT = Math.max(0, tp.dashT - dt); tp.cd = Math.max(0, tp.cd - dt); if (!frozen) tp.shield = Math.max(0, tp.shield - dt); tp.hitWob = Math.max(0, tp.hitWob - dt * 0.8);
-    // spin decays faster the bigger you are; tutorial and countdown are forgiving
-    if (run && !frozen && !(run.tutorial && tp.isPlayer)) tp.spin -= ((CFG.decay * (1 + tp.spin * CFG.decayGrowth)) / st.sta) * (od > 1 ? 0.5 : 1) * dt;
-    if (tp.ai === 'dummy') tp.spin = Math.max(tp.spin, 1);
-    tp.peak = Math.max(tp.peak, tp.spin);
-    walls(tp);
-    if (tp.state === 'alive' && tp.spin <= 0) startTopple(tp);
-    updateMass(tp);
-  }
-  // top vs top
-  for (let i = 0; i < tops.length; i++) for (let j = i + 1; j < tops.length; j++) if (alive(tops[i]) && alive(tops[j])) collide(tops[i], tops[j]);
-  // sparks: magnet + pickup
-  for (const s of sparks) {
-    if (!s.on || s.fall > 0) continue;
-    for (const tp of tops) {
-      if (!alive(tp)) continue;
-      const dx = tp.x - s.x, dz = tp.z - s.z, d = Math.hypot(dx, dz);
-      if (d < tp.r + 0.35) { collectSpark(tp, s); break; }
-      if (d < tp.r + CFG.magnet) { const k = (8 * dt) / Math.max(d, 0.1); s.x += dx * k; s.z += dz * k; }
-    }
-  }
-}
-function walls(tp) {
-  const r = Math.hypot(tp.x, tp.z), lim = R - tp.r * 0.92;
-  if (r <= lim) return;
-  const ang = Math.atan2(tp.z, tp.x), nx = tp.x / r, nz = tp.z / r;
-  if (pitAt(ang, tp.r) >= 0) {
-    if (r > R - tp.r * 0.3) startFall(tp);
-    return;
-  }
-  const vn = tp.vx * nx + tp.vz * nz;
-  if (vn > 0) {
-    tp.vx -= (1 + CFG.wallBounce) * vn * nx; tp.vz -= (1 + CFG.wallBounce) * vn * nz; tp.spin -= CFG.wallLoss * vn;
-    if (vn > 3) { playSfx('wall', clamp(vn / 12, 0.2, 0.8) * nearVol(tp.x, tp.z)); burst(new THREE.Vector3(nx * R, bowlY(R) + 0.5, nz * R), '#ffe8c2', 4 + (vn | 0), 4); }
-  }
-  tp.x = nx * lim; tp.z = nz * lim;
-}
-function pitAt(ang, rad) {
-  const half = Math.max(0.05, CFG.pitHalf - (rad / R) * 0.55);
-  for (let i = 0; i < PIT_ANGLES.length; i++) if (Math.abs(angDiff(ang, PIT_ANGLES[i])) < half) return i;
-  return -1;
-}
-function nearestPit(x, z) {
-  const ang = Math.atan2(z, x); let best = 0, bd = 9;
-  PIT_ANGLES.forEach((p, i) => { const d = Math.abs(angDiff(ang, p)); if (d < bd) { bd = d; best = i; } });
-  return { i: best, ang: PIT_ANGLES[best], diff: bd, x: Math.cos(PIT_ANGLES[best]) * R, z: Math.sin(PIT_ANGLES[best]) * R };
-}
-function collide(a, b) {
-  const dx = b.x - a.x, dz = b.z - a.z, d = Math.hypot(dx, dz), minD = a.r + b.r;
-  if (d >= minD || d < 1e-4) return;
-  const nx = dx / d, nz = dz / d, overlap = minD - d, ima = 1 / a.mass, imb = 1 / b.mass, sum = ima + imb;
-  a.x -= (nx * overlap * ima) / sum; a.z -= (nz * overlap * ima) / sum; b.x += (nx * overlap * imb) / sum; b.z += (nz * overlap * imb) / sum;
-  const rel = (a.vx - b.vx) * nx + (a.vz - b.vz) * nz; // closing speed along the normal
-  if (rel <= 0.4) return; // resting contact: no clash
-  const kick = CFG.repel * (0.6 + 0.4 * Math.min(1, (a.spin + b.spin) / 400)); // spinning tops fling apart
-  const j = ((1 + CFG.restitution) * rel + kick) / sum;
-  a.vx -= j * ima * nx; a.vz -= j * ima * nz; b.vx += j * imb * nx; b.vz += j * imb * nz;
-  const tx = -nz, tz = nx, g = CFG.grind; // clockwise spin grinds the tops sideways
-  a.vx += tx * g; a.vz += tz * g; b.vx -= tx * g; b.vz -= tz * g;
-  const key = a.id < b.id ? a.id * 4096 + b.id : b.id * 4096 + a.id, now = run ? run.time : simTime;
-  if (now - (pairHits.get(key) ?? -9) < CFG.pairCooldown) return; // still bounce, but one clash per contact
-  pairHits.set(key, now);
-  const base = CFG.clashBase + Math.max(0, rel - CFG.bumpSpeed) * CFG.clashSpeed; // slow bumps barely hurt; real hits do
-  const dmgTo = (atk, def) => def.shield > 0 ? 0 : Math.min(CFG.maxHit + def.spin * 0.08, (base * atk.stats.atk * (atk.dashT > 0 ? CFG.dashMul : 1) * Math.sqrt(atk.mass / def.mass)) / def.stats.def);
-  let dA = dmgTo(b, a), dB = dmgTo(a, b);
-  if (a.dashT > 0) dA *= 0.4; if (b.dashT > 0) dB *= 0.4; // the rammer wins the exchange: dash with intent
-  const mercy = (tp) => (tp.spin < 60 ? 0.55 + 0.45 * (tp.spin / 60) : 1); // a low top can still claw back
-  dA *= mercy(a); dB *= mercy(b);
-  if (run?.tutorial && a.isPlayer) dA *= 0.3; if (run?.tutorial && b.isPlayer) dB *= 0.3;
-  if (a.ai === 'dummy' || b.ai === 'dummy') { if (run?.tutorial && run.tutStep === 2 && (a.isPlayer || b.isPlayer) && (a.dashT > 0 || b.dashT > 0)) run.tutDashHit = true; }
-  a.spin -= dA; b.spin -= dB;
-  a.lastHitBy = b; a.lastHitT = now; b.lastHitBy = a; b.lastHitT = now;
-  a.hitWob = Math.min(0.45, a.hitWob + dA * 0.012); b.hitWob = Math.min(0.45, b.hitWob + dB * 0.012);
-  const cx = a.x + nx * a.r, cz = a.z + nz * a.r, cy = bowlY(Math.hypot(cx, cz)) + 0.55 * Math.min(a.r, b.r);
-  const heavy = rel > 9 || dA + dB > 40, mine = a.isPlayer || b.isPlayer, vol = mine ? 1 : nearVol(cx, cz) * 0.6;
-  burst(new THREE.Vector3(cx, cy, cz), '#fff2a8', Math.min(26, 6 + (rel | 0) * 2), 6 + rel * 0.4);
-  burst(new THREE.Vector3(cx, cy, cz), heavy ? '#ff9a3d' : '#7fd8ff', heavy ? 10 : 4, 5);
-  if (heavy) shockwave(cx, cy - 0.4, cz, 2.5 + rel * 0.15, '#ffd27a');
-  playSfx(heavy ? 'clashHeavy' : 'clash', vol * clamp(0.4 + rel / 14, 0.4, 1), heavy ? 1 : 1.1);
-  if (mine) shake(heavy ? 0.55 : 0.22);
-}
-function collectSpark(tp, s) {
-  s.on = false;
-  tp.spin = Math.min(CFG.maxSpin, tp.spin + CFG.sparkValue * (s.big ? 2 : 1));
-  if (tp.isPlayer) {
-    tp.score += s.big ? 2 : 1; playSfx('spark', 0.45, 0.9 + Math.random() * 0.3);
-    if (run?.tutorial) run.tutSparks++;
-  }
-  burst(new THREE.Vector3(s.x, bowlY(Math.hypot(s.x, s.z)) + 0.5, s.z), '#ffe066', 4, 3);
-}
-function startFall(tp) {
-  tp.state = 'falling'; tp.timer = 1.1; tp.fallY = bowlY(R); tp.fallV = -2;
-  const sp = Math.hypot(tp.vx, tp.vz), r = Math.hypot(tp.x, tp.z); if (sp < 4) { tp.vx += (tp.x / r) * 4; tp.vz += (tp.z / r) * 4; }
-  playSfx('ringout', tp.isPlayer ? 1 : 0.8 * nearVol(tp.x, tp.z));
-  if (tp.isPlayer) { run.slow = 1.1; shake(0.6); }
-}
-function startTopple(tp) {
-  tp.state = 'toppling'; tp.timer = 0.9; tp.spin = 0;
-  playSfx('topple', tp.isPlayer ? 1 : 0.7 * nearVol(tp.x, tp.z));
-  if (tp.isPlayer) { run.slow = 1.1; shake(0.4); }
-}
-function eliminate(tp, how) {
-  const now = run ? run.time : 0, wasLeader = tp === leader;
-  const killer = tp.lastHitBy && now - tp.lastHitT < 5 && tops.includes(tp.lastHitBy) && alive(tp.lastHitBy) ? tp.lastHitBy : null;
-  if (killer) {
-    killer.kos++;
-    let pts = (how === 'ringout' ? CFG.ringoutPoints : CFG.koPoints) + Math.round(tp.peak * 0.1);
-    if (wasLeader) pts *= 2;
-    killer.score += pts;
-    if (how === 'ringout') killer.spin = Math.min(CFG.maxSpin, killer.spin + tp.peak * CFG.ringoutSteal * 0.5 + 15);
-    if (killer.isPlayer) {
-      banner(t(how === 'ringout' ? 'ringout' : 'topple'), wasLeader ? t('leaderDown') : `+${pts}`); voice(how === 'ringout' ? 'ringout' : 'topple');
-      playSfx('cheer', 0.55); cheer(); shake(0.35);
-    }
-  }
-  if (how === 'topple') { // spun-out tops spill their sparks
-    const n = Math.min(30, 4 + Math.round((tp.peak * CFG.toppleDrop) / CFG.sparkValue / 3)), y = bowlY(Math.hypot(tp.x, tp.z)) + 0.5;
-    for (let k = 0; k < n; k++) { const a = Math.random() * Math.PI * 2, v = rand(2, 7); addSpark(tp.x, tp.z, { vx: Math.cos(a) * v, vz: Math.sin(a) * v, big: k % 5 === 0 ? 1 : 0 }); }
-    burst(new THREE.Vector3(tp.x, y, tp.z), tp.color, 22, 7); shockwave(tp.x, y - 0.4, tp.z, tp.r * 3, tp.color);
-  }
-  feed(killer, tp, how);
-  if (tp.isPlayer) { endRun(killer, how); return; }
-  if (run?.dummy === tp) run.dummy = null;
-  removeTop(tp);
-  pendingRespawns.push(CFG.respawn); // tickRun refills the arena once the delay runs out
-}
-const pendingRespawns = [], pairHits = new Map();
-function endRun(killer, how) {
-  run.over = true; run.how = how; run.killer = killer;
-  player.state = 'dead'; player.mesh.root.visible = false; player.label.visible = false;
+const soloInput = (tp) => (tp.id !== meId ? null : AUTOPLAY ? S.botMove(world, tp, STEP) : { ...playerInput(), dash: takeDash() });
+function endRun(e, killer) {
+  run.over = true; run.how = e.how; run.killer = killer;
+  Object.assign(player, { score: e.score ?? player.score, kos: e.kos ?? player.kos, peak: e.peak ?? player.peak, state: 'dead' });
   stopHum(); playSfx('over', 0.7);
   run.gearsEarned = Math.floor(player.score / 10) + player.kos * 3 + Math.floor(run.time / 20);
   save.gears += run.gearsEarned;
-  const isBest = player.score > save.best;
-  if (isBest) { save.best = player.score; happytime(); }
+  run.isBest = player.score > save.best;
+  if (run.isBest) { save.best = player.score; happytime(); }
   persist();
-  run.overTimer = 1.2; run.isBest = isBest;
+  run.overTimer = 1.2;
 }
 function showResults() {
   const r = run, k = r.killer;
-  $('overBy').textContent = k ? t(r.how === 'ringout' ? 'byRingout' : 'byTopple', { n: k.isPlayer ? t('you') : k.name }) : t(r.how === 'ringout' ? 'selfRingout' : 'selfTopple');
+  $('overBy').textContent = k ? t(r.how === 'ringout' ? 'byRingout' : 'byTopple', { n: k.name }) : t(r.how === 'ringout' ? 'selfRingout' : 'selfTopple');
   $('finalScore').textContent = player.score; $('overBest').textContent = save.best; $('newBest').hidden = !r.isBest;
   $('overRank').textContent = `#${r.bestRank < 99 ? r.bestRank : '-'}`; $('overKos').textContent = player.kos; $('overPeak').textContent = Math.round(player.peak);
   const sec = Math.floor(r.time); $('overTime').textContent = `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
@@ -959,118 +837,38 @@ function showResults() {
   $('btnDouble').hidden = !(adsAvailable() && r.gearsEarned > 0);
   setState(State.GAMEOVER); refreshMenu();
 }
-function cheer() { crowdCheer = 2.2; }
-let crowdCheer = 0;
-
 function tickRun(dt) {
   if (!run) return;
   if (run.countdown > 0) {
     const before = Math.ceil(run.countdown); run.countdown -= dt; const after = Math.ceil(run.countdown);
     const cd = $('countdown');
     boardTimer -= dt; if (boardTimer <= 0) { boardTimer = 0.25; renderBoard(); }
-    if (run.countdown <= 0) { if (run.tutorial) nextTutStep(); cd.textContent = t('go'); cd.classList.remove('tick'); void cd.offsetWidth; cd.classList.add('tick'); setTimeout(() => { cd.hidden = true; }, 600); }
-    else if (before !== after || cd.hidden) { cd.hidden = false; cd.textContent = String(after); cd.classList.remove('tick'); void cd.offsetWidth; cd.classList.add('tick'); playSfx('count', 0.5); }
+    if (run.countdown <= 0) {
+      world.frozen = false; if (run.tutorial) nextTutStep();
+      cd.textContent = t('go'); cd.classList.remove('tick'); void cd.offsetWidth; cd.classList.add('tick'); setTimeout(() => { cd.hidden = true; }, 600);
+    } else if (before !== after || cd.hidden) { cd.hidden = false; cd.textContent = String(after); cd.classList.remove('tick'); void cd.offsetWidth; cd.classList.add('tick'); playSfx('count', 0.5); }
     return;
   }
   if (run.over) { run.overTimer -= dt; if (run.overTimer <= 0 && state === State.PLAYING) showResults(); }
   else run.time += dt;
-  // keep the arena full and stocked
-  for (let i = pendingRespawns.length - 1; i >= 0; i--) { pendingRespawns[i] -= dt; if (pendingRespawns[i] <= 0) pendingRespawns.splice(i, 1); }
-  const bots = tops.filter((tp) => !tp.isPlayer).length;
-  if (bots < CFG.bots && pendingRespawns.length < CFG.bots - bots) spawnBot();
-  const active = sparks.reduce((n, s) => n + (s.on ? 1 : 0), 0);
-  if (active < CFG.sparks && Math.random() < dt * 6) addSpark(...randomSparkSpot());
-  // leader + rank
-  const list = rankList(); const lead = list[0] || null;
-  if (lead !== leader) { leader = lead; if (leader?.isPlayer && !run.over && run.time - run.leaderSaid > 12 && run.time > 5) { run.leaderSaid = run.time; banner(t('leader'), '', false, 1.6); voice('leader'); if (!run.happy) { run.happy = true; happytime(); } } }
-  if (!run.over && alive(player)) { const rk = list.indexOf(player) + 1; if (rk > 0) run.bestRank = Math.min(run.bestRank, rk); }
-  // events
-  if (!run.tutorial && !run.over) {
-    if (run.event) { run.event.t -= dt; tickEvent(run.event, dt); if (run.event.t <= 0) endEvent(); }
-    else if (run.time >= run.nextEvent) startEvent();
-  }
+  if (!run.over && player && alive(player)) { const rk = S.rankList(world).findIndex((tp) => tp.id === meId) + 1; if (rk > 0) run.bestRank = Math.min(run.bestRank, rk); }
   if (run.tutorial) tickTutorial(dt);
   boardTimer -= dt; if (boardTimer <= 0 && state === State.PLAYING) { boardTimer = 0.25; renderBoard(); }
-  if (state === State.PLAYING && alive(player)) updateHUD();
+  if (state === State.PLAYING && player && alive(player)) updateHUD();
 }
 
-// ================================================================ AI (bots: grab sparks, hunt smaller tops toward pits, flee bigger ones)
-function botMove(b, dt) {
-  b.think -= dt;
-  if (b.think <= 0) { b.think = rand(0.1, 0.22); decide(b); }
-  if (b.goal.dash && b.cd <= 0) { b.goal.dash = false; dash(b, { x: b.goal.x, y: b.goal.z }); }
-  const noise = (1 - b.skill) * 0.25;
-  return norm(b.goal.x + rand(-noise, noise), b.goal.z + rand(-noise, noise));
-}
-const norm = (x, z) => { const l = Math.hypot(x, z); return l > 1e-3 ? { x: x / l, y: z / l } : { x: 0, y: 0 }; };
-function decide(b) {
-  const r = Math.hypot(b.x, b.z), pit = nearestPit(b.x, b.z);
-  const ramp = Math.min(1, 0.2 + (run ? run.time : 0) / CFG.aggroRamp), aggro = b.ai === 'passive' ? 0 : b.aggro * ramp;
-  // 1. stay out of the pits: steer back to the centre when close to an opening
-  if (r > R - 4.5 && pit.diff < CFG.pitHalf + 0.28) { b.goal = { x: -b.x / r, z: -b.z / r, dash: r > R - 2.5 && b.skill > 0.5 }; return; }
-  let flee = null, prey = null, preyScore = 0;
-  for (const o of tops) {
-    if (o === b || !alive(o)) continue;
-    const d = Math.hypot(o.x - b.x, o.z - b.z); if (d > 12) continue;
-    const ratio = o.spin / Math.max(1, b.spin);
-    if (ratio > 1.45 && d < 6.5 && (!flee || d < flee.d)) flee = { o, d };
-    if (aggro > 0 && ratio < 0.95 && d < 9) { // only hunt tops smaller than you
-      let s = (12 - d) * (1.3 - ratio) * aggro;
-      if (o.isPlayer) s *= (run && run.time < CFG.graceTime) || ratio > 0.8 ? 0 : 0.9; // a quiet start, and only clearly smaller players get hunted
-      if (o === leader) s *= 1.4;
-      const op = nearestPit(o.x, o.z); if (Math.hypot(o.x, o.z) > R - 7 && op.diff < 0.45) s *= 1.7; // easy ring-out
-      if (o.ai === 'dummy') s = 0;
-      if (s > preyScore) { preyScore = s; prey = { o, d }; }
-    }
-  }
-  if (flee && (!prey || b.skill < 0.7 || flee.d < 4)) { // run away, but not toward a pit
-    const fx = b.x - flee.o.x, fz = b.z - flee.o.z, l = Math.hypot(fx, fz) || 1;
-    b.goal = { x: fx / l - (b.x / R) * 0.9, z: fz / l - (b.z / R) * 0.9, dash: flee.d < 3 && Math.random() < b.skill * 0.5 };
-    return;
-  }
-  if (prey) { // approach from the side away from the prey's nearest pit, then charge
-    const o = prey.o, op = nearestPit(o.x, o.z), px = op.x - o.x, pz = op.z - o.z, pl = Math.hypot(px, pz) || 1;
-    let gx, gz;
-    if (prey.d > 4.5) { gx = o.x - (px / pl) * (o.r + b.r + 1) - b.x; gz = o.z - (pz / pl) * (o.r + b.r + 1) - b.z; }
-    else { gx = o.x - b.x; gz = o.z - b.z; }
-    b.goal = { x: gx, z: gz, dash: prey.d < 4.2 + o.r && Math.random() < b.skill * 0.6 };
-    return;
-  }
-  // 3. sparks: nearest one (sampled), else drift toward the middle ring
-  let best = null, bd = 1e9;
-  for (let i = 0; i < sparks.length; i += 1) { const s = sparks[i]; if (!s.on || s.fall > 0) continue; const d = (s.x - b.x) ** 2 + (s.z - b.z) ** 2; if (d < bd) { bd = d; best = s; } }
-  if (best) b.goal = { x: best.x - b.x, z: best.z - b.z, dash: false };
-  else b.goal = { x: -b.x * 0.3 + rand(-1, 1), z: -b.z * 0.3 + rand(-1, 1), dash: false };
-  if (r > R - 2.5) { b.goal.x -= (b.x / r) * 1.5; b.goal.z -= (b.z / r) * 1.5; } // don't hug the wall
-}
-
-// ================================================================ EVENTS (every ~40 s: Spark Storm, Arena Tilt, Overdrive)
-function startEvent() {
-  const ids = ['storm', 'tilt', 'overdrive'].filter((e) => e !== run.lastEvent), id = ids[(Math.random() * ids.length) | 0];
-  const dur = { storm: 6, tilt: 7, overdrive: 8 }[id];
-  run.event = { id, t: dur, dur, pit: (Math.random() * CFG.pitCount) | 0, acc: 0 };
-  run.lastEvent = id;
-  banner(t('ev_' + id), t(`ev_${id}Sub`), id === 'tilt', 2.2); playSfx('event', 0.7); voice(id);
-  if (id === 'tilt') { chevrons.visible = true; chevrons.rotation.y = -PIT_ANGLES[run.event.pit]; }
-  if (id === 'overdrive' && audio.music) audio.music.playbackRate = 1.08;
-}
-function tickEvent(ev, dt) {
-  if (ev.id === 'storm') { ev.acc += dt * 8; while (ev.acc >= 1) { ev.acc--; const [x, z] = randomSparkSpot(R * 0.75); addSpark(x, z, { fall: 7, big: Math.random() < 0.25 ? 1 : 0 }); } }
-}
-function endEvent() {
-  if (run.event.id === 'tilt') chevrons.visible = false;
-  if (run.event.id === 'overdrive' && audio.music) audio.music.playbackRate = 1;
-  run.event = null; run.nextEvent = run.time + CFG.eventEvery;
-}
-
-// ================================================================ TUTORIAL (first run: learn by doing, ~30 s, skippable)
+// ================================================================ TUTORIAL (first solo run: learn by doing, ~30 s, skippable)
 const TUT = [
   { text: 'tutMove', icon: () => (isTouch ? '<svg class="hand"><use href="#i-move"/></svg>' : '<span class="keys"><span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span></span>'), done: () => run.tutMoved > 6 },
-  { text: 'tutSparks', icon: () => '<svg><use href="#i-spark"/></svg>', setup: () => { for (let k = 0; k < 7; k++) { const a = (k / 7) * Math.PI * 2; addSpark(player.x + Math.cos(a) * 4, player.z + Math.sin(a) * 4, { big: 1 }); } }, done: () => run.tutSparks >= 5 },
+  { text: 'tutSparks', icon: () => '<svg><use href="#i-spark"/></svg>', setup: () => { for (let k = 0; k < 7; k++) { const a = (k / 7) * Math.PI * 2; S.addSpark(world, player.x + Math.cos(a) * 4, player.z + Math.sin(a) * 4, { big: 1 }); } }, done: () => run.tutSparks >= 5 },
   { text: 'tutDash', icon: () => (isTouch ? '<svg class="hand"><use href="#i-dash"/></svg>' : '<span class="key">Space</span>'),
-    setup: () => { const a = Math.atan2(-player.z, -player.x) || 0, d = makeTop({ parts: { crown: 'bastion', core: 'iron', tip: 'grip', paint: 'snow' }, name: t('dummy'), spin: 60 }); Object.assign(d, { x: player.x + Math.cos(a) * 5, z: player.z + Math.sin(a) * 5, ai: 'dummy' }); run.dummy = d; },
+    setup: () => {
+      const a = Math.atan2(-player.z, -player.x) || 0;
+      const d = S.addTop(world, { parts: { crown: 'bastion', core: 'iron', tip: 'grip', paint: 'snow' }, name: t('dummy'), spin: 60, x: player.x + Math.cos(a) * 5, z: player.z + Math.sin(a) * 5, ai: 'dummy', spawn: false });
+      run.dummyId = d.id;
+    },
     done: () => run.tutDashHit },
-  { text: 'tutPits', icon: () => '<svg><use href="#i-pit"/></svg>', setup: () => { const p = nearestPit(player.x, player.z); chevrons.visible = true; chevrons.rotation.y = -p.ang; run.tutT = 0; }, done: () => run.tutT > 5 },
+  { text: 'tutPits', icon: () => '<svg><use href="#i-pit"/></svg>', setup: () => { const p = S.nearestPit(player.x, player.z); chevrons.visible = true; chevrons.rotation.y = -p.ang; run.tutT = 0; }, done: () => run.tutT > 5 },
 ];
 function nextTutStep() {
   run.tutStep++;
@@ -1084,42 +882,202 @@ function tickTutorial(dt) {
   if (run.tutStep < 0) return;
   run.tutT += dt;
   if (run.tutStep === 0) run.tutMoved += Math.hypot(player.vx, player.vz) * dt;
-  if (run.tutStep === 2 && !run.dummy) TUT[2].setup(); // the practice top fell into a pit: bring a new one
+  if (run.tutStep === 2 && !S.topById(world, run.dummyId)) TUT[2].setup(); // the practice top fell into a pit: bring a new one
   if (TUT[run.tutStep]?.done()) nextTutStep();
 }
 function finishTutorial(skipped) {
   if (!run?.tutorial) return;
   run.tutorial = false; save.tut = true; persist();
   $('coach').hidden = true; chevrons.visible = false;
-  if (run.dummy) { run.dummy.ai = 'normal'; run.dummy = null; }
-  for (const tp of tops) if (tp.ai === 'passive') tp.ai = 'normal';
-  run.nextEvent = run.time + CFG.eventFirst;
+  const dummy = S.topById(world, run.dummyId); if (dummy) dummy.ai = 'normal';
+  for (const tp of world.tops) if (tp.ai === 'passive') tp.ai = 'normal';
+  player.noDecay = false; player.dmgTaken = 1;
+  world.eventsOn = true; world.nextEvent = world.time + CFG.eventFirst;
   if (!skipped) { banner(t('tutDone'), '', false, 2); playSfx('unlock', 0.7); }
 }
 
-// ================================================================ LOOP (fixed-step simulation, interpolation-free render sync)
+// ================================================================ ONLINE (no account: join a public match, or a private room by code / invite link)
+// The server runs the authoritative world; this client mirrors it. Other tops are drawn INTERP seconds in the past between
+// two snapshots; my own top is predicted locally (same sim.integrate) and eased toward the server so steering feels instant.
+const net = { joinable: null, ws: null, status: 'off', code: '', priv: false, name: '', players: 0, rtt: 0, offset: null, snaps: [], srvMe: null, me: null, leaving: false, sendT: 0, pingT: 0, sx: 9, sy: 9, dash: false };
+const STATE_NAME = ['spawn', 'alive', 'falling', 'toppling'];
+function connectOnline(joinMsg) {
+  if (CAPTURE) return;
+  closeOnline();
+  net.status = 'connecting'; net.leaving = false;
+  $('lobbyStatus').textContent = t('connecting'); $('lobbyStatus').classList.remove('bad');
+  if (state !== State.LOBBY) setState(State.LOBBY);
+  let ws; try { ws = new WebSocket(MP_URL); } catch { onlineFail('connFail'); return; }
+  net.ws = ws;
+  ws.onopen = async () => {
+    net.opened = true;
+    const name = await Promise.race([sdkUsername(), new Promise((r) => setTimeout(() => r(null), 3000))]); // never wait long for the account lookup
+    if (net.ws === ws) ws.send(JSON.stringify({ ...joinMsg, name, parts: save.sel }));
+  };
+  ws.onmessage = (m) => { if (net.ws !== ws) return; let d; try { d = JSON.parse(m.data); } catch { return; } onNet(d); };
+  ws.onclose = () => {
+    if (net.ws !== ws) return;
+    const was = net.status; net.ws = null; net.status = 'off';
+    if (was === 'connecting') onlineFail('connFail'); else if (!net.leaving) { toast(t('connLost')); leaveToMenu(); }
+  };
+  ws.onerror = () => {};
+  net.opened = false;
+  setTimeout(() => { if (net.ws === ws && !net.opened && ws.readyState === WebSocket.CONNECTING) ws.close(); }, 25000); // only a socket that never opens times out
+}
+function onlineFail(key) { closeOnline(); if (state !== State.LOBBY) setState(State.LOBBY); $('lobbyStatus').textContent = t(key); $('lobbyStatus').classList.add('bad'); }
+function closeOnline() {
+  if (!net.ws && net.status === 'off') return;
+  net.leaving = true; const ws = net.ws; net.ws = null; net.status = 'off';
+  try { ws?.send(JSON.stringify({ t: 'leave' })); ws?.close(); } catch {}
+  if (mode === 'online') sdkLeftRoom();
+}
+const netSend = (m) => { if (net.ws?.readyState === 1) net.ws.send(JSON.stringify(m)); };
+function joinByCode(code) {
+  code = String(code || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (code.length !== 5) { $('lobbyStatus').textContent = t('noRoom'); $('lobbyStatus').classList.add('bad'); return; }
+  connectOnline({ t: 'join', mode: 'code', code });
+}
+function onNet(d) {
+  switch (d.t) {
+    case 'err': onlineFail(d.e === 'noroom' ? 'noRoom' : d.e === 'full' ? 'roomFull' : 'connFail'); break;
+    case 'welcome': enterOnline(d); break;
+    case 'you': meId = d.id; startOnlineLife(); break;
+    case 's': onSnapshot(d); break;
+    case 'p': { const rtt = performance.now() - d.c; net.rtt = net.rtt ? net.rtt * 0.8 + rtt * 0.2 : rtt; break; }
+  }
+}
+function mirrorTop(info) {
+  if (S.topById(world, info.id)) return;
+  const parts = S.cleanParts(info.parts);
+  const tp = {
+    id: info.id, name: info.name, human: !!info.human, parts, stats: S.statsOf(parts), x: 0, z: 0, vx: 0, vz: 0, spin: CFG.startSpin, peak: CFG.startSpin,
+    r: 1, mass: 1, state: 'spawn', timer: 0.6, fallY: 0, fallV: 0, dashT: 0, cd: 0, shield: 0, kos: 0, score: 0, hitWob: 0, faceX: 0, faceZ: 1, age: 0, placed: false,
+  };
+  S.updateMass(tp); world.tops.push(tp);
+}
+function mirrorSpark([i, x, z, vx, vz, fall, big]) { const s = world.sparks[i]; if (s) Object.assign(s, { on: true, x, z, vx, vz, fall, big, y: 0.4 + fall }); }
+function enterOnline(d) {
+  stopHum(); clearViews(); mode = 'online'; run = null; player = null; meId = 0;
+  Object.assign(net, { status: 'in', code: d.code, priv: d.priv, name: d.name, players: d.players, snaps: [], offset: null, srvMe: null, me: null });
+  $('roomCode').textContent = d.code; $('roomInfo').textContent = t('players', { n: d.players });
+  world = S.createWorld({ bots: 0, sparks: 0 }); world.events.length = 0; world.time = d.tm;
+  for (const info of d.tops) mirrorTop(info);
+  for (const sp of d.sparks) mirrorSpark(sp);
+  world.event = d.ev ? { ...d.ev } : null; world.leader = d.leader;
+  chevrons.visible = world.event?.id === 'tilt'; if (chevrons.visible) chevrons.rotation.y = -PIT_ANGLES[world.event.pit];
+  net.joinable = d.players < 10; sdkRoom({ roomId: d.code, isJoinable: net.joinable, inviteParams: { roomId: d.code } });
+  if (d.priv) toast(t('shareCode', { c: d.code }));
+}
+function startOnlineLife() {
+  run = newRun({ online: true }); player = S.topById(world, meId) || player;
+  $('feed').innerHTML = ''; boardTimer = 0;
+  setState(State.PLAYING); startHum(); playSfx('launch', 0.8);
+}
+function onlinePlayAgain() { if (net.status === 'in') netSend({ t: 'play', parts: save.sel }); else leaveToMenu(); }
+function onSnapshot(d) {
+  const now = performance.now() / 1000, off = d.tm - now;
+  net.offset = net.offset == null ? off : net.offset + (off - net.offset) * 0.05; // smoothed server clock
+  if (off > net.offset + 0.25) net.offset = off; // big lag spike recovered: jump forward
+  world.time = d.tm; net.players = d.n;
+  for (const e of d.ev) { if (e.type === 'add') mirrorTop(e); else handleEvent(e); }
+  for (const sp of d.sp) mirrorSpark(sp);
+  const seen = new Map();
+  for (const a of d.tops) {
+    seen.set(a[0], a);
+    const tp = S.topById(world, a[0]); if (!tp) continue;
+    const st = STATE_NAME[a[6]] || 'alive';
+    if (st !== tp.state) { // state changes are animated locally from here
+      if (st === 'falling') { tp.timer = 1.1; tp.fallY = bowlY(R); tp.fallV = -2; tp.vx = a[3]; tp.vz = a[4]; }
+      if (st === 'toppling') { tp.timer = 0.9; tp.vx = a[3]; tp.vz = a[4]; }
+      if (st === 'alive' && tp.id === meId) { tp.x = a[1]; tp.z = a[2]; tp.vx = a[3]; tp.vz = a[4]; }
+      tp.state = st;
+    }
+    if (!tp.placed) { tp.x = a[1]; tp.z = a[2]; tp.placed = true; }
+    tp.spin = a[5]; tp.peak = Math.max(tp.peak, tp.spin); tp.shield = a[7] & 2 ? 1 : 0; tp.dashT = a[7] & 1 ? 0.1 : 0; S.updateMass(tp);
+    if (tp.id === meId) net.srvMe = { tm: d.tm, x: a[1], z: a[2], vx: a[3], vz: a[4] };
+  }
+  world.tops = world.tops.filter((tp) => seen.has(tp.id) || ((tp.state === 'falling' || tp.state === 'toppling') && tp.timer > 0)); // let a fall finish locally
+  net.snaps.push({ tm: d.tm, tops: seen }); if (net.snaps.length > 30) net.snaps.shift();
+  if (d.e && world.event) world.event.t = d.e.t; else if (!d.e && world.event) onEventEnd({ id: world.event.id });
+  if (d.me && player && d.me.id === player.id) { player.score = d.me.score; player.kos = d.me.kos; player.peak = Math.max(player.peak, d.me.peak); player.cd = Math.max(player.cd, d.me.cd - 0.15); }
+  const joinable = d.n < 10; if (joinable !== net.joinable) { net.joinable = joinable; sdkRoom({ isJoinable: joinable }); }
+}
+function netStep(dt) { // per fixed step while online: local animation, my prediction, input upload
+  S.updateSparks(world, dt);
+  if (world.event) world.event.t -= dt;
+  for (const tp of world.tops) {
+    tp.hitWob = Math.max(0, tp.hitWob - dt * 0.8);
+    if (tp.state === 'falling' || tp.state === 'toppling') S.animateDying(tp, dt);
+    else if (tp.state === 'spawn') tp.timer = Math.max(0, tp.timer - dt);
+  }
+  const me = S.topById(world, meId), playing = state === State.PLAYING && run && !run.over;
+  let inp = { x: 0, y: 0 };
+  if (me && alive(me) && playing) {
+    inp = playerInput();
+    if (takeDash() && me.cd <= 0) { S.dash(world, me, inp); dashFx(me, me.faceX, me.faceZ); net.dash = true; world.events.length = 0; }
+    S.integrate(world, me, inp, dt); S.walls(world, me, true); S.updateMass(me);
+    const srv = net.srvMe;
+    if (srv) { // ease toward where the server says I am (extrapolated to now); snap when far off
+      const age = clamp(performance.now() / 1000 + net.offset - srv.tm, 0, 0.4), tx = srv.x + srv.vx * age, tz = srv.z + srv.vz * age, err = Math.hypot(tx - me.x, tz - me.z);
+      if (err > 4) { me.x = tx; me.z = tz; me.vx = srv.vx; me.vz = srv.vz; }
+      else { const k = 1 - Math.exp(-dt * 5), kv = 1 - Math.exp(-dt * 3); me.x += (tx - me.x) * k; me.z += (tz - me.z) * k; me.vx += (srv.vx - me.vx) * kv; me.vz += (srv.vz - me.vz) * kv; }
+    }
+  }
+  net.sendT -= dt; net.pingT -= dt;
+  if (net.sendT <= 0 && (net.dash || Math.abs(inp.x - net.sx) + Math.abs(inp.y - net.sy) > 0.05 || net.sendT < -0.25)) {
+    netSend({ t: 'i', x: Math.round(inp.x * 100) / 100, y: Math.round(inp.y * 100) / 100, d: net.dash ? 1 : 0 });
+    net.sx = inp.x; net.sy = inp.y; net.dash = false; net.sendT = 0.05;
+  }
+  if (net.pingT <= 0) { net.pingT = 2; netSend({ t: 'p', c: performance.now() }); }
+}
+function netInterpolate() { // place every other top at "server now - INTERP" between the two snapshots around that time
+  const snaps = net.snaps; if (!snaps.length || net.offset == null) return;
+  const rt = performance.now() / 1000 + net.offset - INTERP;
+  let s0 = snaps[0], s1 = snaps[snaps.length - 1];
+  for (let i = snaps.length - 1; i > 0; i--) if (snaps[i - 1].tm <= rt) { s0 = snaps[i - 1]; s1 = snaps[i]; break; }
+  const k = s1.tm > s0.tm ? clamp((rt - s0.tm) / (s1.tm - s0.tm), 0, 1) : 1;
+  for (const tp of world.tops) {
+    if ((tp.id === meId && alive(tp)) || tp.state === 'falling' || tp.state === 'toppling') continue;
+    const a = s0.tops.get(tp.id), b = s1.tops.get(tp.id) || a; if (!a && !b) continue;
+    const p = a || b;
+    tp.x = p[1] + (b[1] - p[1]) * k; tp.z = p[2] + (b[2] - p[2]) * k; tp.vx = p[3] + (b[3] - p[3]) * k; tp.vz = p[4] + (b[4] - p[4]) * k;
+  }
+}
+async function shareInvite() {
+  if (!net.code) return;
+  const link = inviteLinkFor(net.code);
+  try { await navigator.clipboard.writeText(link); toast(t('linkCopied')); } catch { toast(t('shareCode', { c: net.code })); }
+}
+
+// ================================================================ LOOP (fixed-step simulation, render sync, calm camera)
 let last = performance.now(), acc = 0;
-const camPos = new THREE.Vector3(0, 30, 24), camLook = new THREE.Vector3();
+const camPos = new THREE.Vector3(0, 30, 24), camLook = new THREE.Vector3(), lookGoal = new THREE.Vector3();
 function step(dt) {
   simTime += dt;
-  updateSparks(dt);
-  if (state === State.PLAYING || state === State.GAMEOVER) { simulate(dt); tickRun(dt); }
-  else if (state === State.MENU || state === State.GARAGE) { for (const tp of tops) { tp.spin = Math.max(tp.spin, 60); updateMass(tp); } }
+  if (mode === 'online') { if (net.status === 'in') netStep(dt); tickRun(dt); return; }
+  if (state === State.PLAYING || state === State.GAMEOVER) {
+    S.step(world, dt, soloInput);
+    for (const e of world.events) handleEvent(e);
+    world.events.length = 0;
+    tickRun(dt);
+  } else S.updateSparks(world, dt);
 }
 function advance(dt) {
-  if (state === State.PAUSED) return;
+  if (state === State.PAUSED && mode !== 'online') return; // online the world keeps going: my top just stops steering
   let sdt = dt;
-  if (run?.slow > 0) { run.slow -= dt; sdt = dt * 0.3; }
+  if (run?.slow > 0) { run.slow -= dt; sdt = dt * (mode === 'online' ? 1 : 0.3); }
   acc += sdt; let n = 0; while (acc >= STEP && n < 8) { step(STEP); acc -= STEP; n++; } if (n >= 8) acc = 0;
+  if (mode === 'online') netInterpolate();
+  refreshPlayer();
   updateParticles(sdt); updateWaves(sdt);
   if (bannerTimer > 0) { bannerTimer -= dt; if (bannerTimer <= 0) $('banner').hidden = true; }
-  if (state === State.PLAYING && run && alive(player)) {
+  if (state === State.PLAYING && run && player && alive(player)) {
     const sp = Math.hypot(player.vx, player.vz);
     updateHum(0.05 + 0.1 * clamp(player.spin / 300, 0, 1) + 0.05 * clamp(sp / 10, 0, 1), 0.75 + 0.45 * clamp(player.spin / 400, 0, 1) + sp * 0.01);
   }
 }
-function syncTop(tp, dt) {
-  const m = tp.mesh, s = tp.r, r = Math.hypot(tp.x, tp.z);
+function syncTop(tp, v, dt) {
+  const m = v.mesh, s = tp.r, r = Math.hypot(tp.x, tp.z), me = tp.id === meId;
   let y = bowlY(Math.min(r, R));
   if (tp.state === 'spawn') y += Math.max(0, tp.timer) * 9;
   if (tp.state === 'falling') y = tp.fallY;
@@ -1127,24 +1085,28 @@ function syncTop(tp, dt) {
   const spinFrac = clamp(tp.spin / 220, 0, 1);
   const omega = tp.state === 'toppling' ? tp.timer * 10 : 9 + 28 * spinFrac;
   m.spin.rotation.y -= omega * dt;
-  tp.prec += dt * (5 + 7 * spinFrac);
+  v.prec += dt * (5 + 7 * spinFrac);
   let amp = 0.025 + tp.hitWob + (tp.spin < 30 ? ((30 - Math.max(0, tp.spin)) / 30) * 0.28 : 0);
   if (tp.state === 'toppling') amp = 0.35 + (0.9 - tp.timer) * 1.3;
   if (tp.state === 'falling') amp = 0.3 + (1.1 - tp.timer) * 1.2;
   const sp = Math.hypot(tp.vx, tp.vz), lean = clamp(sp * 0.014, 0, 0.13), lx = sp > 0.1 ? tp.vx / sp : 0, lz = sp > 0.1 ? tp.vz / sp : 0;
-  m.tilt.rotation.x = lean * lz + amp * Math.sin(tp.prec); m.tilt.rotation.z = -lean * lx + amp * Math.cos(tp.prec);
+  m.tilt.rotation.x = lean * lz + amp * Math.sin(v.prec); m.tilt.rotation.z = -lean * lx + amp * Math.cos(v.prec);
   m.blur.material.opacity = tp.state === 'alive' || tp.state === 'spawn' ? 0.12 + 0.42 * spinFrac : 0.05;
-  if (tp.isPlayer) m.ring.material.opacity = tp.cd <= 0 ? 0.7 + 0.25 * Math.sin(simTime * 8) : 0.4;
+  if (me) m.ring.material.opacity = tp.cd <= 0 ? 0.7 + 0.25 * Math.sin(simTime * 8) : 0.4;
   m.ring.visible = tp.state === 'alive' && !(tp.shield > 0 && Math.sin(simTime * 30) < -0.3);
-  tp.label.visible = state !== State.COVER && tp.state !== 'dead' && (state === State.PLAYING || state === State.GAMEOVER || state === State.PAUSED);
-  tp.label.position.set(tp.x, y + 0.95 * s + 0.75, tp.z);
-  const ls = 2.5 + s * 0.4; tp.label.scale.set(ls, ls * 0.22, 1);
+  v.label.visible = state !== State.COVER && (state === State.PLAYING || state === State.GAMEOVER || state === State.PAUSED);
+  v.label.position.set(tp.x, y + 0.95 * s + 0.75, tp.z);
+  const ls = 2.5 + s * 0.4; v.label.scale.set(ls, ls * 0.22, 1);
+  v.tp = tp;
 }
 function render(dt) {
-  for (const tp of tops) syncTop(tp, dt);
+  const ids = new Set();
+  for (const tp of world.tops) { ids.add(tp.id); syncTop(tp, viewFor(tp), dt); }
+  for (const id of [...views.keys()]) if (!ids.has(id)) dropView(id);
   renderSparks();
-  if (leader && alive(leader) && (state === State.PLAYING || state === State.GAMEOVER)) {
-    crownSprite.visible = true; crownSprite.position.set(leader.x, leader.mesh.root.position.y + 0.95 * leader.r + 1.55, leader.z); const cs = 0.9 + leader.r * 0.15; crownSprite.scale.set(cs, cs, 1);
+  const lead = S.topById(world, world.leader);
+  if (lead && alive(lead) && (state === State.PLAYING || state === State.GAMEOVER || state === State.PAUSED)) {
+    crownSprite.visible = true; crownSprite.position.set(lead.x, views.get(lead.id).mesh.root.position.y + 0.95 * lead.r + 1.55, lead.z); const cs = 0.9 + lead.r * 0.15; crownSprite.scale.set(cs, cs, 1);
   } else crownSprite.visible = false;
   // stadium life
   crowdCheer = Math.max(0, crowdCheer - dt);
@@ -1161,29 +1123,31 @@ function render(dt) {
 }
 function updateCamera(dt) {
   const portrait = innerHeight > innerWidth;
-  if (state === State.MENU || state === State.GARAGE) {
+  if (state === State.MENU || state === State.GARAGE || state === State.LOBBY) {
     const a = simTime * 0.18, dist = state === State.GARAGE ? 5.2 : 6.5, h = state === State.GARAGE ? 2.6 : 3.2;
-    const px = player ? player.x : 0, pz = player ? player.z : 0, py = player ? player.mesh.root.position.y : 0;
+    const px = player ? player.x : 0, pz = player ? player.z : 0, py = player ? bowlY(Math.hypot(px, pz)) : 0;
     camPos.set(px + Math.sin(a) * dist, py + h, pz + Math.cos(a) * dist); camLook.set(px, py + 0.75, pz);
     camera.position.lerp(camPos, 1 - Math.exp(-dt * 3));
     const w = innerWidth, hh = innerHeight;
     if (portrait) camera.setViewOffset(w, hh, 0, hh * 0.22, w, hh); else camera.setViewOffset(w, hh, -w * 0.2, 0, w, hh);
   } else {
+    // Calm follow: a small velocity lead and smoothed look target, so knock-backs and topples do not whip the view around
     camera.clearViewOffset();
     const s = player ? player.r : 1, zoom = (1 + (s - 1) * 0.45) * (portrait ? 1.55 : 1);
     const px = player ? player.x : 0, pz = player ? player.z : 0;
-    const lead = state === State.PLAYING && player ? 0.35 : 0;
-    camLook.set(px + (player?.vx || 0) * lead, 0, pz + (player?.vz || 0) * lead);
+    const lead = state === State.PLAYING && player && alive(player) ? 0.12 : 0;
+    lookGoal.set(px + (player?.vx || 0) * lead, 0, pz + (player?.vz || 0) * lead);
+    camLook.lerp(lookGoal, 1 - Math.exp(-dt * 4));
     const over = state === State.GAMEOVER ? 1.25 : 1;
     camPos.set(camLook.x, 15 * zoom * over, camLook.z + 12.5 * zoom * over);
-    camera.position.lerp(camPos, 1 - Math.exp(-dt * 5));
+    camera.position.lerp(camPos, 1 - Math.exp(-dt * 3.5));
   }
-  shakeAmt = Math.max(0, shakeAmt - dt * 1.8);
-  camera.position.x += (Math.random() - 0.5) * shakeAmt; camera.position.y += (Math.random() - 0.5) * shakeAmt;
+  shakeAmt = Math.max(0, shakeAmt - dt * 2.5);
+  if (shakeAmt > 0) { camera.position.x += Math.sin(simTime * 31) * shakeAmt * 0.5; camera.position.z += Math.cos(simTime * 27) * shakeAmt * 0.4; } // smooth wobble, no random jitter
   camera.lookAt(camLook);
 }
 function frame(now) {
-  const dt = Math.min(0.1, (now - last) / 1000); last = now;
+  const dt = Math.min(0.1, (now - last) / 1000); last = now; lastFrameAt = performance.now();
   advance(dt); render(dt);
   requestAnimationFrame(frame);
 }
@@ -1193,19 +1157,17 @@ addEventListener('resize', resize);
 // ================================================================ COVER (tools/game_covers.py: honest key art rendered from the game itself)
 function stageCover(kind) {
   state = State.COVER; document.body.classList.add('cover');
-  for (const id of ['menu', 'garage', 'paused', 'gameover', 'hud', 'banner', 'coach', 'countdown', 'toast', 'btnAction', 'joystick']) $(id).hidden = true;
-  camera.clearViewOffset();
-  for (const tp of [...tops]) if (!tp.isPlayer) removeTop(tp);
-  for (const s of sparks) s.on = false;
-  save.sel = { crown: 'razor', core: 'heart', tip: 'needle', paint: 'sun' }; rebuildPlayerMesh();
-  Object.assign(player, { x: -1.15, z: 0.3, vx: 0, vz: 0, spin: 220, state: 'alive', hitWob: 0.12 }); player.mesh.root.visible = true; updateMass(player);
-  const rival = makeTop({ parts: { crown: 'bastion', core: 'iron', tip: 'grip', paint: 'coral' }, name: 'Rival', spin: 200 });
-  Object.assign(rival, { x: player.x + player.r + radiusOf(200) - 0.05, z: 0.1, hitWob: 0.15 }); updateMass(rival);
+  for (const id of ['menu', 'garage', 'lobby', 'paused', 'gameover', 'hud', 'banner', 'coach', 'countdown', 'toast', 'btnAction', 'joystick']) $(id).hidden = true;
+  camera.clearViewOffset(); clearViews(); mode = 'solo';
+  world = S.createWorld({ bots: 0, sparks: 0 });
+  player = S.addTop(world, { parts: { crown: 'razor', core: 'heart', tip: 'needle', paint: 'sun' }, name: 'You', human: true, spin: 220, x: -1.15, z: 0.3, spawn: false }); meId = player.id; player.hitWob = 0.12;
+  S.addTop(world, { parts: { crown: 'bastion', core: 'iron', tip: 'grip', paint: 'coral' }, name: 'Rival', spin: 200, x: player.x + player.r + S.radiusOf(200) - 0.05, z: 0.1, spawn: false }).hitWob = 0.15;
   const extra = [[{ crown: 'comet', core: 'feather', tip: 'glide', paint: 'mint' }, -6.5, -5.5], [{ crown: 'halo', core: 'gyro', tip: 'dome', paint: 'sky' }, 6.5, -6.5], [{ crown: 'razor', core: 'gyro', tip: 'grip', paint: 'violet' }, -9, -12], [{ crown: 'halo', core: 'iron', tip: 'needle', paint: 'lime' }, 10, -13]];
-  for (const [p, x, z] of extra) { const b = makeTop({ parts: p, name: 'b', spin: 120 }); Object.assign(b, { x, z }); updateMass(b); }
-  for (let k = 0; k < 45; k++) { const a = rand(Math.PI * 1.05, Math.PI * 1.95), r = rand(3, 16); addSpark(Math.cos(a) * r, Math.sin(a) * r, { big: k % 4 === 0 ? 1 : 0 }); } // behind the clash, not in the lens
+  for (const [p, x, z] of extra) S.addTop(world, { parts: p, name: 'b', spin: 120, x, z, spawn: false });
+  for (let k = 0; k < 45; k++) { const a = rand(Math.PI * 1.05, Math.PI * 1.95), r = rand(3, 16); S.addSpark(world, Math.cos(a) * r, Math.sin(a) * r, { big: k % 4 === 0 ? 1 : 0 }); } // behind the clash, not in the lens
+  world.events.length = 0;
   const cx = player.x + player.r, cy = bowlY(1) + 0.55 * player.r;
-  for (const tp of tops) syncTop(tp, 0.016);
+  for (const tp of world.tops) syncTop(tp, viewFor(tp), 0.016);
   burst(new THREE.Vector3(cx, cy, 0.2), '#ffe27a', 22, 11); burst(new THREE.Vector3(cx, cy, 0.2), '#ff9a3d', 12, 9); burst(new THREE.Vector3(cx, cy, 0.2), '#7fd8ff', 8, 8);
   shockwave(cx, cy - 0.4, 0.2, 3.2, '#ffd27a'); updateParticles(0.14); updateWaves(0.12);
   const cam = { landscape: [0.4, 2.6, 7.4, 0.2, 0.9, -1.5], portrait: [0.2, 3.3, 9.6, 0.1, 0.7, -2.2], square: [0.3, 3.0, 8.4, 0.2, 0.8, -1.8], keyart: [0.4, 2.6, 7.4, 0.2, 0.9, -1.5] }[kind] || [0.4, 2.6, 7.4, 0.2, 0.9, -1.5];
@@ -1225,10 +1187,9 @@ async function boot() {
     document.fonts?.load('800 32px UI').catch(() => {}), document.fonts?.load('32px Display').catch(() => {})];
   let done = 0; jobs.forEach((p) => Promise.resolve(p).finally(() => { done++; $('loadBar').style.width = `${(100 * done) / jobs.length}%`; }));
   await Promise.race([Promise.all(jobs), new Promise((r) => setTimeout(r, 12000))]); // never hang on a slow asset
-  buildWorld(); initSparks();
-  player = makeTop({ parts: { ...save.sel }, name: 'You', isPlayer: true }); scene.add(crownSprite);
-  resetArena();
-  $('menuControls').innerHTML = controlsHTML(); refreshMenu();
+  buildWorld(); initSparks(); scene.add(crownSprite);
+  toMenuWorld();
+  $('menuControls').innerHTML = controlsHTML(); refreshMenu(); refreshShakeButton();
   resize();
   sdkCall((s) => s.game.loadingStop());
   $('loading').hidden = true;
@@ -1243,6 +1204,15 @@ async function boot() {
       cover: (kind) => stageCover(kind),
     };
     render(0);
-  } else requestAnimationFrame((n) => { last = n; frame(n); });
+    return;
+  }
+  requestAnimationFrame((n) => { last = n; frame(n); });
+  if (params.has('debug')) window.__wb = () => ({ world, meId, player, net, views, state, mode }); // inspection hook for tests
+  // invite links and the CrazyGames "instant multiplayer" entry go straight into the right room
+  const invited = sdkInviteParam('roomId') || params.get('room');
+  const afterFirstFrames = (fn) => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(fn, 0))); // shaders are compiled by then
+  if (invited) afterFirstFrames(() => joinByCode(invited));
+  else if (sdkInstantMultiplayer()) afterFirstFrames(() => connectOnline({ t: 'join', mode: 'create' }));
+  sdkCall((s) => s.game.addJoinRoomListener?.((p) => { if (p?.roomId) { leaveToMenu(); joinByCode(p.roomId); } }));
 }
 boot();

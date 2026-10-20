@@ -24,6 +24,8 @@
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></symbol>
   <symbol id="i-move" viewBox="0 0 24 24"><path d="M12 1l4 4h-3v5h-2V5H8zm0 22l-4-4h3v-5h2v5h3zM1 12l4-4v3h5v2H5v3zm22 0l-4 4v-3h-5v-2h5V8z" fill="currentColor"/></symbol>
   <symbol id="i-pit" viewBox="0 0 24 24"><ellipse cx="12" cy="19" rx="10" ry="3.5" fill="currentColor" opacity=".55"/><path d="M12 2v10l3.5-3.5 1.5 1.5-6 6-6-6 1.5-1.5L10 12V2z" fill="currentColor"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm6.9 6h-3a15 15 0 0 0-1.3-3.9A8 8 0 0 1 18.9 8zM12 4.1c.9 1.2 1.6 2.5 2 3.9h-4c.4-1.4 1.1-2.7 2-3.9zM4.3 14a8 8 0 0 1 0-4h3.4a16 16 0 0 0 0 4zm.8 2h3a15 15 0 0 0 1.3 3.9A8 8 0 0 1 5.1 16zm3-8h-3a8 8 0 0 1 4.3-3.9A15 15 0 0 0 8.1 8zM12 19.9c-.9-1.2-1.6-2.5-2-3.9h4c-.4 1.4-1.1 2.7-2 3.9zm2.3-5.9H9.7a14 14 0 0 1 0-4h4.6a14 14 0 0 1 0 4zm.3 5.9a15 15 0 0 0 1.3-3.9h3a8 8 0 0 1-4.3 3.9zm1.7-5.9a16 16 0 0 0 0-4h3.4a8 8 0 0 1 0 4z" fill="currentColor"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10.6 13.4a1 1 0 0 1 0-1.4l3.5-3.5a1 1 0 1 1 1.4 1.4L12 13.4a1 1 0 0 1-1.4 0zM8.5 20a4.5 4.5 0 0 1-3.2-7.7l2.5-2.5 1.4 1.4-2.5 2.5a2.5 2.5 0 0 0 3.6 3.6l2.5-2.5 1.4 1.4-2.5 2.5A4.5 4.5 0 0 1 8.5 20zm7.7-5.8-1.4-1.4 2.5-2.5a2.5 2.5 0 0 0-3.6-3.6l-2.5 2.5-1.4-1.4 2.5-2.5a4.5 4.5 0 0 1 6.4 6.4z" fill="currentColor"/></symbol>
   <symbol id="i-video" viewBox="0 0 24 24"><rect x="2" y="5" width="14" height="14" rx="3" fill="currentColor"/><path d="M17 10l5-3v10l-5-3z" fill="currentColor"/></symbol>
 </svg>
 
@@ -34,6 +36,7 @@
     <div id="feed"></div>
   </div>
   <div id="eventChip" hidden><b id="eventName"></b><span id="eventTime"></span></div>
+  <div id="roomChip" hidden><svg><use href="#i-globe"/></svg><span><small data-i18n="room">Room</small> <b id="roomCode">-----</b></span><span id="roomInfo"></span><button id="btnInvite"><svg><use href="#i-link"/></svg><span data-i18n="invite">Invite</span></button></div>
   <div class="hud-right">
     <button id="btnPause" class="icon" aria-label="Pause"><svg><use href="#i-pause"/></svg></button>
     <ol id="board"></ol>
@@ -59,6 +62,7 @@
     <p class="tagline" data-i18n="tagline">Spin. Clash. Knock rivals out of the ring!</p>
     <div class="stats"><span><svg class="gold"><use href="#i-crown"/></svg><span data-i18n="best">Best</span> <b id="menuBest">0</b></span><span><svg class="gold"><use href="#i-gear"/></svg><b id="menuGears">0</b></span></div>
     <button id="btnPlay" class="big"><svg><use href="#i-play"/></svg><span data-i18n="play">Play</span></button>
+    <button id="btnOnline" class="big online"><svg><use href="#i-globe"/></svg><span data-i18n="playOnline">Play online</span></button>
     <button id="btnGarage" class="wide"><svg><use href="#i-gear"/></svg><span data-i18n="garage">Garage</span><i class="dot" id="garageDot" hidden></i></button>
     <div class="controls" id="menuControls"></div>
   </div>
@@ -74,11 +78,25 @@
   </div>
 </section>
 
+<section id="lobby" class="screen side" hidden>
+  <div class="card lobby">
+    <h2 data-i18n="playOnline">Play online</h2>
+    <p class="tagline" data-i18n="noAccount">No account needed.</p>
+    <p class="who" id="lobbyName"></p>
+    <button id="btnQuick" class="big online"><svg><use href="#i-globe"/></svg><span data-i18n="quickMatch">Quick match</span></button>
+    <button id="btnCreate" class="wide"><svg><use href="#i-link"/></svg><span data-i18n="createRoom">Private room</span></button>
+    <div class="codeRow"><label for="codeInput" data-i18n="joinCode">Join with a code</label><input id="codeInput" maxlength="5" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCDE"><button id="btnJoinCode" data-i18n="join">Join</button></div>
+    <p class="status" id="lobbyStatus" aria-live="polite"></p>
+    <button id="btnLobbyBack" data-i18n="back">Back</button>
+  </div>
+</section>
+
 <section id="paused" class="screen" hidden>
   <div class="card center">
     <h2 data-i18n="paused">Paused</h2>
     <button id="btnResume" class="big" data-i18n="resume">Resume</button>
     <button id="btnQuit" class="wide" data-i18n="menu">Menu</button>
+    <button id="btnShake" class="wide subtle">Camera shake: on</button>
   </div>
 </section>
 
