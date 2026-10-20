@@ -26,13 +26,29 @@ const SFX_FILES = {
   puAnchor: 'assets/audio/whirl_anchor.mp3', puDecoy: 'assets/audio/pop.mp3', champion: 'assets/audio/whirl_champion.mp3', perfect: 'assets/audio/whirl_perfect.mp3',
   shutter: 'assets/audio/whirl_shutter.mp3', zone: 'assets/audio/whirl_zone.mp3', pull: 'assets/audio/whirl_pull.mp3', confetti: 'assets/audio/whirl_confetti.mp3', levelUp: 'assets/audio/level_up.mp3', victory: 'assets/audio/victory.mp3', mission: 'assets/audio/quest_complete.mp3',
 };
-const VOICE_FILES = { // {lang} is filled in at boot (en / tr)
-  ringout: 'assets/audio/voice/wb_ringout_{lang}.mp3', topple: 'assets/audio/voice/wb_topple_{lang}.mp3', leader: 'assets/audio/voice/wb_leader_{lang}.mp3',
-  storm: 'assets/audio/voice/wb_storm_{lang}.mp3', tilt: 'assets/audio/voice/wb_tilt_{lang}.mp3', overdrive: 'assets/audio/voice/wb_overdrive_{lang}.mp3',
-  go: 'assets/audio/voice/wb_go_{lang}.mp3', champion: 'assets/audio/voice/wb_champion_{lang}.mp3', champdown: 'assets/audio/voice/wb_champdown_{lang}.mp3',
-  perfect: 'assets/audio/voice/wb_perfect_{lang}.mp3', magnetar: 'assets/audio/voice/wb_magnetar_{lang}.mp3', teamwin: 'assets/audio/voice/wb_teamwin_{lang}.mp3', teams: 'assets/audio/voice/wb_teams_{lang}.mp3', lasttop: 'assets/audio/voice/wb_lasttop_{lang}.mp3', victory: 'assets/audio/voice/wb_victory_{lang}.mp3', levelup: 'assets/audio/voice/wb_levelup_{lang}.mp3',
+const VOICE_FILES = { // three announcers per line (different voices and wording); {lang} is filled in at boot (en / tr)
+  go: ['assets/audio/voice/wb3_go_1_{lang}.mp3', 'assets/audio/voice/wb3_go_2_{lang}.mp3', 'assets/audio/voice/wb3_go_3_{lang}.mp3'],
+  ringout: ['assets/audio/voice/wb3_ringout_1_{lang}.mp3', 'assets/audio/voice/wb3_ringout_2_{lang}.mp3', 'assets/audio/voice/wb3_ringout_3_{lang}.mp3'],
+  topple: ['assets/audio/voice/wb3_topple_1_{lang}.mp3', 'assets/audio/voice/wb3_topple_2_{lang}.mp3', 'assets/audio/voice/wb3_topple_3_{lang}.mp3'],
+  leader: ['assets/audio/voice/wb3_leader_1_{lang}.mp3', 'assets/audio/voice/wb3_leader_2_{lang}.mp3', 'assets/audio/voice/wb3_leader_3_{lang}.mp3'],
+  storm: ['assets/audio/voice/wb3_storm_1_{lang}.mp3', 'assets/audio/voice/wb3_storm_2_{lang}.mp3', 'assets/audio/voice/wb3_storm_3_{lang}.mp3'],
+  tilt: ['assets/audio/voice/wb3_tilt_1_{lang}.mp3', 'assets/audio/voice/wb3_tilt_2_{lang}.mp3', 'assets/audio/voice/wb3_tilt_3_{lang}.mp3'],
+  overdrive: ['assets/audio/voice/wb3_overdrive_1_{lang}.mp3', 'assets/audio/voice/wb3_overdrive_2_{lang}.mp3', 'assets/audio/voice/wb3_overdrive_3_{lang}.mp3'],
+  champion: ['assets/audio/voice/wb3_champion_1_{lang}.mp3', 'assets/audio/voice/wb3_champion_2_{lang}.mp3', 'assets/audio/voice/wb3_champion_3_{lang}.mp3'],
+  champdown: ['assets/audio/voice/wb3_champdown_1_{lang}.mp3', 'assets/audio/voice/wb3_champdown_2_{lang}.mp3', 'assets/audio/voice/wb3_champdown_3_{lang}.mp3'],
+  magnetar: ['assets/audio/voice/wb3_magnetar_1_{lang}.mp3', 'assets/audio/voice/wb3_magnetar_2_{lang}.mp3', 'assets/audio/voice/wb3_magnetar_3_{lang}.mp3'],
+  perfect: ['assets/audio/voice/wb3_perfect_1_{lang}.mp3', 'assets/audio/voice/wb3_perfect_2_{lang}.mp3', 'assets/audio/voice/wb3_perfect_3_{lang}.mp3'],
+  lasttop: ['assets/audio/voice/wb3_lasttop_1_{lang}.mp3', 'assets/audio/voice/wb3_lasttop_2_{lang}.mp3', 'assets/audio/voice/wb3_lasttop_3_{lang}.mp3'],
+  victory: ['assets/audio/voice/wb3_victory_1_{lang}.mp3', 'assets/audio/voice/wb3_victory_2_{lang}.mp3', 'assets/audio/voice/wb3_victory_3_{lang}.mp3'],
+  levelup: ['assets/audio/voice/wb3_levelup_1_{lang}.mp3', 'assets/audio/voice/wb3_levelup_2_{lang}.mp3', 'assets/audio/voice/wb3_levelup_3_{lang}.mp3'],
+  teamwin: ['assets/audio/voice/wb3_teamwin_1_{lang}.mp3', 'assets/audio/voice/wb3_teamwin_2_{lang}.mp3', 'assets/audio/voice/wb3_teamwin_3_{lang}.mp3'],
+  teams: ['assets/audio/voice/wb3_teams_1_{lang}.mp3', 'assets/audio/voice/wb3_teams_2_{lang}.mp3', 'assets/audio/voice/wb3_teams_3_{lang}.mp3'],
 };
-const MUSIC = { arena: 'assets/audio/bgm_whirl_arena.mp3', showdown: 'assets/audio/bgm_whirl_showdown.mp3' }; // showdown: Last Top Spinning and the Champion
+const MUSIC = { // a random track from the pool each run; showdown plays for Last Top Spinning and the bosses
+  arena: ['assets/audio/bgm_whirl_arena.mp3', 'assets/audio/bgm_whirl_funk.mp3', 'assets/audio/bgm_whirl_chip.mp3', 'assets/audio/bgm_whirl_breaks.mp3'],
+  showdown: ['assets/audio/bgm_whirl_showdown.mp3', 'assets/audio/bgm_whirl_showdown2.mp3'],
+  menu: ['assets/audio/bgm_whirl_menu.mp3'],
+};
 
 // ================================================================ I18N (English required; Turkish written natively)
 const STRINGS = {
@@ -92,6 +108,21 @@ const STRINGS = {
     h_perfect: 'Charge from point blank for a PERFECT hit', h_boss_champion: 'Knock out the Champion for a big bounty. Watch its slam!', h_boss_magnetar: 'The Magnetar pulls you in: dash out, or use Anchor',
     h_zone: 'Stay inside the ring: outside, your spin drains fast', h_arena_turntable: 'Ride the spinning disc to recharge your spin', h_arena_shutter: 'Flashing doors are about to open or close',
     h_arena_orbit: 'The pits move round the rim: watch your back', h_teams: 'Hit the red team. Teammates cannot hurt you', h_respawn: 'In Teams you come back after a knockout', tip: 'Tip',
+    howTo: 'How to play', h_controls: 'Controls', h_modes: 'Modes', h_powers: 'Power-ups (use within 10 s)', h_bosses: 'Bosses', h_arenas: 'Arenas', h_events: 'Arena events', h_tricks: 'Tricks',
+    hw_move: 'Steer with WASD, the arrow keys or the mouse', hw_dash: 'Space or click to dash into rivals', hw_power: 'E or right-click to fire your power-up', hw_touch: 'Touch: drag to steer, tap to dash, power button to fire',
+    hw_endless: 'climb to #1; rivals respawn bigger', hw_last: 'no respawns, the ring closes in', hw_teams: 'Blue vs Red, knockouts score for your team', hw_ranked: 'Last Top rounds with a rating (CrazyGames account)',
+    hw_champion: 'slams the floor around it', hw_magnetar: 'pulls tops and sparks toward it', hw_bossTip: 'Beat a boss for +{n} points',
+    hw_bowl: 'three open pits', hw_turntable: 'the spinning disc recharges you', hw_shutter: 'six pits, three open, they swap', hw_orbit: 'the pits travel round the rim',
+    hw_perfect: 'Dash from point blank for a PERFECT hit', hw_ringout: 'Ring outs (into a pit) score more than topples', hw_leader: 'Knocking out the #1 top scores double', hw_spark: 'Sparks make you bigger: spin is health and size',
+    badges: 'Badges', badgeGot: 'Badge earned!', seasonTitle: 'Season {n}', seasonEnds: '{d} days left', seasonTier: 'Tier {t}/20', seasonNext: 'Next: {x}', seasonDone: 'Season track complete!', seasonUp: 'Season tier {t}', seasonItem: 'Season tier {n}',
+    b_ringouts: 'Pit Master', bd_ringouts: 'Ring out {n} rivals', b_kos: 'Knockout Artist', bd_kos: 'Knock out {n} rivals', b_bosses: 'Giant Slayer', bd_bosses: 'Defeat {n} bosses',
+    b_perfect: 'Sharpshooter', bd_perfect: 'Land {n} Perfect hits', b_wins: 'Last One Spinning', bd_wins: 'Win {n} Last Top rounds', b_teamwins: 'Team Player', bd_teamwins: 'Win {n} Teams matches',
+    b_sparks: 'Spark Collector', bd_sparks: 'Collect {n} sparks', b_online: 'Globetrotter', bd_online: 'Play {n} online matches', b_powers: 'Power User', bd_powers: 'Use {n} power-ups', b_level: 'Veteran', bd_level: 'Reach level {n}',
+    t_comet: 'Comet', c_nova: 'Nova', calmOn: 'Reduced effects: on', calmOff: 'Reduced effects: off', cbOn: 'Colour-blind teams: on', cbOff: 'Colour-blind teams: off',
+    mode_ranked: 'Ranked', rankedNeedLogin: 'Log in to CrazyGames to play Ranked', rankedTop: 'Ranked top 10', rating: 'Rating {r} ({d})', vote: 'Next arena:',
+    mut_rush: 'This week: Spark Rush, sparks are worth more', mut_overdrive: 'This week: Overdrive, everyone is faster', mut_bosses: 'This week: Boss Rush, bosses come early and often', mut_frenzy: 'This week: Power Frenzy, power-ups everywhere',
+    e0: 'GG!', e1: 'Nice hit!', e2: 'Oops!', e3: 'Team up?', e4: 'Come at me!', e5: 'Good luck!',
+
   },
   tr: {
     play: 'Oyna', garage: 'Garaj', done: 'Tamam', best: 'En iyi', tagline: 'Dön. Çarpış. Rakiplerini pistten at!', paused: 'Duraklatıldı', resume: 'Devam',
@@ -149,6 +180,21 @@ const STRINGS = {
     h_perfect: 'Yakından atılırsan MÜKEMMEL vuruş yaparsın', h_boss_champion: 'Şampiyonu nakavt et, büyük ödülü al. Yere vuruşuna dikkat!', h_boss_magnetar: 'Manyetar seni çeker: atılarak kaç ya da Çapa kullan',
     h_zone: 'Halkanın içinde kal: dışarıda dönüşün hızla biter', h_arena_turntable: 'Dönüşünü doldurmak için dönen tablaya bin', h_arena_shutter: 'Yanıp sönen kapaklar açılmak ya da kapanmak üzere',
     h_arena_orbit: 'Çukurlar kenarda dönüyor: arkanı kolla', h_teams: 'Kırmızı takıma vur. Takım arkadaşların sana zarar veremez', h_respawn: 'Takımlar modunda nakavttan sonra geri dönersin', tip: 'İpucu',
+    howTo: 'Nasıl oynanır', h_controls: 'Kontroller', h_modes: 'Modlar', h_powers: 'Güçler (10 sn içinde kullan)', h_bosses: 'Bosslar', h_arenas: 'Arenalar', h_events: 'Arena olayları', h_tricks: 'Taktikler',
+    hw_move: 'WASD, ok tuşları ya da fareyle yönlendir', hw_dash: 'Rakiplere atılmak için Boşluk ya da tıkla', hw_power: 'Gücü kullanmak için E ya da sağ tık', hw_touch: 'Dokunmatik: sürükle, atılmak için dokun, güç düğmesi',
+    hw_endless: '1 numaraya çık; rakipler daha büyük döner', hw_last: 'geri dönüş yok, halka daralır', hw_teams: 'Mavi - Kırmızı, nakavtlar takımına yazılır', hw_ranked: 'puanlı Son Topaç turları (CrazyGames hesabı)',
+    hw_champion: 'etrafındaki zemine vurur', hw_magnetar: 'topaçları ve kıvılcımları kendine çeker', hw_bossTip: 'Bir boss yen: +{n} puan',
+    hw_bowl: 'üç açık çukur', hw_turntable: 'dönen tabla seni şarj eder', hw_shutter: 'altı çukur, üçü açık, yer değiştirir', hw_orbit: 'çukurlar kenarda döner',
+    hw_perfect: 'Yakından atılırsan MÜKEMMEL vuruş', hw_ringout: 'Çukura atmak, devirmekten daha çok puan', hw_leader: '1 numarayı nakavt etmek iki kat puan', hw_spark: 'Kıvılcımlar seni büyütür: dönüş hem can hem boy',
+    badges: 'Rozetler', badgeGot: 'Rozet kazandın!', seasonTitle: 'Sezon {n}', seasonEnds: '{d} gün kaldı', seasonTier: 'Kademe {t}/20', seasonNext: 'Sıradaki: {x}', seasonDone: 'Sezon yolu tamamlandı!', seasonUp: 'Sezon kademesi {t}', seasonItem: 'Sezon kademesi {n}',
+    b_ringouts: 'Çukur Ustası', bd_ringouts: '{n} rakibi çukura it', b_kos: 'Nakavt Sanatçısı', bd_kos: '{n} rakibi nakavt et', b_bosses: 'Dev Avcısı', bd_bosses: '{n} boss yen',
+    b_perfect: 'Keskin Nişancı', bd_perfect: '{n} mükemmel vuruş yap', b_wins: 'Son Dönen', bd_wins: '{n} Son Topaç turu kazan', b_teamwins: 'Takım Oyuncusu', bd_teamwins: '{n} Takımlar maçı kazan',
+    b_sparks: 'Kıvılcım Koleksiyoncusu', bd_sparks: '{n} kıvılcım topla', b_online: 'Dünya Gezgini', bd_online: '{n} çevrimiçi maç oyna', b_powers: 'Güç Tutkunu', bd_powers: '{n} güç kullan', b_level: 'Kıdemli', bd_level: '{n}. seviyeye ulaş',
+    t_comet: 'Kuyruklu Yıldız', c_nova: 'Nova', calmOn: 'Azaltılmış efektler: açık', calmOff: 'Azaltılmış efektler: kapalı', cbOn: 'Renk körü takımlar: açık', cbOff: 'Renk körü takımlar: kapalı',
+    mode_ranked: 'Dereceli', rankedNeedLogin: 'Dereceli oynamak için CrazyGames hesabına giriş yap', rankedTop: 'Dereceli ilk 10', rating: 'Puan {r} ({d})', vote: 'Sonraki arena:',
+    mut_rush: 'Bu hafta: Kıvılcım Akını, kıvılcımlar daha değerli', mut_overdrive: 'Bu hafta: Aşırı Hız, herkes daha hızlı', mut_bosses: 'Bu hafta: Boss Akını, bosslar erken ve sık gelir', mut_frenzy: 'Bu hafta: Güç Çılgınlığı, her yerde güç',
+    e0: 'İyi oyundu!', e1: 'Güzel vuruş!', e2: 'Hay aksi!', e3: 'Birlikte mi?', e4: 'Gel bakalım!', e5: 'Bol şans!',
+
   },
 };
 let lang = 'en';
@@ -249,11 +295,13 @@ const SYNTH = { // [waveform, startHz, endHz, seconds, gain]
   shutter: ['square', 300, 140, 0.35, 0.08], zone: ['sawtooth', 120, 260, 0.8, 0.08], levelUp: ['triangle', 520, 1560, 0.6, 0.14], victory: ['triangle', 660, 1320, 1, 0.14],
   mission: ['triangle', 880, 1760, 0.4, 0.12], pull: ['sine', 90, 180, 1.2, 0.12], confetti: ['triangle', 1200, 2400, 0.4, 0.1],
 };
-const audio = { ctx: null, master: null, buffers: {}, music: null, track: 'arena', tracks: {}, wantMusic: false, musicVol: 0.3, muted: new Set(), voices: 0, hum: null, last: {} };
+const audio = { ctx: null, master: null, sfxBus: null, buffers: {}, music: null, track: '', file: '', tracks: {}, wantMusic: false, musicVol: 0.3, duck: 1, muted: new Set(), voices: 0, hum: null, last: {}, lastVoice: {} };
 
-function initAudio() {
-  try { audio.ctx = new (window.AudioContext || window.webkitAudioContext)(); audio.master = audio.ctx.createGain(); audio.master.connect(audio.ctx.destination); }
-  catch { audio.ctx = null; }
+function initAudio() { // master <- effects bus (ducked under the announcer) + voices
+  try {
+    audio.ctx = new (window.AudioContext || window.webkitAudioContext)(); audio.master = audio.ctx.createGain(); audio.master.connect(audio.ctx.destination);
+    audio.sfxBus = audio.ctx.createGain(); audio.sfxBus.connect(audio.master);
+  } catch { audio.ctx = null; }
 }
 async function loadSfx(key, url) {
   if (!audio.ctx) return;
@@ -269,7 +317,7 @@ function playSfx(key, vol = 1, rate = 1) {
   if (audio.last[key] && now - audio.last[key] < 0.05) return; // the same sound twice in one frame burst is just louder noise
   audio.last[key] = now;
   const b = audio.buffers[key], g = audio.ctx.createGain();
-  g.connect(audio.master); audio.voices++;
+  g.connect(key.startsWith('v_') ? audio.master : audio.sfxBus); audio.voices++;
   if (b) {
     const s = audio.ctx.createBufferSource(); s.buffer = b; s.playbackRate.value = rate * (0.94 + Math.random() * 0.12); g.gain.value = vol;
     s.connect(g); s.onended = () => audio.voices--; s.start(); return;
@@ -280,7 +328,19 @@ function playSfx(key, vol = 1, rate = 1) {
   g.gain.setValueAtTime(gain * vol, now); g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
   o.connect(g); o.onended = () => audio.voices--; o.start(now); o.stop(now + dur);
 }
-const voice = (k) => playSfx(`v_${k}`, 0.95);
+function voice(k) { // one of the three announcers, never the same take twice in a row
+  const takes = [0, 1, 2].filter((i) => audio.buffers[`v_${k}_${i}`] && (i !== audio.lastVoice[k] || ![0, 1, 2].some((j) => j !== i && audio.buffers[`v_${k}_${j}`])));
+  if (!takes.length || audio.muted.size) return;
+  const i = takes[(Math.random() * takes.length) | 0]; audio.lastVoice[k] = i;
+  playSfx(`v_${k}_${i}`, 0.95); duckFor(audio.buffers[`v_${k}_${i}`].duration);
+}
+let duckTimer = 0;
+function duckFor(secs) { // the announcer stays clear: effects and music dip while a line plays
+  if (!audio.ctx) return;
+  const now = audio.ctx.currentTime; audio.sfxBus.gain.cancelScheduledValues(now); audio.sfxBus.gain.setTargetAtTime(0.5, now, 0.04); audio.sfxBus.gain.setTargetAtTime(1, now + secs, 0.2);
+  audio.duck = 0.55; setMusicVolume(); clearTimeout(duckTimer); duckTimer = setTimeout(() => { audio.duck = 1; setMusicVolume(); }, secs * 1000 + 150);
+}
+const setMusicVolume = () => { if (audio.music) audio.music.volume = clamp(audio.musicVol * (save.vol?.music ?? 1) * audio.duck, 0, 1); };
 function startHum() { // the player's own top: a looping whirr whose pitch follows spin and speed
   stopHum(); if (!audio.ctx) return;
   const g = audio.ctx.createGain(); g.gain.value = 0; g.connect(audio.master);
@@ -296,15 +356,20 @@ function updateHum(level, pitch) {
   if (audio.hum.src.playbackRate) audio.hum.src.playbackRate.setTargetAtTime(pitch, now, 0.1); else audio.hum.src.frequency.setTargetAtTime(140 + pitch * 90, now, 0.1);
 }
 function stopHum() { if (!audio.hum) return; try { audio.hum.src.stop(); } catch {} audio.hum.g.disconnect(); audio.hum = null; }
-function playMusic(vol = audio.musicVol, track = audio.track) { // track: 'arena' or 'showdown' (Last Top Spinning, the Champion)
+function playMusic(vol = audio.musicVol, track = audio.track || 'menu', fresh = false) { // track: menu | arena | showdown; fresh: pick a new song from the pool
   audio.wantMusic = true; audio.musicVol = vol;
-  if (track !== audio.track || !audio.music) {
-    audio.music?.pause(); audio.track = track;
-    let el = audio.tracks[track];
-    if (el === undefined && MUSIC[track]) { el = new Audio(MUSIC[track]); el.loop = true; el.onerror = () => { audio.tracks[track] = null; if (audio.music === el) audio.music = null; }; audio.tracks[track] = el; }
-    audio.music = el || null; if (audio.music) { audio.music.currentTime = 0; audio.music.playbackRate = 1; }
+  if (track !== audio.track || !audio.music || fresh) {
+    const pool = (MUSIC[track] || []).filter((f) => audio.tracks[f] !== null), choice = pool.filter((f) => f !== audio.file);
+    const file = (choice.length ? choice : pool)[(Math.random() * (choice.length || pool.length)) | 0];
+    if (file !== audio.file || !audio.music) {
+      audio.music?.pause(); audio.file = file;
+      let el = file ? audio.tracks[file] : null;
+      if (file && el === undefined) { el = new Audio(file); el.loop = true; el.onerror = () => { audio.tracks[file] = null; if (audio.music === el) audio.music = null; }; audio.tracks[file] = el; }
+      audio.music = el || null; if (audio.music) { audio.music.currentTime = 0; audio.music.playbackRate = 1; }
+    }
+    audio.track = track;
   }
-  if (audio.music) { audio.music.volume = clamp(vol * (save.vol?.music ?? 1), 0, 1); if (!audio.muted.size) audio.music.play().catch(() => {}); }
+  if (audio.music) { setMusicVolume(); if (!audio.muted.size) audio.music.play().catch(() => {}); }
 }
 function muteAudio(reason = 'ad') { audio.muted.add(reason); applyMute(); }
 function unmuteAudio(reason = 'ad') { audio.muted.delete(reason); applyMute(); }
@@ -319,14 +384,14 @@ const DEFAULT_SAVE = () => ({
   best: 0, gears: 0, runs: 0, tut: false, shake: true, level: 1, xp: 0, mode: 'endless', arena: 'bowl', onlineKind: 'endless',
   owned: { crown: ['halo'], core: ['gyro'], tip: ['dome'], paint: ['sun', 'coral', 'mint'], trail: ['none'] },
   sel: { crown: 'halo', core: 'gyro', tip: 'dome', paint: 'sun', trail: 'none' },
-  vol: { music: 0.8, sfx: 0.9 }, gfx: 'auto', hints: {}, nick: null,
+  vol: { music: 0.8, sfx: 0.9 }, gfx: 'auto', hints: {}, nick: null, calm: false, cb: false, totals: {}, badges: {}, season: { id: 0, xp: 0, tier: 0 },
   missions: { day: '', list: [] }, rec: { score: 0, kos: 0, ringouts: 0, lead: 0, peak: 0, time: 0, wins: 0 },
 });
 let save = DEFAULT_SAVE();
 function loadSave() {
   const d = DEFAULT_SAVE(), s = loadData(`${SAVE_KEY}:save`, null) || {};
   save = { ...d, ...s, owned: { ...d.owned, ...(s.owned || {}) }, sel: { ...d.sel, ...(s.sel || {}) }, missions: { ...d.missions, ...(s.missions || {}) }, rec: { ...d.rec, ...(s.rec || {}) },
-    vol: { ...d.vol, ...(s.vol || {}) }, hints: { ...(s.hints || {}) } };
+    vol: { ...d.vol, ...(s.vol || {}) }, hints: { ...(s.hints || {}) }, totals: { ...(s.totals || {}) }, badges: { ...(s.badges || {}) }, season: { ...d.season, ...(s.season || {}) } };
   save.rec.score = Math.max(save.rec.score, save.best); // saves from before 1.3 only kept the best score
   if (!Array.isArray(save.missions.list)) save.missions = d.missions;
   for (const [lv, [kind, id]] of Object.entries(LEVEL_REWARDS)) if (save.level >= lv && PARTS[kind] && !save.owned[kind].includes(id)) save.owned[kind].push(id); // rewards added after a player passed that level
@@ -352,7 +417,35 @@ function addXP(n) { // returns the level-ups it caused: [{ lv, reward, gears }]
     if (reward && PARTS[reward[0]]) { if (save.owned[reward[0]].includes(reward[1])) { gears += 100; reward = null; } else save.owned[reward[0]].push(reward[1]); }
     save.gears += gears; ups.push({ lv: save.level, reward, gears });
   }
+  seasonXP(n);
   return ups;
+}
+// ---- the season track: 4 weeks, 20 free tiers fed by the same XP; tier 10 and 20 give season-only cosmetics
+const SEASON_EPOCH = Date.UTC(2026, 9, 19), SEASON_DAYS = 28, TIER_XP = 250;
+const seasonNow = () => { const d = (Date.now() - SEASON_EPOCH) / 86_400_000, idx = Math.max(0, Math.floor(d / SEASON_DAYS)); return { id: idx + 1, left: Math.max(1, Math.ceil((idx + 1) * SEASON_DAYS - d)) }; };
+const tierReward = (tier) => (tier === 10 ? ['trail', 'comet'] : tier === 20 ? ['paint', 'nova'] : null);
+function seasonXP(n) {
+  const now = seasonNow(); if (save.season.id !== now.id) save.season = { id: now.id, xp: 0, tier: 0 }; // a new season starts from tier 0
+  save.season.xp += Math.max(0, Math.round(n));
+  while (save.season.tier < 20 && save.season.xp >= (save.season.tier + 1) * TIER_XP) {
+    const tier = ++save.season.tier; let reward = tierReward(tier), gears = 25 + tier * 5;
+    if (reward) { if (save.owned[reward[0]].includes(reward[1])) { gears += 150; reward = null; } else save.owned[reward[0]].push(reward[1]); }
+    save.gears += gears; run?.seasonUps?.push({ tier, reward, gears });
+  }
+}
+// ---- badges: long-term goals, one gear reward each
+const BADGES = [
+  { id: 'ringouts', n: 100, gears: 200 }, { id: 'kos', n: 250, gears: 200 }, { id: 'bosses', n: 10, gears: 250 }, { id: 'perfect', n: 50, gears: 150 }, { id: 'wins', n: 10, gears: 250 },
+  { id: 'teamwins', n: 10, gears: 200 }, { id: 'sparks', n: 5000, gears: 150 }, { id: 'online', n: 25, gears: 200 }, { id: 'powers', n: 100, gears: 150 }, { id: 'level', n: 15, gears: 300 },
+];
+const TOTAL_OF = { kos: 'kos', ringouts: 'ringouts', sparks: 'sparks', perfect: 'perfect', powers: 'powers', champion: 'bosses', online: 'online', teams: 'teamwins' }; // bump ids -> lifetime totals
+const badgeValue = (b) => (b.id === 'wins' ? save.rec.wins : b.id === 'level' ? save.level : save.totals[b.id] || 0);
+function checkBadges() {
+  for (const b of BADGES) {
+    if (save.badges[b.id] || badgeValue(b) < b.n) continue;
+    save.badges[b.id] = 1; save.gears += b.gears; persist();
+    notice({ icon: 'medal', small: t('badgeGot'), text: t('b_' + b.id), extra: `+${b.gears}`, sfx: 'unlock' });
+  }
 }
 // Missions: three a day. run: counts the best single run; otherwise a running total. lv: offered from this level on.
 const MISSIONS = [
@@ -372,6 +465,7 @@ function refreshMissions() {
 function bump(id, inc = 1) {
   if (!run || CAPTURE) return;
   run.stats[id] = (run.stats[id] || 0) + inc; progress(id, inc, run.stats[id]);
+  const tot = TOTAL_OF[id]; if (tot) { save.totals[tot] = (save.totals[tot] || 0) + inc; if (state === State.PLAYING) checkBadges(); }
 }
 function setStat(id, value) { // a value that only grows during a run (spin peak, minutes survived)
   if (!run || CAPTURE || value <= (run.stats[id] || 0)) return;
@@ -400,10 +494,10 @@ function completeMission(m, def) {
   notice({ icon: 'check', small: t('missionDone'), text: missionText(m.id), extra: `+${def.gears}`, sfx: 'mission' }); refreshMenu();
 }
 // first-time hints: each one shows once per player, in play, as a few words
-function hint(id) {
+function hint(id, text = t('h_' + id)) {
   if (CAPTURE || run?.tutorial || save.hints[id] || state !== State.PLAYING) return;
   save.hints[id] = 1; persist();
-  notice({ icon: 'bulb', small: t('tip'), text: t('h_' + id), hint: true, secs: 4.5 });
+  notice({ icon: 'bulb', small: t('tip'), text, hint: true, secs: 4.5 });
 }
 const missionText = (id) => t('m_' + id, { n: missionDef(id).n });
 const missionLeft = () => save.missions.list.filter((m) => !m.done).length;
@@ -433,6 +527,7 @@ function applyGfx() {
   if (low === gfxLow) return; gfxLow = low;
   renderer.setPixelRatio(low ? Math.min(devicePixelRatio, 1) : Math.min(devicePixelRatio, 1.75));
   renderer.shadowMap.enabled = !low; if (sunLight) sunLight.castShadow = !low;
+  if (crowd) crowd.count = low ? 380 : crowd.instanceMatrix.count; for (const b of beams) b.visible = !low; // Fast: a smaller crowd, no light beams
   scene.traverse((o) => { if (o.material) for (const m of [].concat(o.material)) m.needsUpdate = true; });
   resize();
 }
@@ -735,8 +830,8 @@ function viewFor(tp) {
   const mesh = buildTopMesh(tp.parts, tp.parts.paint, me ? '#ffffff' : tp.boss ? '#ffc531' : '#ffe8c2');
   if (me) { mesh.ring.material.color.set('#ffc531'); mesh.ring.material.opacity = 0.85; }
   if (mine) mesh.ring.material.opacity = 0.25;
-  const teamCol = tp.team != null ? TEAM_COLOR[tp.team] : null;
-  if (teamCol && !me) { mesh.ring.material.color.set(teamCol); mesh.ring.material.opacity = 0.75; }
+  const teamCol = tp.team != null ? teamColor(tp.team) : null;
+  if (teamCol && !me) { mesh.ring.material.color.set(teamCol); mesh.ring.material.opacity = 0.75; if (tp.team === 1 && save.cb) mesh.ring.geometry = cached('dashRing', dashedRing); }
   let pullRing = null;
   if (tp.bossKind === 'magnetar') { // the Magnetar: two violet orbit rings and a pull ripple
     mesh.ring.material.color.set('#c27bff'); mesh.ring.material.opacity = 0.9;
@@ -774,6 +869,15 @@ function refreshPlayer() { const p = S.topById(world, meId); if (p) player = p; 
 
 // Power-up orbs: a glowing glass ball with the power's icon, a light beam and a floor ring; they blink before they vanish.
 const TEAM_COLOR = ['#4cb8ff', '#ff5d73']; // Blue, Red
+function dashedRing() { // the ground ring cut into 12 dashes: team Red reads by shape too
+  const parts = []; for (let k = 0; k < 12; k++) parts.push(new THREE.RingGeometry(1.1, 1.32, 6, 1, (k / 12) * Math.PI * 2, (Math.PI * 2) / 24));
+  const g = mergeRings(parts); g.rotateX(-Math.PI / 2); return g;
+}
+function mergeRings(list) { // tiny merge for same-layout ring geometries (no addons import needed)
+  const pos = [], idx = []; let off = 0;
+  for (const g of list) { const p = g.attributes.position.array, ix = g.index.array; for (const v of p) pos.push(v); for (const i of ix) idx.push(i + off); off += p.length / 3; g.dispose(); }
+  const out = new THREE.BufferGeometry(); out.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); out.setIndex(idx); return out;
+}
 const PU_COLOR = { blast: '#ff8a3d', shield: '#4cb8ff', magnet: '#c27bff', turbo: '#3ee0a1', anchor: '#7f8fc4', decoy: '#ff7ce0' };
 const orbs = new Map(), iconTex = {};
 function powerIcon(kind) { // the same SVG path as the HUD icon, drawn white on a canvas
@@ -829,10 +933,10 @@ const particles = [], pGeo = new THREE.BoxGeometry(0.1, 0.1, 0.32), pMats = {};
 const pMat = (c) => (pMats[c] ??= new THREE.MeshBasicMaterial({ color: c, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
 function burst(pos, color, n = 14, speed = 6, up = 1) {
   if (quietFx()) return;
-  if (gfxLow) n = Math.ceil(n / 2);
+  if (gfxLow || calm()) n = Math.ceil(n / 2);
   for (let i = 0; i < n; i++) {
     let p = particles.find((q) => !q.visible);
-    if (!p) { if (particles.length > 360) return; p = new THREE.Mesh(pGeo, pMat(color)); p.userData.v = new THREE.Vector3(); particles.push(p); scene.add(p); }
+    if (!p) { if (particles.length > (gfxLow ? 160 : 360)) return; p = new THREE.Mesh(pGeo, pMat(color)); p.userData.v = new THREE.Vector3(); particles.push(p); scene.add(p); }
     p.material = pMat(color); p.visible = true; p.position.copy(pos); p.userData.life = 0.35 + Math.random() * 0.35;
     p.userData.v.set((Math.random() - 0.5) * speed, Math.random() * speed * 0.6 * up, (Math.random() - 0.5) * speed);
   }
@@ -859,7 +963,9 @@ function updateWaves(dt) {
     const k = 1 - w.userData.life / 0.4; w.scale.setScalar(0.5 + k * w.userData.size); w.material.opacity = 1 - k;
   }
 }
-function shake(a) { if (save.shake !== false && !CAPTURE) shakeAmt = Math.max(shakeAmt, Math.min(a, 0.3)); } // small and smooth: big jolts make people motion sick
+const calm = () => !!save.calm && !CAPTURE; // Reduced effects: no freeze frames, flashes or shake, fewer particles
+const teamColor = (k) => (k === 1 && save.cb ? '#ffb02e' : TEAM_COLOR[k]); // colour-blind teams: blue vs orange, and Red's ring is dashed
+function shake(a) { if (save.shake !== false && !CAPTURE && !save.calm) shakeAmt = Math.max(shakeAmt, Math.min(a, 0.3)); } // small and smooth: big jolts make people motion sick
 let hitStop = 0; // a few frames of freeze on big hits (solo only: online the server keeps time)
 // floating damage numbers and callouts that stick to a point in the arena
 const pops = [], projV = new THREE.Vector3();
@@ -892,7 +998,7 @@ function perfectFx(x, z) { // my dash connected at full speed from point blank
   const p = pos3(x, z, 0.6);
   popText(x, z, 2.4, t('perfect'), 'big', 1.1); playSfx('perfect', 0.9);
   shockwave(x, p.y - 0.4, z, 4.5, '#ffc531'); burst(p, '#ffc531', 20, 10);
-  hitStop = Math.max(hitStop, 0.07); shake(0.12);
+  if (!calm()) hitStop = Math.max(hitStop, 0.07); shake(0.12);
   if (simTime - lastPerfectVoice > 8) { lastPerfectVoice = simTime; voice('perfect'); }
   bump('perfect');
 }
@@ -904,7 +1010,7 @@ let isTouch = matchMedia('(pointer: coarse)').matches || (navigator.maxTouchPoin
 function setTouchUI(on) { // the input actually used decides: hybrid laptops, tablets with keyboards, phones that report a fine pointer
   if (isTouch === on && document.body.classList.contains('touch') === on) return;
   isTouch = on; document.body.classList.toggle('touch', on);
-  $('menuControls').innerHTML = controlsHTML();
+  $('menuControls').innerHTML = controlsHTML(); renderChat();
   if (state === State.PLAYING) { $('btnAction').hidden = !on; $('dashKey').hidden = on; }
   updatePowerUI();
 }
@@ -916,6 +1022,7 @@ addEventListener('keydown', (e) => {
   if (['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'KeyE'].includes(e.code)) { mouse.on = false; setTouchUI(false); }
   if (e.code === 'Space' && state === State.PLAYING) playerDash();
   if (e.code === 'KeyE' && state === State.PLAYING) playerUse();
+  if (/^Digit[1-6]$/.test(e.code)) sendEmote(Number(e.code.slice(5)) - 1); // quick chat (online)
   if (e.code === 'KeyP') togglePause(); // never Escape: on CrazyGames it exits fullscreen
   if ((e.code === 'Enter' || e.code === 'Space') && state === State.MENU && !settingsOpen) $('btnPlay').click();
 });
@@ -987,9 +1094,11 @@ function setState(s) {
   if (s !== State.PLAYING) { stick.id = null; stick.x = stick.y = 0; $('joystick').hidden = true; }
   if (s !== State.PLAYING && s !== State.PAUSED) { $('coach').hidden = true; $('countdown').hidden = true; $('banner').hidden = true; bannerTimer = 0; }
   if (s === State.PLAYING) onGameplayStart(); else onGameplayStop(); // stop on every break: menus, pause, game over, waiting for a round
+  $('chat').hidden = !(s === State.PLAYING && mode === 'online'); $('chatMenu').hidden = true; // quick chat: online play only
+  if (s !== State.GAMEOVER && s !== State.SPECTATE) { $('overVote').hidden = $('specVote').hidden = true; $('overRating').hidden = true; }
   if (s !== State.PLAYING) { notices.length = 0; missionPopTimer = 0; $('missionPop').hidden = true; } // notices belong to play: never over a menu or the results
   if (s !== State.GAMEOVER) { $('btnRetry').disabled = false; $('btnRetry').textContent = t('again'); $('overTop').hidden = true; }
-  if (inMenus(s)) { playMusic(0.2, 'arena'); camera.clearViewOffset(); }
+  if (inMenus(s)) { playMusic(0.22, 'menu'); camera.clearViewOffset(); }
   if (s === State.MENU) fetchOnlineCount();
   if (s === State.PLAYING) playMusic(0.32, wantTrack());
   if (s !== State.GAMEOVER) $('overChips').innerHTML = '';
@@ -1025,6 +1134,12 @@ click('btnSettings', () => openSettings());
 click('btnPauseSettings', () => openSettings());
 click('btnSettingsDone', () => closeSettings());
 click('btnSpecLeave', () => leaveToMenu());
+click('btnCalm', () => { save.calm = !save.calm; persist(); refreshShakeButton(); });
+click('btnCb', () => { save.cb = !save.cb; persist(); refreshShakeButton(); clearViews(); }); // views rebuild with the new team colours
+click('btnHelp', () => openHowto());
+click('btnHowDone', () => { $('howto').hidden = true; });
+click('btnHowX', () => { $('howto').hidden = true; });
+click('btnChat', () => { $('chatMenu').hidden = !$('chatMenu').hidden; });
 click('btnQuit', () => { leaveToMenu(); });
 click('btnMenu', () => { leaveToMenu(); }); // navigation: never an ad here
 click('btnRetry', () => triggerMidgameAd(() => (mode === 'online' ? onlinePlayAgain() : startRun()))); // between runs: the right moment for a midgame ad
@@ -1063,13 +1178,13 @@ function renderSettings() {
   $('gfxSeg').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { playSfx('click', 0.5); save.gfx = b.dataset.g; applyGfx(); renderSettings(); }));
   refreshShakeButton();
 }
-$('volMusic').addEventListener('input', () => { save.vol.music = $('volMusic').value / 100; $('volMusicVal').textContent = $('volMusic').value; if (audio.music) audio.music.volume = clamp(audio.musicVol * save.vol.music, 0, 1); });
+$('volMusic').addEventListener('input', () => { save.vol.music = $('volMusic').value / 100; $('volMusicVal').textContent = $('volMusic').value; setMusicVolume(); });
 $('volSfx').addEventListener('input', () => { save.vol.sfx = $('volSfx').value / 100; $('volSfxVal').textContent = $('volSfx').value; applyMute(); });
 $('volSfx').addEventListener('change', () => { unlockAudio(); playSfx('spark', 0.8); });
 for (const id of ['volMusic', 'volSfx']) $(id).addEventListener('keydown', (e) => e.stopPropagation()); // arrow keys move the slider, not the game
 function refreshMenu() {
   $('menuBest').textContent = save.best; $('menuGears').textContent = save.gears; $('garageGears').textContent = save.gears;
-  const affordable = Object.entries(PARTS).some(([kind, list]) => list.some((p) => !p.hidden && !p.lvl && !save.owned[kind].includes(p.id) && p.cost <= save.gears));
+  const affordable = Object.entries(PARTS).some(([kind, list]) => list.some((p) => !p.hidden && !p.lvl && !p.season && !save.owned[kind].includes(p.id) && p.cost <= save.gears));
   $('garageDot').hidden = !affordable;
   $('menuLv').textContent = t('lv', { n: save.level }); $('menuXp').style.width = `${Math.round((100 * save.xp) / xpFor(save.level))}%`;
   $('menuXpText').textContent = t('xp', { a: save.xp, b: xpFor(save.level) });
@@ -1077,6 +1192,21 @@ function refreshMenu() {
   const ds = displayStats(save.sel);
   $('menuStats').innerHTML = ['atk', 'def', 'sta', 'spd'].map((k) => `<div><span>${t('st_short_' + k)}</span><i><b style="width:${Math.round(ds[k] * 100)}%"></b></i></div>`).join('');
   renderSegs();
+  $('weekly').textContent = t('mut_' + S.weekMutator()); // this week's Endless twist
+}
+function openHowto() { // one screen: controls, modes, power-ups, bosses, arenas, events, tricks
+  const p = (icon, color, title, text) => `<p><svg style="--ic:${color}"><use href="#i-${icon}"/></svg><span>${title ? `<b>${title}</b> ` : ''}${text}</span></p>`;
+  const sec = (title, rows) => `<section><h3>${t(title)}</h3>${rows.join('')}</section>`;
+  $('howGrid').innerHTML = [
+    sec('h_controls', [p('move', '#4cb8ff', '', t('hw_move')), p('dash', '#ffc531', '', t('hw_dash')), p('blast', '#ff8a3d', '', t('hw_power')), p('move', '#3ee0a1', '', t('hw_touch'))]),
+    sec('h_modes', ['endless', 'last', 'teams', 'ranked'].map((m) => p(m === 'teams' ? 'team' : m === 'ranked' ? 'medal' : m === 'last' ? 'target' : 'spin', '#a77bff', t('mode_' + m), t('hw_' + m)))),
+    sec('h_powers', S.POWERS.map((k) => p(k, PU_COLOR[k], t('pu_' + k).replace('!', ''), t('pud_' + k)))),
+    sec('h_bosses', [p('crown', '#2e2a5c', t('champion'), t('hw_champion')), p('magnet', '#4b2a86', t('magnetar'), t('hw_magnetar')), p('star', '#ffc531', '', t('hw_bossTip', { n: CFG.bossPoints }))]),
+    sec('h_arenas', S.ARENA_IDS.map((a) => p('globe', ARENA_LOOK[a].floor[0], t('arena_' + a), t('hw_' + a)))),
+    sec('h_events', ['storm', 'tilt', 'overdrive'].map((ev) => p(ev === 'storm' ? 'spark' : ev === 'tilt' ? 'pit' : 'turbo', '#ff5d73', t('ev_' + ev).replace('!', ''), t(`ev_${ev}Sub`)))),
+    sec('h_tricks', [p('dash', '#ffc531', '', t('hw_perfect')), p('pit', '#ff5d73', '', t('hw_ringout')), p('crown', '#ffc531', '', t('hw_leader')), p('spark', '#ffe066', '', t('hw_spark'))]),
+  ].join('');
+  $('howto').hidden = false;
 }
 function renderSegs() { // mode + arena pickers: locked choices show the level that opens them
   const seg = (box, kind, ids, label, cur) => {
@@ -1112,6 +1242,13 @@ function renderProfile() { // daily missions, the next level reward, personal re
   const next = Object.keys(LEVEL_REWARDS).map(Number).filter((l) => l > save.level).sort((a, b) => a - b)[0];
   $('nextReward').innerHTML = next ? t('nextReward', { n: next, x: `<b>${rewardName(LEVEL_REWARDS[next])}</b>` }) : t('allRewards');
   $('recordList').innerHTML = RECORDS.map((k) => `<div><small>${t('rec_' + k)}</small><b>${recValue(k, save.rec[k] || 0)}</b></div>`).join('');
+  seasonXP(0); const sn = seasonNow(), tier = save.season.tier, into = save.season.xp - tier * TIER_XP; // season track
+  $('seasonTitle').textContent = `${t('seasonTitle', { n: sn.id })} · ${t('seasonEnds', { d: sn.left })}`; $('seasonTier').textContent = tier;
+  $('seasonBar').style.width = `${tier >= 20 ? 100 : Math.round((100 * into) / TIER_XP)}%`; $('seasonText').textContent = tier >= 20 ? '' : `${into}/${TIER_XP} XP`;
+  const nr = tier < 20 ? tierReward(tier + 1) : null;
+  $('seasonNext').textContent = tier >= 20 ? t('seasonDone') : t('seasonNext', { x: nr ? rewardName(nr) : t('rw_gears', { n: 25 + (tier + 1) * 5 }) });
+  $('badgeList').innerHTML = BADGES.map((b) => { const v = Math.min(b.n, badgeValue(b)), done = !!save.badges[b.id];
+    return `<div class="${done ? 'done' : ''}"><b><svg><use href="#i-medal"/></svg>${t('b_' + b.id)}</b><span>${t('bd_' + b.id, { n: b.n })}</span><div class="xpbar"><i style="width:${Math.round((100 * v) / b.n)}%"></i></div></div>`; }).join('');
 }
 // "N playing now" on the Play online button and today's top 10 in the lobby: one short question to the game server
 let onlineN = 0, countAt = -1e9, dailyTop = null;
@@ -1127,8 +1264,9 @@ function fetchOnlineCount(force = false) {
   };
   ws.onerror = () => {};
 }
-function renderTop() { // the lobby list; my name is highlighted
-  const list = dailyTop?.list || [], me = net.name || pickedName();
+function renderTop() { // the lobby list (today's scores, or the ranked ratings); my name is highlighted
+  const ranked = save.onlineKind === 'ranked', list = (ranked ? dailyTop?.ranked : dailyTop?.list) || [], me = net.name || pickedName();
+  document.querySelector('.dailytop .sub').textContent = t(ranked ? 'rankedTop' : 'todayTop');
   $('topList').innerHTML = list.length ? list.map((e) => `<li class="${e.n === me ? 'me' : ''}">${escapeHTML(e.n)}<b>${Math.round(e.s)}</b></li>`).join('') : `<li class="empty">${t('topEmpty')}</li>`;
 }
 function renderNamePicker() {
@@ -1137,12 +1275,14 @@ function renderNamePicker() {
   $('nameB').innerHTML = S.NAME_B.map((w) => opt(w, w, w === save.nick.b)).join('');
   $('nameN').innerHTML = opt(0, '–', !save.nick.n) + Array.from({ length: 99 }, (_, i) => opt(i + 1, i + 1, save.nick.n === i + 1)).join('');
 }
+const ONLINE_KINDS = [...S.MODES, 'ranked'];
 function renderLobbySeg() {
-  $('lobbySeg').innerHTML = S.MODES.map((k) => `<button class="${save.onlineKind === k ? 'on' : ''}" data-k="${k}" role="radio" aria-checked="${save.onlineKind === k}">${t('mode_' + k)}</button>`).join('');
+  $('btnCreate').hidden = save.onlineKind === 'ranked'; renderTop(); // ranked has no private rooms; its list is the rating board
+  $('lobbySeg').innerHTML = ONLINE_KINDS.map((k) => `<button class="${save.onlineKind === k ? 'on' : ''}" data-k="${k}" role="radio" aria-checked="${save.onlineKind === k}">${t('mode_' + k)}</button>`).join('');
   $('lobbySeg').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { playSfx('click', 0.5); save.onlineKind = b.dataset.k; persist(); renderLobbySeg(); }));
 }
 function showOnlineCount() { const el = $('onlineCount'); el.hidden = !(onlineN > 0); el.textContent = t('playingNow', { n: onlineN }); }
-const refreshShakeButton = () => { $('btnShake').textContent = t(save.shake === false ? 'shakeOff' : 'shakeOn'); };
+const refreshShakeButton = () => { $('btnShake').textContent = t(save.shake === false ? 'shakeOff' : 'shakeOn'); $('btnCalm').textContent = t(save.calm ? 'calmOn' : 'calmOff'); $('btnCb').textContent = t(save.cb ? 'cbOn' : 'cbOff'); };
 function displayStats(p) { // 0..1 bars for the garage
   const s = S.statsOf(p), n = (v) => Math.max(0.05, Math.min(1, (v - 0.6) / 1.0));
   return { atk: n(s.atk), def: n(s.def * Math.sqrt(s.mass)), sta: n(s.sta), spd: n(s.spd * Math.pow(s.acc, 0.4)) };
@@ -1157,7 +1297,7 @@ function renderGarage() {
     const label = garageTab === 'paint' ? t('c_' + p.id) : garageTab === 'trail' ? t('t_' + p.id) : t('p_' + p.id);
     const trailBg = garageTab === 'trail' ? (p.c.length ? `linear-gradient(90deg, ${p.c.length > 1 ? p.c.join(', ') : `${p.c[0]}, ${p.c[0]}`})` : 'rgba(255,255,255,.08)') : '';
     const desc = garageTab === 'paint' ? `<span class="swatch" style="background:${p.c}"></span>` : garageTab === 'trail' ? `<span class="swatch trail" style="background:${trailBg}"></span>` : `<small>${t('d_' + p.id)}</small>`;
-    const status = on ? `<small>${t('equipped')}</small>` : owned ? `<small>${t('owned')}</small>` : p.lvl ? `<span class="lvl"><svg><use href="#i-star"/></svg>${t('lockedLv', { n: p.lvl })}</span>` : `<span class="cost ${save.gears < p.cost ? 'no' : ''}"><svg><use href="#i-lock"/></svg>${p.cost}</span>`;
+    const status = on ? `<small>${t('equipped')}</small>` : owned ? `<small>${t('owned')}</small>` : p.season ? `<span class="lvl"><svg><use href="#i-medal"/></svg>${t('seasonItem', { n: p.season })}</span>` : p.lvl ? `<span class="lvl"><svg><use href="#i-star"/></svg>${t('lockedLv', { n: p.lvl })}</span>` : `<span class="cost ${save.gears < p.cost ? 'no' : ''}"><svg><use href="#i-lock"/></svg>${p.cost}</span>`;
     return `<button class="part ${on ? 'on' : ''} ${owned ? '' : 'locked'}" data-id="${p.id}"><b>${label}</b>${desc}${status}</button>`;
   }).join('');
   const ds = displayStats(save.sel);
@@ -1176,6 +1316,7 @@ function previewPart(kind, id) { // a gold outline on each stat bar shows what t
 function selectPart(kind, id) {
   const p = part(kind, id);
   if (!save.owned[kind].includes(id) && p.lvl) { toast(t('unlockAt', { n: p.lvl })); playSfx('wall', 0.6); return; }
+  if (!save.owned[kind].includes(id) && p.season) { toast(t('seasonItem', { n: p.season })); playSfx('wall', 0.6); return; }
   if (!save.owned[kind].includes(id)) {
     if (save.gears < p.cost) { toast(t('notEnough')); playSfx('wall', 0.6); return; }
     save.gears -= p.cost; save.owned[kind].push(id); toast(t('unlocked')); playSfx('unlock', 0.8);
@@ -1198,7 +1339,7 @@ function renderBoard() {
   const list = S.rankList(world), me = list.findIndex((tp) => tp.id === meId), rows = [];
   const row = (tp, i, extra = '') => {
     const mine = tp.id === meId, person = mode === 'online' && tp.human && !mine ? '<svg class="hu"><use href="#i-user"/></svg>' : '';
-    const sw = tp.team != null ? `<i class="tm" style="background:${TEAM_COLOR[tp.team]}"></i>` : `<i class="sw" style="background:${topColor(tp)}"></i>`; // Teams: a team bar instead of the paint dot
+    const sw = tp.team != null ? `<i class="tm${tp.team === 1 && save.cb ? ' t1cb' : ''}" style="background:${teamColor(tp.team)}"></i>` : `<i class="sw" style="background:${topColor(tp)}"></i>`; // Teams: a team bar instead of the paint dot
     return `<li class="${mine ? 'me' : tp.boss ? 'boss' : tp.human ? 'hu' : ''} ${extra}"><span>${i === 0 ? '<svg><use href="#i-crown"/></svg>' : i + 1 + '.'}</span>${sw}${person}${escapeHTML(displayName(tp))}<b>${Math.round(tp.spin)}</b></li>`;
   };
   const n = isShort() ? 3 : 5;
@@ -1245,7 +1386,7 @@ function updateChips() { // top-centre chips: event, boss, Last Top ring, Teams 
     chip.classList.toggle('closing', before <= 0); $('zoneText').textContent = before > 0 ? t('zoneSoon', { n: Math.ceil(before) }) : t('zoneClosing');
   }
   const teams = world.mode === 'teams'; $('teamChip').hidden = !teams;
-  if (teams) { const left = Math.max(0, Math.ceil(world.roundEnd - world.time)); $('team0').textContent = world.teamScore[0]; $('team1').textContent = world.teamScore[1]; $('teamTime').textContent = `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`; }
+  if (teams) { const left = Math.max(0, Math.ceil(world.roundEnd - world.time)); $('team1').style.background = teamColor(1); $('team0').textContent = world.teamScore[0]; $('team1').textContent = world.teamScore[1]; $('teamTime').textContent = `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`; }
   const watch = spectateTarget(), spec = $('specChip');
   const waiting = state === State.SPECTATE && net.rp ? (net.rp.ph === 'play' ? t('roundLive') : t('nextRound', { n: Math.ceil(net.rp.t) })) : '';
   spec.hidden = !(watch && watch.id !== meId) && !waiting;
@@ -1286,13 +1427,13 @@ function handleEvent(e) {
       burst(p, e.heavy ? '#ff9a3d' : '#7fd8ff', e.heavy ? 10 : 4, 5);
       if (e.heavy) shockwave(e.x, p.y - 0.4, e.z, 2.5 + e.rel * 0.15, '#ffd27a');
       playSfx(e.heavy ? 'clashHeavy' : 'clash', (mine ? 1 : nearVol(e.x, e.z) * 0.6) * clamp(0.4 + e.rel / 14, 0.4, 1), e.heavy ? 1 : 1.1);
-      if (mine && e.heavy) { shake(0.15); hitStop = Math.max(hitStop, 0.045); }
+      if (mine && e.heavy) { shake(0.15); if (!calm()) hitStop = Math.max(hitStop, 0.045); }
       if (mode === 'online') for (const id of [e.a, e.b]) { const o = S.topById(world, id); if (o) o.hitWob = Math.min(0.45, o.hitWob + (e.heavy ? 0.3 : 0.12)); }
-      for (const [id, d] of [[e.a, e.dA], [e.b, e.dB]]) { const vv = views.get(id); if (vv && d > 2) vv.flash = Math.min(0.16, 0.05 + d * 0.006); } // short emissive pulse on whoever got hurt
+      for (const [id, d] of [[e.a, e.dA], [e.b, e.dB]]) { const vv = views.get(id); if (vv && d > 2 && !calm()) vv.flash = Math.min(0.16, 0.05 + d * 0.006); } // short emissive pulse on whoever got hurt
       if ((e.a === meId && e.aPerf) || (e.b === meId && e.bPerf)) perfectFx(e.x, e.z);
       if (mine) { // my hits: the spin I took off them floats up from the victim
         const dealt = e.a === meId ? e.dB : e.dA, victim = infoOf(e.a === meId ? e.b : e.a);
-        if (dealt >= 3 && victim && !isDecoy(victim)) popText(victim.x, victim.z, 1.2 + (victim.r || 1), `-${Math.round(dealt)}`, 'dmg', 0.8);
+        if (dealt >= 3 && victim && !isDecoy(victim) && !calm()) popText(victim.x, victim.z, 1.2 + (victim.r || 1), `-${Math.round(dealt)}`, 'dmg', 0.8);
       }
       if (run?.tutorial && run.tutStep === 2 && run.dummyId && [e.a, e.b].includes(meId) && [e.a, e.b].includes(run.dummyId) && (e.a === meId ? e.aDash : e.bDash)) run.tutDashHit = true;
       break;
@@ -1330,7 +1471,7 @@ function handleEvent(e) {
     }
     case 'puGone': if (mode === 'online') world.powerups = world.powerups.filter((q) => q.id !== e.id); break;
     case 'puExpire':
-      if (e.id === meId) { toast(t('puLost')); playSfx('puLost', 0.7); if (player) player.power = null; }
+      if (e.id === meId) { toast(t('puLost')); playSfx('puLost', 0.7); if (player) player.power = null; if (run) run.puLost = (run.puLost || 0) + 1; }
       break;
     case 'puUse': {
       if (!tp) break;
@@ -1365,6 +1506,7 @@ function handleEvent(e) {
       break;
     }
     case 'pull': if (e.on && tp) playSfx('pull', 0.9 * nearVol(tp.x, tp.z)); break;
+    case 'emote': if (tp) { popText(tp.x, tp.z, 2 + (tp.r || 1), t('e' + e.e), 'say', 2.2); playSfx('click', 0.5 * nearVol(tp.x, tp.z)); } break;
     case 'teamWin': {
       world.teamScore = e.scores || world.teamScore;
       if (run && !run.over && player) endRun({ how: e.team < 0 ? 'teamdraw' : e.team === player.team ? 'teamwin' : 'teamlose', score: player.score, kos: player.kos, peak: player.peak }, null);
@@ -1440,7 +1582,7 @@ function toMenuWorld() {
   for (let i = 0; i < CFG.bots; i++) S.spawnBot(world, { ring: i, idle: true, avoidPaint: save.sel.paint });
   world.events.length = 0; crownSprite.visible = false; chevrons.visible = false;
 }
-function leaveToMenu() { if (run && !run.over) persist(); closeOnline(); toMenuWorld(); setState(State.MENU); refreshMenu(); } // keep mission progress from a quit run
+function leaveToMenu() { if (run && !run.over) { persist(); if (!run.tutorial || run.tutStat) sendStat('quit'); } closeOnline(); toMenuWorld(); setState(State.MENU); refreshMenu(); } // keep mission progress from a quit run
 function modeHints() { // first time in a mode or arena: a few words on what is different
   if (!world || state !== State.PLAYING) return;
   if (world.mode === 'last') hint('zone'); if (world.mode === 'teams') hint('teams'); if (world.arenaId !== 'bowl') hint('arena_' + world.arenaId);
@@ -1458,14 +1600,14 @@ function respawnPlayer() { // solo Teams: back in after the wait, keeping your s
 const newRun = (extra = {}) => ({
   time: 0, countdown: 0, gearsEarned: 0, slow: 0, over: false, overTimer: 0, how: '', killer: null, leaderSaid: -99, happy: false, bestRank: 99, isBest: false,
   tutorial: false, tutStep: -1, tutMoved: 0, tutSparks: 0, tutDashHit: false, tutT: 0, dummyId: 0,
-  stats: {}, missionsDone: [], levelUps: [], xpEarned: 0, records: [], place: 0, field: 0, won: false, zoneWarned: false, ...extra,
+  stats: {}, missionsDone: [], levelUps: [], seasonUps: [], xpEarned: 0, records: [], place: 0, field: 0, won: false, zoneWarned: false, puLost: 0, tutStat: null, ...extra,
 });
 function startRun(opts = {}) {
   closeOnline(); stopHum(); clearViews(); mode = 'solo';
   if (CAPTURE) opts = { mode: params.get('mode') || undefined, arena: params.get('arena') || undefined, ...opts }; // capture restarts keep the scene
   const tutorial = !save.tut && !CAPTURE;
   const gameMode = tutorial ? 'endless' : opts.mode || curMode(), arena = tutorial ? 'bowl' : opts.arena || curArena(); // the first run is the tutorial in the Grand Bowl
-  world = S.createWorld({ arena, mode: gameMode }); buildArena(arena);
+  world = S.createWorld({ arena, mode: gameMode, mutator: tutorial ? null : S.weekMutator() }); buildArena(arena);
   world.eventsOn = world.powersOn = !tutorial; world.bossOn = gameMode === 'endless' && !tutorial; world.frozen = !CAPTURE;
   if (CAPTURE) { world.bossAt = Number(params.get('boss')) || 35; if (params.get('bosskind') === 'magnetar') world.bossCount = 1; } // the trailer and screenshots get to see a boss
   player = S.addTop(world, { parts: save.sel, name: 'You', human: true }); meId = player.id;
@@ -1475,7 +1617,7 @@ function startRun(opts = {}) {
   run = newRun({ countdown: CAPTURE ? 0 : 2.6, tutorial, field: world.tops.length });
   save.runs++; refreshMissions(); persist();
   $('feed').innerHTML = ''; boardTimer = 0;
-  setState(State.PLAYING); startHum();
+  audio.track = ''; setState(State.PLAYING); startHum(); // a new run: a new song from the pool
   if (!CAPTURE) { voice('go'); playSfx('launch', 0.8); }
 }
 const soloInput = (tp) => (tp.id !== meId ? null : AUTOPLAY ? S.botMove(world, tp, STEP) : { ...playerInput(), dash: takeDash(), use: takeUse() });
@@ -1504,6 +1646,7 @@ function endRun(e, killer) {
   run.xpEarned += xp; run.levelUps.push(...addXP(xp));
   persist();
   run.overTimer = run.won ? 2.2 : run.spectate ? 2.6 : 1.2;
+  checkBadges(); sendStat(e.how);
 }
 function showResults() {
   const r = run, k = r.killer, last = world.mode === 'last';
@@ -1525,12 +1668,13 @@ function showResults() {
   const chips = [
     ...r.levelUps.map((u) => `<span class="lvup"><svg><use href="#i-star"/></svg>${t('levelUp')} ${t('lv', { n: u.lv })}${u.reward ? ' · ' + rewardName(u.reward) : ' · ' + t('rw_gears', { n: u.gears })}</span>`),
     ...r.records.slice(0, 2).map((key) => `<span class="rec"><svg><use href="#i-crown"/></svg>${t('newRecord', { x: `${t('rec_' + key)} ${recValue(key, save.rec[key])}` })}</span>`),
+    ...r.seasonUps.map((u) => `<span class="lvup"><svg><use href="#i-medal"/></svg>${t('seasonUp', { t: u.tier })}${u.reward ? ' · ' + rewardName(u.reward) : ''}</span>`),
     ...(r.dayBonus ? [`<span class="rec"><svg><use href="#i-star"/></svg>${t('arenaDay')}</span>`] : []),
     ...r.missionsDone.map((id) => `<span><svg><use href="#i-check"/></svg>${missionText(id)}</span>`),
   ];
   $('overChips').innerHTML = chips.slice(0, 5).join('');
   setState(State.GAMEOVER); refreshMenu();
-  if (mode === 'online') { netSend({ t: 'top' }); if (net.kind !== 'endless') $('btnRetry').disabled = true; } // round rooms bring you back by themselves
+  if (mode === 'online') { netSend({ t: 'top' }); if (net.kind !== 'endless') $('btnRetry').disabled = true; renderOverRating(); } // round rooms bring you back by themselves
   if (r.levelUps.length) setTimeout(() => { if (state === State.GAMEOVER) { playSfx('levelUp', 0.8); voice('levelup'); } }, 500);
 }
 function tickRun(dt) {
@@ -1593,6 +1737,7 @@ function tickTutorial(dt) {
 }
 function finishTutorial(skipped) {
   if (!run?.tutorial) return;
+  run.tutStat = skipped ? 'skipped' : 'done';
   run.tutorial = false; save.tut = true; persist();
   $('coach').hidden = true; chevrons.visible = false;
   const dummy = S.topById(world, run.dummyId); if (dummy) dummy.ai = 'normal';
@@ -1619,6 +1764,7 @@ function connectOnline(joinMsg) {
   ws.onopen = async () => {
     net.opened = true;
     const tok = await Promise.race([sdkToken(), new Promise((r) => setTimeout(() => r(null), 3000))]); // never wait long for the account lookup
+    if (joinMsg.kind === 'ranked' && joinMsg.mode === 'quick' && !tok) { onlineFail('rankedNeedLogin'); return; }
     if (net.ws === ws) ws.send(JSON.stringify({ ...joinMsg, name: pickedName(), tok, parts: save.sel })); // the server shows the verified CrazyGames name, else the picked one
   };
   ws.onmessage = (m) => { if (net.ws !== ws) return; let d; try { d = JSON.parse(m.data); } catch { return; } onNet(d); };
@@ -1646,7 +1792,8 @@ function joinByCode(code) {
 }
 function onNet(d) {
   switch (d.t) {
-    case 'err': onlineFail(d.e === 'noroom' ? 'noRoom' : d.e === 'full' ? 'roomFull' : 'connFail'); break;
+    case 'err': onlineFail(d.e === 'noroom' ? 'noRoom' : d.e === 'full' ? 'roomFull' : d.e === 'ranked' ? 'rankedNeedLogin' : 'connFail'); break;
+    case 'rank': net.rating = d; if (d.place && state === State.GAMEOVER) renderOverRating(); break;
     case 'welcome': enterOnline(d); break;
     case 'you': meId = d.id; startOnlineLife(d.cd || 0); break;
     case 'top': dailyTop = d; renderTop(); if (state === State.GAMEOVER) renderOverTop(); break;
@@ -1672,7 +1819,7 @@ function enterOnline(d) {
   stopHum(); clearViews(); mode = 'online'; run = null; player = null; meId = 0;
   Object.assign(net, { status: 'in', code: d.code, priv: d.priv, name: d.name, players: d.players, snaps: [], offset: null, srvMe: null, me: null, kind: d.kind || 'endless', rp: d.rp || null });
   $('roomCode').textContent = d.code; $('roomInfo').textContent = t('players', { n: d.players });
-  world = S.createWorld({ bots: 0, sparks: 0, arena: d.arena, mode: net.kind }); world.events.length = 0; world.time = d.tm; buildArena(world.arenaId);
+  world = S.createWorld({ bots: 0, sparks: 0, arena: d.arena, mode: net.kind === 'ranked' ? 'last' : net.kind, mutator: S.weekMutator() }); world.events.length = 0; world.time = d.tm; buildArena(world.arenaId);
   if (d.ts) world.teamScore = d.ts;
   for (const info of d.tops) mirrorTop(info);
   for (const sp of d.sparks) mirrorSpark(sp);
@@ -1689,10 +1836,32 @@ function startOnlineLife(cd = 0) {
   if (respawn) { run.respawnT = 0; run.spectate = 0; startHum(); return; }
   run = newRun({ online: true, countdown: cd, field: 12 });
   $('feed').innerHTML = ''; boardTimer = 0;
-  setState(State.PLAYING); startHum(); playSfx('launch', 0.8);
+  audio.track = ''; setState(State.PLAYING); startHum(); playSfx('launch', 0.8);
   if (!cd) setTimeout(modeHints, 1500);
 }
 function onlinePlayAgain() { if (net.status === 'in') netSend({ t: 'play', parts: save.sel }); else leaveToMenu(); }
+function sendEmote(e) { // quick chat: fixed phrases only, online, a few seconds apart
+  if (mode !== 'online' || state !== State.PLAYING || !player || !alive(player) || performance.now() - (sendEmote.at || 0) < 2500) return;
+  sendEmote.at = performance.now(); netSend({ t: 'emote', e }); $('chatMenu').hidden = true;
+}
+function renderChat() { $('chatMenu').innerHTML = [0, 1, 2, 3, 4, 5].map((i) => `<button data-e="${i}">${isTouch ? '' : `<span class="key">${i + 1}</span>`}${t('e' + i)}</button>`).join(''); $('chatMenu').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => sendEmote(Number(b.dataset.e)))); }
+let voteSig = '', myVote = '';
+function renderVote() { // round rooms, between rounds: vote on the next arena (results card, or the spectate bar)
+  const rp = net.rp, on = mode === 'online' && rp?.ph === 'end' && rp.opts, box = state === State.SPECTATE ? $('specVote') : $('overVote');
+  $('specVote').hidden = $('overVote').hidden = true; if (!on || !(state === State.SPECTATE || state === State.GAMEOVER)) { myVote = ''; return; }
+  box.hidden = false; const sig = rp.opts.join() + rp.votes.join() + myVote + lang; if (sig === voteSig && box.childElementCount) return; voteSig = sig;
+  box.innerHTML = `<span>${t('vote')}</span>` + rp.opts.map((a, i) => `<button class="${myVote === a ? 'on' : ''}" data-a="${a}">${t('arena_' + a)}<b>${rp.votes[i] || ''}</b></button>`).join('');
+  box.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { myVote = b.dataset.a; netSend({ t: 'vote', a: myVote }); playSfx('click', 0.5); voteSig = ''; renderVote(); }));
+}
+function renderOverRating() { const r = net.rating, el = $('overRating'); el.hidden = !(mode === 'online' && net.kind === 'ranked' && r?.place); if (!el.hidden) el.textContent = t('rating', { r: r.r, d: `${r.d >= 0 ? '+' : ''}${r.d}` }); }
+// Anonymous counters for tuning: what was played and how it went. No ids, no names; never sent from tests or local builds.
+function sendStat(how) {
+  if (CAPTURE || params.has('nocount') || /^(localhost|127\.0\.0\.1)$|\.test$/.test(location.hostname) || !run) return;
+  const m = { t: 'stat', mode: mode === 'online' ? net.kind : world.mode, arena: world.arenaId, time: Math.round(run.time), how, online: mode === 'online', tut: run.tutStat,
+    puUsed: run.stats.powers || 0, puLost: run.puLost || 0, perfect: run.stats.perfect || 0, gfxLow: !!gfxLow, touch: isTouch };
+  if (mode === 'online' && net.ws?.readyState === 1) { netSend(m); return; }
+  try { const ws = new WebSocket(MP_URL); ws.onopen = () => { ws.send(JSON.stringify(m)); setTimeout(() => ws.close(), 300); }; ws.onerror = () => {}; } catch {}
+}
 function renderOverTop() { // online results: where you stand on today's board
   const list = dailyTop?.list || [], i = list.findIndex((e) => e.n === net.name), el = $('overTop');
   el.hidden = mode !== 'online' || (!list.length && i < 0);
@@ -1792,7 +1961,7 @@ function step(dt) {
     if (net.status === 'in') netStep(dt);
     tickRun(dt);
     if ((state === State.SPECTATE || state === State.GAMEOVER) && (uiTimer -= dt) <= 0) { // waiting for a round: board, chips, the next-round countdown
-      uiTimer = 0.25; if (state === State.SPECTATE) { renderBoard(); updateChips(); }
+      uiTimer = 0.25; if (state === State.SPECTATE) { renderBoard(); updateChips(); } renderVote();
       if (state === State.GAMEOVER && net.kind !== 'endless' && net.rp) $('btnRetry').textContent = net.rp.ph === 'end' ? t('nextRound', { n: Math.ceil(net.rp.t) }) : t('roundLive');
     }
     return;
@@ -1927,7 +2096,7 @@ addEventListener('resize', resize);
 // ================================================================ COVER (tools/game_covers.py: honest key art rendered from the game itself)
 function stageCover(kind) {
   state = State.COVER; document.body.classList.add('cover');
-  for (const id of ['menu', 'garage', 'lobby', 'profile', 'settings', 'paused', 'gameover', 'hud', 'banner', 'coach', 'countdown', 'toast', 'btnAction', 'joystick', 'missionPop']) $(id).hidden = true;
+  for (const id of ['menu', 'garage', 'lobby', 'profile', 'settings', 'howto', 'paused', 'gameover', 'hud', 'banner', 'coach', 'countdown', 'toast', 'btnAction', 'joystick', 'missionPop']) $(id).hidden = true;
   camera.clearViewOffset(); clearViews(); mode = 'solo';
   world = S.createWorld({ bots: 0, sparks: 0 }); buildArena('bowl'); zoneWall.visible = zoneFloor.visible = false;
   player = S.addTop(world, { parts: { crown: 'razor', core: 'heart', tip: 'needle', paint: 'sun' }, name: 'You', human: true, spin: 220, x: -1.15, z: 0.3, spawn: false }); meId = player.id; player.hitWob = 0.12;
@@ -1953,15 +2122,16 @@ async function boot() {
   if (!STRINGS[lang]) lang = 'en';
   document.documentElement.lang = lang; applyI18n();
   initAudio(); loadSave();
-  const jobs = [...Object.entries(SFX_FILES).map(([k, u]) => loadSfx(k, u)), ...Object.entries(VOICE_FILES).map(([k, u]) => loadSfx(`v_${k}`, u.replace('{lang}', lang))),
+  const jobs = [...Object.entries(SFX_FILES).map(([k, u]) => loadSfx(k, u)), ...Object.entries(VOICE_FILES).map(([k, u]) => loadSfx(`v_${k}_0`, u[0].replace('{lang}', lang))),
     document.fonts?.load('800 32px UI').catch(() => {}), document.fonts?.load('32px Display').catch(() => {})];
   let done = 0; jobs.forEach((p) => Promise.resolve(p).finally(() => { done++; $('loadBar').style.width = `${(100 * done) / jobs.length}%`; }));
   await Promise.race([Promise.all(jobs), new Promise((r) => setTimeout(r, 12000))]); // never hang on a slow asset
   buildStadium(); initSparks(); scene.add(crownSprite); applyMute();
   toMenuWorld();
-  $('menuControls').innerHTML = controlsHTML(); refreshMenu(); refreshShakeButton();
+  $('menuControls').innerHTML = controlsHTML(); refreshMenu(); refreshShakeButton(); renderChat();
   resize(); applyGfx();
   sdkCall((s) => s.game.loadingStop());
+  setTimeout(() => { for (const [k, u] of Object.entries(VOICE_FILES)) u.slice(1).forEach((f, i) => loadSfx(`v_${k}_${i + 1}`, f.replace('{lang}', lang))); }, 1500); // the other two announcers load after boot
   $('loading').hidden = true;
   setState(State.MENU);
   if (CAPTURE) { // capture protocol used by tools/capture.mjs: no rAF loop, the tool drives every frame

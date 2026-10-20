@@ -22,7 +22,7 @@ games/<slug>/            one folder per game; this folder is exactly what ships 
 games/<slug>/covers/     the 3 submission covers: landscape 1920x1080, portrait 800x1200, square 800x800
 games/<slug>/dist/       build output: <slug>.zip and web/ (the flat upload), playtest screenshots, release work files (gitignored)
 studio.json              studio identity for press kits: BroadGamesPro, https://broadgames.pro, contact email, about text
-tools/                   new_game.py, factory.py, catalog.py, build.py, playtest.mjs, capture.mjs, release.py, balance.py, optimize_models.sh
+tools/                   new_game.py, factory.py, catalog.py, build.py, playtest.mjs, capture.mjs, release.py, balance.py, optimize_models.sh, mp_stats.py (anonymous play counters an online game server keeps)
 mp/<slug>.mjs            online game servers (Node + ws), e.g. mp/whirlbash.mjs: systemd `broadgames-mp.service`, port 8090,
                          public at wss://broadgames.pro/mp/<slug> (the only Caddy route without the password)
 server.py                studio site (systemd `midir.service`, Caddy with password at https://broadgames.pro): releases with
@@ -143,7 +143,8 @@ Whirlbash is the reference for this.
 - **No accounts.**
   - Show the CrazyGames username when it is available; CrazyGames requires it in multiplayer. The client sends `SDK.user.getUserToken()` and the server verifies it (RS256, key from https://sdk.crazygames.com/publicKey.json), so nobody can claim someone else's name.
   - Players without an account pick a name from fixed word lists (adjective + noun + number, `NAME_A` / `NAME_B` in sim.js); the server accepts only names built from those lists, else it generates a guest name.
-  - Never show text a player typed (no chat, no free-text names), so nothing needs moderation.
+  - Never show text a player typed (no free chat, no free-text names), so nothing needs moderation. Quick chat uses fixed phrases only.
+  - Anonymous counters (no ids) may be summed per day on the game server for tuning; skip them on localhost and test hosts.
 - **CrazyGames room flow.**
   - Call `updateRoom({roomId, isJoinable, inviteParams})` only when something changes, and `leftRoom()` on leave.
   - Make invite links with `inviteLink({roomId})`, falling back to `?room=CODE` off-platform.

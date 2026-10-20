@@ -6,8 +6,10 @@
 // Rooms play one mode: endless (drop in any time), or round-based last / teams (countdown, a round, results, the next round;
 // people who join mid-round watch until the next one). A daily top 10 of online scores is kept in MP_DATA (default mp/data/).
 // Protocol (JSON). Client -> server: join {mode: quick|create|code, kind?, code?, name?, tok?, parts}, play {parts}, i {x, y, d, u},
-// p {c}, leave, count, top. Server -> client: welcome, you {id, cd}, s (snapshot: tops, events, sparks, me, rp, ts), p (pong),
-// count {n}, top {day, list}, err {e}.
+// p {c}, leave, count, top, vote {a}, emote {e}, stat {...}. Server -> client: welcome, you {id, cd}, s (snapshot: tops, events, sparks,
+// me, rp, ts), p (pong), count {n}, top {day, list, ranked}, rank {r, d, place}, err {e}.
+// Ranked rooms play Last Top rounds and are open only to verified CrazyGames users; ratings are kept per username in MP_DATA.
+// stat: anonymous per-run counters (mode, arena, length, how it ended...) summed per day, with no player identifiers stored.
 import { WebSocketServer } from 'ws';
 import { createPublicKey, verify } from 'node:crypto';
 import { readFileSync, writeFileSync, mkdirSync, renameSync } from 'node:fs';
@@ -18,7 +20,9 @@ import * as S from '../games/whirlbash/sim.js';
 const PORT = Number(process.env.MP_PORT || 8090), HOST = process.env.MP_HOST || '127.0.0.1';
 const DATA = process.env.MP_DATA || path.join(path.dirname(fileURLToPath(import.meta.url)), 'data');
 const LIMITS = { roomTops: 12, roomHumans: 10, rooms: 60, clients: 400, perIp: 8, msgPerSec: 60, idleRoom: 60_000 };
-const ROUND = { count: 3, end: 8 }; // round rooms: countdown seconds, results seconds before the next round
+const ROUND = { count: 3, end: 10 }; // round rooms: countdown seconds, results (and the vote on the next arena) before the next round
+const KINDS = [...S.MODES, 'ranked'];
+const EMOTES = 6, EMOTE_GAP = 2500;
 const TICK_MS = 50, STEPS_PER_TICK = Math.round(TICK_MS / 1000 / S.STEP); // 20 snapshots/s, physics at 60 Hz
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const CG_NAME = /^[A-Za-z0-9._]{3,20}$/; // CrazyGames usernames: letters, digits, period, underscore
@@ -62,19 +66,48 @@ setInterval(() => {
   if (!dailyDirty) return; dailyDirty = false;
   try { mkdirSync(DATA, { recursive: true }); const f = path.join(DATA, 'whirlbash-daily.json'); writeFileSync(f + '.tmp', JSON.stringify(daily)); renameSync(f + '.tmp', f); } catch (e) { log('save daily failed', e.message); }
 }, 10_000);
-const topMsg = () => ({ t: 'top', day: daily.day === dayKey() ? daily.day : dayKey(), list: daily.day === dayKey() ? daily.list : [] });
+const topMsg = () => ({ t: 'top', day: daily.day === dayKey() ? daily.day : dayKey(), list: daily.day === dayKey() ? daily.list : [], ranked: rankedTop() });
+const loadJson = (f, d) => { try { return JSON.parse(readFileSync(path.join(DATA, f), 'utf8')); } catch { return d; } };
+function saveJson(f, v) { try { mkdirSync(DATA, { recursive: true }); const p = path.join(DATA, f); writeFileSync(p + '.tmp', JSON.stringify(v)); renameSync(p + '.tmp', p); } catch (e) { log('save failed', f, e.message); } }
+// ---------------------------------------------------------------- ranked ratings (verified CrazyGames usernames only)
+const ratings = loadJson('whirlbash-ratings.json', {}); let ratingsDirty = false;
+const ratingOf = (n) => ratings[n]?.r ?? 1000;
+const rankedTop = () => Object.entries(ratings).filter(([, v]) => v.n >= 3).sort((a, b) => b[1].r - a[1].r).slice(0, 10).map(([n, v]) => ({ n, s: v.r }));
+function rateRound(room) { // placement among the 12 tops vs what your rating predicts against 1000-rated opposition
+  for (const c of room.clients) {
+    if (!c.verified || !c.place) continue;
+    const r = ratingOf(c.name), perf = (12 - c.place) / 11, expect = 1 / (1 + 10 ** ((1000 - r) / 400)), d = Math.round(40 * (perf - expect));
+    ratings[c.name] = { r: r + d, n: (ratings[c.name]?.n || 0) + 1 }; ratingsDirty = true;
+    send(c, { t: 'rank', r: r + d, d, place: c.place });
+  }
+}
+// ---------------------------------------------------------------- anonymous play counters, summed per day
+const stats = loadJson('whirlbash-stats.json', { days: {} }); let statsDirty = false;
+const HOWS = ['ringout', 'topple', 'win', 'teamwin', 'teamlose', 'teamdraw', 'quit'];
+function addStat(m) {
+  const day = dayKey(), d = (stats.days[day] ||= { runs: 0, time: 0, len: [0, 0, 0, 0, 0], mode: {}, arena: {}, how: {}, online: 0, tut: { done: 0, skipped: 0 }, pu: { used: 0, lost: 0 }, perfect: 0, gfxLow: 0, touch: 0 });
+  const time = Math.max(0, Math.min(3600, Number(m.time) || 0)), mode = KINDS.includes(m.mode) ? m.mode : 'endless', arena = S.ARENA_IDS.includes(m.arena) ? m.arena : 'bowl';
+  d.runs++; d.time += Math.round(time); d.len[time < 30 ? 0 : time < 60 ? 1 : time < 120 ? 2 : time < 300 ? 3 : 4]++;
+  d.mode[mode] = (d.mode[mode] || 0) + 1; d.arena[arena] = (d.arena[arena] || 0) + 1;
+  if (HOWS.includes(m.how)) d.how[m.how] = (d.how[m.how] || 0) + 1;
+  if (m.online) d.online++; if (m.tut === 'done' || m.tut === 'skipped') d.tut[m.tut]++;
+  d.pu.used += Math.min(50, Number(m.puUsed) || 0); d.pu.lost += Math.min(50, Number(m.puLost) || 0); d.perfect += Math.min(200, Number(m.perfect) || 0);
+  if (m.gfxLow) d.gfxLow++; if (m.touch) d.touch++;
+  const days = Object.keys(stats.days).sort(); while (days.length > 120) delete stats.days[days.shift()]; // keep four months
+  statsDirty = true;
+}
+setInterval(() => { if (ratingsDirty) { ratingsDirty = false; saveJson('whirlbash-ratings.json', ratings); } if (statsDirty) { statsDirty = false; saveJson('whirlbash-stats.json', stats); } }, 10_000);
 
 // ---------------------------------------------------------------- rooms
 function newCode() { for (;;) { let c = ''; for (let i = 0; i < 5; i++) c += CODE_CHARS[(Math.random() * CODE_CHARS.length) | 0]; if (!rooms.has(c)) return c; } }
 const isRound = (room) => room.kind !== 'endless';
-function newWorld(room) { // endless: one world for the room's life; round rooms: a fresh world (and arena) every round
-  const arena = S.ARENA_IDS[(Math.random() * S.ARENA_IDS.length) | 0];
-  const world = S.createWorld({ bots: LIMITS.roomTops, arena, mode: room.kind });
+function newWorld(room, arena = S.ARENA_IDS[(Math.random() * S.ARENA_IDS.length) | 0]) { // endless: one world for the room's life; round rooms: a fresh world every round
+  const world = S.createWorld({ bots: LIMITS.roomTops, arena, mode: room.kind === 'ranked' ? 'last' : room.kind, mutator: S.weekMutator() });
   if (room.kind === 'endless') world.heat = (w) => { const hs = w.tops.filter((t) => t.human); return hs.length ? hs.reduce((s, t) => s + t.age, 0) / hs.length : 30; };
   return world;
 }
 function createRoom(priv, kind) {
-  const room = { code: newCode(), priv, kind: S.MODES.includes(kind) ? kind : 'endless', clients: new Set(), emptySince: Date.now(), phase: 'play', phaseT: 0 };
+  const room = { code: newCode(), priv, kind: KINDS.includes(kind) ? kind : 'endless', clients: new Set(), emptySince: Date.now(), phase: 'play', phaseT: 0, opts: null, votes: new Map() };
   room.world = newWorld(room);
   if (isRound(room)) { room.phase = 'count'; room.phaseT = ROUND.count; room.world.frozen = true; }
   fillBots(room); room.world.events.length = 0;
@@ -99,7 +132,12 @@ function uniqueName(room, base) {
 }
 const send = (c, msg) => { if (c.ws.readyState === 1) c.ws.send(typeof msg === 'string' ? msg : JSON.stringify(msg)); };
 function sparkData(s, i) { return [i, r2(s.x), r2(s.z), r2(s.vx), r2(s.vz), r2(s.fall), s.big]; }
-const roundInfo = (room) => (isRound(room) ? { ph: room.phase, t: r2(Math.max(0, room.phaseT)) } : null);
+const roundInfo = (room) => {
+  if (!isRound(room)) return null;
+  const rp = { ph: room.phase, t: r2(Math.max(0, room.phaseT)) };
+  if (room.phase === 'end' && room.opts) { rp.opts = room.opts; rp.votes = room.opts.map((a) => [...room.votes.values()].filter((v) => v === a).length); }
+  return rp;
+};
 
 function welcome(c, room) {
   const w = room.world;
@@ -144,9 +182,12 @@ function pickQuickRoom(kind) {
   for (const r of rooms.values()) if (!r.priv && r.kind === kind && r.clients.size < LIMITS.roomHumans && (!best || r.clients.size > best.clients.size)) best = r;
   return best || (rooms.size < LIMITS.rooms ? createRoom(false, kind) : null);
 }
-function startRound(room) { // a fresh world and arena; everyone in the room plays, bots fill the rest
-  room.world = newWorld(room); room.phase = 'count'; room.phaseT = ROUND.count; room.world.frozen = true;
-  for (const c of room.clients) { c.top = null; c.carry = null; welcome(c, room); spawnHuman(c, c.parts); }
+function startRound(room) { // a fresh world in the arena the room voted for; everyone plays, bots fill the rest
+  let arena;
+  if (room.opts) { const tally = room.opts.map((a) => [...room.votes.values()].filter((v) => v === a).length), best = Math.max(...tally), top = room.opts.filter((_, i) => tally[i] === best); arena = top[(Math.random() * top.length) | 0]; }
+  room.opts = null; room.votes.clear();
+  room.world = newWorld(room, arena); room.phase = 'count'; room.phaseT = ROUND.count; room.world.frozen = true;
+  for (const c of room.clients) { c.top = null; c.carry = null; c.place = 0; welcome(c, room); spawnHuman(c, c.parts); }
   fillBots(room); room.world.events.length = 0;
 }
 
@@ -166,12 +207,20 @@ function onMessage(c, raw) {
     case 'p': send(c, { t: 'p', c: Number(m.c) || 0 }); return;
     case 'count': { let n = 0; for (const r of rooms.values()) n += r.clients.size; send(c, { t: 'count', n }); return; }
     case 'top': send(c, topMsg()); return;
+    case 'vote': { const room = c.room; if (room?.phase === 'end' && room.opts?.includes(m.a)) room.votes.set(c, m.a); return; }
+    case 'emote': { // fixed phrases only, a few seconds apart, from a top in play
+      const e = Number(m.e) | 0; if (e < 0 || e >= EMOTES || !c.top || !c.room?.world.tops.includes(c.top) || now - (c.emoteAt || 0) < EMOTE_GAP) return;
+      c.emoteAt = now; c.room.world.events.push({ type: 'emote', id: c.top.id, e }); return;
+    }
+    case 'stat': if (now - (c.statAt || 0) > 15_000) { c.statAt = now; addStat(m); } return;
     case 'play': if (c.room && !isRound(c.room)) { c.parts = S.cleanParts(m.parts); spawnHuman(c, c.parts); } return; // round rooms bring you back next round
     case 'leave': leaveRoom(c); return;
     case 'join': {
       if (c.room) leaveRoom(c);
       c.parts = S.cleanParts(m.parts);
-      const kind = S.MODES.includes(m.kind) ? m.kind : 'endless';
+      let kind = KINDS.includes(m.kind) ? m.kind : 'endless';
+      const cg = cgUsername(m.tok); c.verified = !!cg;
+      if (kind === 'ranked' && m.mode === 'create') kind = 'last'; // no private ranked rooms: ratings come from public matches
       let room = null;
       if (m.mode === 'create') { if (rooms.size >= LIMITS.rooms) { send(c, { t: 'err', e: 'busy' }); return; } room = createRoom(true, kind); }
       else if (m.mode === 'code') {
@@ -180,10 +229,13 @@ function onMessage(c, raw) {
         if (room.clients.size >= LIMITS.roomHumans) { send(c, { t: 'err', e: 'full' }); return; }
       } else room = pickQuickRoom(kind);
       if (!room) { send(c, { t: 'err', e: 'busy' }); return; }
+      if (room.kind === 'ranked' && !cg) { send(c, { t: 'err', e: 'ranked' }); return; } // ranked needs a CrazyGames account
       // a verified CrazyGames username, else a name picked from the word lists, else a guest name (never free text)
-      const cg = cgUsername(m.tok), legacy = !cgKey && typeof m.name === 'string' && CG_NAME.test(m.name) ? m.name : null;
-      c.name = uniqueName(room, cg || (S.isPickedName(m.name) ? m.name : legacy) || guestName(room));
+      const legacy = !cgKey && typeof m.name === 'string' && CG_NAME.test(m.name) ? m.name : null;
+      c.name = room.kind === 'ranked' ? cg : uniqueName(room, cg || (S.isPickedName(m.name) ? m.name : legacy) || guestName(room)); // ratings key on the real username
+      if (room.kind === 'ranked' && [...room.clients].some((k) => k.name === cg)) { send(c, { t: 'err', e: 'full' }); return; }
       joinRoom(c, room);
+      if (room.kind === 'ranked') send(c, { t: 'rank', r: ratingOf(c.name), d: 0, place: 0 });
       return;
     }
   }
@@ -218,11 +270,13 @@ function afterStep(room) { // humans knocked out: daily scores, Teams respawns; 
     if (e.type === 'elim') {
       const c = [...room.clients].find((k) => k.top && k.top.id === e.id); if (!c) continue;
       if (room.kind === 'teams' && room.phase === 'play') { c.carry = { score: e.score, kos: e.kos }; c.respawnAt = Date.now() + S.CFG.respawn * 1000; }
-      else recordScore(c.name, e.score);
+      else { recordScore(c.name, e.score); if (room.phase === 'play') c.place = w.tops.filter((t) => !S.isDecoy(t) && t.state !== 'dead').length + 1; }
     }
     if ((e.type === 'win' || e.type === 'teamWin') && room.phase === 'play') {
       room.phase = 'end'; room.phaseT = ROUND.end;
-      for (const c of room.clients) if (c.top && w.tops.includes(c.top)) recordScore(c.name, c.top.score); else if (c.carry) recordScore(c.name, c.carry.score);
+      for (const c of room.clients) if (c.top && w.tops.includes(c.top)) { recordScore(c.name, c.top.score); if (e.type === 'win' && c.top.id === e.id) c.place = 1; } else if (c.carry) recordScore(c.name, c.carry.score);
+      const pool = [...S.ARENA_IDS].sort(() => Math.random() - 0.5); room.opts = pool.slice(0, 3); room.votes.clear(); // the next arena is up for a vote
+      if (room.kind === 'ranked') rateRound(room);
     }
   }
 }

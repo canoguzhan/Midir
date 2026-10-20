@@ -50,6 +50,9 @@ export const ARENAS = {
 };
 export const ARENA_IDS = Object.keys(ARENAS);
 export const MODES = ['endless', 'last', 'teams'];
+// Weekly rule change for Endless (solo and online agree, because it only depends on the date): a new twist every Monday
+export const MUTATORS = ['rush', 'overdrive', 'bosses', 'frenzy'];
+export const weekMutator = (now = Date.now()) => MUTATORS[Math.floor((now / 86_400_000 + 3) / 7) % MUTATORS.length]; // day 0 was a Thursday: +3 starts weeks on Monday
 export const pitAng = (w, i) => w.pits[i] + (w.arena.pitSpin || 0) * w.time; // where pit i is right now
 export const pitOpen = (w, i) => !w.arena.shutEvery || (Math.floor(w.time / w.arena.shutEvery) + i) % 2 === 0;
 export const shutterLeft = (w) => (w.arena.shutEvery ? w.arena.shutEvery - (w.time % w.arena.shutEvery) : 99); // seconds until the pits swap
@@ -84,12 +87,14 @@ export const PARTS = {
     { id: 'sun', cost: 0, c: '#ffc531' }, { id: 'coral', cost: 0, c: '#ff5d73' }, { id: 'mint', cost: 0, c: '#3ee0a1' }, { id: 'sky', cost: 80, c: '#4cb8ff' },
     { id: 'violet', cost: 80, c: '#a77bff' }, { id: 'lime', cost: 80, c: '#b6f03c' }, { id: 'tangerine', cost: 120, c: '#ff8a3d' }, { id: 'snow', cost: 120, c: '#eef1f8' },
     { id: 'ruby', lvl: 6, c: '#e8234f' }, { id: 'jade', lvl: 9, c: '#14b892' }, { id: 'aurora', lvl: 15, c: '#ff7ce0' }, // earned by levelling up, never bought
+    { id: 'nova', season: 20, c: '#5ee7ff' }, // the season track's last reward
     { id: 'champ', hidden: true, c: '#2e2a5c' }, { id: 'magnetar', hidden: true, c: '#4b2a86' }, // the bosses' own colours: no player can wear them
   ],
   trail: [ // cosmetic only: sparks left behind while moving, also the colour of your dash burst
     { id: 'none', cost: 0, c: [] }, { id: 'sparkle', cost: 150, c: ['#ffe066', '#ffffff'] }, { id: 'bubble', cost: 250, c: ['#ff7ce0', '#c27bff'] },
     { id: 'frost', cost: 350, c: ['#9ee7ff', '#ffffff'] }, { id: 'flame', lvl: 11, c: ['#ff8a3d', '#ffc531', '#ff5d73'] },
     { id: 'rainbow', lvl: 14, c: ['#ff5d73', '#ff8a3d', '#ffc531', '#3ee0a1', '#4cb8ff', '#a77bff'] },
+    { id: 'comet', season: 10, c: ['#ffffff', '#9ee7ff', '#a77bff'] },
   ],
 };
 export const PART_KINDS = ['crown', 'core', 'tip', 'paint', 'trail'];
@@ -149,7 +154,7 @@ export function botName(w) {
 }
 
 // ---------------------------------------------------------------- world
-export function createWorld({ bots = CFG.bots, rng = Math.random, sparks = CFG.sparks, arena = 'bowl', mode = 'endless' } = {}) {
+export function createWorld({ bots = CFG.bots, rng = Math.random, sparks = CFG.sparks, arena = 'bowl', mode = 'endless', mutator = null } = {}) {
   const arenaId = ARENAS[arena] ? arena : 'bowl', def = ARENAS[arenaId], pits = pitAngles(def.pits);
   const pillars = Array.from({ length: def.pillars || 0 }, (_, i) => { const a = pits[i % pits.length] + Math.PI / def.pits; return { x: Math.cos(a) * def.pillarAt, z: Math.sin(a) * def.pillarAt, r: def.pillarR }; });
   if (!MODES.includes(mode)) mode = 'endless';
@@ -160,7 +165,11 @@ export function createWorld({ bots = CFG.bots, rng = Math.random, sparks = CFG.s
     powerups: [], powerT: CFG.powerFirst, nextPu: 1, powersOn: true,
     arenaId, arena: def, pits, pillars, mode, respawns: mode !== 'last', bossOn: mode === 'endless', bossAt: CFG.bossFirst, bossCount: 0, over: false,
     teamScore: [0, 0], roundEnd: mode === 'teams' ? CFG.teamRound : 0,
+    mut: mode === 'endless' && MUTATORS.includes(mutator) ? mutator : null, bossEvery: CFG.bossEvery, bossStay: CFG.bossStay, powerEvery: CFG.powerEvery, powerMax: CFG.powerMax, sparkTarget: CFG.sparks,
   };
+  if (w.mut === 'bosses') { w.bossAt = 45; w.bossEvery = 60; w.bossStay = 60; } // Boss Rush: they come early and often, and stay a shorter time
+  if (w.mut === 'frenzy') { w.powerEvery = 4; w.powerMax = 5; w.powerT = 4; } // Power Frenzy
+  if (w.mut === 'rush') { w.sparkTarget = Math.round(CFG.sparks * 1.3); sparks = Math.round(sparks * 1.3); } // Spark Rush
   for (let i = 0; i < CFG.sparkMax; i++) w.sparks.push({ on: false, x: 0, z: 0, y: 0.4, vx: 0, vz: 0, fall: 0, ph: rng() * 6, big: 0 });
   for (let i = 0; i < sparks; i++) addSpark(w, ...randomSpot(w));
   return w;
@@ -239,7 +248,7 @@ export function spawnBoss(w, kind = BOSSES[w.bossCount % BOSSES.length]) {
   const tp = addTop(w, { parts: mag ? { crown: 'comet', core: 'heart', tip: 'glide' } : { crown: 'razor', core: 'iron', tip: 'needle' }, name: mag ? 'Magnetar' : 'Champion', spin: Math.round(Math.min(900, CFG.bossSpin * (mag ? 0.9 : 1) + heat * 0.6)), x, z, ai: 'boss', skill: 0.92, aggro: 1 });
   tp.boss = true; tp.bossKind = kind; tp.parts.paint = mag ? 'magnetar' : 'champ';
   tp.stats = mag ? { atk: 1.1, def: 1.35, mass: 1.6, sta: 2.2, spd: 1, acc: 0.9 } : { atk: 1.25, def: 1.5, mass: 1.7, sta: 2.2, spd: 0.92, acc: 0.85 };
-  tp.slamT = 4; tp.pullT = 4; tp.pulling = 0; tp.bossT = CFG.bossStay; updateMass(tp); w.bossCount++;
+  tp.slamT = 4; tp.pullT = 4; tp.pulling = 0; tp.bossT = w.bossStay; updateMass(tp); w.bossCount++;
   emit(w, { type: 'boss', id: tp.id, kind });
   return tp;
 }
@@ -267,7 +276,7 @@ export function dash(w, tp, dir) {
 }
 // Movement for one alive top: thrust, bowl pull, turntable, tilt, damping, speed cap. Also used for online client prediction.
 export function integrate(w, tp, inp, dt) {
-  const od = w.event?.id === 'overdrive' ? CFG.overdrive : 1;
+  const od = w.event?.id === 'overdrive' ? CFG.overdrive : w.mut === 'overdrive' ? 1.2 : 1; // Overdrive week: always a bit faster
   if (inp.x || inp.y) { tp.faceX = inp.x; tp.faceZ = inp.y; }
   const st = tp.stats, lowSpin = tp.spin < 25 ? 0.55 + 0.45 * Math.max(0, tp.spin) / 25 : 1;
   const fx = tp.fx?.kind, turbo = fx === 'turbo' ? CFG.turboSpeed : 1, anchored = fx === 'anchor';
@@ -344,7 +353,7 @@ function collide(w, a, b) {
 }
 function collectSpark(w, tp, i) {
   const s = w.sparks[i]; s.on = false;
-  tp.spin = Math.min(CFG.maxSpin, tp.spin + CFG.sparkValue * (s.big ? 2 : 1));
+  tp.spin = Math.min(CFG.maxSpin, tp.spin + CFG.sparkValue * (s.big ? 2 : 1) * (w.mut === 'rush' ? 1.5 : 1));
   tp.score += s.big ? 2 : 1;
   emit(w, { type: 'spark', i, id: tp.id, x: s.x, z: s.z, big: s.big });
 }
@@ -375,7 +384,7 @@ function eliminate(w, tp, how) {
     const n = Math.min(tp.boss ? 45 : 30, 4 + Math.round((tp.peak * CFG.toppleDrop) / CFG.sparkValue / 3));
     for (let k = 0; k < n; k++) { const a = w.rng() * Math.PI * 2, v = 2 + w.rng() * 5; addSpark(w, tp.x, tp.z, { vx: Math.cos(a) * v, vz: Math.sin(a) * v, big: k % 5 === 0 ? 1 : 0 }); }
   }
-  if (tp.boss) w.bossAt = heatOf(w) + CFG.bossEvery;
+  if (tp.boss) w.bossAt = heatOf(w) + w.bossEvery;
   emit(w, { type: 'elim', id: tp.id, killer: killer?.id || 0, how, pts, wasLeader, boss: tp.bossKind || false, x: tp.x, z: tp.z, peak: tp.peak, score: tp.score, kos: tp.kos });
   tp.state = 'dead';
   removeTop(w, tp);
@@ -432,7 +441,7 @@ export function usePower(w, tp) {
 function tickPowers(w, dt) {
   if (w.powersOn) {
     w.powerT -= dt;
-    if (w.powerT <= 0) { w.powerT = CFG.powerEvery * (0.75 + w.rng() * 0.5); if (w.powerups.length < CFG.powerMax) spawnPowerup(w); }
+    if (w.powerT <= 0) { w.powerT = w.powerEvery * (0.75 + w.rng() * 0.5); if (w.powerups.length < w.powerMax) spawnPowerup(w); }
   }
   for (let i = w.powerups.length - 1; i >= 0; i--) {
     const pu = w.powerups[i]; pu.t -= dt;
@@ -572,7 +581,7 @@ export function step(w, dt, inputFor) {
       if (!tp.noDecay) tp.spin -= ((CFG.decay * (1 + tp.spin * CFG.decayGrowth)) / tp.stats.sta) * (w.event?.id === 'overdrive' ? 0.5 : 1) * dt;
       if (turn && r < turn && !isDecoy(tp)) tp.spin = Math.min(CFG.maxSpin, tp.spin + CFG.turnRecharge * dt); // riding the turntable recharges you
       if (r > zr) tp.spin -= (CFG.zoneDrain + Math.max(0, tp.spin) * 0.03) * dt; // outside the safe zone
-      if (tp.boss) { tp.bossT -= dt; if (tp.bossT <= 0) { emit(w, { type: 'bossLeave', id: tp.id }); w.bossAt = heatOf(w) + CFG.bossEvery; removeTop(w, tp); continue; } }
+      if (tp.boss) { tp.bossT -= dt; if (tp.bossT <= 0) { emit(w, { type: 'bossLeave', id: tp.id }); w.bossAt = heatOf(w) + w.bossEvery; removeTop(w, tp); continue; } }
     }
     if (tp.ai === 'dummy') tp.spin = Math.max(tp.spin, 1);
     tp.peak = Math.max(tp.peak, tp.spin);
@@ -602,7 +611,7 @@ export function step(w, dt, inputFor) {
     const b = bots.filter(alive).sort((p, q) => far(q) - far(p))[0]; if (b) removeTop(w, b);
   }
   const active = w.sparks.reduce((n, s) => n + (s.on ? 1 : 0), 0);
-  if (active < CFG.sparks && w.rng() < dt * 6) addSpark(w, ...randomSpot(w));
+  if (active < w.sparkTarget && w.rng() < dt * (w.mut === 'rush' ? 9 : 6)) addSpark(w, ...randomSpot(w));
   w.leaderT -= dt;
   if (w.leaderT <= 0) { w.leaderT = 0.25; const lead = rankList(w)[0]?.id ?? null; if (lead !== w.leader) { w.leader = lead; emit(w, { type: 'leader', id: lead }); } }
   if (w.eventsOn) { if (w.event) tickEvent(w, dt); else if (w.time >= w.nextEvent) startEvent(w); }
