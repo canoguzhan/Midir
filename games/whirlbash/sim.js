@@ -2,7 +2,7 @@
 // server (mp/whirlbash.mjs). No DOM and no THREE here: step() changes the world and pushes what happened to world.events
 // ({ type: 'clash' | 'dash' | 'wall' | 'land' | 'spark' | 'sparkAdd' | 'fall' | 'topple' | 'elim' | 'add' | 'remove' |
 // 'event' | 'eventEnd' | 'leader' | 'puAdd' | 'puTake' | 'puGone' | 'puExpire' | 'puUse' | 'fxEnd' | 'blast' | 'decoyPop' |
-// 'boss' | 'bossLeave' | 'win', ... }); the view (game.js) turns those into particles, sounds and HUD updates.
+// 'boss' | 'bossLeave' | 'pull' | 'win' | 'teamWin', ... }); the view (game.js) turns those into particles, sounds and HUD updates.
 
 export const STEP = 1 / 60; // fixed simulation step: identical physics at 60/144/165 Hz and on the server
 export const CFG = {
@@ -28,6 +28,10 @@ export const CFG = {
   bossFirst: 150, bossEvery: 170, bossSpin: 520, bossStay: 100, bossPoints: 250, bossSlam: 6.5,
   // Last Top Spinning: no respawns; the safe zone closes in and spin drains fast outside it
   zoneStart: 20, zoneShrink: 90, zoneMid: 7, zoneEnd: 35, zoneDrain: 9,
+  // the Magnetar (the second boss): every pullEvery s it pulls tops and sparks in for pullTime s
+  pullEvery: 7, pullTime: 2.2, pullRadius: 11, pullForce: 13,
+  // Teams: two teams of six, a timed round, knockout points go to the team
+  teamRound: 180,
 };
 export const POWERS = ['blast', 'shield', 'magnet', 'turbo', 'anchor', 'decoy'];
 export const FX_CODE = { shield: 1, magnet: 2, turbo: 3, anchor: 4 }; // lasting effects (a blast and a decoy are instant)
@@ -42,9 +46,11 @@ export const ARENAS = {
   bowl: { pits: 3, pitHalf: CFG.pitHalf },
   turntable: { pits: 3, pitHalf: CFG.pitHalf, turnR: 7.5, turnW: 0.6, pillars: 3, pillarR: 1.25, pillarAt: 14.5 }, // spinning centre disc + bumper pillars
   shutter: { pits: 6, pitHalf: 0.15, shutEvery: 9, shutWarn: 2 }, // six pits, three open at a time, swapping every shutEvery s
+  orbit: { pits: 3, pitHalf: 0.17, pitSpin: 0.1 }, // the pits (and their walls) travel round the rim: one lap a minute
 };
 export const ARENA_IDS = Object.keys(ARENAS);
-export const MODES = ['endless', 'last'];
+export const MODES = ['endless', 'last', 'teams'];
+export const pitAng = (w, i) => w.pits[i] + (w.arena.pitSpin || 0) * w.time; // where pit i is right now
 export const pitOpen = (w, i) => !w.arena.shutEvery || (Math.floor(w.time / w.arena.shutEvery) + i) % 2 === 0;
 export const shutterLeft = (w) => (w.arena.shutEvery ? w.arena.shutEvery - (w.time % w.arena.shutEvery) : 99); // seconds until the pits swap
 export function zoneR(w) { // Last Top Spinning: radius of the safe zone (99 = no zone)
@@ -78,13 +84,28 @@ export const PARTS = {
     { id: 'sun', cost: 0, c: '#ffc531' }, { id: 'coral', cost: 0, c: '#ff5d73' }, { id: 'mint', cost: 0, c: '#3ee0a1' }, { id: 'sky', cost: 80, c: '#4cb8ff' },
     { id: 'violet', cost: 80, c: '#a77bff' }, { id: 'lime', cost: 80, c: '#b6f03c' }, { id: 'tangerine', cost: 120, c: '#ff8a3d' }, { id: 'snow', cost: 120, c: '#eef1f8' },
     { id: 'ruby', lvl: 6, c: '#e8234f' }, { id: 'jade', lvl: 9, c: '#14b892' }, { id: 'aurora', lvl: 15, c: '#ff7ce0' }, // earned by levelling up, never bought
-    { id: 'champ', hidden: true, c: '#2e2a5c' }, // the Champion's own colour: no player can wear it
+    { id: 'champ', hidden: true, c: '#2e2a5c' }, { id: 'magnetar', hidden: true, c: '#4b2a86' }, // the bosses' own colours: no player can wear them
+  ],
+  trail: [ // cosmetic only: sparks left behind while moving, also the colour of your dash burst
+    { id: 'none', cost: 0, c: [] }, { id: 'sparkle', cost: 150, c: ['#ffe066', '#ffffff'] }, { id: 'bubble', cost: 250, c: ['#ff7ce0', '#c27bff'] },
+    { id: 'frost', cost: 350, c: ['#9ee7ff', '#ffffff'] }, { id: 'flame', lvl: 11, c: ['#ff8a3d', '#ffc531', '#ff5d73'] },
+    { id: 'rainbow', lvl: 14, c: ['#ff5d73', '#ff8a3d', '#ffc531', '#3ee0a1', '#4cb8ff', '#a77bff'] },
   ],
 };
+export const PART_KINDS = ['crown', 'core', 'tip', 'paint', 'trail'];
+// Player names are picked from these words (adjective + noun + optional number), never typed, so nothing needs moderation.
+export const NAME_A = ['Swift', 'Brave', 'Lucky', 'Mighty', 'Rapid', 'Sunny', 'Cosmic', 'Turbo', 'Jolly', 'Nimble', 'Zippy', 'Clever', 'Bouncy', 'Breezy', 'Steady', 'Daring',
+  'Golden', 'Silver', 'Shiny', 'Fuzzy', 'Happy', 'Mega', 'Super', 'Tiny', 'Giant', 'Electric', 'Frosty', 'Blazing', 'Sneaky', 'Wild', 'Royal', 'Neon'];
+export const NAME_B = ['Comet', 'Falcon', 'Otter', 'Rocket', 'Panda', 'Tiger', 'Pixel', 'Rider', 'Gecko', 'Koala', 'Badger', 'Meteor', 'Fox', 'Whale', 'Lynx', 'Orbit',
+  'Dragon', 'Spinner', 'Cyclone', 'Twister', 'Wizard', 'Ninja', 'Knight', 'Pilot', 'Robot', 'Star', 'Storm', 'Bolt', 'Puma', 'Hawk', 'Shark', 'Yeti'];
+export function isPickedName(n) { // a name made of the two word lists and an optional number from 1 to 99
+  const m = /^([A-Z][a-z]+)([A-Z][a-z]+)([1-9][0-9]?)?$/.exec(String(n || ''));
+  return !!m && NAME_A.includes(m[1]) && NAME_B.includes(m[2]);
+}
 export const part = (kind, id) => PARTS[kind].find((p) => p.id === id) || PARTS[kind][0];
 export function cleanParts(p) { // whatever a client sends, only known, wearable part ids survive
   const out = {};
-  for (const kind of ['crown', 'core', 'tip', 'paint']) { const q = part(kind, p?.[kind]); out[kind] = q.hidden ? PARTS[kind][0].id : q.id; }
+  for (const kind of PART_KINDS) { const q = part(kind, p?.[kind]); out[kind] = q.hidden ? PARTS[kind][0].id : q.id; }
   return out;
 }
 export function statsOf(p) {
@@ -93,7 +114,7 @@ export function statsOf(p) {
 }
 export function randomParts(rng = Math.random) {
   const pick = (list) => { list = list.filter((p) => !p.hidden); return list[(rng() * list.length) | 0].id; };
-  return { crown: pick(PARTS.crown), core: pick(PARTS.core), tip: pick(PARTS.tip), paint: pick(PARTS.paint) };
+  return { crown: pick(PARTS.crown), core: pick(PARTS.core), tip: pick(PARTS.tip), paint: pick(PARTS.paint), trail: rng() < 0.2 ? pick(PARTS.trail) : 'none' };
 }
 
 // ---------------------------------------------------------------- geometry helpers
@@ -103,18 +124,19 @@ export const angDiff = (a, b) => Math.atan2(Math.sin(a - b), Math.cos(a - b));
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 export function pitAt(w, ang, rad) {
   const half = Math.max(0.05, w.arena.pitHalf - (rad / R) * 0.55);
-  for (let i = 0; i < w.pits.length; i++) if (pitOpen(w, i) && Math.abs(angDiff(ang, w.pits[i])) < half) return i;
+  for (let i = 0; i < w.pits.length; i++) if (pitOpen(w, i) && Math.abs(angDiff(ang, pitAng(w, i))) < half) return i;
   return -1;
 }
 export function nearestPit(w, x, z) { // the nearest open pit
   const ang = Math.atan2(z, x); let best = 0, bd = 9;
-  w.pits.forEach((p, i) => { if (!pitOpen(w, i)) return; const d = Math.abs(angDiff(ang, p)); if (d < bd) { bd = d; best = i; } });
-  const a = w.pits[best];
+  w.pits.forEach((p, i) => { if (!pitOpen(w, i)) return; const d = Math.abs(angDiff(ang, pitAng(w, i))); if (d < bd) { bd = d; best = i; } });
+  const a = pitAng(w, best);
   return { i: best, ang: a, diff: bd, x: Math.cos(a) * R, z: Math.sin(a) * R };
 }
 const norm = (x, z) => { const l = Math.hypot(x, z); return l > 1e-3 ? { x: x / l, y: z / l } : { x: 0, y: 0 }; };
 export const alive = (tp) => tp.state === 'alive';
 export const isDecoy = (tp) => tp.ai === 'decoy';
+export const sameTeam = (a, b) => a.team != null && a.team === b.team;
 
 const SYL_A = ['Vor', 'Zip', 'Kra', 'Spi', 'Nim', 'Bly', 'Rax', 'Tor', 'Fen', 'Glim', 'Whi', 'Zor', 'Bri', 'Quo', 'Lux', 'Pyr', 'Dex', 'Mo', 'Sky', 'Jet', 'Rio', 'Kai', 'Nova', 'Pix', 'Zee', 'Ori', 'Bo', 'Tam'];
 const SYL_B = ['tex', 'nix', 'dle', 'ra', 'zo', 'lo', 'ka', 'vin', 'bolt', 'spin', 'wick', 'rex', 'dash', 'fy', 'mo', 'ny', 'ro', 'lix', 'ton', 'whirl'];
@@ -136,7 +158,8 @@ export function createWorld({ bots = CFG.bots, rng = Math.random, sparks = CFG.s
     botTarget: bots, event: null, nextEvent: CFG.eventFirst, lastEvent: '', eventsOn: true, frozen: false,
     leader: null, leaderT: 0, heat: null, trimT: 0,
     powerups: [], powerT: CFG.powerFirst, nextPu: 1, powersOn: true,
-    arenaId, arena: def, pits, pillars, mode, respawns: mode !== 'last', bossOn: mode === 'endless', bossAt: CFG.bossFirst, over: false,
+    arenaId, arena: def, pits, pillars, mode, respawns: mode !== 'last', bossOn: mode === 'endless', bossAt: CFG.bossFirst, bossCount: 0, over: false,
+    teamScore: [0, 0], roundEnd: mode === 'teams' ? CFG.teamRound : 0,
   };
   for (let i = 0; i < CFG.sparkMax; i++) w.sparks.push({ on: false, x: 0, z: 0, y: 0.4, vx: 0, vz: 0, fall: 0, ph: rng() * 6, big: 0 });
   for (let i = 0; i < sparks; i++) addSpark(w, ...randomSpot(w));
@@ -170,7 +193,7 @@ export function updateSparks(w, dt) { // also run by online clients on their mir
   }
 }
 
-export function addTop(w, { parts, name, human = false, spin = CFG.startSpin, x = 0, z = 0, ai = 'normal', spawn = true, skill = 0.6, aggro = 0.6 }) {
+export function addTop(w, { parts, name, human = false, spin = CFG.startSpin, x = 0, z = 0, ai = 'normal', spawn = true, skill = 0.6, aggro = 0.6, team = null }) {
   parts = cleanParts(parts);
   const tp = {
     id: w.nextId++, name, human, parts, stats: statsOf(parts),
@@ -178,6 +201,7 @@ export function addTop(w, { parts, name, human = false, spin = CFG.startSpin, x 
     dashT: 0, cd: 0, shield: 0, kos: 0, score: 0, lastHitBy: 0, lastHitT: -99, hitWob: 0, faceX: 0, faceZ: 1, age: 0,
     think: 0, goal: { x: 0, z: 0, dash: false, use: false }, skill, aggro, ai, noDecay: false, dmgTaken: 1,
     power: null, fx: null, // power: a held skill { kind, t } (t counts down to loss); fx: an active effect { kind, t }
+    team: w.mode === 'teams' ? team ?? smallerTeam(w) : null,
   };
   updateMass(tp); w.tops.push(tp); emit(w, { type: 'add', id: tp.id }); return tp;
 }
@@ -188,6 +212,10 @@ export function removeTop(w, tp) {
   if (w.leader === tp.id) w.leader = null;
 }
 export const topById = (w, id) => w.tops.find((tp) => tp.id === id) || null;
+export function smallerTeam(w) { // new tops join the team with fewer members
+  const n = [0, 0]; for (const tp of w.tops) if (tp.team != null && !isDecoy(tp)) n[tp.team]++;
+  return n[1] < n[0] ? 1 : 0;
+}
 export function spawnBot(w, { ring = -1, idle = false, spin = null, avoidPaint = null, avoid = [] } = {}) {
   const parts = randomParts(w.rng);
   if (avoidPaint && parts.paint === avoidPaint) parts.paint = PARTS.paint[(PARTS.paint.findIndex((p) => p.id === parts.paint) + 3) % 8].id;
@@ -205,13 +233,27 @@ export function freeSpot(w, minGap = 7) { // where a newly joined human (or the 
   }
   return best;
 }
-export function spawnBoss(w) {
-  const heat = heatOf(w), [x, z] = freeSpot(w, 8);
-  const tp = addTop(w, { parts: { crown: 'razor', core: 'iron', tip: 'needle' }, name: 'Champion', spin: Math.round(Math.min(900, CFG.bossSpin + heat * 0.6)), x, z, ai: 'boss', skill: 0.92, aggro: 1 });
-  tp.boss = true; tp.parts.paint = 'champ'; tp.stats = { atk: 1.25, def: 1.5, mass: 1.7, sta: 2.2, spd: 0.92, acc: 0.85 };
-  tp.slamT = 4; tp.bossT = CFG.bossStay; updateMass(tp);
-  emit(w, { type: 'boss', id: tp.id });
+export const BOSSES = ['champion', 'magnetar']; // they take turns: the Champion slams, the Magnetar pulls everything in
+export function spawnBoss(w, kind = BOSSES[w.bossCount % BOSSES.length]) {
+  const heat = heatOf(w), [x, z] = freeSpot(w, 8), mag = kind === 'magnetar';
+  const tp = addTop(w, { parts: mag ? { crown: 'comet', core: 'heart', tip: 'glide' } : { crown: 'razor', core: 'iron', tip: 'needle' }, name: mag ? 'Magnetar' : 'Champion', spin: Math.round(Math.min(900, CFG.bossSpin * (mag ? 0.9 : 1) + heat * 0.6)), x, z, ai: 'boss', skill: 0.92, aggro: 1 });
+  tp.boss = true; tp.bossKind = kind; tp.parts.paint = mag ? 'magnetar' : 'champ';
+  tp.stats = mag ? { atk: 1.1, def: 1.35, mass: 1.6, sta: 2.2, spd: 1, acc: 0.9 } : { atk: 1.25, def: 1.5, mass: 1.7, sta: 2.2, spd: 0.92, acc: 0.85 };
+  tp.slamT = 4; tp.pullT = 4; tp.pulling = 0; tp.bossT = CFG.bossStay; updateMass(tp); w.bossCount++;
+  emit(w, { type: 'boss', id: tp.id, kind });
   return tp;
+}
+function tickMagnetar(w, b, dt) { // every pullEvery s: a pullTime s tug on every top and spark within reach
+  if (b.pulling > 0) {
+    b.pulling -= dt;
+    for (const o of w.tops) {
+      if (o === b || !alive(o) || (o.human && o.age < CFG.graceTime) || o.fx?.kind === 'anchor') continue;
+      const dx = b.x - o.x, dz = b.z - o.z, d = Math.hypot(dx, dz); if (d > CFG.pullRadius || d < 0.5) continue;
+      const k = (CFG.pullForce * (1 - d / CFG.pullRadius) * dt) / Math.sqrt(o.stats.mass); o.vx += (dx / d) * k; o.vz += (dz / d) * k;
+    }
+    for (const s of w.sparks) { if (!s.on || s.fall > 0) continue; const dx = b.x - s.x, dz = b.z - s.z, d = Math.hypot(dx, dz); if (d < CFG.pullRadius && d > 0.3) { const k = Math.min(1, (6 * dt) / d); s.x += dx * k; s.z += dz * k; } }
+    if (b.pulling <= 0) emit(w, { type: 'pull', id: b.id, on: false });
+  } else if ((b.pullT -= dt) <= 0) { b.pullT = CFG.pullEvery; b.pulling = CFG.pullTime; emit(w, { type: 'pull', id: b.id, on: true }); }
 }
 
 // ---------------------------------------------------------------- physics
@@ -276,11 +318,12 @@ function collide(w, a, b) {
   a.vx -= j * ima * nx; a.vz -= j * ima * nz; b.vx += j * imb * nx; b.vz += j * imb * nz;
   const tx = -nz, tz = nx, g = CFG.grind; // clockwise spin grinds the tops sideways
   a.vx += tx * g; a.vz += tz * g; b.vx -= tx * g; b.vz -= tz * g;
-  if (isDecoy(a) || isDecoy(b)) { // a decoy bursts at the first touch of anyone but its owner, and hurts nobody
+  if (isDecoy(a) || isDecoy(b)) { // a decoy bursts at the first touch of anyone but its owner (or the owner's team), and hurts nobody
     const dc = isDecoy(a) ? a : b, other = dc === a ? b : a;
-    if (other.id !== dc.decoyOf && !isDecoy(other)) popDecoy(w, dc, other);
+    if (other.id !== dc.decoyOf && !isDecoy(other) && !sameTeam(other, dc)) popDecoy(w, dc, other);
     return;
   }
+  if (sameTeam(a, b)) return; // teammates bounce off each other but never hurt each other
   const key = a.id < b.id ? a.id * 65536 + b.id : b.id * 65536 + a.id, now = w.time;
   if (now - (w.pairHits.get(key) ?? -9) < CFG.pairCooldown) return; // still bounce, but one clash per contact
   w.pairHits.set(key, now);
@@ -325,6 +368,7 @@ function eliminate(w, tp, how) {
     pts = (how === 'ringout' ? CFG.ringoutPoints : CFG.koPoints) + Math.round(tp.peak * 0.1) + (tp.boss ? CFG.bossPoints : 0);
     if (wasLeader) pts *= 2;
     killer.score += pts;
+    if (killer.team != null) w.teamScore[killer.team] += pts;
     if (how === 'ringout') killer.spin = Math.min(CFG.maxSpin, killer.spin + tp.peak * CFG.ringoutSteal * 0.5 + 15);
   }
   if (how === 'topple') { // spun-out tops spill their sparks
@@ -332,7 +376,7 @@ function eliminate(w, tp, how) {
     for (let k = 0; k < n; k++) { const a = w.rng() * Math.PI * 2, v = 2 + w.rng() * 5; addSpark(w, tp.x, tp.z, { vx: Math.cos(a) * v, vz: Math.sin(a) * v, big: k % 5 === 0 ? 1 : 0 }); }
   }
   if (tp.boss) w.bossAt = heatOf(w) + CFG.bossEvery;
-  emit(w, { type: 'elim', id: tp.id, killer: killer?.id || 0, how, pts, wasLeader, boss: !!tp.boss, x: tp.x, z: tp.z, peak: tp.peak, score: tp.score, kos: tp.kos });
+  emit(w, { type: 'elim', id: tp.id, killer: killer?.id || 0, how, pts, wasLeader, boss: tp.bossKind || false, x: tp.x, z: tp.z, peak: tp.peak, score: tp.score, kos: tp.kos });
   tp.state = 'dead';
   removeTop(w, tp);
   if (!tp.human && !tp.boss && w.respawns) w.pendingRespawns.push(CFG.respawn); // the refill below brings a new bot after the delay
@@ -347,7 +391,7 @@ export function spawnPowerup(w, kind = POWERS[(w.rng() * POWERS.length) | 0], at
 function popDecoy(w, d, by = null) {
   if (d.state === 'dead') return;
   for (const o of w.tops) { // a little puff that shoves whoever fell for it
-    if (o === d || !alive(o) || o.id === d.decoyOf || isDecoy(o)) continue;
+    if (o === d || !alive(o) || o.id === d.decoyOf || isDecoy(o) || sameTeam(o, d)) continue;
     const dx = o.x - d.x, dz = o.z - d.z, dist = Math.hypot(dx, dz), reach = CFG.decoyPopR + o.r;
     if (dist > reach || dist < 1e-3) continue;
     const k = 1 - dist / reach, push = (CFG.decoyPopPush * k) / Math.sqrt(o.stats.mass);
@@ -362,7 +406,7 @@ export function usePower(w, tp) {
   if (kind === 'blast') { // instant: every top in range is flung away and loses a little spin
     const popped = [];
     for (const o of w.tops) {
-      if (o === tp || !alive(o)) continue;
+      if (o === tp || !alive(o) || sameTeam(o, tp)) continue;
       const dx = o.x - tp.x, dz = o.z - tp.z, d = Math.hypot(dx, dz), reach = CFG.blastRadius + o.r;
       if (d > reach || d < 1e-3) continue;
       if (isDecoy(o)) { if (o.decoyOf !== tp.id) popped.push(o); continue; }
@@ -377,7 +421,7 @@ export function usePower(w, tp) {
   }
   if (kind === 'decoy') { // a copy of you rolls off to the side; whoever hits it wastes their charge
     const sp = Math.hypot(tp.vx, tp.vz), base = sp > 0.5 ? Math.atan2(tp.vz, tp.vx) : Math.atan2(tp.faceZ, tp.faceX), a = base + (w.rng() < 0.5 ? -1 : 1) * 0.9;
-    const d = addTop(w, { parts: tp.parts, name: tp.name, human: false, spin: Math.max(40, tp.spin * 0.85), x: tp.x + Math.cos(a) * tp.r * 2.3, z: tp.z + Math.sin(a) * tp.r * 2.3, ai: 'decoy', spawn: false });
+    const d = addTop(w, { parts: tp.parts, name: tp.name, human: false, spin: Math.max(40, tp.spin * 0.85), x: tp.x + Math.cos(a) * tp.r * 2.3, z: tp.z + Math.sin(a) * tp.r * 2.3, ai: 'decoy', spawn: false, team: tp.team });
     Object.assign(d, { decoyOf: tp.id, life: CFG.decoyTime, noDecay: true, dirX: Math.cos(a), dirZ: Math.sin(a), vx: Math.cos(a) * Math.max(5, sp), vz: Math.sin(a) * Math.max(5, sp) });
     emit(w, { type: 'puUse', id: tp.id, kind, decoy: d.id });
     return;
@@ -408,7 +452,7 @@ function botPowerChoice(w, b) { // when should a bot fire its power? roughly whe
   const k = b.power.kind;
   if (b.power.t < 1.5) return true; // never waste it
   let near = 99, threat = false;
-  for (const o of w.tops) { if (o === b || !alive(o)) continue; const d = Math.hypot(o.x - b.x, o.z - b.z) - o.r - b.r; near = Math.min(near, d); if (d < 3 && o.spin > b.spin * 1.2) threat = true; }
+  for (const o of w.tops) { if (o === b || !alive(o) || sameTeam(o, b)) continue; const d = Math.hypot(o.x - b.x, o.z - b.z) - o.r - b.r; near = Math.min(near, d); if (d < 3 && o.spin > b.spin * 1.2) threat = true; }
   if (k === 'blast') return near < 2.5 && !w.tops.some((o) => o.human && !b.human && o.age < CFG.graceTime && Math.hypot(o.x - b.x, o.z - b.z) < CFG.blastRadius + o.r); // spare fresh players
   if (k === 'shield') return threat || b.spin < 40;
   if (k === 'turbo') return !!b.goal.dash;
@@ -423,7 +467,8 @@ export function botMove(w, b, dt) {
   if (b.think <= 0) { b.think = 0.1 + w.rng() * 0.12; decide(w, b); }
   if (b.goal.dash && b.cd <= 0) { b.goal.dash = false; dash(w, b, { x: b.goal.x, y: b.goal.z }); }
   if (b.power && b.ai !== 'passive' && botPowerChoice(w, b)) usePower(w, b);
-  if (b.boss) { // the Champion slams the floor when rivals crowd it
+  if (b.bossKind === 'magnetar') tickMagnetar(w, b, dt);
+  else if (b.boss) { // the Champion slams the floor when rivals crowd it
     b.slamT -= dt;
     if (b.slamT <= 0 && w.tops.some((o) => o !== b && alive(o) && !isDecoy(o) && Math.hypot(o.x - b.x, o.z - b.z) - o.r - b.r < 2.2 && !(o.human && o.age < CFG.graceTime))) { b.slamT = CFG.bossSlam; b.power = { kind: 'blast', t: 1 }; usePower(w, b); }
   }
@@ -446,7 +491,7 @@ function decide(w, b) {
   if (r > R - 4.5 && pit.diff < w.arena.pitHalf + 0.28) { b.goal = { x: -b.x / r, z: -b.z / r, dash: r > R - 2.5 && b.skill > 0.5 }; return; }
   let flee = null, prey = null, preyScore = 0;
   for (const o of w.tops) {
-    if (o === b || !alive(o) || o.id === b.decoyOf) continue;
+    if (o === b || !alive(o) || o.id === b.decoyOf || sameTeam(o, b)) continue;
     const d = Math.hypot(o.x - b.x, o.z - b.z); if (d > 12) continue;
     const ratio = o.spin / Math.max(1, b.spin);
     if (!b.boss && ratio > 1.45 && d < 6.5 && (!flee || d < flee.d)) flee = { o, d };
@@ -486,7 +531,7 @@ function decide(w, b) {
 function startEvent(w) {
   const ids = ['storm', 'tilt', 'overdrive'].filter((e) => e !== w.lastEvent), id = ids[(w.rng() * ids.length) | 0];
   const open = w.pits.map((_, i) => i).filter((i) => pitOpen(w, i)), pit = open[(w.rng() * open.length) | 0] ?? 0;
-  w.event = { id, t: EVENT_DUR[id], dur: EVENT_DUR[id], pit, ang: w.pits[pit], acc: 0 };
+  w.event = { id, t: EVENT_DUR[id], dur: EVENT_DUR[id], pit, ang: pitAng(w, pit), acc: 0 };
   w.lastEvent = id;
   emit(w, { type: 'event', id, pit, t: w.event.t });
 }
@@ -563,6 +608,10 @@ export function step(w, dt, inputFor) {
   if (w.eventsOn) { if (w.event) tickEvent(w, dt); else if (w.time >= w.nextEvent) startEvent(w); }
   tickPowers(w, dt);
   if (w.bossOn && heatOf(w) >= w.bossAt && !T.some((tp) => tp.boss)) spawnBoss(w);
+  if (w.mode === 'teams' && !w.over && w.time >= w.roundEnd) { // Teams: the round ends on time; more knockout points wins
+    w.over = true; const [a, b] = w.teamScore;
+    emit(w, { type: 'teamWin', team: a > b ? 0 : b > a ? 1 : -1, scores: [a, b] });
+  }
   if (w.mode === 'last' && !w.over) { // Last Top Spinning ends when one top is left
     const left = T.filter((tp) => !isDecoy(tp) && tp.state !== 'dead');
     if (left.length <= 1) { w.over = true; emit(w, { type: 'win', id: left[0]?.id || 0 }); }

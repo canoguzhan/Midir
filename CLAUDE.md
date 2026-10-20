@@ -141,8 +141,9 @@ Whirlbash is the reference for this.
   - Your own top is predicted locally with the same `integrate()` and eased toward the server position.
   - Keep messages as small JSON.
 - **No accounts.**
-  - Show the CrazyGames username (`SDK.user.getUser()`) when it is available; CrazyGames requires it in multiplayer. Otherwise the server generates a guest name.
-  - Never show text a player typed (no chat, no custom names), so nothing needs moderation.
+  - Show the CrazyGames username when it is available; CrazyGames requires it in multiplayer. The client sends `SDK.user.getUserToken()` and the server verifies it (RS256, key from https://sdk.crazygames.com/publicKey.json), so nobody can claim someone else's name.
+  - Players without an account pick a name from fixed word lists (adjective + noun + number, `NAME_A` / `NAME_B` in sim.js); the server accepts only names built from those lists, else it generates a guest name.
+  - Never show text a player typed (no chat, no free-text names), so nothing needs moderation.
 - **CrazyGames room flow.**
   - Call `updateRoom({roomId, isJoinable, inviteParams})` only when something changes, and `leftRoom()` on leave.
   - Make invite links with `inviteLink({roomId})`, falling back to `?room=CODE` off-platform.
