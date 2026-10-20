@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-20 14:08",
-  "count": 366,
+  "updated": "2026-10-20 15:02",
+  "count": 467,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -98,6 +98,58 @@
       ]
     },
     {
+      "path": "audio/bgm_whirl_breaks.mp3",
+      "prompt": "high-energy breakbeat electronic arena music, rolling drums, rubbery bass, sparkly synth arpeggios, stadium energy, 140 bpm, no vocals, seamless loop",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "bgm",
+        "breaks",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/bgm_whirl_chip.mp3",
+      "prompt": "bouncy chiptune pop battle music with modern punchy drums, playful square-wave leads, energetic and cheerful, 132 bpm, no vocals, seamless loop",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "bgm",
+        "chip",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/bgm_whirl_funk.mp3",
+      "prompt": "funky upbeat disco-house arcade battle music for a spinning-top arena game, slap bass, wah guitar, bright brass stabs, 124 bpm, no vocals, seamless loop",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "bgm",
+        "funk",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/bgm_whirl_menu.mp3",
+      "prompt": "relaxed groovy lounge electronic music for a colourful game menu, mellow electric piano, soft drums, warm bass, 100 bpm, no vocals, seamless loop",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "bgm",
+        "menu",
+        "whirl"
+      ]
+    },
+    {
       "path": "audio/bgm_whirl_showdown.mp3",
       "prompt": "tense driving electronic showdown music for the final duel in a spinning-top arena game, pulsing synth bass, big drums, rising arpeggios, 140 bpm, no vocals, seamless loop",
       "game": "whirlbash",
@@ -107,6 +159,19 @@
       "tags": [
         "bgm",
         "showdown",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/bgm_whirl_showdown2.mp3",
+      "prompt": "intense electronic boss battle music, pounding drums, heavy synth bass, rising synth strings and brass hits, 145 bpm, no vocals, seamless loop",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "bgm",
+        "showdown2",
         "whirl"
       ]
     },
@@ -1183,6 +1248,1350 @@
         "siege",
         "tr",
         "wave"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_champdown_1_en.mp3",
+      "prompt": "Champion down!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "voice",
+      "kb": 18,
+      "tags": [
+        "champdown",
+        "en",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_champdown_1_tr.mp3",
+      "prompt": "Şampiyon düştü!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 22,
+      "tags": [
+        "champdown",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_champdown_2_en.mp3",
+      "prompt": "The Champion falls!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "voice",
+      "kb": 22,
+      "tags": [
+        "champdown",
+        "en",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_champdown_2_tr.mp3",
+      "prompt": "Şampiyon yere serildi!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xyqF3vGMQlPk3e7yA4DI",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "champdown",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_champdown_3_en.mp3",
+      "prompt": "What a takedown!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "voice",
+      "kb": 22,
+      "tags": [
+        "champdown",
+        "en",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_champdown_3_tr.mp3",
+      "prompt": "Ne nakavt ama!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 19,
+      "tags": [
+        "champdown",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_champion_1_en.mp3",
+      "prompt": "The Champion has entered the arena!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "voice",
+      "kb": 32,
+      "tags": [
+        "champion",
+        "en",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_champion_1_tr.mp3",
+      "prompt": "Şampiyon arenaya çıktı!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 25,
+      "tags": [
+        "champion",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_champion_2_en.mp3",
+      "prompt": "Uh oh... here comes the Champion!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "voice",
+      "kb": 35,
+      "tags": [
+        "champion",
+        "en",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_champion_2_tr.mp3",
+      "prompt": "Eyvah... Şampiyon geliyor!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xyqF3vGMQlPk3e7yA4DI",
+      "kind": "voice",
+      "kb": 26,
+      "tags": [
+        "champion",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_champion_3_en.mp3",
+      "prompt": "Make way for the Champion!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "voice",
+      "kb": 25,
+      "tags": [
+        "champion",
+        "en",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_champion_3_tr.mp3",
+      "prompt": "Yol açın, Şampiyon geliyor!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 30,
+      "tags": [
+        "champion",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_go_1_en.mp3",
+      "prompt": "Three... two... one... SPIN!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "voice",
+      "kb": 51,
+      "tags": [
+        "en",
+        "go",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_go_1_tr.mp3",
+      "prompt": "Üç... iki... bir... DÖN!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 33,
+      "tags": [
+        "go",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_go_2_en.mp3",
+      "prompt": "Ready? Three, two, one, let it rip!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "voice",
+      "kb": 33,
+      "tags": [
+        "en",
+        "go",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_go_2_tr.mp3",
+      "prompt": "Hazır mısın? Üç, iki, bir, bırak gitsin!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xyqF3vGMQlPk3e7yA4DI",
+      "kind": "voice",
+      "kb": 34,
+      "tags": [
+        "go",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_go_3_en.mp3",
+      "prompt": "Alright, tops! Three, two, one... spin!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "voice",
+      "kb": 66,
+      "tags": [
+        "en",
+        "go",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_go_3_tr.mp3",
+      "prompt": "Haydi bakalım! Üç, iki, bir... dön!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 49,
+      "tags": [
+        "go",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_lasttop_1_en.mp3",
+      "prompt": "Last Top Spinning!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "voice",
+      "kb": 21,
+      "tags": [
+        "en",
+        "lasttop",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_lasttop_1_tr.mp3",
+      "prompt": "Son Dönen Topaç!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 22,
+      "tags": [
+        "lasttop",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_lasttop_2_en.mp3",
+      "prompt": "Last top standing wins!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "voice",
+      "kb": 25,
+      "tags": [
+        "en",
+        "lasttop",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_lasttop_2_tr.mp3",
+      "prompt": "Ayakta kalan son topaç kazanır!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xyqF3vGMQlPk3e7yA4DI",
+      "kind": "voice",
+      "kb": 26,
+      "tags": [
+        "lasttop",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_lasttop_3_en.mp3",
+      "prompt": "No respawns. Last top spinning!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "voice",
+      "kb": 49,
+      "tags": [
+        "en",
+        "lasttop",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_lasttop_3_tr.mp3",
+      "prompt": "Geri dönüş yok. Son dönen topaç!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 36,
+      "tags": [
+        "lasttop",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_leader_1_en.mp3",
+      "prompt": "New leader!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "voice",
+      "kb": 16,
+      "tags": [
+        "en",
+        "leader",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_leader_1_tr.mp3",
+      "prompt": "Yeni lider!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "leader",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_leader_2_en.mp3",
+      "prompt": "We've got a new number one!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "voice",
+      "kb": 23,
+      "tags": [
+        "en",
+        "leader",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_leader_2_tr.mp3",
+      "prompt": "Yeni bir bir numaramız var!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xyqF3vGMQlPk3e7yA4DI",
+      "kind": "voice",
+      "kb": 25,
+      "tags": [
+        "leader",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_leader_3_en.mp3",
+      "prompt": "Top of the board!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "en",
+        "leader",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_leader_3_tr.mp3",
+      "prompt": "Zirvede!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 13,
+      "tags": [
+        "leader",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_levelup_1_en.mp3",
+      "prompt": "Level up!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "voice",
+      "kb": 13,
+      "tags": [
+        "en",
+        "levelup",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_levelup_1_tr.mp3",
+      "prompt": "Seviye atladın!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 22,
+      "tags": [
+        "levelup",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_levelup_2_en.mp3",
+      "prompt": "You levelled up!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "voice",
+      "kb": 18,
+      "tags": [
+        "en",
+        "levelup",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_levelup_2_tr.mp3",
+      "prompt": "Bir seviye yükseldin!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xyqF3vGMQlPk3e7yA4DI",
+      "kind": "voice",
+      "kb": 22,
+      "tags": [
+        "levelup",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_levelup_3_en.mp3",
+      "prompt": "New level!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "voice",
+      "kb": 16,
+      "tags": [
+        "en",
+        "levelup",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_levelup_3_tr.mp3",
+      "prompt": "Yeni seviye!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 18,
+      "tags": [
+        "levelup",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_magnetar_1_en.mp3",
+      "prompt": "The Magnetar has entered the arena!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "voice",
+      "kb": 30,
+      "tags": [
+        "en",
+        "magnetar",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_magnetar_1_tr.mp3",
+      "prompt": "Manyetar arenaya çıktı!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 23,
+      "tags": [
+        "magnetar",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_magnetar_2_en.mp3",
+      "prompt": "Watch out, the Magnetar pulls you in!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "voice",
+      "kb": 33,
+      "tags": [
+        "en",
+        "magnetar",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_magnetar_2_tr.mp3",
+      "prompt": "Dikkat, Manyetar seni çekiyor!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xyqF3vGMQlPk3e7yA4DI",
+      "kind": "voice",
+      "kb": 34,
+      "tags": [
+        "magnetar",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_magnetar_3_en.mp3",
+      "prompt": "Here comes the Magnetar!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "voice",
+      "kb": 29,
+      "tags": [
+        "en",
+        "magnetar",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_magnetar_3_tr.mp3",
+      "prompt": "Manyetar geliyor!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "magnetar",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_overdrive_1_en.mp3",
+      "prompt": "Overdrive!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "en",
+        "overdrive",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_overdrive_1_tr.mp3",
+      "prompt": "Aşırı hız!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "overdrive",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_overdrive_2_en.mp3",
+      "prompt": "Maximum speed!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "voice",
+      "kb": 20,
+      "tags": [
+        "en",
+        "overdrive",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_overdrive_2_tr.mp3",
+      "prompt": "Tam gaz!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xyqF3vGMQlPk3e7yA4DI",
+      "kind": "voice",
+      "kb": 16,
+      "tags": [
+        "overdrive",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_overdrive_3_en.mp3",
+      "prompt": "Overdrive! Everybody faster!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "voice",
+      "kb": 30,
+      "tags": [
+        "en",
+        "overdrive",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_overdrive_3_tr.mp3",
+      "prompt": "Aşırı hız! Herkes daha hızlı!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 39,
+      "tags": [
+        "overdrive",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_perfect_1_en.mp3",
+      "prompt": "Perfect!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "voice",
+      "kb": 10,
+      "tags": [
+        "en",
+        "perfect",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_perfect_1_tr.mp3",
+      "prompt": "Mükemmel!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 14,
+      "tags": [
+        "perfect",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_perfect_2_en.mp3",
+      "prompt": "Perfect hit!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "voice",
+      "kb": 15,
+      "tags": [
+        "en",
+        "perfect",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_perfect_2_tr.mp3",
+      "prompt": "Mükemmel vuruş!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xyqF3vGMQlPk3e7yA4DI",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "perfect",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_perfect_3_en.mp3",
+      "prompt": "Ooh, perfect!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "voice",
+      "kb": 22,
+      "tags": [
+        "en",
+        "perfect",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_perfect_3_tr.mp3",
+      "prompt": "Oha, mükemmel!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 21,
+      "tags": [
+        "perfect",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_ringout_1_en.mp3",
+      "prompt": "Ring out!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "voice",
+      "kb": 13,
+      "tags": [
+        "en",
+        "ringout",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_ringout_1_tr.mp3",
+      "prompt": "Pist dışı!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "ringout",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_ringout_2_en.mp3",
+      "prompt": "Out of the ring!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "en",
+        "ringout",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_ringout_2_tr.mp3",
+      "prompt": "Çukura gitti!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xyqF3vGMQlPk3e7yA4DI",
+      "kind": "voice",
+      "kb": 20,
+      "tags": [
+        "ringout",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_ringout_3_en.mp3",
+      "prompt": "And it's gone! Ring out!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "voice",
+      "kb": 28,
+      "tags": [
+        "en",
+        "ringout",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_ringout_3_tr.mp3",
+      "prompt": "Ve gitti! Pist dışı!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "ringout",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_storm_1_en.mp3",
+      "prompt": "Spark storm!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "voice",
+      "kb": 19,
+      "tags": [
+        "en",
+        "storm",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_storm_1_tr.mp3",
+      "prompt": "Kıvılcım fırtınası!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "storm",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_storm_2_en.mp3",
+      "prompt": "It's raining sparks!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "voice",
+      "kb": 21,
+      "tags": [
+        "en",
+        "storm",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_storm_2_tr.mp3",
+      "prompt": "Kıvılcım yağıyor!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xyqF3vGMQlPk3e7yA4DI",
+      "kind": "voice",
+      "kb": 25,
+      "tags": [
+        "storm",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_storm_3_en.mp3",
+      "prompt": "Spark storm incoming!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "en",
+        "storm",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_storm_3_tr.mp3",
+      "prompt": "Kıvılcım fırtınası geliyor!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 29,
+      "tags": [
+        "storm",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_teams_1_en.mp3",
+      "prompt": "Team battle!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "en",
+        "teams",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_teams_1_tr.mp3",
+      "prompt": "Takım savaşı!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 19,
+      "tags": [
+        "teams",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_teams_2_en.mp3",
+      "prompt": "Blue versus Red!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "voice",
+      "kb": 20,
+      "tags": [
+        "en",
+        "teams",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_teams_2_tr.mp3",
+      "prompt": "Mavi, kırmızıya karşı!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xyqF3vGMQlPk3e7yA4DI",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "teams",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_teams_3_en.mp3",
+      "prompt": "Teams, get ready!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "voice",
+      "kb": 22,
+      "tags": [
+        "en",
+        "teams",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_teams_3_tr.mp3",
+      "prompt": "Takımlar, hazır olun!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "teams",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_teamwin_1_en.mp3",
+      "prompt": "Your team wins!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "voice",
+      "kb": 20,
+      "tags": [
+        "en",
+        "teamwin",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_teamwin_1_tr.mp3",
+      "prompt": "Takımın kazandı!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 22,
+      "tags": [
+        "teamwin",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_teamwin_2_en.mp3",
+      "prompt": "Team victory!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "voice",
+      "kb": 16,
+      "tags": [
+        "en",
+        "teamwin",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_teamwin_2_tr.mp3",
+      "prompt": "Takım zaferi!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xyqF3vGMQlPk3e7yA4DI",
+      "kind": "voice",
+      "kb": 23,
+      "tags": [
+        "teamwin",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_teamwin_3_en.mp3",
+      "prompt": "That's a win for your team!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "voice",
+      "kb": 27,
+      "tags": [
+        "en",
+        "teamwin",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_teamwin_3_tr.mp3",
+      "prompt": "Bu galibiyet takımının!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 26,
+      "tags": [
+        "teamwin",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_tilt_1_en.mp3",
+      "prompt": "Arena tilt!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "en",
+        "tilt",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_tilt_1_tr.mp3",
+      "prompt": "Arena eğiliyor!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 21,
+      "tags": [
+        "tilt",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_tilt_2_en.mp3",
+      "prompt": "Hold on, the arena's tilting!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "voice",
+      "kb": 30,
+      "tags": [
+        "en",
+        "tilt",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_tilt_2_tr.mp3",
+      "prompt": "Sıkı tutun, arena eğiliyor!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xyqF3vGMQlPk3e7yA4DI",
+      "kind": "voice",
+      "kb": 26,
+      "tags": [
+        "tilt",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_tilt_3_en.mp3",
+      "prompt": "Everything's sliding!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "en",
+        "tilt",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_tilt_3_tr.mp3",
+      "prompt": "Her şey kayıyor!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 23,
+      "tags": [
+        "tilt",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_topple_1_en.mp3",
+      "prompt": "Toppled!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "voice",
+      "kb": 12,
+      "tags": [
+        "en",
+        "topple",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_topple_1_tr.mp3",
+      "prompt": "Devrildi!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 15,
+      "tags": [
+        "topple",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_topple_2_en.mp3",
+      "prompt": "Down it goes!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "voice",
+      "kb": 15,
+      "tags": [
+        "en",
+        "topple",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_topple_2_tr.mp3",
+      "prompt": "Yere serildi!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xyqF3vGMQlPk3e7yA4DI",
+      "kind": "voice",
+      "kb": 14,
+      "tags": [
+        "topple",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_topple_3_en.mp3",
+      "prompt": "Spun out!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "en",
+        "topple",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_topple_3_tr.mp3",
+      "prompt": "Dönüşü bitti!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 18,
+      "tags": [
+        "topple",
+        "tr",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_victory_1_en.mp3",
+      "prompt": "Victory! You are the last top spinning!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "voice",
+      "kb": 42,
+      "tags": [
+        "en",
+        "victory",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_victory_1_tr.mp3",
+      "prompt": "Zafer! Son dönen topaç sensin!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 40,
+      "tags": [
+        "tr",
+        "victory",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_victory_2_en.mp3",
+      "prompt": "You did it! Last one spinning!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "voice",
+      "kb": 30,
+      "tags": [
+        "en",
+        "victory",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_victory_2_tr.mp3",
+      "prompt": "Başardın! Son dönen sensin!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xyqF3vGMQlPk3e7yA4DI",
+      "kind": "voice",
+      "kb": 27,
+      "tags": [
+        "tr",
+        "victory",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_victory_3_en.mp3",
+      "prompt": "And the winner is... you!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "voice",
+      "kb": 42,
+      "tags": [
+        "en",
+        "victory",
+        "wb3"
+      ]
+    },
+    {
+      "path": "audio/voice/wb3_victory_3_tr.mp3",
+      "prompt": "Ve kazanan... sensin!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "voice": "xgYIZvUB5h2eFY3HUFNj",
+      "kind": "voice",
+      "kb": 25,
+      "tags": [
+        "tr",
+        "victory",
+        "wb3"
       ]
     },
     {

@@ -105,19 +105,25 @@ def gen_music(name, prompt, game, seconds=90):
     save(os.path.join(LIB, rel), b); catalog.note(rel, prompt=prompt, game=game, source='elevenlabs')
 
 
-def voice_files(name, spec): return [f'audio/voice/{name}_{lang}.mp3' for lang in spec if lang != 'speaker']
+VOICE_KEYS = ('speaker', 'settings')  # spec keys that are not languages; speaker_<lang> picks a voice for one language
+
+
+def voice_files(name, spec): return [f'audio/voice/{name}_{lang}.mp3' for lang in spec if not lang.startswith(VOICE_KEYS)]
 
 
 def gen_voice(name, spec, game):
-    """spec = dict(speaker='narrator', en='Round one!', tr='Birinci tur!') -> one file per language."""
-    vid = VOICES.get(spec.get('speaker', 'narrator'), spec.get('speaker'))
+    """spec = dict(speaker='narrator', en='Round one!', tr='Birinci tur!') -> one file per language.
+    Optional: speaker_tr='<voice id>' (a native voice per language), settings=dict(stability=.3, style=.6) for livelier delivery."""
+    settings = spec.get('settings')
     for lang, text in spec.items():
-        if lang == 'speaker': continue
+        if lang.startswith(VOICE_KEYS): continue
+        sp = spec.get(f'speaker_{lang}', spec.get('speaker', 'narrator')); vid = VOICES.get(sp, sp)
         rel = f'audio/voice/{name}_{lang}.mp3'
         if os.path.exists(os.path.join(LIB, rel)): continue
-        try: b = req(f'{EB}/text-to-speech/{vid}', {'text': text, 'model_id': 'eleven_multilingual_v2'}, EH, raw=True)
+        body = {'text': text, 'model_id': 'eleven_multilingual_v2', **({'voice_settings': {'similarity_boost': 0.8, 'use_speaker_boost': True, **settings}} if settings else {})}
+        try: b = req(f'{EB}/text-to-speech/{vid}', body, EH, raw=True)
         except RuntimeError: b = req(f'{EB}/text-to-speech/{VOICES["narrator"]}', {'text': text, 'model_id': 'eleven_multilingual_v2'}, EH, raw=True)
-        save(os.path.join(LIB, rel), b); catalog.note(rel, prompt=text, game=game, source='elevenlabs')
+        save(os.path.join(LIB, rel), b); catalog.note(rel, prompt=text, game=game, source='elevenlabs', voice=vid)
 
 
 # ---------------- Higgsfield ----------------

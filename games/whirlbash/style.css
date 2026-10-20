@@ -398,3 +398,45 @@ input[type=range]::-moz-range-thumb { width: 1.5em; height: 1.5em; border: 0; bo
 #hud.spectating .hud-left .pill, #hud.spectating #dashKey, #hud.spectating #powerKey, #hud.spectating #btnPause { display: none !important; }
 button:disabled { filter: saturate(.35) brightness(.85); cursor: default; transform: none; }
 button.big:disabled { font-size: calc(var(--u) * 1.25); box-shadow: none; }
+
+/* ---------------- 1.5: how to play, weekly rule, quick chat, arena vote, season + badges */
+.weekly { margin: 0; padding: .3em .7em; border-radius: 10px; background: rgba(62, 224, 161, .14); color: var(--mint); font-size: calc(var(--u) * .85); width: 100%; }
+.weekly:empty { display: none; }
+#howto { background: rgba(10, 10, 32, .6); z-index: 25; }
+.howto { width: min(920px, 94vw); align-items: stretch; }
+.howgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(calc(var(--u) * 15), 1fr)); gap: .6em; }
+.howgrid section { display: flex; flex-direction: column; gap: .35em; padding: .6em .8em; border-radius: 12px; background: rgba(255, 255, 255, .06); }
+.howgrid h3 { margin: 0; font: 400 calc(var(--u) * 1.2)/1.1 'Display', 'UI', sans-serif; color: var(--accent); letter-spacing: .02em; }
+.howgrid p { margin: 0; display: flex; gap: .5em; align-items: flex-start; font-size: calc(var(--u) * .88); color: var(--dim); line-height: 1.25; }
+.howgrid p b { color: var(--text); }
+.howgrid p svg { flex: none; width: 1.5em; height: 1.5em; padding: .15em; border-radius: 50%; color: #fff; background: var(--ic, var(--panel-hi)); }
+#btnHowDone { align-self: center; }
+.chat { position: relative; pointer-events: auto; }
+.chat button.icon { width: calc(var(--u) * 2.5); height: calc(var(--u) * 2.5); }
+.chatmenu { position: absolute; left: calc(100% + 6px); top: 0; display: grid; grid-template-columns: repeat(3, auto); gap: 4px; padding: 5px; border-radius: 12px; background: var(--panel); }
+.chatmenu button { font-size: calc(var(--u) * .85); padding: .35em .7em; background: var(--panel-hi); box-shadow: none; white-space: nowrap; }
+.chatmenu button .key { font-size: .8em; padding: 0 .35em; margin-right: .2em; }
+#pops div.say { font: 800 calc(var(--u) * 1.05)/1 "UI", sans-serif; color: #1d1d3a; -webkit-text-stroke: 0; text-shadow: none; background: #fff; padding: .35em .7em; border-radius: 12px; box-shadow: 0 3px 0 rgba(0, 0, 0, .3); }
+.vote { display: flex; gap: .4em; flex-wrap: wrap; justify-content: center; align-items: center; font-size: calc(var(--u) * .9); }
+.vote > span { color: var(--dim); }
+.vote button { font-size: calc(var(--u) * .9); padding: .35em .8em; background: var(--panel-hi); box-shadow: none; }
+.vote button.on { box-shadow: inset 0 0 0 2px var(--accent); }
+.vote button b { margin-left: .3em; color: var(--accent); }
+#specVote { pointer-events: auto; padding: .35em .6em; border-radius: 14px; background: var(--panel); }
+.season { display: flex; flex-direction: column; gap: .3em; }
+.badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(calc(var(--u) * 9.5), 1fr)); gap: .4em; }
+.badges > div { display: flex; flex-direction: column; gap: .25em; padding: .45em .6em; border-radius: 10px; background: rgba(255, 255, 255, .06); font-size: calc(var(--u) * .82); color: var(--dim); }
+.badges > div b { display: flex; align-items: center; gap: .3em; color: var(--text); font-size: 1.05em; }
+.badges > div svg { width: 1.2em; height: 1.2em; color: rgba(255, 255, 255, .25); }
+.badges > div.done svg { color: var(--accent); }
+.badges .xpbar { height: .4em; }
+#board li .tm.t1cb { background: repeating-linear-gradient(45deg, #ffb02e 0 3px, #8a5200 3px 6px) !important; }
+@media (max-height: 520px) {
+  .howto .howgrid { grid-template-columns: repeat(3, 1fr); }
+  .howto #btnHowDone { display: none; }
+  .howto button.done-x { display: grid; place-items: center; margin-left: auto; width: 44px; height: 44px; background: var(--accent); color: #3b2300; box-shadow: 0 3px 0 var(--accent-dark); }
+}
+@media (max-aspect-ratio: 1/1) { .howto { width: 100%; max-height: 70vh; } }
+.howto { background: #19183f; }
+.howto button.done-x { display: grid; place-items: center; margin-left: auto; width: 44px; height: 44px; background: var(--accent); color: #3b2300; box-shadow: 0 3px 0 var(--accent-dark); }
+.howto #btnHowDone { display: none; }
