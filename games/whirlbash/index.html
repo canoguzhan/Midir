@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Whirlbash</title>
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+<script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<!-- inline SVG icons: one flat style for the whole UI -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-spin" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10h-3a7 7 0 1 1-7-7z" fill="currentColor"/><circle cx="12" cy="12" r="3" fill="currentColor"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 1l2.6 7.4L22 11l-7.4 2.6L12 21l-2.6-7.4L2 11l7.4-2.6z" fill="currentColor"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><path d="M10 1h4l.6 3 2.5 1.1 2.6-1.7 2.8 2.8-1.7 2.6L22 10.4v3.2l-3 .6-1.2 2.5 1.7 2.6-2.8 2.8-2.6-1.7-2.5 1.1-.6 3h-4l-.6-3-2.5-1.1-2.6 1.7-2.8-2.8 1.7-2.6L2 13.6v-3.2l3-.6 1.1-2.5-1.7-2.6 2.8-2.8 2.6 1.7L12.4 4z M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" fill="currentColor" fill-rule="evenodd"/></symbol>
+  <symbol id="i-crown" viewBox="0 0 24 24"><path d="M2 7l5 4 5-7 5 7 5-4-2 12H4z" fill="currentColor"/></symbol>
+  <symbol id="i-ko" viewBox="0 0 24 24"><path d="M12 1l2 6 5-4-2 6 6 1-5 3 4 5-6-1v6l-4-5-4 5v-6l-6 1 4-5-5-3 6-1-2-6 5 4z" fill="currentColor"/></symbol>
+  <symbol id="i-dash" viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6z" fill="currentColor"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="5" y="4" width="5" height="16" rx="1.5" fill="currentColor"/><rect x="14" y="4" width="5" height="16" rx="1.5" fill="currentColor"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2zm3 0h4V7a2 2 0 0 0-4 0z" fill="currentColor"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></symbol>
+  <symbol id="i-move" viewBox="0 0 24 24"><path d="M12 1l4 4h-3v5h-2V5H8zm0 22l-4-4h3v-5h2v5h3zM1 12l4-4v3h5v2H5v3zm22 0l-4 4v-3h-5v-2h5V8z" fill="currentColor"/></symbol>
+  <symbol id="i-pit" viewBox="0 0 24 24"><ellipse cx="12" cy="19" rx="10" ry="3.5" fill="currentColor" opacity=".55"/><path d="M12 2v10l3.5-3.5 1.5 1.5-6 6-6-6 1.5-1.5L10 12V2z" fill="currentColor"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><rect x="2" y="5" width="14" height="14" rx="3" fill="currentColor"/><path d="M17 10l5-3v10l-5-3z" fill="currentColor"/></symbol>
+</svg>
+
+<div id="hud" hidden>
+  <div class="hud-left">
+    <div class="pill spin"><svg><use href="#i-spin"/></svg><div class="meter"><i id="spinBar"></i></div><b id="spinVal">100</b></div>
+    <div class="pill"><svg class="gold"><use href="#i-spark"/></svg><b id="score">0</b><span class="sep"></span><svg class="gold"><use href="#i-ko"/></svg><b id="kos">0</b></div>
+    <div id="feed"></div>
+  </div>
+  <div id="eventChip" hidden><b id="eventName"></b><span id="eventTime"></span></div>
+  <div class="hud-right">
+    <button id="btnPause" class="icon" aria-label="Pause"><svg><use href="#i-pause"/></svg></button>
+    <ol id="board"></ol>
+  </div>
+  <div id="dashKey" hidden><svg><use href="#i-dash"/></svg><span class="key">Space</span></div>
+</div>
+
+<div id="joystick" hidden><div class="knob"></div></div>
+<button id="btnAction" class="touch-btn" hidden aria-label="Dash"><svg><use href="#i-dash"/></svg></button>
+
+<div id="banner" hidden><b id="bannerText"></b><small id="bannerSub"></small></div>
+<div id="countdown" hidden></div>
+
+<div id="coach" hidden>
+  <div class="coach-icon" id="coachIcon"></div>
+  <div class="coach-text"><small id="coachStep"></small><b id="coachText"></b></div>
+  <button id="btnSkipTut" data-i18n="skip">Skip</button>
+</div>
+
+<section id="menu" class="screen side" hidden>
+  <div class="card">
+    <h1>Whirlbash</h1>
+    <p class="tagline" data-i18n="tagline">Spin. Clash. Knock rivals out of the ring!</p>
+    <div class="stats"><span><svg class="gold"><use href="#i-crown"/></svg><span data-i18n="best">Best</span> <b id="menuBest">0</b></span><span><svg class="gold"><use href="#i-gear"/></svg><b id="menuGears">0</b></span></div>
+    <button id="btnPlay" class="big"><svg><use href="#i-play"/></svg><span data-i18n="play">Play</span></button>
+    <button id="btnGarage" class="wide"><svg><use href="#i-gear"/></svg><span data-i18n="garage">Garage</span><i class="dot" id="garageDot" hidden></i></button>
+    <div class="controls" id="menuControls"></div>
+  </div>
+</section>
+
+<section id="garage" class="screen side" hidden>
+  <div class="card garage">
+    <div class="garage-head"><h2 data-i18n="garage">Garage</h2><span class="gears"><svg class="gold"><use href="#i-gear"/></svg><b id="garageGears">0</b></span></div>
+    <div class="tabs" id="garageTabs"></div>
+    <div class="parts" id="garageParts"></div>
+    <div class="statbars" id="garageStats"></div>
+    <button id="btnGarageDone" class="big" data-i18n="done">Done</button>
+  </div>
+</section>
+
+<section id="paused" class="screen" hidden>
+  <div class="card center">
+    <h2 data-i18n="paused">Paused</h2>
+    <button id="btnResume" class="big" data-i18n="resume">Resume</button>
+    <button id="btnQuit" class="wide" data-i18n="menu">Menu</button>
+  </div>
+</section>
+
+<section id="gameover" class="screen" hidden>
+  <div class="card center results">
+    <h2 id="overTitle" data-i18n="eliminated">Eliminated!</h2>
+    <p class="by" id="overBy"></p>
+    <p class="final"><b id="finalScore">0</b></p>
+    <p class="best"><span data-i18n="best">Best</span>: <b id="overBest">0</b> <span id="newBest" data-i18n="newBest" hidden>New best!</span></p>
+    <div class="grid">
+      <div><small data-i18n="rank">Best rank</small><b id="overRank">#1</b></div>
+      <div><small data-i18n="kosLabel">Knockouts</small><b id="overKos">0</b></div>
+      <div><small data-i18n="peak">Peak spin</small><b id="overPeak">0</b></div>
+      <div><small data-i18n="time">Time</small><b id="overTime">0:00</b></div>
+    </div>
+    <p class="earned"><svg class="gold"><use href="#i-gear"/></svg>+<b id="overGears">0</b> <span data-i18n="gears">gears</span></p>
+    <button id="btnDouble" class="reward" hidden><svg><use href="#i-video"/></svg><span data-i18n="double">Double gears</span></button>
+    <button id="btnRetry" class="big" data-i18n="again">Play again</button>
+    <div class="row"><button id="btnOverGarage" class="wide" data-i18n="garage">Garage</button><button id="btnMenu" class="wide" data-i18n="menu">Menu</button></div>
+  </div>
+</section>
+
+<div id="loading"><div class="logo">Whirlbash</div><div class="bar"><i id="loadBar"></i></div></div>
+<div id="toast" hidden></div>
+<script type="module" src="game.js"></script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-19 23:37",
-  "count": 315,
+  "updated": "2026-10-19 23:45",
+  "count": 340,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -82,6 +82,19 @@
       "tags": [
         "bgm",
         "title"
+      ]
+    },
+    {
+      "path": "audio/bgm_whirl_arena.mp3",
+      "prompt": "energetic upbeat electronic arcade battle music for a spinning-top arena game, punchy drums, bouncy synth bass, bright synth leads, 128 bpm, no vocals, seamless loop",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1407,
+      "tags": [
+        "arena",
+        "bgm",
+        "whirl"
       ]
     },
     {
@@ -1157,6 +1170,309 @@
         "siege",
         "tr",
         "wave"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_go_en.mp3",
+      "prompt": "Three, two, one... Spin!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 30,
+      "tags": [
+        "en",
+        "go",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_go_tr.mp3",
+      "prompt": "Üç, iki, bir... Dön!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 26,
+      "tags": [
+        "go",
+        "tr",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_leader_en.mp3",
+      "prompt": "New leader!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 16,
+      "tags": [
+        "en",
+        "leader",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_leader_tr.mp3",
+      "prompt": "Yeni lider!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 18,
+      "tags": [
+        "leader",
+        "tr",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_overdrive_en.mp3",
+      "prompt": "Overdrive!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 15,
+      "tags": [
+        "en",
+        "overdrive",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_overdrive_tr.mp3",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "overdrive",
+        "tr",
+        "wb"
+      ],
+      "prompt": "Aşırı hız!",
+      "game": "whirlbash",
+      "source": "elevenlabs"
+    },
+    {
+      "path": "audio/voice/wb_ringout_en.mp3",
+      "prompt": "Ring out!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 13,
+      "tags": [
+        "en",
+        "ringout",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_ringout_tr.mp3",
+      "prompt": "Pist dışı!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 15,
+      "tags": [
+        "ringout",
+        "tr",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_storm_en.mp3",
+      "prompt": "Spark storm!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "en",
+        "storm",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_storm_tr.mp3",
+      "prompt": "Kıvılcım fırtınası!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 23,
+      "tags": [
+        "storm",
+        "tr",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_tilt_en.mp3",
+      "prompt": "Arena tilt!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 14,
+      "tags": [
+        "en",
+        "tilt",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_tilt_tr.mp3",
+      "prompt": "Arena eğiliyor!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 20,
+      "tags": [
+        "tilt",
+        "tr",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_topple_en.mp3",
+      "prompt": "Toppled!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 13,
+      "tags": [
+        "en",
+        "topple",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_topple_tr.mp3",
+      "prompt": "Devrildi!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 14,
+      "tags": [
+        "topple",
+        "tr",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/whirl_cheer.mp3",
+      "prompt": "small excited arena crowd cheering and clapping, short burst",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 32,
+      "tags": [
+        "cheer",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/whirl_clash.mp3",
+      "prompt": "two hard plastic spinning battle tops colliding, sharp bright metallic clang with a crackle of sparks, short, punchy",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 13,
+      "tags": [
+        "clash",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/whirl_clash_heavy.mp3",
+      "prompt": "heavy spinning tops slamming together, deep metallic crunch and ringing clang with sparks, powerful impact",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "clash",
+        "heavy",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/whirl_dash.mp3",
+      "prompt": "spinning top surging forward, rising high-pitched whirr and air whoosh, fast",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 11,
+      "tags": [
+        "dash",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/whirl_event.mp3",
+      "prompt": "stadium event alarm, two bright synth horn blasts, energetic, game show",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "event",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/whirl_hum.mp3",
+      "prompt": "steady smooth high-pitched whirring hum of a fast spinning top on a plastic arena, constant, seamless loop, no attack",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 47,
+      "tags": [
+        "hum",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/whirl_launch.mp3",
+      "prompt": "spinning top launched onto a plastic stadium floor, quick zipping whirr and a crisp landing click",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "launch",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/whirl_ringout.mp3",
+      "prompt": "cartoon falling whoosh as a spinning top drops into a deep pit, descending whistle then a distant thud",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 24,
+      "tags": [
+        "ringout",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/whirl_topple.mp3",
+      "prompt": "spinning top wobbling, losing speed and clattering to a stop on a smooth plastic floor",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 24,
+      "tags": [
+        "topple",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/whirl_wall.mp3",
+      "prompt": "spinning top bouncing off a rubber bumper wall, springy plastic thunk",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "wall",
+        "whirl"
       ]
     },
     {
