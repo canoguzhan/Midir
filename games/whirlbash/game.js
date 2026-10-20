@@ -359,15 +359,15 @@ function buildWorld() {
   // bleachers + crowd, sky dome, light beams: the stadium around the bowl
   const steps = []; for (let s = 0; s < 5; s++) { steps.push(new THREE.Vector2(R + 7 + s * 2.4, -1 + s * 1.5), new THREE.Vector2(R + 7 + (s + 1) * 2.4, -1 + s * 1.5)); }
   steps.push(new THREE.Vector2(R + 7 + 5 * 2.4, -10));
-  const stands = new THREE.Mesh(new THREE.LatheGeometry([new THREE.Vector2(R + 7, -10), ...steps], 96), new THREE.MeshStandardMaterial({ color: '#2a2860', roughness: 0.9, side: THREE.DoubleSide }));
+  const stands = new THREE.Mesh(new THREE.LatheGeometry([new THREE.Vector2(R + 7, -10), ...steps], 96), new THREE.MeshStandardMaterial({ color: '#3b3a8c', roughness: 0.85, side: THREE.DoubleSide }));
   scene.add(stands);
   const cols = ['#ff5d73', '#ffc531', '#3ee0a1', '#4cb8ff', '#a77bff', '#ffe8c2', '#ff8a3d'];
-  const N = 640; crowd = new THREE.InstancedMesh(new THREE.BoxGeometry(0.7, 1.1, 0.7), new THREE.MeshStandardMaterial({ roughness: 0.8 }), N);
+  const N = 1100; crowd = new THREE.InstancedMesh(new THREE.CapsuleGeometry(0.28, 0.45, 2, 8), new THREE.MeshStandardMaterial({ roughness: 0.7 }), N);
   const tmp = new THREE.Object3D(), col = new THREE.Color();
   for (let i = 0; i < N; i++) {
-    const row = i % 5, a = Math.random() * Math.PI * 2, r = R + 8.2 + row * 2.4 + rand(-0.3, 0.3);
+    const row = i % 5, a = ((i / 5) | 0) / (N / 5) * Math.PI * 2 + row * 0.013 + rand(-0.004, 0.004), r = R + 8.4 + row * 2.4; // even seats, row by row
     if (PIT_ANGLES.some((p) => Math.abs(angDiff(a, p)) < 0.05)) { tmp.position.set(0, -50, 0); tmp.scale.setScalar(0); tmp.updateMatrix(); crowd.setMatrixAt(i, tmp.matrix); tmp.scale.setScalar(1); continue; }
-    crowdBase[i] = { x: Math.cos(a) * r, y: -1 + row * 1.5 + 0.55, z: Math.sin(a) * r, ph: Math.random() * 6.28 };
+    crowdBase[i] = { x: Math.cos(a) * r, y: -1 + row * 1.5 + 0.52, z: Math.sin(a) * r, ph: Math.random() * 6.28 };
     tmp.position.set(crowdBase[i].x, crowdBase[i].y, crowdBase[i].z); tmp.updateMatrix(); crowd.setMatrixAt(i, tmp.matrix);
     crowd.setColorAt(i, col.set(cols[(Math.random() * cols.length) | 0]));
   }
