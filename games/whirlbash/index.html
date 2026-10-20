@@ -31,6 +31,11 @@
   <symbol id="i-magnet" viewBox="0 0 24 24"><path d="M4 3h5v8a3 3 0 0 0 6 0V3h5v8a8 8 0 0 1-16 0zm0 3.5h5V9H4zm11 0h5V9h-5z" fill="currentColor" fill-rule="evenodd"/></symbol>
   <symbol id="i-turbo" viewBox="0 0 24 24"><path d="M3 4l8 8-8 8h4.5l8-8-8-8zm8 0l8 8-8 8h4.5l8-8-8-8z" fill="currentColor"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z" fill="currentColor"/></symbol>
+  <symbol id="i-anchor" viewBox="0 0 24 24"><path d="M12 1.5a3.2 3.2 0 0 1 1.1 6.2V10H16v2.2h-2.9v8.2a7.2 7.2 0 0 0 5.6-5.3h-2.2L20 11l3.5 4.1h-2.6A9.3 9.3 0 0 1 12 22.5a9.3 9.3 0 0 1-8.9-7.4H.5L4 11l3.5 4.1H5.3a7.2 7.2 0 0 0 5.6 5.3v-8.2H8V10h2.9V7.7A3.2 3.2 0 0 1 12 1.5zm0 2.1a1.1 1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.2z" fill="currentColor" fill-rule="evenodd"/></symbol>
+  <symbol id="i-decoy" viewBox="0 0 24 24"><path d="M7 6.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zM17 6.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 2.6a2.9 2.9 0 1 0 0 5.8 2.9 2.9 0 0 0 0-5.8z" fill="currentColor" fill-rule="evenodd"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="7.5" r="4.5" fill="currentColor"/><path d="M3 21.5c.6-5 4.2-7.8 9-7.8s8.4 2.8 9 7.8z" fill="currentColor"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm0 3a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm0 2.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z" fill="currentColor" fill-rule="evenodd"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 1.8l3.1 6.6 7.2.8-5.4 4.9 1.5 7.1L12 17.6l-6.4 3.6 1.5-7.1-5.4-4.9 7.2-.8z" fill="currentColor"/></symbol>
   <symbol id="i-video" viewBox="0 0 24 24"><rect x="2" y="5" width="14" height="14" rx="3" fill="currentColor"/><path d="M17 10l5-3v10l-5-3z" fill="currentColor"/></symbol>
 </svg>
 
@@ -38,9 +43,14 @@
   <div class="hud-left">
     <div class="pill spin"><svg><use href="#i-spin"/></svg><div class="meter"><i id="spinBar"></i></div><b id="spinVal">100</b></div>
     <div class="pill"><svg class="gold"><use href="#i-spark"/></svg><b id="score">0</b><span class="sep"></span><svg class="gold"><use href="#i-ko"/></svg><b id="kos">0</b></div>
+    <div class="pill" id="leftPill" hidden><svg class="gold"><use href="#i-target"/></svg><b id="leftN">12</b><span id="leftLabel">left</span></div>
     <div id="feed"></div>
   </div>
-  <div id="eventChip" hidden><b id="eventName"></b><span id="eventTime"></span></div>
+  <div id="centerChips">
+    <div id="eventChip" hidden><b id="eventName"></b><span id="eventTime"></span></div>
+    <div id="bossChip" hidden><svg><use href="#i-crown"/></svg><b data-i18n="champion">The Champion</b><div class="meter"><i id="bossBar"></i></div><span id="bossTime"></span></div>
+    <div id="zoneChip" hidden><b id="zoneText"></b></div>
+  </div>
   <div id="roomChip" hidden><svg><use href="#i-globe"/></svg><span><small data-i18n="room">Room</small> <b id="roomCode">-----</b></span><span id="roomInfo"></span><button id="btnInvite"><svg><use href="#i-link"/></svg><span data-i18n="invite">Invite</span></button></div>
   <div class="hud-right">
     <button id="btnPause" class="icon" aria-label="Pause"><svg><use href="#i-pause"/></svg></button>
@@ -54,6 +64,8 @@
 <button id="btnAction" class="touch-btn" hidden aria-label="Dash"><svg><use href="#i-dash"/></svg></button>
 <button id="btnPower" class="touch-btn power-slot" hidden aria-label="Use power-up"><span class="pw"><svg><use href="#i-blast"/></svg></span></button>
 
+<div id="pops"></div>
+<div id="missionPop" hidden><svg><use href="#i-check"/></svg><span><small data-i18n="missionDone">Mission complete!</small><b id="missionPopText"></b></span><em id="missionPopGears"></em></div>
 <div id="banner" hidden><b id="bannerText"></b><small id="bannerSub"></small></div>
 <div id="countdown" hidden></div>
 
@@ -67,10 +79,14 @@
   <div class="card">
     <h1>Whirlbash</h1>
     <p class="tagline" data-i18n="tagline">Spin. Clash. Knock rivals out of the ring!</p>
+    <div class="lvrow"><span class="lv" id="menuLv">Lv 1</span><div class="xpbar"><i id="menuXp"></i></div><small id="menuXpText"></small></div>
     <div class="stats"><span><svg class="gold"><use href="#i-crown"/></svg><span data-i18n="best">Best</span> <b id="menuBest">0</b></span><span><svg class="gold"><use href="#i-gear"/></svg><b id="menuGears">0</b></span></div>
+    <div class="seg" id="modeSeg" role="radiogroup"></div>
+    <div class="seg" id="arenaSeg" role="radiogroup"></div>
     <button id="btnPlay" class="big"><svg><use href="#i-play"/></svg><span data-i18n="play">Play</span></button>
-    <button id="btnOnline" class="big online"><svg><use href="#i-globe"/></svg><span data-i18n="playOnline">Play online</span></button>
-    <button id="btnGarage" class="wide"><svg><use href="#i-gear"/></svg><span data-i18n="garage">Garage</span><i class="dot" id="garageDot" hidden></i></button>
+    <button id="btnOnline" class="big online"><svg><use href="#i-globe"/></svg><span><span data-i18n="playOnline">Play online</span><small id="onlineCount" hidden></small></span></button>
+    <div class="row menu-row"><button id="btnGarage"><svg><use href="#i-gear"/></svg><span data-i18n="garage">Garage</span><i class="dot" id="garageDot" hidden></i></button><button id="btnMissions"><svg><use href="#i-target"/></svg><span data-i18n="missions">Missions</span><b class="badge" id="missionBadge">0/3</b></button></div>
+    <div class="minestats" id="menuStats"></div>
     <div class="controls" id="menuControls"></div>
   </div>
 </section>
@@ -98,6 +114,18 @@
   </div>
 </section>
 
+<section id="profile" class="screen side" hidden>
+  <div class="card profile">
+    <div class="garage-head"><h2 data-i18n="missions">Missions</h2><span class="lv" id="profLv">Lv 1</span><button id="btnProfileX" class="icon done-x" aria-label="Done"><svg><use href="#i-check"/></svg></button></div>
+    <small class="sub" data-i18n="dailyMissions">Daily missions</small>
+    <ol class="missions" id="missionList"></ol>
+    <p class="next" id="nextReward"></p>
+    <small class="sub" data-i18n="records">Records</small>
+    <div class="recs" id="recordList"></div>
+    <button id="btnProfileDone" class="big" data-i18n="done">Done</button>
+  </div>
+</section>
+
 <section id="paused" class="screen" hidden>
   <div class="card center">
     <h2 data-i18n="paused">Paused</h2>
@@ -114,15 +142,17 @@
     <p class="final"><b id="finalScore">0</b></p>
     <p class="best"><span data-i18n="best">Best</span>: <b id="overBest">0</b> <span id="newBest" data-i18n="newBest" hidden>New best!</span></p>
     <div class="grid">
-      <div><small data-i18n="rank">Best rank</small><b id="overRank">#1</b></div>
+      <div><small id="overRankLabel" data-i18n="rank">Best rank</small><b id="overRank">#1</b></div>
       <div><small data-i18n="kosLabel">Knockouts</small><b id="overKos">0</b></div>
       <div><small data-i18n="peak">Peak spin</small><b id="overPeak">0</b></div>
       <div><small data-i18n="time">Time</small><b id="overTime">0:00</b></div>
     </div>
     <p class="earned"><svg class="gold"><use href="#i-gear"/></svg>+<b id="overGears">0</b> <span data-i18n="gears">gears</span></p>
+    <div class="lvrow over"><span class="lv" id="overLv">Lv 1</span><div class="xpbar"><i id="overXp"></i></div><small id="overXpText"></small></div>
+    <div class="chips" id="overChips"></div>
     <button id="btnDouble" class="reward" hidden><svg><use href="#i-video"/></svg><span data-i18n="double">Double gears</span></button>
     <button id="btnRetry" class="big" data-i18n="again">Play again</button>
-    <div class="row"><button id="btnOverGarage" class="wide" data-i18n="garage">Garage</button><button id="btnMenu" class="wide" data-i18n="menu">Menu</button></div>
+    <div class="row"><button id="btnOverInvite" hidden><svg><use href="#i-link"/></svg><span data-i18n="inviteFriends">Invite friends</span></button><button id="btnOverGarage" class="wide" data-i18n="garage">Garage</button><button id="btnMenu" class="wide" data-i18n="menu">Menu</button></div>
   </div>
 </section>
 

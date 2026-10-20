@@ -1,7 +1,7 @@
 // Whirlbash: spinning-top arena brawler (io-style). Solo against bots, or online against real players with bots filling
 // the empty seats. The rules live in sim.js (shared with the multiplayer server, mp/whirlbash.mjs); this file is the view:
 // Three.js scene, UI, audio, input, the solo run, the online client and the CrazyGames SDK. Sections: CONFIG, I18N, SDK,
-// AUDIO, SAVE, WORLD, TOPS, SPARKS, FX, INPUT, STATE, UI, EVENTS, SOLO, TUTORIAL, ONLINE, LOOP, COVER, BOOT.
+// AUDIO, SAVE, PROGRESS, WORLD, TOPS, SPARKS, FX, INPUT, STATE, UI, EVENTS, SOLO, TUTORIAL, ONLINE, LOOP, COVER, BOOT.
 // Every top, the arena and the icons are procedural; audio loads from ./assets/ with synth fallbacks. No API keys in here.
 import * as THREE from 'three';
 import * as S from './sim.js';
@@ -12,7 +12,7 @@ const STEP = S.STEP;
 const params = new URLSearchParams(location.search);
 const CAPTURE = params.has('capture'); // deterministic frame stepping for press screenshots + trailer (tools/capture.mjs)
 const AUTOPLAY = CAPTURE || params.has('autoplay'); // the player's top is driven by the bot brain (trailer footage, balance tests)
-const { CFG, R, PIT_ANGLES, PARTS, part, bowlY, angDiff, clamp, alive } = S;
+const { CFG, R, PARTS, part, bowlY, angDiff, clamp, alive, isDecoy } = S;
 const MP_URL = /^wss?:\/\//.test(params.get('mp') || '') ? params.get('mp') : 'wss://broadgames.pro/mp/whirlbash'; // online arena (?mp= for local tests)
 const INTERP = 0.12; // online: other tops are drawn this far in the past, between two server snapshots
 const SFX_FILES = {
@@ -23,13 +23,16 @@ const SFX_FILES = {
   upgrade: 'assets/audio/upgrade.mp3', unlock: 'assets/audio/unlock.mp3', over: 'assets/audio/defeat.mp3', count: 'assets/audio/countdown.mp3',
   puBlast: 'assets/audio/skill_slam.mp3', puShield: 'assets/audio/skill_heal.mp3', puMagnet: 'assets/audio/portal.mp3', puTurbo: 'assets/audio/frenzy.mp3',
   puTake: 'assets/audio/gate_good.mp3', puLost: 'assets/audio/gate_bad.mp3',
+  puAnchor: 'assets/audio/whirl_anchor.mp3', puDecoy: 'assets/audio/pop.mp3', champion: 'assets/audio/whirl_champion.mp3', perfect: 'assets/audio/whirl_perfect.mp3',
+  shutter: 'assets/audio/whirl_shutter.mp3', zone: 'assets/audio/whirl_zone.mp3', levelUp: 'assets/audio/level_up.mp3', victory: 'assets/audio/victory.mp3', mission: 'assets/audio/quest_complete.mp3',
 };
 const VOICE_FILES = { // {lang} is filled in at boot (en / tr)
   ringout: 'assets/audio/voice/wb_ringout_{lang}.mp3', topple: 'assets/audio/voice/wb_topple_{lang}.mp3', leader: 'assets/audio/voice/wb_leader_{lang}.mp3',
   storm: 'assets/audio/voice/wb_storm_{lang}.mp3', tilt: 'assets/audio/voice/wb_tilt_{lang}.mp3', overdrive: 'assets/audio/voice/wb_overdrive_{lang}.mp3',
-  go: 'assets/audio/voice/wb_go_{lang}.mp3',
+  go: 'assets/audio/voice/wb_go_{lang}.mp3', champion: 'assets/audio/voice/wb_champion_{lang}.mp3', champdown: 'assets/audio/voice/wb_champdown_{lang}.mp3',
+  perfect: 'assets/audio/voice/wb_perfect_{lang}.mp3', lasttop: 'assets/audio/voice/wb_lasttop_{lang}.mp3', victory: 'assets/audio/voice/wb_victory_{lang}.mp3', levelup: 'assets/audio/voice/wb_levelup_{lang}.mp3',
 };
-const MUSIC = 'assets/audio/bgm_whirl_arena.mp3';
+const MUSIC = { arena: 'assets/audio/bgm_whirl_arena.mp3', showdown: 'assets/audio/bgm_whirl_showdown.mp3' }; // showdown: Last Top Spinning and the Champion
 
 // ================================================================ I18N (English required; Turkish written natively)
 const STRINGS = {
@@ -51,7 +54,7 @@ const STRINGS = {
     p_gyro: 'Gyro', d_gyro: 'Balanced weight', p_iron: 'Iron', d_iron: 'Heavy: hard to push', p_feather: 'Feather', d_feather: 'Light and quick',
     p_heart: 'Heartcore', d_heart: 'Spins much longer',
     p_dome: 'Dome', d_dome: 'Steady control', p_grip: 'Grip', d_grip: 'Sharp turns', p_glide: 'Glide', d_glide: 'High top speed', p_needle: 'Needle', d_needle: 'Loses spin slower',
-    c_sun: 'Sunburst', c_coral: 'Coral', c_mint: 'Mint', c_sky: 'Sky', c_violet: 'Violet', c_lime: 'Lime', c_tangerine: 'Tangerine', c_snow: 'Snow',
+    c_sun: 'Sunburst', c_coral: 'Coral', c_mint: 'Mint', c_sky: 'Sky', c_violet: 'Violet', c_lime: 'Lime', c_tangerine: 'Tangerine', c_snow: 'Snow', c_ruby: 'Ruby', c_jade: 'Jade', c_aurora: 'Aurora',
     playOnline: 'Play online', online: 'Online', quickMatch: 'Quick match', createRoom: 'Private room', joinCode: 'Join with a code', join: 'Join', back: 'Back',
     noAccount: 'No account needed. You face real players, and bots fill the empty seats.', playingAs: 'You play as {n}', guestAuto: 'You get a guest name automatically',
     connecting: 'Connecting…', connFail: 'Could not reach the online arena. Try again, or play solo.', connLost: 'Connection lost', noRoom: 'No room with that code',
@@ -60,6 +63,23 @@ const STRINGS = {
     pu_blast: 'Blast!', pu_shield: 'Shield!', pu_magnet: 'Magnet!', pu_turbo: 'Turbo!', pud_blast: 'knocks everyone away', pud_shield: 'no damage, hard to push',
     pud_magnet: 'pulls in sparks', pud_turbo: 'speed and quick dashes', puUseKey: 'Press E within 10 s', puUseTouch: 'Tap the power button within 10 s',
     puLost: 'Power-up lost: use it within 10 seconds!', ctlPower: 'Power-up', ctlTapDash: 'Tap: dash', ctlPowerBtn: 'Power button: use power-up', ctlRight: 'Right-click',
+    pu_anchor: 'Anchor!', pud_anchor: 'nobody can push you', pu_decoy: 'Decoy!', pud_decoy: 'a fake you fools rivals', decoy: 'Decoy', fooled: 'Fooled!',
+    lv: 'Lv {n}', xp: '{a}/{b} XP', xpGain: '+{n} XP', levelUp: 'Level up!', unlockAt: 'Unlocks at Lv {n}', lockedLv: 'Lv {n}',
+    mode_endless: 'Endless', mode_last: 'Last Top', modeName_endless: 'Endless', modeName_last: 'Last Top Spinning',
+    arena_bowl: 'Grand Bowl', arena_turntable: 'Turntable', arena_shutter: 'Shutter Ring', seg_bowl: 'Bowl', seg_turntable: 'Turntable', seg_shutter: 'Shutters',
+    arenaSub_bowl: 'Three open pits', arenaSub_turntable: 'The spinning disc recharges you', arenaSub_shutter: 'Six pits: three open at a time',
+    missions: 'Missions', dailyMissions: 'Daily missions', records: 'Records', missionDone: 'Mission complete!', newTomorrow: 'All done! New missions tomorrow.',
+    nextReward: 'Next reward at Lv {n}: {x}', allRewards: 'Every level reward unlocked. Levels still pay gears.',
+    m_ringouts: 'Ring out {n} rivals in one run', m_kos: 'Knock out {n} rivals', m_sparks: 'Collect {n} sparks', m_leader: 'Become #1 in a run',
+    m_lead: 'Hold #1 for {n} seconds', m_powers: 'Use {n} power-ups', m_perfect: 'Land {n} perfect dashes', m_survive: 'Survive {n} minutes in one run',
+    m_peak: 'Reach {n} spin in one run', m_champion: 'Defeat the Champion', m_lasttop: 'Finish top 3 in Last Top Spinning', m_online: 'Play a match online',
+    rec_score: 'Best score', rec_kos: 'Most knockouts', rec_ringouts: 'Most ring outs', rec_lead: 'Longest at #1', rec_peak: 'Highest spin', rec_time: 'Longest run', rec_wins: 'Last Top wins',
+    newRecord: 'New record: {x}', rw_mode: 'New mode: {x}', rw_arena: 'New arena: {x}', rw_part: 'New part: {x}', rw_gears: '+{n} gears',
+    victory: 'Victory!', placeOf: '#{p} of {n}', place: 'Place', lastStanding: 'You are the last top spinning!', outPlace: 'You finished #{p} of {n}',
+    champion: 'The Champion', championIn: 'The Champion has entered!', championSub: 'Beat it for +{n} points', championOut: 'The Champion left the arena', champDown: 'Champion down!',
+    perfect: 'Perfect!', zoneSoon: 'Ring closes in {n}s', zoneClosing: 'The ring is closing!', zoneSub: 'Stay inside or lose spin fast', left: 'left',
+    lastTopGo: 'Last Top Spinning!', lastTopSub: 'No respawns. Be the last top in the ring.', playingNow: '{n} playing now', inviteFriends: 'Invite friends',
+    st_short_atk: 'ATK', st_short_def: 'DEF', st_short_sta: 'STA', st_short_spd: 'SPD',
   },
   tr: {
     play: 'Oyna', garage: 'Garaj', done: 'Tamam', best: 'En iyi', tagline: 'Dön. Çarpış. Rakiplerini pistten at!', paused: 'Duraklatıldı', resume: 'Devam',
@@ -79,7 +99,7 @@ const STRINGS = {
     p_gyro: 'Jiro', d_gyro: 'Dengeli ağırlık', p_iron: 'Demir', d_iron: 'Ağır: itmesi zor', p_feather: 'Tüy', d_feather: 'Hafif ve çevik',
     p_heart: 'Kalp', d_heart: 'Çok daha uzun döner',
     p_dome: 'Kubbe', d_dome: 'Sabit kontrol', p_grip: 'Tutuş', d_grip: 'Keskin dönüşler', p_glide: 'Kayış', d_glide: 'Yüksek azami hız', p_needle: 'İğne', d_needle: 'Dönüşünü yavaş kaybeder',
-    c_sun: 'Güneş', c_coral: 'Mercan', c_mint: 'Nane', c_sky: 'Gök', c_violet: 'Menekşe', c_lime: 'Misket', c_tangerine: 'Mandalina', c_snow: 'Kar',
+    c_sun: 'Güneş', c_coral: 'Mercan', c_mint: 'Nane', c_sky: 'Gök', c_violet: 'Menekşe', c_lime: 'Misket', c_tangerine: 'Mandalina', c_snow: 'Kar', c_ruby: 'Yakut', c_jade: 'Yeşim', c_aurora: 'Kutup Işığı',
     playOnline: 'Çevrimiçi oyna', online: 'Çevrimiçi', quickMatch: 'Hızlı maç', createRoom: 'Özel oda', joinCode: 'Kodla katıl', join: 'Katıl', back: 'Geri',
     noAccount: 'Hesap gerekmez. Gerçek oyunculara karşı oynarsın, boş yerleri botlar doldurur.', playingAs: 'Oyuncu adın: {n}', guestAuto: 'Sana otomatik bir misafir adı verilir',
     connecting: 'Bağlanıyor…', connFail: 'Çevrimiçi arenaya ulaşılamadı. Tekrar dene ya da tek başına oyna.', connLost: 'Bağlantı koptu', noRoom: 'Bu kodla bir oda yok',
@@ -88,6 +108,23 @@ const STRINGS = {
     pu_blast: 'Patlama!', pu_shield: 'Kalkan!', pu_magnet: 'Mıknatıs!', pu_turbo: 'Turbo!', pud_blast: 'herkesi geri savurur', pud_shield: 'hasar yok, itilmesi zor',
     pud_magnet: 'kıvılcımları çeker', pud_turbo: 'hız ve seri atılma', puUseKey: '10 sn içinde E tuşuna bas', puUseTouch: '10 sn içinde güç düğmesine dokun',
     puLost: 'Güç kaybedildi: 10 saniye içinde kullan!', ctlPower: 'Güç', ctlTapDash: 'Dokun: atıl', ctlPowerBtn: 'Güç düğmesi: gücü kullan', ctlRight: 'Sağ tık',
+    pu_anchor: 'Çapa!', pud_anchor: 'kimse seni itemez', pu_decoy: 'Sahte Kopya!', pud_decoy: 'sahte bir sen rakipleri kandırır', decoy: 'Kopya', fooled: 'Kandırıldı!',
+    lv: 'Sv {n}', xp: '{a}/{b} XP', xpGain: '+{n} XP', levelUp: 'Seviye atladın!', unlockAt: '{n}. seviyede açılır', lockedLv: 'Sv {n}',
+    mode_endless: 'Sonsuz', mode_last: 'Son Topaç', modeName_endless: 'Sonsuz', modeName_last: 'Son Dönen Topaç',
+    arena_bowl: 'Büyük Kase', arena_turntable: 'Döner Tabla', arena_shutter: 'Kapaklı Halka', seg_bowl: 'Kase', seg_turntable: 'Döner Tabla', seg_shutter: 'Kapaklar',
+    arenaSub_bowl: 'Üç açık çukur', arenaSub_turntable: 'Dönen tabla seni şarj eder', arenaSub_shutter: 'Altı çukur: aynı anda üçü açık',
+    missions: 'Görevler', dailyMissions: 'Günlük görevler', records: 'Rekorlar', missionDone: 'Görev tamamlandı!', newTomorrow: 'Hepsi bitti! Yeni görevler yarın.',
+    nextReward: '{n}. seviye ödülü: {x}', allRewards: 'Tüm seviye ödülleri açıldı. Seviyeler hâlâ dişli kazandırır.',
+    m_ringouts: 'Tek turda {n} rakibi çukura it', m_kos: '{n} rakibi nakavt et', m_sparks: '{n} kıvılcım topla', m_leader: 'Bir turda 1 numara ol',
+    m_lead: '{n} saniye 1 numara kal', m_powers: '{n} güç kullan', m_perfect: '{n} mükemmel atılma yap', m_survive: 'Tek turda {n} dakika dayan',
+    m_peak: 'Tek turda {n} dönüşe ulaş', m_champion: 'Şampiyonu yen', m_lasttop: 'Son Dönen Topaç modunda ilk 3\'e gir', m_online: 'Çevrimiçi bir maç oyna',
+    rec_score: 'En yüksek skor', rec_kos: 'En çok nakavt', rec_ringouts: 'En çok pist dışı', rec_lead: 'En uzun 1 numara', rec_peak: 'En yüksek dönüş', rec_time: 'En uzun tur', rec_wins: 'Son Topaç zaferi',
+    newRecord: 'Yeni rekor: {x}', rw_mode: 'Yeni mod: {x}', rw_arena: 'Yeni arena: {x}', rw_part: 'Yeni parça: {x}', rw_gears: '+{n} dişli',
+    victory: 'Zafer!', placeOf: '{n} topaç içinde {p}.', place: 'Sıra', lastStanding: 'Son dönen topaç sensin!', outPlace: '{n} topaç içinde {p}. oldun',
+    champion: 'Şampiyon', championIn: 'Şampiyon arenaya çıktı!', championSub: 'Yen: +{n} puan', championOut: 'Şampiyon arenadan ayrıldı', champDown: 'Şampiyon düştü!',
+    perfect: 'Mükemmel!', zoneSoon: 'Halka {n} sn içinde daralıyor', zoneClosing: 'Halka daralıyor!', zoneSub: 'İçeride kal yoksa dönüşün hızla biter', left: 'kaldı',
+    lastTopGo: 'Son Dönen Topaç!', lastTopSub: 'Yeniden doğma yok. Halkada kalan son topaç ol.', playingNow: 'Şu an {n} kişi oynuyor', inviteFriends: 'Arkadaşlarını davet et',
+    st_short_atk: 'SAL', st_short_def: 'SAV', st_short_sta: 'DAY', st_short_spd: 'HIZ',
   },
 };
 let lang = 'en';
@@ -180,8 +217,11 @@ const SYNTH = { // [waveform, startHz, endHz, seconds, gain]
   unlock: ['triangle', 660, 1320, 0.4, 0.12], over: ['triangle', 440, 110, 0.8, 0.16], count: ['square', 880, 880, 0.08, 0.08],
   puBlast: ['sawtooth', 300, 40, 0.5, 0.18], puShield: ['sine', 400, 900, 0.4, 0.12], puMagnet: ['sine', 200, 600, 0.5, 0.1], puTurbo: ['square', 300, 1200, 0.3, 0.08],
   puTake: ['triangle', 700, 1400, 0.25, 0.12], puLost: ['triangle', 600, 200, 0.4, 0.12],
+  puAnchor: ['square', 160, 60, 0.4, 0.14], puDecoy: ['sine', 900, 300, 0.15, 0.1], champion: ['sawtooth', 110, 220, 1.2, 0.14], perfect: ['triangle', 1400, 2400, 0.25, 0.12],
+  shutter: ['square', 300, 140, 0.35, 0.08], zone: ['sawtooth', 120, 260, 0.8, 0.08], levelUp: ['triangle', 520, 1560, 0.6, 0.14], victory: ['triangle', 660, 1320, 1, 0.14],
+  mission: ['triangle', 880, 1760, 0.4, 0.12],
 };
-const audio = { ctx: null, master: null, buffers: {}, music: null, wantMusic: false, musicVol: 0.3, muted: new Set(), voices: 0, hum: null, last: {} };
+const audio = { ctx: null, master: null, buffers: {}, music: null, track: 'arena', tracks: {}, wantMusic: false, musicVol: 0.3, muted: new Set(), voices: 0, hum: null, last: {} };
 
 function initAudio() {
   try { audio.ctx = new (window.AudioContext || window.webkitAudioContext)(); audio.master = audio.ctx.createGain(); audio.master.connect(audio.ctx.destination); }
@@ -228,9 +268,14 @@ function updateHum(level, pitch) {
   if (audio.hum.src.playbackRate) audio.hum.src.playbackRate.setTargetAtTime(pitch, now, 0.1); else audio.hum.src.frequency.setTargetAtTime(140 + pitch * 90, now, 0.1);
 }
 function stopHum() { if (!audio.hum) return; try { audio.hum.src.stop(); } catch {} audio.hum.g.disconnect(); audio.hum = null; }
-function playMusic(vol = audio.musicVol) {
+function playMusic(vol = audio.musicVol, track = audio.track) { // track: 'arena' or 'showdown' (Last Top Spinning, the Champion)
   audio.wantMusic = true; audio.musicVol = vol;
-  if (!audio.music && MUSIC) { audio.music = new Audio(MUSIC); audio.music.loop = true; audio.music.onerror = () => { audio.music = null; }; }
+  if (track !== audio.track || !audio.music) {
+    audio.music?.pause(); audio.track = track;
+    let el = audio.tracks[track];
+    if (el === undefined && MUSIC[track]) { el = new Audio(MUSIC[track]); el.loop = true; el.onerror = () => { audio.tracks[track] = null; if (audio.music === el) audio.music = null; }; audio.tracks[track] = el; }
+    audio.music = el || null; if (audio.music) { audio.music.currentTime = 0; audio.music.playbackRate = 1; }
+  }
   if (audio.music) { audio.music.volume = vol; if (!audio.muted.size) audio.music.play().catch(() => {}); }
 }
 function muteAudio(reason = 'ad') { audio.muted.add(reason); applyMute(); }
@@ -243,16 +288,85 @@ function applyMute() {
 
 // ================================================================ SAVE
 const DEFAULT_SAVE = () => ({
-  best: 0, gears: 0, runs: 0, tut: false, shake: true,
+  best: 0, gears: 0, runs: 0, tut: false, shake: true, level: 1, xp: 0, mode: 'endless', arena: 'bowl',
   owned: { crown: ['halo'], core: ['gyro'], tip: ['dome'], paint: ['sun', 'coral', 'mint'] },
   sel: { crown: 'halo', core: 'gyro', tip: 'dome', paint: 'sun' },
+  missions: { day: '', list: [] }, rec: { score: 0, kos: 0, ringouts: 0, lead: 0, peak: 0, time: 0, wins: 0 },
 });
 let save = DEFAULT_SAVE();
 function loadSave() {
   const d = DEFAULT_SAVE(), s = loadData(`${SAVE_KEY}:save`, null) || {};
-  save = { ...d, ...s, owned: { ...d.owned, ...(s.owned || {}) }, sel: { ...d.sel, ...(s.sel || {}) } };
+  save = { ...d, ...s, owned: { ...d.owned, ...(s.owned || {}) }, sel: { ...d.sel, ...(s.sel || {}) }, missions: { ...d.missions, ...(s.missions || {}) }, rec: { ...d.rec, ...(s.rec || {}) } };
+  save.rec.score = Math.max(save.rec.score, save.best); // saves from before 1.3 only kept the best score
+  if (!Array.isArray(save.missions.list)) save.missions = d.missions;
 }
 const persist = () => saveData(`${SAVE_KEY}:save`, save);
+
+// ================================================================ PROGRESS (player level + XP, level rewards, daily missions, personal records)
+const xpFor = (lv) => 120 + 80 * (lv - 1); // XP to go from lv to lv + 1: the first levels come after one or two runs
+const LEVEL_REWARDS = { 2: ['mode', 'last'], 3: ['arena', 'turntable'], 4: ['paint', 'sky'], 5: ['arena', 'shutter'], 6: ['paint', 'ruby'], 7: ['tip', 'grip'], 8: ['crown', 'razor'], 9: ['paint', 'jade'], 10: ['core', 'heart'], 12: ['crown', 'comet'], 15: ['paint', 'aurora'] };
+const UNLOCK_LV = { mode: { endless: 1, last: 2 }, arena: { bowl: 1, turntable: 3, shutter: 5 } };
+const isUnlocked = (kind, id) => save.level >= (UNLOCK_LV[kind]?.[id] ?? 1);
+const rewardName = ([kind, id]) => (kind === 'mode' ? t('rw_mode', { x: t('modeName_' + id) }) : kind === 'arena' ? t('rw_arena', { x: t('arena_' + id) }) : t('rw_part', { x: t((kind === 'paint' ? 'c_' : 'p_') + id) }));
+function addXP(n) { // returns the level-ups it caused: [{ lv, reward, gears }]
+  const ups = []; save.xp += Math.max(0, Math.round(n));
+  while (save.xp >= xpFor(save.level)) {
+    save.xp -= xpFor(save.level); save.level++;
+    let reward = LEVEL_REWARDS[save.level] || null, gears = 20 + 10 * save.level;
+    if (reward && PARTS[reward[0]]) { if (save.owned[reward[0]].includes(reward[1])) { gears += 100; reward = null; } else save.owned[reward[0]].push(reward[1]); }
+    save.gears += gears; ups.push({ lv: save.level, reward, gears });
+  }
+  return ups;
+}
+// Missions: three a day. run: counts the best single run; otherwise a running total. lv: offered from this level on.
+const MISSIONS = [
+  { id: 'ringouts', n: 2, run: true, gears: 40 }, { id: 'kos', n: 6, gears: 40 }, { id: 'sparks', n: 200, gears: 30 }, { id: 'leader', n: 1, run: true, gears: 50 },
+  { id: 'lead', n: 45, gears: 50 }, { id: 'powers', n: 5, gears: 30 }, { id: 'perfect', n: 4, gears: 40 }, { id: 'survive', n: 3, run: true, gears: 50 },
+  { id: 'peak', n: 400, run: true, gears: 40 }, { id: 'champion', n: 1, gears: 80, lv: 3 }, { id: 'lasttop', n: 1, gears: 60, lv: 2 }, { id: 'online', n: 1, gears: 40 },
+];
+const MISSION_XP = 60;
+const missionDef = (id) => MISSIONS.find((m) => m.id === id);
+const today = () => { const d = new Date(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; };
+function refreshMissions() {
+  if (CAPTURE || (save.missions.day === today() && save.missions.list.length)) return;
+  const pool = MISSIONS.filter((m) => (m.lv || 1) <= save.level).sort(() => Math.random() - 0.5);
+  save.missions = { day: today(), list: pool.slice(0, 3).map((m) => ({ id: m.id, p: 0, done: false })) }; persist();
+}
+// bump: something happened `inc` times in this run (run missions keep the best run, total missions add up)
+function bump(id, inc = 1) {
+  if (!run || CAPTURE) return;
+  run.stats[id] = (run.stats[id] || 0) + inc; progress(id, inc, run.stats[id]);
+}
+function setStat(id, value) { // a value that only grows during a run (spin peak, minutes survived)
+  if (!run || CAPTURE || value <= (run.stats[id] || 0)) return;
+  const inc = value - (run.stats[id] || 0); run.stats[id] = value; progress(id, inc, value);
+}
+function progress(id, inc, runValue) {
+  for (const m of save.missions.list) {
+    if (m.id !== id || m.done) continue;
+    const def = missionDef(id); m.p = def.run ? Math.max(m.p, runValue) : m.p + inc;
+    if (m.p >= def.n) completeMission(m, def);
+  }
+}
+let missionPopTimer = 0;
+function completeMission(m, def) {
+  m.done = true; m.p = def.n; save.gears += def.gears;
+  const ups = addXP(MISSION_XP); if (run) { run.missionsDone.push(m.id); run.levelUps.push(...ups); run.xpEarned += MISSION_XP; }
+  persist();
+  $('missionPopText').textContent = missionText(m.id); $('missionPopGears').textContent = `+${def.gears}`;
+  const el = $('missionPop'); el.hidden = true; void el.offsetWidth; el.hidden = false; missionPopTimer = 2.8;
+  playSfx('mission', 0.7); refreshMenu();
+}
+const missionText = (id) => t('m_' + id, { n: missionDef(id).n });
+const missionLeft = () => save.missions.list.filter((m) => !m.done).length;
+// Personal records: shown on the results screen when broken
+const RECORDS = ['score', 'kos', 'ringouts', 'lead', 'peak', 'time', 'wins'];
+const recValue = (k, v) => (k === 'lead' || k === 'time' ? `${Math.floor(v / 60)}:${String(Math.floor(v % 60)).padStart(2, '0')}` : String(Math.round(v)));
+function checkRecords(vals) { // -> keys of the records this run broke
+  const broke = [];
+  for (const [k, v] of Object.entries(vals)) if (v > (save.rec[k] || 0)) { if ((save.rec[k] || 0) > 0) broke.push(k); save.rec[k] = v; } // a first run sets records quietly
+  return broke;
+}
 
 // ================================================================ WORLD (night stadium: glossy cobalt bowl, bumper walls, three glowing pits)
 const $ = (id) => document.getElementById(id);
@@ -264,71 +378,24 @@ const scene = new THREE.Scene(); scene.background = new THREE.Color('#15123a'); 
 const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 300);
 let shakeAmt = 0;
 const rand = (a, b) => a + Math.random() * (b - a);
-let crowd = null, crowdBase = [], beams = [], chevrons = null, pitGlows = [];
+let crowd = null, crowdBase = [], beams = [], chevrons = null, zoneWall = null, zoneFloor = null, arenaView = null, stripeTex = null, glowTex = null;
 
 function canvasTex(w, h, draw) {
   const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h);
   const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4; return tex;
 }
 
-function buildWorld() {
+// The stadium around the bowl never changes: lights, stands + crowd, sky, light beams, tilt chevrons, the Last Top ring wall.
+function buildStadium() {
   scene.add(new THREE.HemisphereLight('#c9d0ff', '#2a1d4a', 1.25));
   const sun = new THREE.DirectionalLight('#ffffff', 2.3); sun.position.set(10, 30, 14); sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048); Object.assign(sun.shadow.camera, { left: -28, right: 28, top: 28, bottom: -28, near: 1, far: 80 }); sun.shadow.bias = -0.0005;
   scene.add(sun);
   const rimLight = new THREE.DirectionalLight('#ff7fd0', 0.6); rimLight.position.set(-20, 10, -20); scene.add(rimLight);
-
-  // bowl floor: lathe profile with planar UVs so the painted rings stay round
-  const prof = []; for (let i = 0; i <= 32; i++) { const r = (i / 32) * (R + 0.3); prof.push(new THREE.Vector2(r, bowlY(Math.min(r, R)))); }
-  const floorGeo = new THREE.LatheGeometry(prof, 128), pos = floorGeo.attributes.position, uv = floorGeo.attributes.uv;
-  for (let i = 0; i < pos.count; i++) uv.setXY(i, pos.getX(i) / (2 * (R + 0.3)) + 0.5, pos.getZ(i) / (2 * (R + 0.3)) + 0.5);
-  const floorTex = canvasTex(1024, 1024, (g, w) => {
-    const c = w / 2, rr = c;
-    const grad = g.createRadialGradient(c, c, 0, c, c, rr); grad.addColorStop(0, '#3a52d6'); grad.addColorStop(0.7, '#2738a8'); grad.addColorStop(1, '#1b2580');
-    g.fillStyle = grad; g.fillRect(0, 0, w, w);
-    g.strokeStyle = 'rgba(140, 165, 255, .28)'; g.lineWidth = 3;
-    for (let a = 0; a < 24; a++) { g.beginPath(); g.moveTo(c, c); g.lineTo(c + Math.cos((a / 24) * Math.PI * 2) * rr, c + Math.sin((a / 24) * Math.PI * 2) * rr); g.stroke(); }
-    for (const [f, lw, col] of [[0.2, 6, 'rgba(130, 160, 255, .5)'], [0.42, 5, 'rgba(130, 160, 255, .45)'], [0.64, 8, 'rgba(255, 197, 49, .55)'], [0.86, 5, 'rgba(130, 160, 255, .45)'], [0.985, 10, 'rgba(255, 232, 194, .8)']]) {
-      g.lineWidth = lw; g.strokeStyle = col; g.beginPath(); g.arc(c, c, rr * f, 0, Math.PI * 2); g.stroke();
-    }
-    g.lineCap = 'round'; g.lineWidth = 7; g.strokeStyle = 'rgba(255, 214, 92, .55)'; // centre swirl emblem
-    for (let k = 0; k < 3; k++) { g.beginPath(); g.arc(c, c, rr * 0.1, (k * Math.PI * 2) / 3, (k * Math.PI * 2) / 3 + 1.5); g.stroke(); }
-    g.fillStyle = 'rgba(255, 232, 194, .7)';
-    for (let a = 0; a < 72; a++) { const ang = (a / 72) * Math.PI * 2; g.beginPath(); g.arc(c + Math.cos(ang) * rr * 0.93, c + Math.sin(ang) * rr * 0.93, 4, 0, Math.PI * 2); g.fill(); }
-  });
-  const floor = new THREE.Mesh(floorGeo, new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.32, metalness: 0.15, side: THREE.DoubleSide }));
-  floor.receiveShadow = true; scene.add(floor);
-  const skirt = new THREE.Mesh(new THREE.CylinderGeometry(R + 0.35, R * 0.7, 9, 96, 1, true), new THREE.MeshStandardMaterial({ color: '#1a1850', roughness: 0.8, side: THREE.DoubleSide }));
-  skirt.position.y = bowlY(R) - 4.5; scene.add(skirt);
-
-  // bumper walls between the pits: alternating coral / cream segments on a dark base
-  const segMat = [new THREE.MeshStandardMaterial({ color: '#ff5d73', roughness: 0.35 }), new THREE.MeshStandardMaterial({ color: '#ffe8c2', roughness: 0.35 })];
-  const baseMat = new THREE.MeshStandardMaterial({ color: '#2b2a72', roughness: 0.6, side: THREE.DoubleSide });
-  for (let i = 0; i < CFG.pitCount; i++) {
-    const a0 = PIT_ANGLES[i] + CFG.pitHalf, a1 = PIT_ANGLES[(i + 1) % CFG.pitCount] - CFG.pitHalf + (i === CFG.pitCount - 1 ? Math.PI * 2 : 0);
-    const len = a1 - a0, n = 7;
-    for (let s = 0; s < n; s++) {
-      const seg = new THREE.Mesh(new THREE.TorusGeometry(R + 0.5, 0.5, 12, 24, len / n - 0.004), segMat[s % 2]);
-      seg.geometry.rotateX(Math.PI / 2); seg.rotation.y = -(a0 + (s * len) / n); seg.position.y = bowlY(R) + 0.45; seg.castShadow = true; scene.add(seg);
-    }
-    const base = new THREE.Mesh(new THREE.CylinderGeometry(R + 0.9, R + 0.9, 1.1, 48, 1, true, Math.PI / 2 - a1, len), baseMat);
-    base.position.y = bowlY(R) + 0.05; scene.add(base);
-    for (const ang of [a0, a1]) { // posts at both ends of each wall
-      const post = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.7, 1.6, 16), new THREE.MeshStandardMaterial({ color: '#ffc531', roughness: 0.3, metalness: 0.2 }));
-      post.position.set(Math.cos(ang) * (R + 0.5), bowlY(R) + 0.7, Math.sin(ang) * (R + 0.5)); post.castShadow = true; scene.add(post);
-    }
-  }
-  // pits: hazard stripes on the lip + a glowing curtain dropping into the dark
-  const stripeTex = canvasTex(256, 256, (g, w) => { g.fillStyle = '#ffc531'; g.fillRect(0, 0, w, w); g.fillStyle = '#1d1d3a'; for (let k = -w; k < w * 2; k += 64) { g.beginPath(); g.moveTo(k, 0); g.lineTo(k + 32, 0); g.lineTo(k + 32 - w, w); g.lineTo(k - w, w); g.fill(); } });
+  stripeTex = canvasTex(256, 256, (g, w) => { g.fillStyle = '#ffc531'; g.fillRect(0, 0, w, w); g.fillStyle = '#1d1d3a'; for (let k = -w; k < w * 2; k += 64) { g.beginPath(); g.moveTo(k, 0); g.lineTo(k + 32, 0); g.lineTo(k + 32 - w, w); g.lineTo(k - w, w); g.fill(); } });
   stripeTex.wrapS = stripeTex.wrapT = THREE.RepeatWrapping; stripeTex.repeat.set(6, 6);
-  const glowTex = canvasTex(64, 256, (g, w, h) => { const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, 'rgba(255, 93, 115, 1)'); gr.addColorStop(0.5, 'rgba(255, 60, 90, .35)'); gr.addColorStop(1, 'rgba(255, 60, 90, 0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
-  for (const pa of PIT_ANGLES) {
-    const lip = new THREE.Mesh(new THREE.RingGeometry(R - 1.3, R + 0.05, 24, 1, -(pa + CFG.pitHalf), CFG.pitHalf * 2), new THREE.MeshStandardMaterial({ map: stripeTex, roughness: 0.4, transparent: true, opacity: 0.95 }));
-    lip.rotation.x = -Math.PI / 2; lip.position.y = bowlY(R) + 0.02; scene.add(lip); // XY ring laid flat: angle t lands at -t, hence the negated start
-    const glow = new THREE.Mesh(new THREE.CylinderGeometry(R + 0.4, R + 0.4, 5, 24, 1, true, Math.PI / 2 - pa - CFG.pitHalf, CFG.pitHalf * 2),
-      new THREE.MeshBasicMaterial({ map: glowTex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
-    glow.position.y = bowlY(R) - 2.5; scene.add(glow); pitGlows.push(glow);
-  }
+  glowTex = canvasTex(64, 256, (g, w, h) => { const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, 'rgba(255, 93, 115, 1)'); gr.addColorStop(0.5, 'rgba(255, 60, 90, .35)'); gr.addColorStop(1, 'rgba(255, 60, 90, 0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
+
   // tilt-event chevrons (hidden until an Arena Tilt)
   chevrons = new THREE.Group(); chevrons.visible = false;
   const vShape = new THREE.Shape(); vShape.moveTo(-1.4, -0.6); vShape.lineTo(0, 0.6); vShape.lineTo(1.4, -0.6); vShape.lineTo(1.4, -1.3); vShape.lineTo(0, -0.1); vShape.lineTo(-1.4, -1.3);
@@ -338,6 +405,22 @@ function buildWorld() {
     m.rotation.y = -Math.PI / 2; m.position.set(4 + k * 3.2, 0.06, 0); m.userData.k = k; chevrons.add(m);
   }
   scene.add(chevrons);
+
+  // Last Top Spinning: a glowing coral wall marks the edge of the safe zone as it closes in
+  zoneWall = new THREE.Group(); zoneWall.visible = false;
+  const zoneTex = canvasTex(64, 256, (g, w, h) => { const gr = g.createLinearGradient(0, h, 0, 0); gr.addColorStop(0, 'rgba(255,255,255,.95)'); gr.addColorStop(0.35, 'rgba(255,255,255,.35)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
+  const zw = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 2.6, 96, 1, true), new THREE.MeshBasicMaterial({ map: zoneTex, color: '#ff4d6a', transparent: true, depthWrite: false, side: THREE.DoubleSide }));
+  zw.position.y = 1.3;
+  const zr = new THREE.Mesh(new THREE.RingGeometry(0.985, 1, 128).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: '#ff5d73', transparent: true, opacity: 0.85, depthWrite: false }));
+  zr.position.y = 0.06; zoneWall.add(zw, zr); scene.add(zoneWall);
+  // ...and everything outside it gets red hazard stripes that follow the bowl (a tiny shader: discard inside the zone radius)
+  const zp = []; for (let i = 0; i <= 48; i++) { const r = (i / 48) * (R + 0.3); zp.push(new THREE.Vector2(r, bowlY(Math.min(r, R)) + 0.035)); }
+  zoneFloor = new THREE.Mesh(new THREE.LatheGeometry(zp, 128), new THREE.ShaderMaterial({
+    uniforms: { zr: { value: 99 }, time: { value: 0 } }, transparent: true, depthWrite: false, side: THREE.DoubleSide,
+    vertexShader: 'varying vec3 vP; void main() { vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+    fragmentShader: 'uniform float zr; uniform float time; varying vec3 vP; void main() { float r = length(vP.xz); if (r < zr) discard; float s = step(0.5, fract((vP.x + vP.z) * 0.3 - time * 0.6)); float edge = 1.0 - smoothstep(0.0, 2.5, r - zr); gl_FragColor = vec4(1.0, 0.24, 0.33, 0.2 + 0.12 * s + 0.25 * edge); }',
+  }));
+  zoneFloor.visible = false; zoneFloor.renderOrder = 1; scene.add(zoneFloor);
 
   // bleachers + crowd, sky dome, light beams: the stadium around the bowl
   const steps = []; for (let s = 0; s < 5; s++) { steps.push(new THREE.Vector2(R + 7 + s * 2.4, -1 + s * 1.5), new THREE.Vector2(R + 7 + (s + 1) * 2.4, -1 + s * 1.5)); }
@@ -349,7 +432,6 @@ function buildWorld() {
   const tmp = new THREE.Object3D(), col = new THREE.Color();
   for (let i = 0; i < N; i++) {
     const row = i % 5, a = ((i / 5) | 0) / (N / 5) * Math.PI * 2 + row * 0.013 + rand(-0.004, 0.004), r = R + 8.4 + row * 2.4; // even seats, row by row
-    if (PIT_ANGLES.some((p) => Math.abs(angDiff(a, p)) < 0.05)) { tmp.position.set(0, -50, 0); tmp.scale.setScalar(0); tmp.updateMatrix(); crowd.setMatrixAt(i, tmp.matrix); tmp.scale.setScalar(1); continue; }
     crowdBase[i] = { x: Math.cos(a) * r, y: -1 + row * 1.5 + 0.52, z: Math.sin(a) * r, ph: Math.random() * 6.28 };
     tmp.position.set(crowdBase[i].x, crowdBase[i].y, crowdBase[i].z); tmp.updateMatrix(); crowd.setMatrixAt(i, tmp.matrix);
     crowd.setColorAt(i, col.set(cols[(Math.random() * cols.length) | 0]));
@@ -364,6 +446,135 @@ function buildWorld() {
     const b = new THREE.Mesh(beamGeo, new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.07, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }));
     const a = (i / 4) * Math.PI * 2 + 0.4; b.position.set(Math.cos(a) * (R + 22), 34, Math.sin(a) * (R + 22)); b.userData.a = a; scene.add(b); beams.push(b);
   });
+}
+
+// The arena itself changes per match: floor colour, walls between the pits, pit mouths, shutter doors, turntable disc, pillars.
+const ARENA_LOOK = {
+  bowl: { floor: ['#3a52d6', '#2738a8', '#1b2580'], line: '140, 165, 255', skirt: '#1a1850', base: '#2b2a72' },
+  turntable: { floor: ['#6d4be0', '#5233b8', '#38207f'], line: '205, 180, 255', skirt: '#231650', base: '#3a2878' },
+  shutter: { floor: ['#1f9db0', '#16798f', '#0e5366'], line: '160, 240, 255', skirt: '#0d2f42', base: '#173f5c' },
+};
+const DOOR_UP = bowlY(R) + 0.45, DOOR_DOWN = bowlY(R) - 2.6;
+function planarUV(geo, size) { const pos = geo.attributes.position, uv = geo.attributes.uv; for (let i = 0; i < pos.count; i++) uv.setXY(i, pos.getX(i) / (2 * size) + 0.5, pos.getZ(i) / (2 * size) + 0.5); }
+function buildArena(id) {
+  if (!S.ARENAS[id]) id = 'bowl';
+  if (arenaView?.id === id) return;
+  if (arenaView) { // free the old arena (the shared stripe/glow textures stay)
+    scene.remove(arenaView.group);
+    arenaView.group.traverse((o) => { o.geometry?.dispose(); if (o.material) o.material.dispose(); });
+    for (const tx of arenaView.texs) tx.dispose();
+  }
+  const look = ARENA_LOOK[id], def = S.ARENAS[id], pits = S.pitAngles(def.pits), half = def.pitHalf, n = pits.length;
+  const group = new THREE.Group(), v = { id, group, texs: [], glows: [], lips: [], doors: [], disc: null, phase: -1 };
+  const add = (m) => { group.add(m); return m; };
+
+  // bowl floor: lathe profile with planar UVs so the painted rings stay round
+  const prof = []; for (let i = 0; i <= 32; i++) { const r = (i / 32) * (R + 0.3); prof.push(new THREE.Vector2(r, bowlY(Math.min(r, R)))); }
+  const floorGeo = new THREE.LatheGeometry(prof, 128); planarUV(floorGeo, R + 0.3);
+  const floorTex = canvasTex(1024, 1024, (g, w) => {
+    const c = w / 2, rr = c;
+    const grad = g.createRadialGradient(c, c, 0, c, c, rr); grad.addColorStop(0, look.floor[0]); grad.addColorStop(0.7, look.floor[1]); grad.addColorStop(1, look.floor[2]);
+    g.fillStyle = grad; g.fillRect(0, 0, w, w);
+    g.strokeStyle = `rgba(${look.line}, .28)`; g.lineWidth = 3;
+    for (let a = 0; a < 24; a++) { g.beginPath(); g.moveTo(c, c); g.lineTo(c + Math.cos((a / 24) * Math.PI * 2) * rr, c + Math.sin((a / 24) * Math.PI * 2) * rr); g.stroke(); }
+    for (const [f, lw, col] of [[0.2, 6, `rgba(${look.line}, .5)`], [0.42, 5, `rgba(${look.line}, .45)`], [0.64, 8, 'rgba(255, 197, 49, .55)'], [0.86, 5, `rgba(${look.line}, .45)`], [0.985, 10, 'rgba(255, 232, 194, .8)']]) {
+      g.lineWidth = lw; g.strokeStyle = col; g.beginPath(); g.arc(c, c, rr * f, 0, Math.PI * 2); g.stroke();
+    }
+    if (!def.turnR) { // centre swirl emblem (the turntable disc covers the centre instead)
+      g.lineCap = 'round'; g.lineWidth = 7; g.strokeStyle = 'rgba(255, 214, 92, .55)';
+      for (let k = 0; k < 3; k++) { g.beginPath(); g.arc(c, c, rr * 0.1, (k * Math.PI * 2) / 3, (k * Math.PI * 2) / 3 + 1.5); g.stroke(); }
+    }
+    g.fillStyle = 'rgba(255, 232, 194, .7)';
+    for (let a = 0; a < 72; a++) { const ang = (a / 72) * Math.PI * 2; g.beginPath(); g.arc(c + Math.cos(ang) * rr * 0.93, c + Math.sin(ang) * rr * 0.93, 4, 0, Math.PI * 2); g.fill(); }
+  });
+  v.texs.push(floorTex);
+  const floor = add(new THREE.Mesh(floorGeo, new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.32, metalness: 0.15, side: THREE.DoubleSide })));
+  floor.receiveShadow = true;
+  const skirt = add(new THREE.Mesh(new THREE.CylinderGeometry(R + 0.35, R * 0.7, 9, 96, 1, true), new THREE.MeshStandardMaterial({ color: look.skirt, roughness: 0.8, side: THREE.DoubleSide })));
+  skirt.position.y = bowlY(R) - 4.5;
+
+  // bumper walls between the pits: alternating coral / cream segments on a dark base, gold posts at both ends
+  const segMat = [new THREE.MeshStandardMaterial({ color: '#ff5d73', roughness: 0.35 }), new THREE.MeshStandardMaterial({ color: '#ffe8c2', roughness: 0.35 })];
+  const baseMat = new THREE.MeshStandardMaterial({ color: look.base, roughness: 0.6, side: THREE.DoubleSide });
+  const postMat = new THREE.MeshStandardMaterial({ color: '#ffc531', roughness: 0.3, metalness: 0.2 });
+  for (let i = 0; i < n; i++) {
+    const a0 = pits[i] + half, a1 = pits[(i + 1) % n] - half + (i === n - 1 ? Math.PI * 2 : 0), len = a1 - a0, segs = Math.max(2, Math.round(len * 4));
+    for (let s = 0; s < segs; s++) {
+      const seg = add(new THREE.Mesh(new THREE.TorusGeometry(R + 0.5, 0.5, 12, 24, len / segs - 0.004), segMat[s % 2]));
+      seg.geometry.rotateX(Math.PI / 2); seg.rotation.y = -(a0 + (s * len) / segs); seg.position.y = bowlY(R) + 0.45; seg.castShadow = true;
+    }
+    const base = add(new THREE.Mesh(new THREE.CylinderGeometry(R + 0.9, R + 0.9, 1.1, 48, 1, true, Math.PI / 2 - a1, len), baseMat));
+    base.position.y = bowlY(R) + 0.05;
+    for (const ang of [a0, a1]) {
+      const post = add(new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.7, 1.6, 16), postMat));
+      post.position.set(Math.cos(ang) * (R + 0.5), bowlY(R) + 0.7, Math.sin(ang) * (R + 0.5)); post.castShadow = true;
+    }
+  }
+  // pits: hazard stripes on the lip + a glowing curtain dropping into the dark; the shutter ring adds a door per pit
+  for (const pa of pits) {
+    const lip = add(new THREE.Mesh(new THREE.RingGeometry(R - 1.3, R + 0.05, 24, 1, -(pa + half), half * 2), new THREE.MeshStandardMaterial({ map: stripeTex, roughness: 0.4, transparent: true, opacity: 0.95, emissive: '#ff5d73', emissiveIntensity: 0 })));
+    lip.rotation.x = -Math.PI / 2; lip.position.y = bowlY(R) + 0.02; v.lips.push(lip); // XY ring laid flat: angle t lands at -t, hence the negated start
+    const glow = add(new THREE.Mesh(new THREE.CylinderGeometry(R + 0.4, R + 0.4, 5, 24, 1, true, Math.PI / 2 - pa - half, half * 2),
+      new THREE.MeshBasicMaterial({ map: glowTex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })));
+    glow.position.y = bowlY(R) - 2.5; v.glows.push(glow);
+    if (def.shutEvery) {
+      const door = add(new THREE.Mesh(new THREE.TorusGeometry(R + 0.5, 0.55, 12, 12, half * 2 + 0.02), new THREE.MeshStandardMaterial({ color: '#c9d3e6', roughness: 0.3, metalness: 0.6, emissive: '#ffc531', emissiveIntensity: 0 })));
+      door.geometry.rotateX(Math.PI / 2); door.rotation.y = -(pa - half - 0.01); door.position.y = DOOR_DOWN; door.castShadow = true; v.doors.push(door);
+    }
+  }
+  // turntable: a striped disc that turns with the physics, ringed by a mint rim
+  if (def.turnR) {
+    const dp = []; for (let i = 0; i <= 12; i++) { const r = (i / 12) * def.turnR; dp.push(new THREE.Vector2(r, bowlY(r) + 0.025)); }
+    const discGeo = new THREE.LatheGeometry(dp, 64); planarUV(discGeo, def.turnR);
+    const discTex = canvasTex(512, 512, (g, w) => {
+      const c = w / 2;
+      for (let k = 0; k < 12; k++) { g.fillStyle = k % 2 ? '#2fbf8c' : '#46e0a8'; g.beginPath(); g.moveTo(c, c); g.arc(c, c, c, (k / 12) * Math.PI * 2, ((k + 1) / 12) * Math.PI * 2); g.fill(); }
+      g.fillStyle = '#ffe8c2'; g.beginPath(); g.arc(c, c, c * 0.2, 0, Math.PI * 2); g.fill();
+      g.fillStyle = 'rgba(255, 255, 255, .85)'; // arrows along the way the disc turns
+      for (let k = 0; k < 6; k++) {
+        const a = (k / 6) * Math.PI * 2, r = c * 0.68; g.save(); g.translate(c + Math.cos(a) * r, c + Math.sin(a) * r); g.rotate(a - Math.PI);
+        g.beginPath(); g.moveTo(-22, -26); g.lineTo(18, 0); g.lineTo(-22, 26); g.lineTo(-10, 0); g.closePath(); g.fill(); g.restore();
+      }
+    });
+    v.texs.push(discTex);
+    v.disc = add(new THREE.Mesh(discGeo, new THREE.MeshStandardMaterial({ map: discTex, roughness: 0.3, metalness: 0.1, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 })));
+    v.disc.receiveShadow = true;
+    const rim = add(new THREE.Mesh(new THREE.TorusGeometry(def.turnR, 0.14, 8, 72), new THREE.MeshStandardMaterial({ color: '#3ee0a1', emissive: '#3ee0a1', emissiveIntensity: 0.6, roughness: 0.3 })));
+    rim.geometry.rotateX(Math.PI / 2); rim.position.y = bowlY(def.turnR) + 0.06;
+  }
+  // bumper pillars (same spots as sim.createWorld): coral / cream bands under a gold cap
+  for (let i = 0; i < (def.pillars || 0); i++) {
+    const a = pits[i % n] + Math.PI / def.pits, x = Math.cos(a) * def.pillarAt, z = Math.sin(a) * def.pillarAt, y = bowlY(def.pillarAt);
+    [['#ff5d73', 0.7], ['#ffe8c2', 0.5], ['#ff5d73', 0.5]].reduce((h, [c, hh]) => {
+      const m = add(new THREE.Mesh(new THREE.CylinderGeometry(def.pillarR, def.pillarR * 1.04, hh, 32), new THREE.MeshStandardMaterial({ color: c, roughness: 0.35 })));
+      m.position.set(x, y + h + hh / 2, z); m.castShadow = true; m.receiveShadow = true; return h + hh;
+    }, 0);
+    const cap = add(new THREE.Mesh(new THREE.CylinderGeometry(def.pillarR * 0.7, def.pillarR * 1.08, 0.3, 32), postMat));
+    cap.position.set(x, y + 1.85, z); cap.castShadow = true;
+  }
+  scene.add(group); arenaView = v;
+}
+// arena clock: the world's time, or online the server clock running smoothly between snapshots
+const arenaClock = () => (mode === 'online' && net.offset != null ? performance.now() / 1000 + net.offset : world.time);
+function animateArena(dt) {
+  const v = arenaView; if (!v || !world) return;
+  const def = S.ARENAS[v.id], tm = arenaClock(), w = { time: tm, arena: def };
+  for (let i = 0; i < v.glows.length; i++) {
+    const open = S.pitOpen(w, i);
+    v.glows[i].material.opacity = open ? 0.75 + 0.25 * Math.sin(simTime * 4) : 0;
+    v.lips[i].material.opacity = open ? 0.95 : 0.4;
+  }
+  if (def.shutEvery) { // doors rise to close a pit and sink to open it; the doors about to move flash first
+    const left = S.shutterLeft(w), warn = left < def.shutWarn, phase = Math.floor(tm / def.shutEvery);
+    v.doors.forEach((d, i) => {
+      const open = S.pitOpen(w, i);
+      d.position.y += ((open ? DOOR_DOWN : DOOR_UP) - d.position.y) * Math.min(1, dt * 7);
+      const flash = warn ? 0.5 + 0.5 * Math.sin(simTime * 18) : 0;
+      d.material.emissiveIntensity = flash * 0.8; v.lips[i].material.emissiveIntensity = flash * 0.6;
+    });
+    if (v.phase !== phase) { if (v.phase >= 0 && state === State.PLAYING) playSfx('shutter', 0.45); v.phase = phase; }
+  }
+  if (v.disc) v.disc.rotation.y = -tm * def.turnW; // same sense as the physics: angle grows from +x toward +z
 }
 
 // ================================================================ TOPS (procedural meshes: tip + core + crown + cap, all spinning)
@@ -389,7 +600,7 @@ function crownGeometry(id) {
 }
 function buildTopMesh(parts, paintId, accentHex) {
   const color = part('paint', paintId).c;
-  const plastic = new THREE.MeshStandardMaterial({ color, roughness: 0.28, metalness: 0.08 });
+  const plastic = new THREE.MeshStandardMaterial({ color, roughness: 0.28, metalness: 0.08, emissive: '#ffffff', emissiveIntensity: 0 }); // emissive: the short hit flash
   const metal = new THREE.MeshStandardMaterial({ color: '#c9d3e6', roughness: 0.25, metalness: 0.85 });
   const dark = new THREE.MeshStandardMaterial({ color: '#2b2d4a', roughness: 0.45, metalness: 0.5 });
   const accent = new THREE.MeshStandardMaterial({ color: accentHex, emissive: accentHex, emissiveIntensity: 0.6, roughness: 0.3 });
@@ -429,10 +640,16 @@ function buildTopMesh(parts, paintId, accentHex) {
 }
 function disposeTopMesh(m) { scene.remove(m.root); for (const mat of m.mats) mat.dispose(); m.root.traverse((o) => { if (o.material && !m.mats.includes(o.material)) o.material.dispose?.(); }); }
 
-function labelSprite(text, color) {
+function labelSprite(text, color, person = false) { // person: a little player icon marks real people online
   const c = document.createElement('canvas'); c.width = 512; c.height = 112;
   const g = c.getContext('2d'); g.font = '800 64px UI, system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.lineWidth = 12; g.strokeStyle = 'rgba(14, 12, 40, .9)'; g.lineJoin = 'round'; g.strokeText(text, 256, 58); g.fillStyle = color; g.fillText(text, 256, 58);
+  const tw = Math.min(400, g.measureText(text).width), cx = person ? 256 + 24 : 256;
+  g.lineWidth = 12; g.strokeStyle = 'rgba(14, 12, 40, .9)'; g.lineJoin = 'round'; g.strokeText(text, cx, 58); g.fillStyle = color; g.fillText(text, cx, 58);
+  if (person) {
+    const x = cx - tw / 2 - 34;
+    g.beginPath(); g.arc(x, 42, 12, 0, Math.PI * 2); g.moveTo(x - 22, 86); g.quadraticCurveTo(x - 20, 58, x, 58); g.quadraticCurveTo(x + 20, 58, x + 22, 86); g.closePath();
+    g.lineWidth = 9; g.stroke(); g.fill();
+  }
   const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace;
   const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthWrite: false, depthTest: false, transparent: true })); s.renderOrder = 10; return s;
 }
@@ -448,15 +665,26 @@ const topColor = (tp) => part('paint', tp.parts.paint).c;
 function viewFor(tp) {
   let v = views.get(tp.id);
   if (v) return v;
-  const me = tp.id === meId, mesh = buildTopMesh(tp.parts, tp.parts.paint, me ? '#ffffff' : '#ffe8c2');
+  const me = tp.id === meId, owner = isDecoy(tp) ? infoOf(tp.decoyOf) : null, mine = owner && owner.id === meId;
+  const mesh = buildTopMesh(tp.parts, tp.parts.paint, me ? '#ffffff' : tp.boss ? '#ffc531' : '#ffe8c2');
   if (me) { mesh.ring.material.color.set('#ffc531'); mesh.ring.material.opacity = 0.85; }
-  const label = labelSprite(me ? t('you') : tp.name, me ? '#ffc531' : tp.human ? '#9ee7ff' : '#ffffff');
+  if (mine) mesh.ring.material.opacity = 0.25;
+  if (tp.boss) { // the Champion: a gold spike crown and a hot aura ring
+    mesh.ring.material.color.set('#ff8a3d'); mesh.ring.material.opacity = 0.9;
+    const gold = new THREE.MeshStandardMaterial({ color: '#ffc531', roughness: 0.25, metalness: 0.7, emissive: '#ff8a3d', emissiveIntensity: 0.35 }); mesh.mats.push(gold);
+    for (let k = 0; k < 8; k++) { const sp = new THREE.Mesh(cached('spike', () => new THREE.ConeGeometry(0.11, 0.42, 8)), gold); const a = (k / 8) * Math.PI * 2; sp.position.set(Math.cos(a) * 0.92, 0.56, Math.sin(a) * 0.92); sp.rotation.set(Math.sin(a) * 1.2, 0, -Math.cos(a) * 1.2); sp.castShadow = true; mesh.spin.add(sp); }
+    const band = new THREE.Mesh(cached('band', () => new THREE.TorusGeometry(0.4, 0.06, 8, 32).rotateX(Math.PI / 2)), gold); band.position.y = 0.86; mesh.spin.add(band);
+  }
+  const who = owner || tp, name = tp.boss ? t('champion') : mine ? t('decoy') : who.id === meId ? t('you') : who.name; // a decoy wears its owner's name tag (yours reads "Decoy")
+  const label = labelSprite(name, tp.boss ? '#ffc531' : mine ? '#b9b6dc' : who.id === meId ? '#ffc531' : who.human ? '#9ee7ff' : '#ffffff', mode === 'online' && who.human && who.id !== meId && !mine);
   const bubble = new THREE.Mesh(cached('bubble', () => new THREE.SphereGeometry(1.35, 24, 16)), new THREE.MeshBasicMaterial({ color: PU_COLOR.shield, transparent: true, opacity: 0.25, depthWrite: false, blending: THREE.AdditiveBlending }));
   bubble.position.y = 0.45; bubble.visible = false; mesh.root.add(bubble); mesh.mats.push(bubble.material);
   const field = new THREE.Mesh(cached('field', () => new THREE.TorusGeometry(1.8, 0.05, 6, 48).rotateX(Math.PI / 2)), new THREE.MeshBasicMaterial({ color: PU_COLOR.magnet, transparent: true, opacity: 0.7, depthWrite: false }));
   field.position.y = 0.3; field.visible = false; mesh.root.add(field); mesh.mats.push(field.material);
+  const anchor = new THREE.Mesh(cached('anchorRing', () => new THREE.TorusGeometry(1.25, 0.16, 8, 40).rotateX(Math.PI / 2)), new THREE.MeshStandardMaterial({ color: '#c9d3e6', metalness: 0.8, roughness: 0.25, emissive: PU_COLOR.anchor, emissiveIntensity: 0.5 }));
+  anchor.position.y = 0.12; anchor.visible = false; mesh.root.add(anchor); mesh.mats.push(anchor.material);
   scene.add(mesh.root, label);
-  v = { mesh, label, prec: Math.random() * 6, tp, bubble, field, trailT: 0 }; views.set(tp.id, v); return v;
+  v = { mesh, label, prec: Math.random() * 6, tp, bubble, field, anchor, trailT: 0, flash: 0, labelScale: tp.boss ? 1.35 : 1 }; views.set(tp.id, v); return v;
 }
 function dropView(id) {
   const v = views.get(id); if (!v) return;
@@ -464,12 +692,12 @@ function dropView(id) {
 }
 function clearViews() { for (const id of [...views.keys()]) dropView(id); }
 const known = new Map(); // id -> { id, name, parts, human, r } for every top seen, so the feed can name one that is already gone
-const remember = (tp) => { known.set(tp.id, { id: tp.id, name: tp.name, parts: tp.parts, human: tp.human, r: tp.r }); if (known.size > 400) known.delete(known.keys().next().value); };
+const remember = (tp) => { known.set(tp.id, { id: tp.id, name: tp.name, parts: tp.parts, human: tp.human, r: tp.r, boss: tp.boss, ai: tp.ai, decoyOf: tp.decoyOf }); if (known.size > 400) known.delete(known.keys().next().value); };
 const infoOf = (id) => (id ? S.topById(world, id) || views.get(id)?.tp || known.get(id) || null : null); // tops that just left the world keep their view one more frame
 function refreshPlayer() { const p = S.topById(world, meId); if (p) player = p; }
 
 // Power-up orbs: a glowing glass ball with the power's icon, a light beam and a floor ring; they blink before they vanish.
-const PU_COLOR = { blast: '#ff8a3d', shield: '#4cb8ff', magnet: '#c27bff', turbo: '#3ee0a1' };
+const PU_COLOR = { blast: '#ff8a3d', shield: '#4cb8ff', magnet: '#c27bff', turbo: '#3ee0a1', anchor: '#7f8fc4', decoy: '#ff7ce0' };
 const orbs = new Map(), iconTex = {};
 function powerIcon(kind) { // the same SVG path as the HUD icon, drawn white on a canvas
   return (iconTex[kind] ??= canvasTex(128, 128, (g) => {
@@ -554,6 +782,35 @@ function updateWaves(dt) {
   }
 }
 function shake(a) { if (save.shake !== false && !CAPTURE) shakeAmt = Math.max(shakeAmt, Math.min(a, 0.3)); } // small and smooth: big jolts make people motion sick
+let hitStop = 0; // a few frames of freeze on big hits (solo only: online the server keeps time)
+// floating damage numbers and callouts that stick to a point in the arena
+const pops = [], projV = new THREE.Vector3();
+function popText(x, z, up, text, cls = '', life = 0.9) {
+  if (quietFx() || state === State.COVER) return;
+  const el = document.createElement('div'); el.textContent = text; if (cls) el.className = cls; $('pops').appendChild(el);
+  pops.push({ el, p: new THREE.Vector3(x, bowlY(Math.hypot(x, z)) + up, z), t: 0, life, dx: (Math.random() - 0.5) * 40 });
+  if (pops.length > 14) pops.shift().el.remove();
+}
+function tickPops(dt) { // ages with the simulation, so skipped time (capture) does not leave stale texts behind
+  for (let i = pops.length - 1; i >= 0; i--) { const q = pops[i]; q.t += dt; if (q.t >= q.life || state === State.COVER) { q.el.remove(); pops.splice(i, 1); } }
+}
+function placePops() {
+  for (const q of pops) {
+    projV.copy(q.p).project(camera);
+    const k = q.t / q.life, x = (projV.x * 0.5 + 0.5) * innerWidth + q.dx * k, y = (-projV.y * 0.5 + 0.5) * innerHeight - 60 * k;
+    const sc = k < 0.12 ? 0.5 + (k / 0.12) * 0.7 : 1.2 - Math.min(0.2, (k - 0.12) * 1.5);
+    q.el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%) scale(${sc.toFixed(3)})`; q.el.style.opacity = k > 0.7 ? ((1 - k) / 0.3).toFixed(3) : '1';
+  }
+}
+let lastPerfectVoice = -99;
+function perfectFx(x, z) { // my dash connected at full speed from point blank
+  const p = pos3(x, z, 0.6);
+  popText(x, z, 2.4, t('perfect'), 'big', 1.1); playSfx('perfect', 0.9);
+  shockwave(x, p.y - 0.4, z, 4.5, '#ffc531'); burst(p, '#ffc531', 20, 10);
+  hitStop = Math.max(hitStop, 0.07); shake(0.12);
+  if (simTime - lastPerfectVoice > 8) { lastPerfectVoice = simTime; voice('perfect'); }
+  bump('perfect');
+}
 const nearVol = (x, z) => (player ? clamp(1.25 - Math.hypot(x - player.x, z - player.z) / 22, 0.12, 1) : 0.5);
 
 // ================================================================ INPUT (keyboard + mouse, or touch: floating joystick, tap / bolt button to dash, power button)
@@ -626,13 +883,15 @@ function playerInput() { // x/z world direction; the camera has no yaw, so scree
   const l = Math.hypot(x, y); return l > 1 ? { x: x / l, y: y / l } : l < 0.12 ? { x: 0, y: 0 } : { x, y };
 }
 
-// ================================================================ STATE (BOOT -> MENU <-> GARAGE / LOBBY, -> PLAYING <-> PAUSED -> GAMEOVER)
-const State = { BOOT: 'BOOT', MENU: 'MENU', GARAGE: 'GARAGE', LOBBY: 'LOBBY', PLAYING: 'PLAYING', PAUSED: 'PAUSED', GAMEOVER: 'GAMEOVER', COVER: 'COVER' };
+// ================================================================ STATE (BOOT -> MENU <-> GARAGE / LOBBY / PROFILE, -> PLAYING <-> PAUSED -> GAMEOVER)
+const State = { BOOT: 'BOOT', MENU: 'MENU', GARAGE: 'GARAGE', LOBBY: 'LOBBY', PROFILE: 'PROFILE', PLAYING: 'PLAYING', PAUSED: 'PAUSED', GAMEOVER: 'GAMEOVER', COVER: 'COVER' };
+const inMenus = (s = state) => s === State.MENU || s === State.GARAGE || s === State.LOBBY || s === State.PROFILE;
+const wantTrack = () => ((state === State.PLAYING || state === State.PAUSED) && world && (world.mode === 'last' || world.tops.some((tp) => tp.boss)) ? 'showdown' : 'arena');
 let state = State.BOOT, run = null, simTime = 0, dashQueued = false, useQueued = false;
 
 function setState(s) {
   state = s;
-  $('menu').hidden = s !== State.MENU; $('garage').hidden = s !== State.GARAGE; $('lobby').hidden = s !== State.LOBBY;
+  $('menu').hidden = s !== State.MENU; $('garage').hidden = s !== State.GARAGE; $('lobby').hidden = s !== State.LOBBY; $('profile').hidden = s !== State.PROFILE;
   $('paused').hidden = s !== State.PAUSED; $('gameover').hidden = s !== State.GAMEOVER;
   $('hud').hidden = !(s === State.PLAYING || s === State.PAUSED);
   $('btnAction').hidden = !(s === State.PLAYING && isTouch);
@@ -643,8 +902,10 @@ function setState(s) {
   if (s !== State.PLAYING) { stick.id = null; stick.x = stick.y = 0; $('joystick').hidden = true; }
   if (s !== State.PLAYING && s !== State.PAUSED) { $('coach').hidden = true; $('countdown').hidden = true; $('banner').hidden = true; bannerTimer = 0; }
   if (s === State.PLAYING) onGameplayStart(); else onGameplayStop(); // stop on every break: menus, pause, game over
-  if (s === State.MENU || s === State.GARAGE || s === State.LOBBY) { playMusic(0.2); camera.clearViewOffset(); }
-  if (s === State.PLAYING) playMusic(0.32);
+  if (inMenus(s)) { playMusic(0.2, 'arena'); camera.clearViewOffset(); }
+  if (s === State.MENU) fetchOnlineCount();
+  if (s === State.PLAYING) playMusic(0.32, wantTrack());
+  if (s !== State.GAMEOVER) $('overChips').innerHTML = '';
   if (s === State.PAUSED || s === State.MENU || s === State.GAMEOVER) updateHum(0, 1);
 }
 function togglePause() {
@@ -666,6 +927,10 @@ click('btnGarage', () => openGarage());
 click('btnOverGarage', () => { toMenuWorld(); openGarage(); });
 click('btnGarageDone', () => { setState(State.MENU); refreshMenu(); });
 click('btnGarageX', () => { setState(State.MENU); refreshMenu(); }); // compact header button on short screens
+click('btnMissions', () => openProfile());
+click('btnProfileDone', () => { setState(State.MENU); refreshMenu(); });
+click('btnProfileX', () => { setState(State.MENU); refreshMenu(); });
+click('btnOverInvite', () => shareInvite());
 click('btnPause', () => togglePause());
 click('btnResume', () => togglePause());
 click('btnShake', () => { save.shake = save.shake === false; persist(); refreshShakeButton(); });
@@ -691,11 +956,65 @@ function controlsHTML() {
   if (isTouch) return `<span><svg><use href="#i-move"/></svg>${t('ctlDrag')}</span><span><svg class="gold"><use href="#i-dash"/></svg>${t('ctlTapDash')}</span><span><svg class="gold"><use href="#i-blast"/></svg>${t('ctlPowerBtn')}</span>`;
   return `<span>${k('W')}${k('A')}${k('S')}${k('D')} / ${t('ctlMouse')}: ${t('ctlMove')}</span><span>${k('Space')} / ${t('ctlClick')}: ${t('ctlDash')}</span><span>${k('E')} / ${t('ctlRight')}: ${t('ctlPower')}</span><span>${k('P')}: ${t('ctlPause')}</span>`;
 }
+const curMode = () => (isUnlocked('mode', save.mode) ? save.mode : 'endless');
+const curArena = () => (isUnlocked('arena', save.arena) ? save.arena : 'bowl');
+const displayName = (tp) => (tp.boss ? t('champion') : tp.id === meId ? t('you') : tp.name);
 function refreshMenu() {
   $('menuBest').textContent = save.best; $('menuGears').textContent = save.gears; $('garageGears').textContent = save.gears;
-  const affordable = Object.entries(PARTS).some(([kind, list]) => list.some((p) => !save.owned[kind].includes(p.id) && p.cost <= save.gears));
+  const affordable = Object.entries(PARTS).some(([kind, list]) => list.some((p) => !p.hidden && !p.lvl && !save.owned[kind].includes(p.id) && p.cost <= save.gears));
   $('garageDot').hidden = !affordable;
+  $('menuLv').textContent = t('lv', { n: save.level }); $('menuXp').style.width = `${Math.round((100 * save.xp) / xpFor(save.level))}%`;
+  $('menuXpText').textContent = t('xp', { a: save.xp, b: xpFor(save.level) });
+  refreshMissions(); $('missionBadge').textContent = `${3 - missionLeft()}/3`;
+  const ds = displayStats(save.sel);
+  $('menuStats').innerHTML = ['atk', 'def', 'sta', 'spd'].map((k) => `<div><span>${t('st_short_' + k)}</span><i><b style="width:${Math.round(ds[k] * 100)}%"></b></i></div>`).join('');
+  renderSegs();
 }
+function renderSegs() { // mode + arena pickers: locked choices show the level that opens them
+  const seg = (box, kind, ids, label, cur) => {
+    $(box).innerHTML = ids.map((id) => {
+      const lv = UNLOCK_LV[kind][id], open = save.level >= lv, on = cur === id;
+      return `<button class="${on ? 'on' : ''} ${open ? '' : 'locked'}" data-id="${id}" role="radio" aria-checked="${on}">${open ? '' : '<svg><use href="#i-lock"/></svg>'}${t(label + id)}${open ? '' : ` <small>${t('lockedLv', { n: lv })}</small>`}</button>`;
+    }).join('');
+    $(box).querySelectorAll('button').forEach((b) => b.addEventListener('click', () => pickSeg(kind, b.dataset.id)));
+  };
+  seg('modeSeg', 'mode', S.MODES, 'mode_', curMode()); seg('arenaSeg', 'arena', S.ARENA_IDS, 'seg_', curArena());
+}
+function pickSeg(kind, id) {
+  unlockAudio();
+  if (!isUnlocked(kind, id)) { toast(t('unlockAt', { n: UNLOCK_LV[kind][id] })); playSfx('wall', 0.5); return; }
+  playSfx('click', 0.5);
+  if (save[kind] === id) return;
+  save[kind] = id; persist();
+  if (kind === 'arena') { toMenuWorld(); toast(`${t('arena_' + id)}: ${t('arenaSub_' + id)}`); }
+  else if (id === 'last') toast(t('lastTopSub'));
+  renderSegs();
+}
+function openProfile() { setState(State.PROFILE); renderProfile(); }
+function renderProfile() { // daily missions, the next level reward, personal records
+  refreshMissions();
+  $('profLv').textContent = t('lv', { n: save.level });
+  const fmt = (id, v) => (id === 'survive' ? (Math.floor(v * 10) / 10).toString() : String(Math.floor(v)));
+  $('missionList').innerHTML = save.missions.list.map((m) => {
+    const def = missionDef(m.id), f = Math.min(1, m.p / def.n);
+    return `<li class="${m.done ? 'done' : ''}"><svg><use href="#i-${m.done ? 'check' : 'target'}"/></svg><b>${missionText(m.id)} <small>${fmt(m.id, Math.min(m.p, def.n))}/${def.n}</small></b><em><svg class="gold"><use href="#i-gear"/></svg>${def.gears}</em><div class="xpbar"><i style="width:${Math.round(f * 100)}%"></i></div></li>`;
+  }).join('') + (missionLeft() ? '' : `<li class="done"><svg><use href="#i-star"/></svg><b>${t('newTomorrow')}</b></li>`);
+  const next = Object.keys(LEVEL_REWARDS).map(Number).filter((l) => l > save.level).sort((a, b) => a - b)[0];
+  $('nextReward').innerHTML = next ? t('nextReward', { n: next, x: `<b>${rewardName(LEVEL_REWARDS[next])}</b>` }) : t('allRewards');
+  $('recordList').innerHTML = RECORDS.map((k) => `<div><small>${t('rec_' + k)}</small><b>${recValue(k, save.rec[k] || 0)}</b></div>`).join('');
+}
+// "N playing now" on the Play online button: a tiny one-off question to the game server
+let onlineN = 0, countAt = -1e9;
+function fetchOnlineCount() {
+  if (CAPTURE || params.has('nocount') || performance.now() - countAt < 30000) return;
+  countAt = performance.now();
+  let ws; try { ws = new WebSocket(MP_URL); } catch { return; }
+  const kill = setTimeout(() => { try { ws.close(); } catch {} }, 8000);
+  ws.onopen = () => ws.send(JSON.stringify({ t: 'count' }));
+  ws.onmessage = (m) => { try { const d = JSON.parse(m.data); if (d.t === 'count') { onlineN = Number(d.n) || 0; showOnlineCount(); } } catch {} clearTimeout(kill); ws.close(); };
+  ws.onerror = () => {};
+}
+function showOnlineCount() { const el = $('onlineCount'); el.hidden = !(onlineN > 0); el.textContent = t('playingNow', { n: onlineN }); }
 const refreshShakeButton = () => { $('btnShake').textContent = t(save.shake === false ? 'shakeOff' : 'shakeOn'); };
 function displayStats(p) { // 0..1 bars for the garage
   const s = S.statsOf(p), n = (v) => Math.max(0.05, Math.min(1, (v - 0.6) / 1.0));
@@ -706,20 +1025,29 @@ function openGarage() { setState(State.GARAGE); renderGarage(); }
 function renderGarage() {
   $('garageGears').textContent = save.gears;
   $('garageTabs').innerHTML = ['crown', 'core', 'tip', 'paint'].map((k) => `<button data-tab="${k}" class="${k === garageTab ? 'on' : ''}">${t('tab_' + k)}</button>`).join('');
-  $('garageParts').innerHTML = PARTS[garageTab].map((p) => {
+  $('garageParts').innerHTML = PARTS[garageTab].filter((p) => !p.hidden).map((p) => {
     const owned = save.owned[garageTab].includes(p.id), on = save.sel[garageTab] === p.id;
     const label = garageTab === 'paint' ? t('c_' + p.id) : t('p_' + p.id);
     const desc = garageTab === 'paint' ? `<span class="swatch" style="background:${p.c}"></span>` : `<small>${t('d_' + p.id)}</small>`;
-    const status = on ? `<small>${t('equipped')}</small>` : owned ? `<small>${t('owned')}</small>` : `<span class="cost ${save.gears < p.cost ? 'no' : ''}"><svg><use href="#i-lock"/></svg>${p.cost}</span>`;
+    const status = on ? `<small>${t('equipped')}</small>` : owned ? `<small>${t('owned')}</small>` : p.lvl ? `<span class="lvl"><svg><use href="#i-star"/></svg>${t('lockedLv', { n: p.lvl })}</span>` : `<span class="cost ${save.gears < p.cost ? 'no' : ''}"><svg><use href="#i-lock"/></svg>${p.cost}</span>`;
     return `<button class="part ${on ? 'on' : ''} ${owned ? '' : 'locked'}" data-id="${p.id}"><b>${label}</b>${desc}${status}</button>`;
   }).join('');
   const ds = displayStats(save.sel);
-  $('garageStats').innerHTML = ['atk', 'def', 'sta', 'spd'].map((k) => `<span>${t('st_' + k)}</span><div class="bar"><i style="width:${Math.round(ds[k] * 100)}%"></i></div>`).join('');
+  $('garageStats').innerHTML = ['atk', 'def', 'sta', 'spd'].map((k) => `<span>${t('st_' + k)}</span><div class="bar"><i style="width:${Math.round(ds[k] * 100)}%"></i><s data-k="${k}" hidden></s></div>`).join('');
   $('garageTabs').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { playSfx('click', 0.5); garageTab = b.dataset.tab; renderGarage(); }));
-  $('garageParts').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => selectPart(garageTab, b.dataset.id)));
+  $('garageParts').querySelectorAll('button').forEach((b) => {
+    b.addEventListener('click', () => selectPart(garageTab, b.dataset.id));
+    b.addEventListener('pointerenter', () => previewPart(garageTab, b.dataset.id)); b.addEventListener('focus', () => previewPart(garageTab, b.dataset.id));
+    b.addEventListener('pointerleave', () => previewPart()); b.addEventListener('blur', () => previewPart());
+  });
+}
+function previewPart(kind, id) { // a gold outline on each stat bar shows what that part would change
+  const ds = kind && kind !== 'paint' ? displayStats({ ...save.sel, [kind]: id }) : null;
+  $('garageStats').querySelectorAll('s').forEach((el) => { el.hidden = !ds; if (ds) el.style.width = `${Math.round(ds[el.dataset.k] * 100)}%`; });
 }
 function selectPart(kind, id) {
   const p = part(kind, id);
+  if (!save.owned[kind].includes(id) && p.lvl) { toast(t('unlockAt', { n: p.lvl })); playSfx('wall', 0.6); return; }
   if (!save.owned[kind].includes(id)) {
     if (save.gears < p.cost) { toast(t('notEnough')); playSfx('wall', 0.6); return; }
     save.gears -= p.cost; save.owned[kind].push(id); toast(t('unlocked')); playSfx('unlock', 0.8);
@@ -740,8 +1068,8 @@ let boardTimer = 0;
 function renderBoard() {
   const list = S.rankList(world), me = list.findIndex((tp) => tp.id === meId), rows = [];
   const row = (tp, i, extra = '') => {
-    const mine = tp.id === meId;
-    return `<li class="${mine ? 'me' : tp.human ? 'hu' : ''} ${extra}"><span>${i === 0 ? '<svg><use href="#i-crown"/></svg>' : i + 1 + '.'}</span><i class="sw" style="background:${topColor(tp)}"></i>${escapeHTML(mine ? t('you') : tp.name)}<b>${Math.round(tp.spin)}</b></li>`;
+    const mine = tp.id === meId, person = mode === 'online' && tp.human && !mine ? '<svg class="hu"><use href="#i-user"/></svg>' : '';
+    return `<li class="${mine ? 'me' : tp.boss ? 'boss' : tp.human ? 'hu' : ''} ${extra}"><span>${i === 0 ? '<svg><use href="#i-crown"/></svg>' : i + 1 + '.'}</span><i class="sw" style="background:${topColor(tp)}"></i>${person}${escapeHTML(displayName(tp))}<b>${Math.round(tp.spin)}</b></li>`;
   };
   const n = isShort() ? 3 : 5;
   list.slice(0, n).forEach((tp, i) => rows.push(row(tp, i)));
@@ -751,7 +1079,7 @@ function renderBoard() {
 const escapeHTML = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 function feed(killer, victim, how) {
   if (CAPTURE && !killer) return;
-  const el = document.createElement('div'), name = (tp) => `<b style="color:${tp.id === meId ? '#ffc531' : topColor(tp)}">${escapeHTML(tp.id === meId ? t('you') : tp.name)}</b>`;
+  const el = document.createElement('div'), name = (tp) => `<b style="color:${tp.id === meId || tp.boss ? '#ffc531' : topColor(tp)}">${escapeHTML(displayName(tp))}</b>`;
   el.innerHTML = killer ? `${name(killer)}<em>${t(how === 'ringout' ? 'feedRing' : 'feedTopple')}</em>${name(victim)}` : `${name(victim)}<em>${t(how === 'ringout' ? 'fell' : 'spunOut')}</em>`;
   if (killer?.id === meId || victim.id === meId) el.className = 'me';
   const f = $('feed'); f.prepend(el); while (f.children.length > (isShort() ? 2 : 4)) f.lastChild.remove();
@@ -772,6 +1100,17 @@ function updateHUD() {
   if (ev) { $('eventChip').hidden = false; $('eventName').textContent = t('ev_' + ev.id).replace('!', ''); $('eventTime').textContent = `${Math.max(0, Math.ceil(ev.t))}s`; }
   else $('eventChip').hidden = true;
   if (mode === 'online') { $('roomCode').textContent = net.code; $('roomInfo').textContent = `${t('players', { n: net.players })} · ${Math.round(net.rtt)} ms`; }
+  const boss = world.tops.find((tp) => tp.boss && (alive(tp) || tp.state === 'spawn')); // the Champion's spin, and how long it stays
+  $('bossChip').hidden = !boss;
+  if (boss) { $('bossBar').style.width = `${Math.round(clamp(boss.spin / Math.max(1, boss.peak), 0, 1) * 100)}%`; $('bossTime').textContent = boss.bossT != null ? `${Math.max(0, Math.ceil(boss.bossT))}s` : ''; }
+  const last = world.mode === 'last'; // Last Top Spinning: tops left + the closing ring
+  $('leftPill').hidden = !last; $('zoneChip').hidden = !last;
+  if (last) {
+    $('leftN').textContent = world.tops.filter((tp) => !isDecoy(tp) && tp.state !== 'dead').length; $('leftLabel').textContent = t('left');
+    const before = CFG.zoneStart - world.time, chip = $('zoneChip');
+    chip.classList.toggle('closing', before <= 0); $('zoneText').textContent = before > 0 ? t('zoneSoon', { n: Math.ceil(before) }) : t('zoneClosing');
+    $('spinBar').classList.toggle('low', p.spin < 30 || Math.hypot(p.x, p.z) > S.zoneR(world));
+  }
   updatePowerUI();
 }
 let powerShown = '';
@@ -809,8 +1148,14 @@ function handleEvent(e) {
       burst(p, e.heavy ? '#ff9a3d' : '#7fd8ff', e.heavy ? 10 : 4, 5);
       if (e.heavy) shockwave(e.x, p.y - 0.4, e.z, 2.5 + e.rel * 0.15, '#ffd27a');
       playSfx(e.heavy ? 'clashHeavy' : 'clash', (mine ? 1 : nearVol(e.x, e.z) * 0.6) * clamp(0.4 + e.rel / 14, 0.4, 1), e.heavy ? 1 : 1.1);
-      if (mine && e.heavy) shake(0.15);
+      if (mine && e.heavy) { shake(0.15); hitStop = Math.max(hitStop, 0.045); }
       if (mode === 'online') for (const id of [e.a, e.b]) { const o = S.topById(world, id); if (o) o.hitWob = Math.min(0.45, o.hitWob + (e.heavy ? 0.3 : 0.12)); }
+      for (const [id, d] of [[e.a, e.dA], [e.b, e.dB]]) { const vv = views.get(id); if (vv && d > 2) vv.flash = Math.min(0.16, 0.05 + d * 0.006); } // short emissive pulse on whoever got hurt
+      if ((e.a === meId && e.aPerf) || (e.b === meId && e.bPerf)) perfectFx(e.x, e.z);
+      if (mine) { // my hits: the spin I took off them floats up from the victim
+        const dealt = e.a === meId ? e.dB : e.dA, victim = infoOf(e.a === meId ? e.b : e.a);
+        if (dealt >= 3 && victim && !isDecoy(victim)) popText(victim.x, victim.z, 1.2 + (victim.r || 1), `-${Math.round(dealt)}`, 'dmg', 0.8);
+      }
       if (run?.tutorial && run.tutStep === 2 && run.dummyId && [e.a, e.b].includes(meId) && [e.a, e.b].includes(run.dummyId) && (e.a === meId ? e.aDash : e.bDash)) run.tutDashHit = true;
       break;
     }
@@ -818,7 +1163,7 @@ function handleEvent(e) {
       const s = world.sparks[e.i], x = e.x ?? s?.x, z = e.z ?? s?.z;
       if (mode === 'online' && s) s.on = false;
       if (x != null) burst(pos3(x, z, 0.5), '#ffe066', 4, 3);
-      if (e.id === meId) { playSfx('spark', 0.45, 0.9 + Math.random() * 0.3); if (run?.tutorial) run.tutSparks++; }
+      if (e.id === meId) { playSfx('spark', 0.45, 0.9 + Math.random() * 0.3); if (run?.tutorial) run.tutSparks++; bump('sparks'); }
       break;
     }
     case 'fall':
@@ -851,10 +1196,11 @@ function handleEvent(e) {
       break;
     case 'puUse': {
       if (!tp) break;
-      const snd = { shield: 'puShield', magnet: 'puMagnet', turbo: 'puTurbo' }[e.kind];
+      const snd = { shield: 'puShield', magnet: 'puMagnet', turbo: 'puTurbo', anchor: 'puAnchor', decoy: 'puDecoy' }[e.kind];
       playSfx(snd, e.id === meId ? 0.9 : 0.5 * nearVol(tp.x, tp.z));
       burst(pos3(tp.x, tp.z, 0.7), PU_COLOR[e.kind], 20, 6); shockwave(tp.x, bowlY(Math.hypot(tp.x, tp.z)), tp.z, tp.r * 2.5, PU_COLOR[e.kind]);
-      if (mode === 'online' && tp.id !== meId) tp.fx = { kind: e.kind, t: 1 };
+      if (mode === 'online' && tp.id !== meId && e.kind !== 'decoy') tp.fx = { kind: e.kind, t: 1 };
+      if (e.id === meId) bump('powers');
       break;
     }
     case 'fxEnd': if (mode === 'online' && tp && tp.id !== meId) tp.fx = null; break;
@@ -863,8 +1209,31 @@ function handleEvent(e) {
       shockwave(e.x, p.y - 0.3, e.z, CFG.blastRadius * 2, '#ff8a3d'); shockwave(e.x, p.y - 0.2, e.z, CFG.blastRadius * 1.3, '#ffe27a');
       burst(p, '#ff8a3d', 30, 12); burst(p, '#ffe27a', 16, 9);
       playSfx('puBlast', mine ? 1 : nearVol(e.x, e.z)); if (mine || near) shake(0.15);
+      if (mine && !infoOf(e.id)?.boss) bump('powers');
       break;
     }
+    case 'decoyPop': { // a decoy burst: if it was mine and someone hit it, they fell for it
+      const p = pos3(e.x, e.z, 0.6);
+      burst(p, PU_COLOR.decoy, 18, 6); shockwave(e.x, p.y - 0.4, e.z, 3, PU_COLOR.decoy); playSfx('puDecoy', e.owner === meId ? 0.8 : 0.4 * nearVol(e.x, e.z));
+      if (e.owner === meId && e.by) popText(e.x, e.z, 2, t('fooled'), 'cool', 1);
+      break;
+    }
+    case 'boss': {
+      const b = infoOf(e.id);
+      banner(t('championIn'), t('championSub', { n: CFG.bossPoints }), false, 2.6); playSfx('champion', 0.8); voice('champion'); cheer();
+      if (b) { shockwave(b.x, bowlY(Math.hypot(b.x, b.z)), b.z, 6, '#ffc531'); burst(pos3(b.x, b.z, 1), '#ffc531', 26, 9); }
+      if (state === State.PLAYING) playMusic(audio.musicVol, 'showdown');
+      break;
+    }
+    case 'bossLeave':
+      toast(t('championOut'));
+      if (tp) { burst(pos3(tp.x, tp.z, 1), '#ffc531', 20, 7); shockwave(tp.x, bowlY(Math.hypot(tp.x, tp.z)), tp.z, 4, '#ffc531'); }
+      if (mode === 'online') world.tops = world.tops.filter((o) => o.id !== e.id);
+      setTimeout(() => { if (state === State.PLAYING) playMusic(audio.musicVol, wantTrack()); }, 0);
+      break;
+    case 'win': // Last Top Spinning: the last top standing
+      if (e.id === meId && run && !run.over && player) endRun({ how: 'win', score: player.score, kos: player.kos, peak: player.peak }, null);
+      break;
     case 'elim': onElim(e); break;
     case 'event': onEventStart(e); break;
     case 'eventEnd': onEventEnd(e); break;
@@ -880,15 +1249,18 @@ function onElim(e) {
   if (e.how === 'topple') { const p = pos3(e.x, e.z, 0.5); burst(p, topColor(victim), 22, 7); shockwave(e.x, p.y - 0.4, e.z, (victim.r || 1) * 3, topColor(victim)); }
   feed(killer, victim, e.how);
   if (e.killer && e.killer === meId) {
-    banner(t(e.how === 'ringout' ? 'ringout' : 'topple'), e.wasLeader ? t('leaderDown') : `+${e.pts}`); voice(e.how === 'ringout' ? 'ringout' : 'topple');
+    if (e.boss) { banner(t('champDown'), `+${e.pts}`, false, 2.4); voice('champdown'); bump('champion'); hitStop = Math.max(hitStop, 0.12); }
+    else { banner(t(e.how === 'ringout' ? 'ringout' : 'topple'), e.wasLeader ? t('leaderDown') : `+${e.pts}`); voice(e.how === 'ringout' ? 'ringout' : 'topple'); }
     playSfx('cheer', 0.55); cheer(); shake(0.1);
-  }
+    bump('kos'); if (e.how === 'ringout') bump('ringouts');
+  } else if (e.boss) { banner(t('champDown'), '', false, 1.8); cheer(); }
+  if (e.boss) setTimeout(() => { if (state === State.PLAYING) playMusic(audio.musicVol, wantTrack()); }, 0);
   if (e.id === meId && run && !run.over) endRun(e, killer);
 }
 function onEventStart(e) {
-  if (mode === 'online') world.event = { id: e.id, t: e.t ?? S.EVENT_DUR[e.id], pit: e.pit };
+  if (mode === 'online') world.event = { id: e.id, t: e.t ?? S.EVENT_DUR[e.id], pit: e.pit, ang: world.pits[e.pit] };
   banner(t('ev_' + e.id), t(`ev_${e.id}Sub`), e.id === 'tilt', 2.2); playSfx('event', 0.7); voice(e.id);
-  if (e.id === 'tilt') { chevrons.visible = true; chevrons.rotation.y = -PIT_ANGLES[e.pit]; }
+  if (e.id === 'tilt') { chevrons.visible = true; chevrons.rotation.y = -world.pits[e.pit]; }
   if (e.id === 'overdrive' && audio.music) audio.music.playbackRate = 1.08;
 }
 function onEventEnd(e) {
@@ -898,6 +1270,7 @@ function onEventEnd(e) {
 }
 function onLeader(id) {
   world.leader = id;
+  if (id && id === meId && run && !run.over) setStat('leader', 1);
   if (id && id === meId && run && !run.over && run.time - run.leaderSaid > 12 && run.time > 5) {
     run.leaderSaid = run.time; banner(t('leader'), '', false, 1.6); voice('leader');
     if (!run.happy) { run.happy = true; happytime(); }
@@ -909,51 +1282,80 @@ let crowdCheer = 0;
 // ================================================================ SOLO (a local world against 11 bots; the menu shows an idle one)
 function toMenuWorld() {
   stopHum(); clearViews(); mode = 'solo'; run = null;
-  world = S.createWorld(); world.frozen = true;
+  world = S.createWorld({ arena: curArena() }); world.frozen = true; buildArena(world.arenaId);
   player = S.addTop(world, { parts: save.sel, name: 'You', human: true, spawn: false }); meId = player.id;
   for (let i = 0; i < CFG.bots; i++) S.spawnBot(world, { ring: i, idle: true, avoidPaint: save.sel.paint });
   world.events.length = 0; crownSprite.visible = false; chevrons.visible = false;
 }
-function leaveToMenu() { closeOnline(); toMenuWorld(); setState(State.MENU); refreshMenu(); }
+function leaveToMenu() { if (run && !run.over) persist(); closeOnline(); toMenuWorld(); setState(State.MENU); refreshMenu(); } // keep mission progress from a quit run
 const newRun = (extra = {}) => ({
   time: 0, countdown: 0, gearsEarned: 0, slow: 0, over: false, overTimer: 0, how: '', killer: null, leaderSaid: -99, happy: false, bestRank: 99, isBest: false,
-  tutorial: false, tutStep: -1, tutMoved: 0, tutSparks: 0, tutDashHit: false, tutT: 0, dummyId: 0, ...extra,
+  tutorial: false, tutStep: -1, tutMoved: 0, tutSparks: 0, tutDashHit: false, tutT: 0, dummyId: 0,
+  stats: {}, missionsDone: [], levelUps: [], xpEarned: 0, records: [], place: 0, field: 0, won: false, zoneWarned: false, ...extra,
 });
-function startRun() {
+function startRun(opts = {}) {
   closeOnline(); stopHum(); clearViews(); mode = 'solo';
+  if (CAPTURE) opts = { mode: params.get('mode') || undefined, arena: params.get('arena') || undefined, ...opts }; // capture restarts keep the scene
   const tutorial = !save.tut && !CAPTURE;
-  world = S.createWorld(); world.eventsOn = world.powersOn = !tutorial; world.frozen = !CAPTURE;
+  const gameMode = tutorial ? 'endless' : opts.mode || curMode(), arena = tutorial ? 'bowl' : opts.arena || curArena(); // the first run is the tutorial in the Grand Bowl
+  world = S.createWorld({ arena, mode: gameMode }); buildArena(arena);
+  world.eventsOn = world.powersOn = !tutorial; world.bossOn = gameMode === 'endless' && !tutorial; world.frozen = !CAPTURE;
+  if (CAPTURE) world.bossAt = Number(params.get('boss')) || 35; // the trailer and screenshots get to see the Champion
   player = S.addTop(world, { parts: save.sel, name: 'You', human: true }); meId = player.id;
   if (tutorial) { player.noDecay = true; player.dmgTaken = 0.3; }
   for (let i = 0; i < CFG.bots; i++) { const b = S.spawnBot(world, { ring: i, avoidPaint: save.sel.paint }); b.timer = 0.6 + Math.random() * 0.6; if (tutorial) b.ai = 'passive'; }
-  world.events.length = 0;
-  run = newRun({ countdown: CAPTURE ? 0 : 2.6, tutorial });
-  save.runs++; persist();
+  world.events.length = 0; world.tops.forEach(remember); // their 'add' events were just dropped: the feed still needs their names
+  run = newRun({ countdown: CAPTURE ? 0 : 2.6, tutorial, field: world.tops.length });
+  save.runs++; refreshMissions(); persist();
   $('feed').innerHTML = ''; boardTimer = 0;
   setState(State.PLAYING); startHum();
   if (!CAPTURE) { voice('go'); playSfx('launch', 0.8); }
 }
 const soloInput = (tp) => (tp.id !== meId ? null : AUTOPLAY ? S.botMove(world, tp, STEP) : { ...playerInput(), dash: takeDash(), use: takeUse() });
 function endRun(e, killer) {
-  run.over = true; run.how = e.how; run.killer = killer;
-  Object.assign(player, { score: e.score ?? player.score, kos: e.kos ?? player.kos, peak: e.peak ?? player.peak, state: 'dead' });
-  stopHum(); playSfx('over', 0.7);
-  run.gearsEarned = Math.floor(player.score / 10) + player.kos * 3 + Math.floor(run.time / 20);
+  run.over = true; run.how = e.how; run.killer = killer; run.won = e.how === 'win';
+  Object.assign(player, { score: e.score ?? player.score, kos: e.kos ?? player.kos, peak: e.peak ?? player.peak, state: run.won ? player.state : 'dead' });
+  stopHum(); playSfx(run.won ? 'victory' : 'over', 0.7);
+  const last = world.mode === 'last';
+  if (last) { run.place = run.won ? 1 : world.tops.filter((tp) => !isDecoy(tp) && tp.id !== meId && tp.state !== 'dead').length + 1; if (run.won) { voice('victory'); save.rec.wins++; } }
+  const placeBonus = last ? Math.max(0, run.field - run.place) : 0;
+  run.gearsEarned = Math.floor(player.score / 10) + player.kos * 3 + Math.floor(run.time / 20) + placeBonus * 3 + (run.won ? 40 : 0);
   save.gears += run.gearsEarned;
   run.isBest = player.score > save.best;
-  if (run.isBest) { save.best = player.score; happytime(); }
+  if (run.isBest) save.best = player.score;
+  if (run.isBest || run.won) happytime();
+  if (last && run.place <= 3) bump('lasttop');
+  if (mode === 'online') bump('online');
+  setStat('survive', run.time / 60); setStat('peak', player.peak);
+  run.records = checkRecords({ score: player.score, kos: player.kos, ringouts: run.stats.ringouts || 0, lead: run.stats.lead || 0, peak: Math.round(player.peak), time: Math.floor(run.time) });
+  const xp = Math.round(player.score * 0.5 + player.kos * 8 + run.time / 5 + placeBonus * 6 + (run.won ? 60 : 0));
+  run.xpEarned += xp; run.levelUps.push(...addXP(xp));
   persist();
-  run.overTimer = 1.2;
+  run.overTimer = run.won ? 1.8 : 1.2;
 }
 function showResults() {
-  const r = run, k = r.killer;
-  $('overBy').textContent = k ? t(r.how === 'ringout' ? 'byRingout' : 'byTopple', { n: k.name }) : t(r.how === 'ringout' ? 'selfRingout' : 'selfTopple');
+  const r = run, k = r.killer, last = world.mode === 'last';
+  $('overTitle').textContent = t(r.won ? 'victory' : 'eliminated'); $('gameover').querySelector('.results').classList.toggle('win', r.won);
+  const by = k ? t(r.how === 'ringout' ? 'byRingout' : 'byTopple', { n: displayName(k) }) : t(r.how === 'ringout' ? 'selfRingout' : 'selfTopple');
+  $('overBy').textContent = r.won ? t('lastStanding') : last ? `${t('outPlace', { p: r.place, n: r.field })} · ${by}` : by;
   $('finalScore').textContent = player.score; $('overBest').textContent = save.best; $('newBest').hidden = !r.isBest;
-  $('overRank').textContent = `#${r.bestRank < 99 ? r.bestRank : '-'}`; $('overKos').textContent = player.kos; $('overPeak').textContent = Math.round(player.peak);
+  $('overRankLabel').textContent = t(last ? 'place' : 'rank'); $('overRank').textContent = last ? `#${r.place}` : `#${r.bestRank < 99 ? r.bestRank : '-'}`;
+  $('overKos').textContent = player.kos; $('overPeak').textContent = Math.round(player.peak);
   const sec = Math.floor(r.time); $('overTime').textContent = `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
   $('overGears').textContent = r.gearsEarned;
   $('btnDouble').hidden = !(adsAvailable() && r.gearsEarned > 0);
+  $('btnOverInvite').hidden = !(mode === 'online' && net.priv);
+  // XP bar fills up to where the player now is; level-ups, broken records and finished missions show as chips
+  $('overLv').textContent = t('lv', { n: save.level }); $('overXpText').textContent = t('xpGain', { n: r.xpEarned });
+  const bar = $('overXp'); bar.style.transition = 'none'; bar.style.width = '0%'; void bar.offsetWidth; bar.style.transition = ''; requestAnimationFrame(() => { bar.style.width = `${Math.round((100 * save.xp) / xpFor(save.level))}%`; });
+  const chips = [
+    ...r.levelUps.map((u) => `<span class="lvup"><svg><use href="#i-star"/></svg>${t('levelUp')} ${t('lv', { n: u.lv })}${u.reward ? ' · ' + rewardName(u.reward) : ' · ' + t('rw_gears', { n: u.gears })}</span>`),
+    ...r.records.slice(0, 2).map((key) => `<span class="rec"><svg><use href="#i-crown"/></svg>${t('newRecord', { x: `${t('rec_' + key)} ${recValue(key, save.rec[key])}` })}</span>`),
+    ...r.missionsDone.map((id) => `<span><svg><use href="#i-check"/></svg>${missionText(id)}</span>`),
+  ];
+  $('overChips').innerHTML = chips.slice(0, 5).join('');
   setState(State.GAMEOVER); refreshMenu();
+  if (r.levelUps.length) setTimeout(() => { if (state === State.GAMEOVER) { playSfx('levelUp', 0.8); voice('levelup'); } }, 500);
 }
 function tickRun(dt) {
   if (!run) return;
@@ -963,13 +1365,19 @@ function tickRun(dt) {
     boardTimer -= dt; if (boardTimer <= 0) { boardTimer = 0.25; renderBoard(); }
     if (run.countdown <= 0) {
       world.frozen = false; if (run.tutorial) nextTutStep();
+      if (world.mode === 'last' && mode === 'solo') { banner(t('lastTopGo'), t('lastTopSub'), false, 2.4); voice('lasttop'); }
       cd.textContent = t('go'); cd.classList.remove('tick'); void cd.offsetWidth; cd.classList.add('tick'); setTimeout(() => { cd.hidden = true; }, 600);
     } else if (before !== after || cd.hidden) { cd.hidden = false; cd.textContent = String(after); cd.classList.remove('tick'); void cd.offsetWidth; cd.classList.add('tick'); playSfx('count', 0.5); }
     return;
   }
   if (run.over) { run.overTimer -= dt; if (run.overTimer <= 0 && state === State.PLAYING) showResults(); }
   else run.time += dt;
-  if (!run.over && player && alive(player)) { const rk = S.rankList(world).findIndex((tp) => tp.id === meId) + 1; if (rk > 0) run.bestRank = Math.min(run.bestRank, rk); }
+  if (!run.over && player && alive(player)) {
+    const rk = S.rankList(world).findIndex((tp) => tp.id === meId) + 1; if (rk > 0) run.bestRank = Math.min(run.bestRank, rk);
+    if (world.leader === meId) bump('lead', dt); // time at #1 (a mission and a record)
+    setStat('peak', player.peak); setStat('survive', run.time / 60);
+    if (world.mode === 'last' && !run.zoneWarned && world.time >= CFG.zoneStart) { run.zoneWarned = true; banner(t('zoneClosing'), t('zoneSub'), true, 2.4); playSfx('zone', 0.7); }
+  }
   if (run.tutorial) tickTutorial(dt);
   boardTimer -= dt; if (boardTimer <= 0 && state === State.PLAYING) { boardTimer = 0.25; renderBoard(); }
   if (state === State.PLAYING && player && alive(player)) updateHUD();
@@ -986,7 +1394,7 @@ const TUT = [
       run.dummyId = d.id;
     },
     done: () => run.tutDashHit },
-  { text: 'tutPits', icon: () => '<svg><use href="#i-pit"/></svg>', setup: () => { const p = S.nearestPit(player.x, player.z); chevrons.visible = true; chevrons.rotation.y = -p.ang; run.tutT = 0; }, done: () => run.tutT > 5 },
+  { text: 'tutPits', icon: () => '<svg><use href="#i-pit"/></svg>', setup: () => { const p = S.nearestPit(world, player.x, player.z); chevrons.visible = true; chevrons.rotation.y = -p.ang; run.tutT = 0; }, done: () => run.tutT > 5 },
 ];
 function nextTutStep() {
   run.tutStep++;
@@ -1010,7 +1418,7 @@ function finishTutorial(skipped) {
   const dummy = S.topById(world, run.dummyId); if (dummy) dummy.ai = 'normal';
   for (const tp of world.tops) if (tp.ai === 'passive') tp.ai = 'normal';
   player.noDecay = false; player.dmgTaken = 1;
-  world.eventsOn = world.powersOn = true; world.nextEvent = world.time + CFG.eventFirst; world.powerT = 6;
+  world.eventsOn = world.powersOn = true; world.bossOn = world.mode === 'endless'; world.nextEvent = world.time + CFG.eventFirst; world.powerT = 6;
   if (!skipped) { banner(t('tutDone'), '', false, 2); playSfx('unlock', 0.7); }
 }
 
@@ -1019,7 +1427,7 @@ function finishTutorial(skipped) {
 // two snapshots; my own top is predicted locally (same sim.integrate) and eased toward the server so steering feels instant.
 const net = { use: false, joinable: null, ws: null, status: 'off', code: '', priv: false, name: '', players: 0, rtt: 0, offset: null, snaps: [], srvMe: null, me: null, leaving: false, sendT: 0, pingT: 0, sx: 9, sy: 9, dash: false };
 const STATE_NAME = ['spawn', 'alive', 'falling', 'toppling'];
-const FX_NAME = ['', 'shield', 'magnet', 'turbo'];
+const FX_NAME = ['', 'shield', 'magnet', 'turbo', 'anchor'];
 function connectOnline(joinMsg) {
   if (CAPTURE) return;
   closeOnline();
@@ -1063,6 +1471,7 @@ function onNet(d) {
     case 'you': meId = d.id; startOnlineLife(); break;
     case 's': onSnapshot(d); break;
     case 'p': { const rtt = performance.now() - d.c; net.rtt = net.rtt ? net.rtt * 0.8 + rtt * 0.2 : rtt; break; }
+    case 'count': onlineN = Number(d.n) || 0; showOnlineCount(); break;
   }
 }
 function mirrorTop(info) {
@@ -1072,6 +1481,8 @@ function mirrorTop(info) {
     id: info.id, name: info.name, human: !!info.human, parts, stats: S.statsOf(parts), x: 0, z: 0, vx: 0, vz: 0, spin: CFG.startSpin, peak: CFG.startSpin,
     r: 1, mass: 1, state: 'spawn', timer: 0.6, fallY: 0, fallV: 0, dashT: 0, cd: 0, shield: 0, kos: 0, score: 0, hitWob: 0, faceX: 0, faceZ: 1, age: 0, placed: false,
   };
+  if (info.boss) { tp.boss = true; tp.parts.paint = 'champ'; }
+  if (info.decoy) { tp.ai = 'decoy'; tp.decoyOf = info.decoy; }
   S.updateMass(tp); world.tops.push(tp); remember(tp);
 }
 function mirrorSpark([i, x, z, vx, vz, fall, big]) { const s = world.sparks[i]; if (s) Object.assign(s, { on: true, x, z, vx, vz, fall, big, y: 0.4 + fall }); }
@@ -1079,12 +1490,12 @@ function enterOnline(d) {
   stopHum(); clearViews(); mode = 'online'; run = null; player = null; meId = 0;
   Object.assign(net, { status: 'in', code: d.code, priv: d.priv, name: d.name, players: d.players, snaps: [], offset: null, srvMe: null, me: null });
   $('roomCode').textContent = d.code; $('roomInfo').textContent = t('players', { n: d.players });
-  world = S.createWorld({ bots: 0, sparks: 0 }); world.events.length = 0; world.time = d.tm;
+  world = S.createWorld({ bots: 0, sparks: 0, arena: d.arena }); world.events.length = 0; world.time = d.tm; buildArena(world.arenaId);
   for (const info of d.tops) mirrorTop(info);
   for (const sp of d.sparks) mirrorSpark(sp);
-  world.event = d.ev ? { ...d.ev } : null; world.leader = d.leader;
+  world.event = d.ev ? { ...d.ev, ang: world.pits[d.ev.pit] } : null; world.leader = d.leader;
   world.powerups = (d.pu || []).map((q) => ({ ...q, t: CFG.powerLife }));
-  chevrons.visible = world.event?.id === 'tilt'; if (chevrons.visible) chevrons.rotation.y = -PIT_ANGLES[world.event.pit];
+  chevrons.visible = world.event?.id === 'tilt'; if (chevrons.visible) chevrons.rotation.y = -world.pits[world.event.pit];
   net.joinable = d.players < 10; sdkRoom({ roomId: d.code, isJoinable: net.joinable, inviteParams: { roomId: d.code } });
   if (d.priv) toast(t('shareCode', { c: d.code }));
 }
@@ -1114,7 +1525,7 @@ function onSnapshot(d) {
     }
     if (!tp.placed) { tp.x = a[1]; tp.z = a[2]; tp.placed = true; }
     tp.spin = a[5]; tp.peak = Math.max(tp.peak, tp.spin); tp.shield = a[7] & 2 ? 1 : 0; tp.dashT = a[7] & 1 ? 0.1 : 0; S.updateMass(tp);
-    const fxk = FX_NAME[(a[7] >> 2) & 3]; if (tp.id !== meId) tp.fx = fxk ? { kind: fxk, t: tp.fx?.t || 1 } : null;
+    const fxk = FX_NAME[(a[7] >> 2) & 7]; if (tp.id !== meId) tp.fx = fxk ? { kind: fxk, t: tp.fx?.t || 1 } : null;
     if (tp.id === meId) net.srvMe = { tm: d.tm, x: a[1], z: a[2], vx: a[3], vz: a[4] };
   }
   world.tops = world.tops.filter((tp) => seen.has(tp.id) || ((tp.state === 'falling' || tp.state === 'toppling') && tp.timer > 0)); // let a fall finish locally
@@ -1194,11 +1605,14 @@ function advance(dt) {
   if (state === State.PAUSED && mode !== 'online') return; // online the world keeps going: my top just stops steering
   let sdt = dt;
   if (run?.slow > 0) { run.slow -= dt; sdt = dt * (mode === 'online' ? 1 : 0.3); }
+  if (hitStop > 0) { hitStop -= dt; if (mode !== 'online') sdt = 0; } // freeze frame on a big hit
   acc += sdt; let n = 0; while (acc >= STEP && n < 8) { step(STEP); acc -= STEP; n++; } if (n >= 8) acc = 0;
   if (mode === 'online') netInterpolate();
   refreshPlayer();
   updateParticles(sdt); updateWaves(sdt);
   if (bannerTimer > 0) { bannerTimer -= dt; if (bannerTimer <= 0) $('banner').hidden = true; }
+  if (missionPopTimer > 0) { missionPopTimer -= dt; if (missionPopTimer <= 0) $('missionPop').hidden = true; }
+  tickPops(dt);
   if (state === State.PLAYING && run && player && alive(player)) {
     const sp = Math.hypot(player.vx, player.vz);
     updateHum(0.05 + 0.1 * clamp(player.spin / 300, 0, 1) + 0.05 * clamp(sp / 10, 0, 1), 0.75 + 0.45 * clamp(player.spin / 400, 0, 1) + sp * 0.01);
@@ -1223,13 +1637,15 @@ function syncTop(tp, v, dt) {
   const fx = alive(tp) ? tp.fx?.kind : null; // active power-up effects
   v.bubble.visible = fx === 'shield'; if (fx === 'shield') v.bubble.material.opacity = 0.2 + 0.08 * Math.sin(simTime * 10);
   v.field.visible = fx === 'magnet'; if (fx === 'magnet') { v.field.rotation.y += dt * 4; v.field.scale.setScalar(1 + 0.15 * Math.sin(simTime * 6)); }
+  v.anchor.visible = fx === 'anchor'; if (fx === 'anchor') v.anchor.material.emissiveIntensity = 0.4 + 0.3 * Math.sin(simTime * 5);
+  if (v.flash > 0) v.flash = Math.max(0, v.flash - dt); m.mats[0].emissiveIntensity = v.flash * 3.5; // hit flash: a short white pulse, never a flat tint
   m.blur.material.color.set(fx === 'turbo' ? PU_COLOR.turbo : topColor(tp));
   if (fx === 'turbo' && (v.trailT -= dt) <= 0) { v.trailT = 0.06; burst(new THREE.Vector3(tp.x, y + 0.3 * s, tp.z), PU_COLOR.turbo, 2, 1.5, 0.2); }
   if (me) m.ring.material.opacity = tp.cd <= 0 ? 0.7 + 0.25 * Math.sin(simTime * 8) : 0.4;
   m.ring.visible = tp.state === 'alive' && !(tp.shield > 0 && Math.sin(simTime * 30) < -0.3);
   v.label.visible = state !== State.COVER && (state === State.PLAYING || state === State.GAMEOVER || state === State.PAUSED);
   v.label.position.set(tp.x, y + 0.95 * s + 0.75, tp.z);
-  const ls = (2.5 + s * 0.4) * (isShort() ? 1.3 : 1); v.label.scale.set(ls, ls * 0.22, 1); // the phone camera sits further back
+  const ls = (2.5 + s * 0.4) * (isShort() ? 1.3 : 1) * v.labelScale; v.label.scale.set(ls, ls * 0.22, 1); // the phone camera sits further back
   v.tp = tp;
 }
 function render(dt) {
@@ -1250,14 +1666,19 @@ function render(dt) {
     crowd.instanceMatrix.needsUpdate = true;
   }
   for (const b of beams) { b.rotation.z = Math.sin(simTime * 0.4 + b.userData.a) * 0.35; b.rotation.x = Math.cos(simTime * 0.3 + b.userData.a) * 0.35; }
-  for (const g of pitGlows) g.material.opacity = 0.75 + 0.25 * Math.sin(simTime * 4);
+  animateArena(dt);
+  const zr = S.zoneR(world), showZone = zr < R + 1 && (state === State.PLAYING || state === State.PAUSED || state === State.GAMEOVER);
+  zoneWall.visible = showZone && zr > 0.05; zoneFloor.visible = showZone;
+  if (zoneWall.visible) { zoneWall.scale.set(zr, 1, zr); zoneWall.position.y = bowlY(Math.min(zr, R)) - 0.25; zoneWall.children[0].material.opacity = 0.55 + 0.25 * Math.sin(simTime * 5); }
+  if (showZone) { zoneFloor.material.uniforms.zr.value = zr; zoneFloor.material.uniforms.time.value = simTime; }
   if (chevrons.visible) for (const c of chevrons.children) c.material.opacity = 0.25 + 0.6 * Math.max(0, Math.sin(simTime * 6 - c.userData.k * 0.9));
   if (state !== State.COVER) updateCamera(dt);
   renderer.render(scene, camera);
+  placePops();
 }
 function updateCamera(dt) {
   const portrait = innerHeight > innerWidth;
-  if (state === State.MENU || state === State.GARAGE || state === State.LOBBY) {
+  if (inMenus()) {
     const a = simTime * 0.18, dist = state === State.GARAGE ? 5.2 : 6.5, h = state === State.GARAGE ? 2.6 : 3.2;
     const px = player ? player.x : 0, pz = player ? player.z : 0, py = player ? bowlY(Math.hypot(px, pz)) : 0;
     camPos.set(px + Math.sin(a) * dist, py + h, pz + Math.cos(a) * dist); camLook.set(px, py + 0.75, pz);
@@ -1291,9 +1712,9 @@ addEventListener('resize', resize);
 // ================================================================ COVER (tools/game_covers.py: honest key art rendered from the game itself)
 function stageCover(kind) {
   state = State.COVER; document.body.classList.add('cover');
-  for (const id of ['menu', 'garage', 'lobby', 'paused', 'gameover', 'hud', 'banner', 'coach', 'countdown', 'toast', 'btnAction', 'joystick']) $(id).hidden = true;
+  for (const id of ['menu', 'garage', 'lobby', 'profile', 'paused', 'gameover', 'hud', 'banner', 'coach', 'countdown', 'toast', 'btnAction', 'joystick', 'missionPop']) $(id).hidden = true;
   camera.clearViewOffset(); clearViews(); mode = 'solo';
-  world = S.createWorld({ bots: 0, sparks: 0 });
+  world = S.createWorld({ bots: 0, sparks: 0 }); buildArena('bowl'); zoneWall.visible = zoneFloor.visible = false;
   player = S.addTop(world, { parts: { crown: 'razor', core: 'heart', tip: 'needle', paint: 'sun' }, name: 'You', human: true, spin: 220, x: -1.15, z: 0.3, spawn: false }); meId = player.id; player.hitWob = 0.12;
   S.addTop(world, { parts: { crown: 'bastion', core: 'iron', tip: 'grip', paint: 'coral' }, name: 'Rival', spin: 200, x: player.x + player.r + S.radiusOf(200) - 0.05, z: 0.1, spawn: false }).hitWob = 0.15;
   const extra = [[{ crown: 'comet', core: 'feather', tip: 'glide', paint: 'mint' }, -6.5, -5.5], [{ crown: 'halo', core: 'gyro', tip: 'dome', paint: 'sky' }, 6.5, -6.5], [{ crown: 'razor', core: 'gyro', tip: 'grip', paint: 'violet' }, -9, -12], [{ crown: 'halo', core: 'iron', tip: 'needle', paint: 'lime' }, 10, -13]];
@@ -1321,7 +1742,7 @@ async function boot() {
     document.fonts?.load('800 32px UI').catch(() => {}), document.fonts?.load('32px Display').catch(() => {})];
   let done = 0; jobs.forEach((p) => Promise.resolve(p).finally(() => { done++; $('loadBar').style.width = `${(100 * done) / jobs.length}%`; }));
   await Promise.race([Promise.all(jobs), new Promise((r) => setTimeout(r, 12000))]); // never hang on a slow asset
-  buildWorld(); initSparks(); scene.add(crownSprite);
+  buildStadium(); initSparks(); scene.add(crownSprite);
   toMenuWorld();
   $('menuControls').innerHTML = controlsHTML(); refreshMenu(); refreshShakeButton();
   resize();
@@ -1330,11 +1751,11 @@ async function boot() {
   setState(State.MENU);
   if (CAPTURE) { // capture protocol used by tools/capture.mjs: no rAF loop, the tool drives every frame
     window.__game = {
-      start: () => startRun(),
+      start: (opts) => startRun({ mode: params.get('mode') || undefined, arena: params.get('arena') || undefined, ...(opts || {}) }),
       frame: (dt = 1 / 30) => { advance(dt); render(dt); },
       skip: (sec) => { for (let s = 0; s < sec; s += STEP) { advance(STEP); if (state === State.GAMEOVER) startRun(); } refreshPlayer(); updateCamera(3); }, // the camera catches up for the shot
       sim: (sec) => { for (let s = 0; s < sec; s += STEP) { advance(STEP); if (run?.over) break; } }, // balance tests: stops when the run ends
-      info: () => ({ how: run?.how, state, score: player?.score, spin: player?.spin, time: run?.time, kos: player?.kos, rank: run?.bestRank, over: run?.over }),
+      info: () => ({ how: run?.how, state, score: player?.score, spin: player?.spin, time: run?.time, kos: player?.kos, rank: run?.bestRank, over: run?.over, mode: world?.mode, arena: world?.arenaId, place: run?.place, won: run?.won, boss: !!world?.tops.some((tp) => tp.boss), level: save.level }),
       cover: (kind) => stageCover(kind),
       orb: (k, dx = 3, dz = 0) => { if (player) S.spawnPowerup(world, k, [player.x + dx, player.z + dz]); world.events.length = 0; }, // screenshots of the power-up orbs
     };
@@ -1342,7 +1763,7 @@ async function boot() {
     return;
   }
   requestAnimationFrame((n) => { last = n; frame(n); });
-  if (params.has('debug')) window.__wb = () => ({ world, meId, player, net, views, state, mode, die: () => { if (player) player.spin = 0; }, give: (k) => { if (player) player.power = { kind: k, t: CFG.powerHold }; } }); // inspection hook for tests
+  if (params.has('debug')) window.__wb = () => ({ world, meId, player, net, views, state, mode, save, die: () => { if (player) player.spin = 0; }, give: (k) => { if (player) player.power = { kind: k, t: CFG.powerHold }; }, boss: () => S.spawnBoss(world), xp: (n) => { addXP(n); persist(); refreshMenu(); } }); // inspection hook for tests
   // invite links and the CrazyGames "instant multiplayer" entry go straight into the right room
   const invited = sdkInviteParam('roomId') || params.get('room');
   const afterFirstFrames = (fn) => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(fn, 0))); // shaders are compiled by then

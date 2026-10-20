@@ -24,6 +24,8 @@ REUSE = [  # library files shipped as-is (paths as in tools/catalog.py output, w
     'audio/ui_click.mp3', 'audio/upgrade.mp3', 'audio/unlock.mp3', 'audio/defeat.mp3', 'audio/countdown.mp3',
     # power-ups: blast, shield, magnet, turbo, pick up, lost
     'audio/skill_slam.mp3', 'audio/skill_heal.mp3', 'audio/portal.mp3', 'audio/frenzy.mp3', 'audio/gate_good.mp3', 'audio/gate_bad.mp3',
+    # 1.3: level up, victory (Last Top Spinning), mission complete, decoy pop
+    'audio/level_up.mp3', 'audio/victory.mp3', 'audio/quest_complete.mp3', 'audio/pop.mp3',
 ]
 
 MODELS = []
@@ -39,9 +41,15 @@ SFX = {  # ElevenLabs sound generation: name: (prompt, seconds)
     'whirl_cheer': ('small excited arena crowd cheering and clapping, short burst', 2.0),
     'whirl_event': ('stadium event alarm, two bright synth horn blasts, energetic, game show', 1.2),
     'whirl_wall': ('spinning top bouncing off a rubber bumper wall, springy plastic thunk', 0.5),
+    'whirl_champion': ('stadium arrival of a giant champion: two deep booming synth horn blasts over a rising heavy mechanical whirr and an excited crowd roar', 2.5),
+    'whirl_perfect': ('perfectly timed hit in an arcade game: crisp bright metallic ding with a sparkly electric zap, satisfying, short', 0.7),
+    'whirl_anchor': ('heavy metal clamp locking onto a floor, deep clunk with a short chain rattle and low hum, toy-like', 0.9),
+    'whirl_shutter': ('mechanical arena trapdoor sliding, quick motorized whirr ending in a solid clack', 1.0),
+    'whirl_zone': ('electric force field closing in, low buzzing warning pulse with a rising tone, arcade', 1.2),
 }
 
 MUSIC = {  # ElevenLabs music: name: prompt  (start names with bgm_)
+    'bgm_whirl_showdown': 'tense driving electronic showdown music for the final duel in a spinning-top arena game, pulsing synth bass, big drums, rising arpeggios, 140 bpm, no vocals, seamless loop',
     'bgm_whirl_arena': 'energetic upbeat electronic arcade battle music for a spinning-top arena game, punchy drums, bouncy synth bass, bright synth leads, 128 bpm, no vocals, seamless loop',
 }
 
@@ -52,6 +60,12 @@ VOICE = {  # ElevenLabs TTS: name: dict(speaker='narrator'|'male'|'female'|'deep
     'wb_storm': dict(speaker='male', en='Spark storm!', tr='Kıvılcım fırtınası!'),
     'wb_tilt': dict(speaker='male', en='Arena tilt!', tr='Arena eğiliyor!'),
     'wb_overdrive': dict(speaker='male', en='Overdrive!', tr='Aşırı hız!'),
+    'wb_champion': dict(speaker='male', en='The Champion has entered the arena!', tr='Şampiyon arenaya çıktı!'),
+    'wb_champdown': dict(speaker='male', en='Champion down!', tr='Şampiyon düştü!'),
+    'wb_perfect': dict(speaker='male', en='Perfect!', tr='Mükemmel!'),
+    'wb_lasttop': dict(speaker='male', en='Last Top Spinning!', tr='Son Dönen Topaç!'),
+    'wb_victory': dict(speaker='male', en='Victory! You are the last top spinning!', tr='Zafer! Son dönen topaç sensin!'),
+    'wb_levelup': dict(speaker='male', en='Level up!', tr='Seviye atladın!'),
     'wb_go': dict(speaker='male', en='Three, two, one... Spin!', tr='Üç, iki, bir... Dön!'),
 }
 
