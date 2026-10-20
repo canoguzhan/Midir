@@ -1,12 +1,17 @@
 {
   "name": "game-factory",
   "private": true,
+  "type": "module",
   "description": "Dev tooling only (headless playtests). Games themselves have no build step.",
   "scripts": {
     "setup": "npx playwright install --with-deps chromium",
-    "serve": "python3 server.py"
+    "serve": "python3 server.py",
+    "mp": "node mp/whirlbash.mjs"
   },
   "devDependencies": {
     "playwright": "1.48.2"
+  },
+  "dependencies": {
+    "ws": "8.18.0"
   }
 }

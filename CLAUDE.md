@@ -23,6 +23,8 @@ games/<slug>/covers/     the 3 submission covers: landscape 1920x1080, portrait 
 games/<slug>/dist/       build output: <slug>.zip and web/ (the flat upload), playtest screenshots, release work files (gitignored)
 studio.json              studio identity for press kits: BroadGamesPro, https://broadgames.pro, contact email, about text
 tools/                   new_game.py, factory.py, catalog.py, build.py, playtest.mjs, capture.mjs, release.py, balance.py, optimize_models.sh
+mp/<slug>.mjs            online game servers (Node + ws), e.g. mp/whirlbash.mjs: systemd `broadgames-mp.service`, port 8090,
+                         public at wss://broadgames.pro/mp/<slug> (the only Caddy route without the password)
 server.py                studio site (systemd `midir.service`, Caddy with password at https://broadgames.pro): releases with
                          download links at /, games at /games/<slug>/, published packages at /releases/<slug>/
 /srv/broadgames/releases/<slug>/   published release (outside git): upload zip, full-package zip, presskit/ page + media
@@ -130,11 +132,37 @@ Review checklist before reporting (open each screenshot, cover and video frame y
 5. Covers: no artifacts, they show real gameplay elements, and the title is in the display font.
 6. At 5 minutes in (`skip()`): is something new still happening?
 
+## Online multiplayer (when a game has it)
+Whirlbash is the reference for this.
+- **Shared rules.** Put the rules in a pure `games/<slug>/sim.js`, with no DOM and no THREE, that reports what happened as events. The browser runs it for solo play. The Node server `mp/<slug>.mjs` imports the same file and runs authoritative rooms. `game.js` only reacts to events, so solo and online share one renderer.
+- **Netcode that is good enough for casual games.**
+  - The server sends 20 snapshots/s and runs physics at 60 Hz.
+  - Other players are drawn about 120 ms in the past, interpolated between snapshots.
+  - Your own top is predicted locally with the same `integrate()` and eased toward the server position.
+  - Keep messages as small JSON.
+- **No accounts.**
+  - Show the CrazyGames username (`SDK.user.getUser()`) when it is available; CrazyGames requires it in multiplayer. Otherwise the server generates a guest name.
+  - Never show text a player typed (no chat, no custom names), so nothing needs moderation.
+- **CrazyGames room flow.**
+  - Call `updateRoom({roomId, isJoinable, inviteParams})` only when something changes, and `leftRoom()` on leave.
+  - Make invite links with `inviteLink({roomId})`, falling back to `?room=CODE` off-platform.
+  - At boot, `getInviteParam('roomId')` and `isInstantMultiplayer` go straight into a room; `addJoinRoomListener` handles invites that arrive in-game.
+  - Keep players in the same room across rounds.
+- **Server limits** (copy them): max rooms, players per room, connections per IP, message size and message rate. Idle rooms are deleted.
+- **Deploy.**
+  - `npm install` in /root/midir (installs `ws`).
+  - Copy `deploy/broadgames-mp.service` to /etc/systemd/system, then `systemctl enable --now broadgames-mp`.
+  - Caddy already proxies `/mp/*` without basic auth (`deploy/Caddyfile`).
+  - After a change to `sim.js` or the server, run `systemctl restart broadgames-mp`.
+- **Test** with two headless browsers against a local server (`MP_PORT=8099 node mp/whirlbash.mjs`, then open the game with `?mp=ws://127.0.0.1:8099/mp/whirlbash&debug=1`).
+  - `window.__wb()` exposes the client world.
+  - Software GL on this 1-CPU server runs at about 3 fps, so judge sync from state dumps, not from smoothness.
+
 ## 2D games
 Drop the `importmap` and the Three.js imports. Draw on the `<canvas id="game">` with a 2D context scaled to `devicePixelRatio`. Set `three=False` in the game's `bake()` call so the vendor folder isn't shipped. Use `VISUALS` (Higgsfield stills and sprites, saved as WebP) instead of `MODELS`. Keep the same SDK, AUDIO and INPUT sections and the same state machine.
 
 ## Never
-- Put API keys, generation endpoints or calls to this server in game files. `build.py` blocks this.
+- Put API keys, generation endpoints or calls to the studio/asset server in game files. `build.py` blocks this. The only server a game may contact is its own online game server at wss://broadgames.pro/mp/<slug>.
 - Generate assets at runtime.
 - Delete files from `library/`, since other games may ship them.
 - Edit `.env`.

@@ -1,0 +1,13 @@
+[Unit]
+Description=BroadGamesPro online game server (Whirlbash rooms over WebSocket)
+After=network-online.target
+
+[Service]
+WorkingDirectory=/root/midir
+ExecStart=/usr/bin/node /root/midir/mp/whirlbash.mjs
+Environment=MP_HOST=127.0.0.1 MP_PORT=8090
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
