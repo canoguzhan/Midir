@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-20 02:13",
-  "count": 340,
+  "updated": "2026-10-20 11:42",
+  "count": 358,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -94,6 +94,19 @@
       "tags": [
         "arena",
         "bgm",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/bgm_whirl_showdown.mp3",
+      "prompt": "tense driving electronic showdown music for the final duel in a spinning-top arena game, pulsing synth bass, big drums, rising arpeggios, 140 bpm, no vocals, seamless loop",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "bgm",
+        "showdown",
         "whirl"
       ]
     },
@@ -1173,6 +1186,58 @@
       ]
     },
     {
+      "path": "audio/voice/wb_champdown_en.mp3",
+      "prompt": "Champion down!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "champdown",
+        "en",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_champdown_tr.mp3",
+      "prompt": "Şampiyon düştü!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 22,
+      "tags": [
+        "champdown",
+        "tr",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_champion_en.mp3",
+      "prompt": "The Champion has entered the arena!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 31,
+      "tags": [
+        "champion",
+        "en",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_champion_tr.mp3",
+      "prompt": "Şampiyon arenaya çıktı!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "champion",
+        "tr",
+        "wb"
+      ]
+    },
+    {
       "path": "audio/voice/wb_go_en.mp3",
       "prompt": "Three, two, one... Spin!",
       "game": "whirlbash",
@@ -1194,6 +1259,32 @@
       "kb": 26,
       "tags": [
         "go",
+        "tr",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_lasttop_en.mp3",
+      "prompt": "Last Top Spinning!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 22,
+      "tags": [
+        "en",
+        "lasttop",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_lasttop_tr.mp3",
+      "prompt": "Son Dönen Topaç!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 22,
+      "tags": [
+        "lasttop",
         "tr",
         "wb"
       ]
@@ -1225,6 +1316,32 @@
       ]
     },
     {
+      "path": "audio/voice/wb_levelup_en.mp3",
+      "prompt": "Level up!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 13,
+      "tags": [
+        "en",
+        "levelup",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_levelup_tr.mp3",
+      "prompt": "Seviye atladın!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 22,
+      "tags": [
+        "levelup",
+        "tr",
+        "wb"
+      ]
+    },
+    {
       "path": "audio/voice/wb_overdrive_en.mp3",
       "prompt": "Overdrive!",
       "game": "whirlbash",
@@ -1249,6 +1366,32 @@
       "prompt": "Aşırı hız!",
       "game": "whirlbash",
       "source": "elevenlabs"
+    },
+    {
+      "path": "audio/voice/wb_perfect_en.mp3",
+      "prompt": "Perfect!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 13,
+      "tags": [
+        "en",
+        "perfect",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_perfect_tr.mp3",
+      "prompt": "Mükemmel!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 15,
+      "tags": [
+        "perfect",
+        "tr",
+        "wb"
+      ]
     },
     {
       "path": "audio/voice/wb_ringout_en.mp3",
@@ -1355,6 +1498,56 @@
       ]
     },
     {
+      "path": "audio/voice/wb_victory_en.mp3",
+      "prompt": "Victory! You are the last top spinning!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 33,
+      "tags": [
+        "en",
+        "victory",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/voice/wb_victory_tr.mp3",
+      "prompt": "Zafer! Son dönen topaç sensin!",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "voice",
+      "kb": 33,
+      "tags": [
+        "tr",
+        "victory",
+        "wb"
+      ]
+    },
+    {
+      "path": "audio/whirl_anchor.mp3",
+      "prompt": "heavy metal clamp locking onto a floor, deep clunk with a short chain rattle and low hum, toy-like",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 14,
+      "tags": [
+        "anchor",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/whirl_champion.mp3",
+      "prompt": "stadium arrival of a giant champion: two deep booming synth horn blasts over a rising heavy mechanical whirr and an excited crowd roar",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 39,
+      "tags": [
+        "champion",
+        "whirl"
+      ]
+    },
+    {
       "path": "audio/whirl_cheer.mp3",
       "prompt": "small excited arena crowd cheering and clapping, short burst",
       "game": "whirlbash",
@@ -1440,6 +1633,18 @@
       ]
     },
     {
+      "path": "audio/whirl_perfect.mp3",
+      "prompt": "perfectly timed hit in an arcade game: crisp bright metallic ding with a sparkly electric zap, satisfying, short",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 11,
+      "tags": [
+        "perfect",
+        "whirl"
+      ]
+    },
+    {
       "path": "audio/whirl_ringout.mp3",
       "prompt": "cartoon falling whoosh as a spinning top drops into a deep pit, descending whistle then a distant thud",
       "game": "whirlbash",
@@ -1448,6 +1653,18 @@
       "kb": 24,
       "tags": [
         "ringout",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/whirl_shutter.mp3",
+      "prompt": "mechanical arena trapdoor sliding, quick motorized whirr ending in a solid clack",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "shutter",
         "whirl"
       ]
     },
@@ -1473,6 +1690,18 @@
       "tags": [
         "wall",
         "whirl"
+      ]
+    },
+    {
+      "path": "audio/whirl_zone.mp3",
+      "prompt": "electric force field closing in, low buzzing warning pulse with a rising tone, arcade",
+      "game": "whirlbash",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "whirl",
+        "zone"
       ]
     },
     {

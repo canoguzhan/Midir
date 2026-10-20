@@ -3,8 +3,9 @@
 //   node mp/whirlbash.mjs            listens on 127.0.0.1:8090 (MP_HOST / MP_PORT); Caddy serves it at wss://<site>/mp/whirlbash
 // No accounts: a player is named by their CrazyGames username when the SDK reports one, otherwise the server picks a guest
 // name. There is no chat and no free-text input, so nothing user-written is ever shown to other players.
-// Protocol (JSON). Client -> server: join {mode: quick|create|code, code?, name?, parts}, play {parts}, i {x, y, d, u}, p {c}, leave.
-// Server -> client: welcome, you, s (snapshot: tops, events, sparks, me), p (pong), err {e}.
+// Protocol (JSON). Client -> server: join {mode: quick|create|code, code?, name?, parts}, play {parts}, i {x, y, d, u}, p {c}, leave,
+// count (how many people are playing; answered, then the client closes). Server -> client: welcome, you, s (snapshot: tops, events,
+// sparks, me), p (pong), count {n}, err {e}. Each room plays one arena (picked at random) in the endless mode.
 import { WebSocketServer } from 'ws';
 import * as S from '../games/whirlbash/sim.js';
 
@@ -23,15 +24,15 @@ const r2 = (v) => Math.round(v * 100) / 100;
 
 function newCode() { for (;;) { let c = ''; for (let i = 0; i < 5; i++) c += CODE_CHARS[(Math.random() * CODE_CHARS.length) | 0]; if (!rooms.has(c)) return c; } }
 function createRoom(priv) {
-  const code = newCode(), world = S.createWorld({ bots: LIMITS.roomTops });
+  const code = newCode(), arena = S.ARENA_IDS[(Math.random() * S.ARENA_IDS.length) | 0], world = S.createWorld({ bots: LIMITS.roomTops, arena });
   world.heat = (w) => { const hs = w.tops.filter((t) => t.human); return hs.length ? hs.reduce((s, t) => s + t.age, 0) / hs.length : 30; };
   for (let i = 0; i < LIMITS.roomTops; i++) S.spawnBot(world, { ring: i });
   world.events.length = 0;
   const room = { code, priv, world, clients: new Set(), emptySince: Date.now() };
-  rooms.set(code, room); log('room +', code, priv ? 'private' : 'public', `(${rooms.size} rooms)`);
+  rooms.set(code, room); log('room +', code, priv ? 'private' : 'public', arena, `(${rooms.size} rooms)`);
   return room;
 }
-const topInfo = (tp) => ({ id: tp.id, name: tp.name, parts: tp.parts, human: tp.human });
+const topInfo = (tp) => ({ id: tp.id, name: tp.name, parts: tp.parts, human: tp.human, ...(tp.boss ? { boss: 1 } : {}), ...(tp.decoyOf ? { decoy: tp.decoyOf } : {}) });
 function guestName(room) {
   for (let k = 0; k < 30; k++) { const n = GUEST_A[(Math.random() * 16) | 0] + GUEST_B[(Math.random() * 16) | 0] + (10 + ((Math.random() * 90) | 0)); if (![...room.clients].some((c) => c.name === n)) return n; }
   return 'Guest' + ((Math.random() * 9999) | 0);
@@ -50,7 +51,7 @@ function joinRoom(c, room) {
   room.world.botTarget = Math.max(0, LIMITS.roomTops - room.clients.size);
   const w = room.world;
   send(c, {
-    t: 'welcome', code: room.code, priv: room.priv, name: c.name, tm: r2(w.time), players: room.clients.size,
+    t: 'welcome', code: room.code, priv: room.priv, name: c.name, tm: r2(w.time), players: room.clients.size, arena: w.arenaId,
     tops: w.tops.map(topInfo), sparks: w.sparks.map((s, i) => (s.on ? sparkData(s, i) : null)).filter(Boolean),
     ev: w.event ? { id: w.event.id, t: r2(w.event.t), pit: w.event.pit } : null, leader: w.leader,
     pu: w.powerups.map((q) => ({ id: q.id, kind: q.kind, x: r2(q.x), z: r2(q.z) })),
@@ -91,6 +92,7 @@ function onMessage(c, raw) {
       return;
     }
     case 'p': send(c, { t: 'p', c: Number(m.c) || 0 }); return;
+    case 'count': { let n = 0; for (const r of rooms.values()) n += r.clients.size; send(c, { t: 'count', n }); return; }
     case 'play': if (c.room) { c.parts = S.cleanParts(m.parts); spawnHuman(c, c.parts); } return;
     case 'leave': leaveRoom(c); return;
     case 'join': {
@@ -111,19 +113,20 @@ function onMessage(c, raw) {
   }
 }
 
-// snapshot: tops as [id, x, z, vx, vz, spin, state, flags], plus the events and spark changes since the last tick
+// snapshot: tops as [id, x, z, vx, vz, spin, state, flags (1 dash, 2 shield, bits 2-4 the active power effect)], plus the events and spark changes since the last tick
 function snapshot(room) {
   const w = room.world, ev = [], sp = [];
   for (const e of w.events) {
     switch (e.type) {
       case 'add': { const tp = S.topById(w, e.id); if (tp) ev.push({ type: 'add', ...topInfo(tp) }); break; }
       case 'sparkAdd': { const s = w.sparks[e.i]; if (s.on) sp.push(sparkData(s, e.i)); break; }
-      case 'clash': ev.push({ type: 'clash', a: e.a, b: e.b, x: r2(e.x), z: r2(e.z), rel: r2(e.rel), heavy: e.heavy, aDash: e.aDash, bDash: e.bDash }); break;
+      case 'clash': ev.push({ type: 'clash', a: e.a, b: e.b, x: r2(e.x), z: r2(e.z), rel: r2(e.rel), heavy: e.heavy, aDash: e.aDash, bDash: e.bDash, aPerf: e.aPerf, bPerf: e.bPerf, dA: Math.round(e.dA), dB: Math.round(e.dB) }); break;
       case 'spark': ev.push({ type: 'spark', i: e.i, id: e.id, big: e.big }); break;
       case 'wall': ev.push({ type: 'wall', id: e.id, x: r2(e.x), z: r2(e.z), vn: r2(e.vn) }); break;
       case 'puAdd': ev.push({ type: 'puAdd', id: e.id, kind: e.kind, x: r2(e.x), z: r2(e.z) }); break;
       case 'blast': ev.push({ type: 'blast', id: e.id, x: r2(e.x), z: r2(e.z) }); break;
-      case 'elim': ev.push({ type: 'elim', id: e.id, killer: e.killer, how: e.how, pts: e.pts, wasLeader: e.wasLeader, x: r2(e.x), z: r2(e.z), peak: Math.round(e.peak), score: e.score, kos: e.kos }); break;
+      case 'decoyPop': ev.push({ type: 'decoyPop', id: e.id, owner: e.owner, by: e.by, x: r2(e.x), z: r2(e.z) }); break;
+      case 'elim': ev.push({ type: 'elim', id: e.id, killer: e.killer, how: e.how, pts: e.pts, wasLeader: e.wasLeader, boss: e.boss, x: r2(e.x), z: r2(e.z), peak: Math.round(e.peak), score: e.score, kos: e.kos }); break;
       default: ev.push(e);
     }
   }
