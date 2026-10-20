@@ -1,7 +1,8 @@
 // Whirlbash simulation: the pure game rules, shared by the browser (solo play + online prediction) and the multiplayer
 // server (mp/whirlbash.mjs). No DOM and no THREE here: step() changes the world and pushes what happened to world.events
 // ({ type: 'clash' | 'dash' | 'wall' | 'land' | 'spark' | 'sparkAdd' | 'fall' | 'topple' | 'elim' | 'add' | 'remove' |
-// 'event' | 'eventEnd' | 'leader', ... }); the view (game.js) turns those into particles, sounds and HUD updates.
+// 'event' | 'eventEnd' | 'leader' | 'puAdd' | 'puTake' | 'puGone' | 'puExpire' | 'puUse' | 'fxEnd' | 'blast', ... }); the view
+// (game.js) turns those into particles, sounds and HUD updates.
 
 export const STEP = 1 / 60; // fixed simulation step: identical physics at 60/144/165 Hz and on the server
 export const CFG = {
@@ -15,7 +16,13 @@ export const CFG = {
   ringoutSteal: 0.35, toppleDrop: 0.45, koPoints: 40, ringoutPoints: 60,
   eventFirst: 30, eventEvery: 38, tiltForce: 5.5, overdrive: 1.35,
   respawn: 3, aggroRamp: 120, graceTime: 18,
+  // skill power-ups: an orb drops every ~powerEvery s; picking one up gives you powerHold s to use it, or it is lost
+  powerFirst: 12, powerEvery: 11, powerMax: 3, powerLife: 22, powerHold: 10, pickup: 0.9,
+  blastRadius: 7, blastPush: 11, blastDmg: 7, shieldTime: 3.5, shieldMass: 2.5, magnetTime: 6, magnetRadius: 9, turboTime: 4.5, turboSpeed: 1.45, turboDashCd: 0.5,
 };
+export const POWERS = ['blast', 'shield', 'magnet', 'turbo'];
+export const FX_CODE = { shield: 1, magnet: 2, turbo: 3 }; // lasting effects (a blast is instant)
+const FX_TIME = { shield: CFG.shieldTime, magnet: CFG.magnetTime, turbo: CFG.turboTime };
 export const R = CFG.arenaR;
 export const PIT_ANGLES = Array.from({ length: CFG.pitCount }, (_, i) => -Math.PI / 2 + (i * Math.PI * 2) / CFG.pitCount + Math.PI / CFG.pitCount);
 export const EVENT_DUR = { storm: 6, tilt: 7, overdrive: 8 };
@@ -94,6 +101,7 @@ export function createWorld({ bots = CFG.bots, rng = Math.random, sparks = CFG.s
     tops: [], sparks: [], time: 0, nextId: 1, events: [], pairHits: new Map(), pendingRespawns: [], rng,
     botTarget: bots, event: null, nextEvent: CFG.eventFirst, lastEvent: '', eventsOn: true, frozen: false,
     leader: null, leaderT: 0, heat: null, trimT: 0,
+    powerups: [], powerT: CFG.powerFirst, nextPu: 1, powersOn: true,
   };
   for (let i = 0; i < CFG.sparkMax; i++) w.sparks.push({ on: false, x: 0, z: 0, y: 0.4, vx: 0, vz: 0, fall: 0, ph: rng() * 6, big: 0 });
   for (let i = 0; i < sparks; i++) addSpark(w, ...randomSpot(w));
@@ -127,7 +135,8 @@ export function addTop(w, { parts, name, human = false, spin = CFG.startSpin, x 
     id: w.nextId++, name, human, parts, stats: statsOf(parts),
     x, z, vx: 0, vz: 0, spin, peak: spin, r: radiusOf(spin), mass: 1, state: spawn ? 'spawn' : 'alive', timer: spawn ? 0.6 : 0, fallY: 0, fallV: 0,
     dashT: 0, cd: 0, shield: 0, kos: 0, score: 0, lastHitBy: 0, lastHitT: -99, hitWob: 0, faceX: 0, faceZ: 1, age: 0,
-    think: 0, goal: { x: 0, z: 0, dash: false }, skill, aggro, ai, noDecay: false, dmgTaken: 1,
+    think: 0, goal: { x: 0, z: 0, dash: false, use: false }, skill, aggro, ai, noDecay: false, dmgTaken: 1,
+    power: null, fx: null, // power: a held skill { kind, t } (t counts down to loss); fx: an active effect { kind, t }
   };
   updateMass(tp); w.tops.push(tp); emit(w, { type: 'add', id: tp.id }); return tp;
 }
@@ -162,7 +171,7 @@ export function dash(w, tp, dir) {
   let dx = dir.x, dz = dir.y;
   if (!dx && !dz) { const sp = Math.hypot(tp.vx, tp.vz); if (sp > 0.5) { dx = tp.vx / sp; dz = tp.vz / sp; } else { dx = tp.faceX; dz = tp.faceZ; } }
   const l = Math.hypot(dx, dz) || 1; dx /= l; dz /= l;
-  tp.vx += dx * CFG.dashSpeed; tp.vz += dz * CFG.dashSpeed; tp.dashT = CFG.dashTime; tp.cd = CFG.dashCooldown; tp.spin -= CFG.dashCost;
+  tp.vx += dx * CFG.dashSpeed; tp.vz += dz * CFG.dashSpeed; tp.dashT = CFG.dashTime; tp.cd = tp.fx?.kind === 'turbo' ? CFG.turboDashCd : CFG.dashCooldown; tp.spin -= CFG.dashCost;
   emit(w, { type: 'dash', id: tp.id, dx, dz });
 }
 // Movement for one alive top: thrust, bowl pull, tilt, damping, speed cap. Also used for online client prediction.
@@ -170,7 +179,8 @@ export function integrate(w, tp, inp, dt) {
   const od = w.event?.id === 'overdrive' ? CFG.overdrive : 1;
   if (inp.x || inp.y) { tp.faceX = inp.x; tp.faceZ = inp.y; }
   const st = tp.stats, lowSpin = tp.spin < 25 ? 0.55 + 0.45 * Math.max(0, tp.spin) / 25 : 1;
-  const maxV = (CFG.maxSpeed * st.spd * od * lowSpin) / (0.8 + 0.2 * tp.r), acc = CFG.accel * st.acc * od;
+  const turbo = tp.fx?.kind === 'turbo' ? CFG.turboSpeed : 1;
+  const maxV = (CFG.maxSpeed * st.spd * od * lowSpin * turbo) / (0.8 + 0.2 * tp.r), acc = CFG.accel * st.acc * od * (turbo > 1 ? 1.3 : 1);
   tp.vx += inp.x * acc * dt; tp.vz += inp.y * acc * dt;
   const r0 = Math.hypot(tp.x, tp.z);
   if (r0 > 0.01) { const pull = CFG.bowlPull * (r0 / R); tp.vx -= (tp.x / r0) * pull * dt; tp.vz -= (tp.z / r0) * pull * dt; }
@@ -196,7 +206,8 @@ export function walls(w, tp, predict = false) {
 function collide(w, a, b) {
   const dx = b.x - a.x, dz = b.z - a.z, d = Math.hypot(dx, dz), minD = a.r + b.r;
   if (d >= minD || d < 1e-4) return;
-  const nx = dx / d, nz = dz / d, overlap = minD - d, ima = 1 / a.mass, imb = 1 / b.mass, sum = ima + imb;
+  const heavy = (tp) => tp.mass * (tp.fx?.kind === 'shield' ? CFG.shieldMass : 1); // a shielded top is hard to push
+  const nx = dx / d, nz = dz / d, overlap = minD - d, ima = 1 / heavy(a), imb = 1 / heavy(b), sum = ima + imb;
   a.x -= (nx * overlap * ima) / sum; a.z -= (nz * overlap * ima) / sum; b.x += (nx * overlap * imb) / sum; b.z += (nz * overlap * imb) / sum;
   const rel = (a.vx - b.vx) * nx + (a.vz - b.vz) * nz; // closing speed along the normal
   if (rel <= 0.4) return; // resting contact: no clash
@@ -209,7 +220,7 @@ function collide(w, a, b) {
   if (now - (w.pairHits.get(key) ?? -9) < CFG.pairCooldown) return; // still bounce, but one clash per contact
   w.pairHits.set(key, now);
   const base = CFG.clashBase + Math.max(0, rel - CFG.bumpSpeed) * CFG.clashSpeed; // slow bumps barely hurt; real hits do
-  const dmgTo = (atk, def) => (def.shield > 0 ? 0 : Math.min(CFG.maxHit + def.spin * 0.08, (base * atk.stats.atk * (atk.dashT > 0 ? CFG.dashMul : 1) * Math.sqrt(atk.mass / def.mass)) / def.stats.def));
+  const dmgTo = (atk, def) => (def.shield > 0 || def.fx?.kind === 'shield' ? 0 : Math.min(CFG.maxHit + def.spin * 0.08, (base * atk.stats.atk * (atk.dashT > 0 ? CFG.dashMul : 1) * Math.sqrt(atk.mass / def.mass)) / def.stats.def));
   let dA = dmgTo(b, a), dB = dmgTo(a, b);
   if (a.dashT > 0) dA *= 0.4; if (b.dashT > 0) dB *= 0.4; // the rammer wins the exchange: dash with intent
   const mercy = (tp) => (tp.spin < 60 ? 0.55 + 0.45 * (tp.spin / 60) : 1); // a low top can still claw back
@@ -257,11 +268,67 @@ function eliminate(w, tp, how) {
   if (!tp.human) w.pendingRespawns.push(CFG.respawn); // the refill below brings a new bot after the delay
 }
 
+// ---------------------------------------------------------------- skill power-ups (Blast, Shield, Magnet, Turbo)
+export function spawnPowerup(w, kind = POWERS[(w.rng() * POWERS.length) | 0], at = null) {
+  const [x, z] = at || randomSpot(w, R - 5);
+  const pu = { id: w.nextPu++, kind, x, z, t: CFG.powerLife };
+  w.powerups.push(pu); emit(w, { type: 'puAdd', id: pu.id, kind, x, z }); return pu;
+}
+export function usePower(w, tp) {
+  const kind = tp.power?.kind; if (!kind || !alive(tp)) return;
+  tp.power = null;
+  if (kind === 'blast') { // instant: every top in range is flung away and loses a little spin
+    for (const o of w.tops) {
+      if (o === tp || !alive(o)) continue;
+      const dx = o.x - tp.x, dz = o.z - tp.z, d = Math.hypot(dx, dz), reach = CFG.blastRadius + o.r;
+      if (d > reach || d < 1e-3) continue;
+      const k = 1 - d / reach, push = (CFG.blastPush * k) / Math.sqrt(o.stats.mass * (o.fx?.kind === 'shield' ? CFG.shieldMass : 1));
+      o.vx += (dx / d) * push; o.vz += (dz / d) * push; o.hitWob = Math.min(0.45, o.hitWob + 0.3 * k);
+      if (o.shield <= 0 && o.fx?.kind !== 'shield') o.spin -= CFG.blastDmg * k * tp.stats.atk;
+      o.lastHitBy = tp.id; o.lastHitT = w.time;
+    }
+    emit(w, { type: 'blast', id: tp.id, x: tp.x, z: tp.z });
+    return;
+  }
+  tp.fx = { kind, t: FX_TIME[kind] };
+  emit(w, { type: 'puUse', id: tp.id, kind });
+}
+function tickPowers(w, dt) {
+  if (w.powersOn) {
+    w.powerT -= dt;
+    if (w.powerT <= 0) { w.powerT = CFG.powerEvery * (0.75 + w.rng() * 0.5); if (w.powerups.length < CFG.powerMax) spawnPowerup(w); }
+  }
+  for (let i = w.powerups.length - 1; i >= 0; i--) {
+    const pu = w.powerups[i]; pu.t -= dt;
+    if (pu.t <= 0) { w.powerups.splice(i, 1); emit(w, { type: 'puGone', id: pu.id }); continue; }
+    for (const tp of w.tops) { // the first top without a power that touches the orb takes it
+      if (!alive(tp) || tp.power || tp.ai === 'dummy' || Math.hypot(tp.x - pu.x, tp.z - pu.z) > tp.r + CFG.pickup) continue;
+      tp.power = { kind: pu.kind, t: CFG.powerHold }; w.powerups.splice(i, 1);
+      emit(w, { type: 'puTake', id: pu.id, top: tp.id, kind: pu.kind }); break;
+    }
+  }
+  for (const tp of w.tops) {
+    if (tp.power) { tp.power.t -= dt; if (tp.power.t <= 0) { emit(w, { type: 'puExpire', id: tp.id, kind: tp.power.kind }); tp.power = null; } }
+    if (tp.fx) { tp.fx.t -= dt; if (tp.fx.t <= 0) { emit(w, { type: 'fxEnd', id: tp.id, kind: tp.fx.kind }); tp.fx = null; } }
+  }
+}
+function botPowerChoice(w, b) { // when should a bot fire its power? roughly when a player would
+  const k = b.power.kind;
+  if (b.power.t < 1.5) return true; // never waste it
+  let near = 99, threat = false;
+  for (const o of w.tops) { if (o === b || !alive(o)) continue; const d = Math.hypot(o.x - b.x, o.z - b.z) - o.r - b.r; near = Math.min(near, d); if (d < 3 && o.spin > b.spin * 1.2) threat = true; }
+  if (k === 'blast') return near < 2.5 && !w.tops.some((o) => o.human && !b.human && o.age < CFG.graceTime && Math.hypot(o.x - b.x, o.z - b.z) < CFG.blastRadius + o.r); // spare fresh players
+  if (k === 'shield') return threat || b.spin < 40;
+  if (k === 'turbo') return !!b.goal.dash;
+  return b.power.t < CFG.powerHold - 1.2; // magnet: soon after pickup
+}
+
 // ---------------------------------------------------------------- bots (grab sparks, hunt smaller tops toward pits, flee bigger ones)
 export function botMove(w, b, dt) {
   b.think -= dt;
   if (b.think <= 0) { b.think = 0.1 + w.rng() * 0.12; decide(w, b); }
   if (b.goal.dash && b.cd <= 0) { b.goal.dash = false; dash(w, b, { x: b.goal.x, y: b.goal.z }); }
+  if (b.power && b.ai !== 'passive' && botPowerChoice(w, b)) usePower(w, b);
   const noise = (1 - b.skill) * 0.25;
   return norm(b.goal.x + (w.rng() * 2 - 1) * noise, b.goal.z + (w.rng() * 2 - 1) * noise);
 }
@@ -298,7 +365,9 @@ function decide(w, b) {
     b.goal = { x: gx, z: gz, dash: prey.d < 4.2 + o.r && w.rng() < b.skill * 0.6 };
     return;
   }
-  // 3. sparks: nearest one, else drift toward the middle ring
+  // 3. a power-up orb close by beats sparks
+  if (!b.power) { const pu = w.powerups.find((q) => Math.hypot(q.x - b.x, q.z - b.z) < 10); if (pu) { b.goal = { x: pu.x - b.x, z: pu.z - b.z, dash: false }; return; } }
+  // 4. sparks: nearest one, else drift toward the middle ring
   let best = null, bd = 1e9;
   for (const s of w.sparks) { if (!s.on || s.fall > 0) continue; const d = (s.x - b.x) ** 2 + (s.z - b.z) ** 2; if (d < bd) { bd = d; best = s; } }
   if (best) b.goal = { x: best.x - b.x, z: best.z - b.z, dash: false };
@@ -335,7 +404,7 @@ export function step(w, dt, inputFor) {
     if (tp.state !== 'alive') continue;
     let inp = { x: 0, y: 0 };
     if (!w.frozen) {
-      if (tp.human) { const i = inputFor(tp) || inp; if (i.dash) dash(w, tp, i); inp = i; }
+      if (tp.human) { const i = inputFor(tp) || inp; if (i.dash) dash(w, tp, i); if (i.use) usePower(w, tp); inp = i; }
       else if (tp.ai !== 'idle' && tp.ai !== 'dummy') inp = botMove(w, tp, dt);
       tp.age += dt; tp.shield = Math.max(0, tp.shield - dt);
     }
@@ -355,9 +424,9 @@ export function step(w, dt, inputFor) {
     const s = w.sparks[i]; if (!s.on || s.fall > 0) continue;
     for (const tp of T) {
       if (!alive(tp)) continue;
-      const dx = tp.x - s.x, dz = tp.z - s.z, d = Math.hypot(dx, dz);
+      const dx = tp.x - s.x, dz = tp.z - s.z, d = Math.hypot(dx, dz), mag = tp.fx?.kind === 'magnet';
       if (d < tp.r + 0.35) { collectSpark(w, tp, i); break; }
-      if (d < tp.r + CFG.magnet) { const k = (8 * dt) / Math.max(d, 0.1); s.x += dx * k; s.z += dz * k; }
+      if (d < tp.r + (mag ? CFG.magnetRadius : CFG.magnet)) { const k = ((mag ? 16 : 8) * dt) / Math.max(d, 0.1); s.x += dx * Math.min(1, k); s.z += dz * Math.min(1, k); }
     }
   }
   if (w.frozen) return;
@@ -375,4 +444,5 @@ export function step(w, dt, inputFor) {
   w.leaderT -= dt;
   if (w.leaderT <= 0) { w.leaderT = 0.25; const lead = rankList(w)[0]?.id ?? null; if (lead !== w.leader) { w.leader = lead; emit(w, { type: 'leader', id: lead }); } }
   if (w.eventsOn) { if (w.event) tickEvent(w, dt); else if (w.time >= w.nextEvent) startEvent(w); }
+  tickPowers(w, dt);
 }

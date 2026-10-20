@@ -26,6 +26,11 @@
   <symbol id="i-pit" viewBox="0 0 24 24"><ellipse cx="12" cy="19" rx="10" ry="3.5" fill="currentColor" opacity=".55"/><path d="M12 2v10l3.5-3.5 1.5 1.5-6 6-6-6 1.5-1.5L10 12V2z" fill="currentColor"/></symbol>
   <symbol id="i-globe" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm6.9 6h-3a15 15 0 0 0-1.3-3.9A8 8 0 0 1 18.9 8zM12 4.1c.9 1.2 1.6 2.5 2 3.9h-4c.4-1.4 1.1-2.7 2-3.9zM4.3 14a8 8 0 0 1 0-4h3.4a16 16 0 0 0 0 4zm.8 2h3a15 15 0 0 0 1.3 3.9A8 8 0 0 1 5.1 16zm3-8h-3a8 8 0 0 1 4.3-3.9A15 15 0 0 0 8.1 8zM12 19.9c-.9-1.2-1.6-2.5-2-3.9h4c-.4 1.4-1.1 2.7-2 3.9zm2.3-5.9H9.7a14 14 0 0 1 0-4h4.6a14 14 0 0 1 0 4zm.3 5.9a15 15 0 0 0 1.3-3.9h3a8 8 0 0 1-4.3 3.9zm1.7-5.9a16 16 0 0 0 0-4h3.4a8 8 0 0 1 0 4z" fill="currentColor"/></symbol>
   <symbol id="i-link" viewBox="0 0 24 24"><path d="M10.6 13.4a1 1 0 0 1 0-1.4l3.5-3.5a1 1 0 1 1 1.4 1.4L12 13.4a1 1 0 0 1-1.4 0zM8.5 20a4.5 4.5 0 0 1-3.2-7.7l2.5-2.5 1.4 1.4-2.5 2.5a2.5 2.5 0 0 0 3.6 3.6l2.5-2.5 1.4 1.4-2.5 2.5A4.5 4.5 0 0 1 8.5 20zm7.7-5.8-1.4-1.4 2.5-2.5a2.5 2.5 0 0 0-3.6-3.6l-2.5 2.5-1.4-1.4 2.5-2.5a4.5 4.5 0 0 1 6.4 6.4z" fill="currentColor"/></symbol>
+  <symbol id="i-blast" viewBox="0 0 24 24"><path d="M12 1l1.8 5.2L18.4 3l-1.6 5.3L22 9.6l-4.5 2.4L22 14.4l-5.2 1.3 1.6 5.3-4.6-3.2L12 23l-1.8-5.2L5.6 21l1.6-5.3L2 14.4l4.5-2.4L2 9.6l5.2-1.3L5.6 3l4.6 3.2zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" fill="currentColor" fill-rule="evenodd"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 1l9 3.5v6.2c0 5.6-3.8 10.4-9 12.3-5.2-1.9-9-6.7-9-12.3V4.5zm0 3.2L6 6.6v4.1c0 3.9 2.4 7.4 6 9 3.6-1.6 6-5.1 6-9V6.6z" fill="currentColor" fill-rule="evenodd"/></symbol>
+  <symbol id="i-magnet" viewBox="0 0 24 24"><path d="M4 3h5v8a3 3 0 0 0 6 0V3h5v8a8 8 0 0 1-16 0zm0 3.5h5V9H4zm11 0h5V9h-5z" fill="currentColor" fill-rule="evenodd"/></symbol>
+  <symbol id="i-turbo" viewBox="0 0 24 24"><path d="M3 4l8 8-8 8h4.5l8-8-8-8zm8 0l8 8-8 8h4.5l8-8-8-8z" fill="currentColor"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z" fill="currentColor"/></symbol>
   <symbol id="i-video" viewBox="0 0 24 24"><rect x="2" y="5" width="14" height="14" rx="3" fill="currentColor"/><path d="M17 10l5-3v10l-5-3z" fill="currentColor"/></symbol>
 </svg>
 
@@ -42,10 +47,12 @@
     <ol id="board"></ol>
   </div>
   <div id="dashKey" hidden><svg><use href="#i-dash"/></svg><span class="key">Space</span></div>
+  <div id="powerKey" class="power-slot" hidden><span class="pw"><svg><use href="#i-blast"/></svg></span><span class="key">E</span></div>
 </div>
 
 <div id="joystick" hidden><div class="knob"></div></div>
 <button id="btnAction" class="touch-btn" hidden aria-label="Dash"><svg><use href="#i-dash"/></svg></button>
+<button id="btnPower" class="touch-btn power-slot" hidden aria-label="Use power-up"><span class="pw"><svg><use href="#i-blast"/></svg></span></button>
 
 <div id="banner" hidden><b id="bannerText"></b><small id="bannerSub"></small></div>
 <div id="countdown" hidden></div>
@@ -70,7 +77,7 @@
 
 <section id="garage" class="screen side" hidden>
   <div class="card garage">
-    <div class="garage-head"><h2 data-i18n="garage">Garage</h2><span class="gears"><svg class="gold"><use href="#i-gear"/></svg><b id="garageGears">0</b></span></div>
+    <div class="garage-head"><h2 data-i18n="garage">Garage</h2><span class="gears"><svg class="gold"><use href="#i-gear"/></svg><b id="garageGears">0</b></span><button id="btnGarageX" class="icon done-x" aria-label="Done"><svg><use href="#i-check"/></svg></button></div>
     <div class="tabs" id="garageTabs"></div>
     <div class="parts" id="garageParts"></div>
     <div class="statbars" id="garageStats"></div>
