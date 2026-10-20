@@ -21,6 +21,8 @@ const SFX_FILES = {
   launch: 'assets/audio/whirl_launch.mp3', cheer: 'assets/audio/whirl_cheer.mp3', event: 'assets/audio/whirl_event.mp3',
   wall: 'assets/audio/whirl_wall.mp3', spark: 'assets/audio/dash_gem.mp3', click: 'assets/audio/ui_click.mp3',
   upgrade: 'assets/audio/upgrade.mp3', unlock: 'assets/audio/unlock.mp3', over: 'assets/audio/defeat.mp3', count: 'assets/audio/countdown.mp3',
+  puBlast: 'assets/audio/skill_slam.mp3', puShield: 'assets/audio/skill_heal.mp3', puMagnet: 'assets/audio/portal.mp3', puTurbo: 'assets/audio/frenzy.mp3',
+  puTake: 'assets/audio/gate_good.mp3', puLost: 'assets/audio/gate_bad.mp3',
 };
 const VOICE_FILES = { // {lang} is filled in at boot (en / tr)
   ringout: 'assets/audio/voice/wb_ringout_{lang}.mp3', topple: 'assets/audio/voice/wb_topple_{lang}.mp3', leader: 'assets/audio/voice/wb_leader_{lang}.mp3',
@@ -55,6 +57,9 @@ const STRINGS = {
     connecting: 'Connecting…', connFail: 'Could not reach the online arena. Try again, or play solo.', connLost: 'Connection lost', noRoom: 'No room with that code',
     roomFull: 'That room is full', room: 'Room', invite: 'Invite', linkCopied: 'Invite link copied!', shareCode: 'Room code {c}: share it with friends',
     players: '{n} online', codePh: 'CODE', shakeOn: 'Camera shake: on', shakeOff: 'Camera shake: off',
+    pu_blast: 'Blast!', pu_shield: 'Shield!', pu_magnet: 'Magnet!', pu_turbo: 'Turbo!', pud_blast: 'knocks everyone away', pud_shield: 'no damage, hard to push',
+    pud_magnet: 'pulls in sparks', pud_turbo: 'speed and quick dashes', puUseKey: 'Press E within 10 s', puUseTouch: 'Tap the power button within 10 s',
+    puLost: 'Power-up lost: use it within 10 seconds!', ctlPower: 'Power-up', ctlTapDash: 'Tap: dash', ctlPowerBtn: 'Power button: use power-up', ctlRight: 'Right-click',
   },
   tr: {
     play: 'Oyna', garage: 'Garaj', done: 'Tamam', best: 'En iyi', tagline: 'Dön. Çarpış. Rakiplerini pistten at!', paused: 'Duraklatıldı', resume: 'Devam',
@@ -80,6 +85,9 @@ const STRINGS = {
     connecting: 'Bağlanıyor…', connFail: 'Çevrimiçi arenaya ulaşılamadı. Tekrar dene ya da tek başına oyna.', connLost: 'Bağlantı koptu', noRoom: 'Bu kodla bir oda yok',
     roomFull: 'Bu oda dolu', room: 'Oda', invite: 'Davet et', linkCopied: 'Davet bağlantısı kopyalandı!', shareCode: 'Oda kodu {c}: arkadaşlarınla paylaş',
     players: '{n} çevrimiçi', codePh: 'KOD', shakeOn: 'Kamera sarsıntısı: açık', shakeOff: 'Kamera sarsıntısı: kapalı',
+    pu_blast: 'Patlama!', pu_shield: 'Kalkan!', pu_magnet: 'Mıknatıs!', pu_turbo: 'Turbo!', pud_blast: 'herkesi geri savurur', pud_shield: 'hasar yok, itilmesi zor',
+    pud_magnet: 'kıvılcımları çeker', pud_turbo: 'hız ve seri atılma', puUseKey: '10 sn içinde E tuşuna bas', puUseTouch: '10 sn içinde güç düğmesine dokun',
+    puLost: 'Güç kaybedildi: 10 saniye içinde kullan!', ctlPower: 'Güç', ctlTapDash: 'Dokun: atıl', ctlPowerBtn: 'Güç düğmesi: gücü kullan', ctlRight: 'Sağ tık',
   },
 };
 let lang = 'en';
@@ -170,6 +178,8 @@ const SYNTH = { // [waveform, startHz, endHz, seconds, gain]
   cheer: ['triangle', 600, 900, 0.3, 0.06], event: ['square', 660, 990, 0.35, 0.08], wall: ['sine', 220, 120, 0.12, 0.12],
   spark: ['square', 1320, 1980, 0.08, 0.06], click: ['square', 900, 900, 0.03, 0.07], upgrade: ['triangle', 520, 1040, 0.3, 0.12],
   unlock: ['triangle', 660, 1320, 0.4, 0.12], over: ['triangle', 440, 110, 0.8, 0.16], count: ['square', 880, 880, 0.08, 0.08],
+  puBlast: ['sawtooth', 300, 40, 0.5, 0.18], puShield: ['sine', 400, 900, 0.4, 0.12], puMagnet: ['sine', 200, 600, 0.5, 0.1], puTurbo: ['square', 300, 1200, 0.3, 0.08],
+  puTake: ['triangle', 700, 1400, 0.25, 0.12], puLost: ['triangle', 600, 200, 0.4, 0.12],
 };
 const audio = { ctx: null, master: null, buffers: {}, music: null, wantMusic: false, musicVol: 0.3, muted: new Set(), voices: 0, hum: null, last: {} };
 
@@ -441,16 +451,52 @@ function viewFor(tp) {
   const me = tp.id === meId, mesh = buildTopMesh(tp.parts, tp.parts.paint, me ? '#ffffff' : '#ffe8c2');
   if (me) { mesh.ring.material.color.set('#ffc531'); mesh.ring.material.opacity = 0.85; }
   const label = labelSprite(me ? t('you') : tp.name, me ? '#ffc531' : tp.human ? '#9ee7ff' : '#ffffff');
+  const bubble = new THREE.Mesh(cached('bubble', () => new THREE.SphereGeometry(1.35, 24, 16)), new THREE.MeshBasicMaterial({ color: PU_COLOR.shield, transparent: true, opacity: 0.25, depthWrite: false, blending: THREE.AdditiveBlending }));
+  bubble.position.y = 0.45; bubble.visible = false; mesh.root.add(bubble); mesh.mats.push(bubble.material);
+  const field = new THREE.Mesh(cached('field', () => new THREE.TorusGeometry(1.8, 0.05, 6, 48).rotateX(Math.PI / 2)), new THREE.MeshBasicMaterial({ color: PU_COLOR.magnet, transparent: true, opacity: 0.7, depthWrite: false }));
+  field.position.y = 0.3; field.visible = false; mesh.root.add(field); mesh.mats.push(field.material);
   scene.add(mesh.root, label);
-  v = { mesh, label, prec: Math.random() * 6, tp }; views.set(tp.id, v); return v;
+  v = { mesh, label, prec: Math.random() * 6, tp, bubble, field, trailT: 0 }; views.set(tp.id, v); return v;
 }
 function dropView(id) {
   const v = views.get(id); if (!v) return;
   disposeTopMesh(v.mesh); scene.remove(v.label); v.label.material.map.dispose(); v.label.material.dispose(); views.delete(id);
 }
 function clearViews() { for (const id of [...views.keys()]) dropView(id); }
-const infoOf = (id) => (id ? S.topById(world, id) || views.get(id)?.tp || null : null); // tops that just left the world keep their view one more frame
+const known = new Map(); // id -> { id, name, parts, human, r } for every top seen, so the feed can name one that is already gone
+const remember = (tp) => { known.set(tp.id, { id: tp.id, name: tp.name, parts: tp.parts, human: tp.human, r: tp.r }); if (known.size > 400) known.delete(known.keys().next().value); };
+const infoOf = (id) => (id ? S.topById(world, id) || views.get(id)?.tp || known.get(id) || null : null); // tops that just left the world keep their view one more frame
 function refreshPlayer() { const p = S.topById(world, meId); if (p) player = p; }
+
+// Power-up orbs: a glowing glass ball with the power's icon, a light beam and a floor ring; they blink before they vanish.
+const PU_COLOR = { blast: '#ff8a3d', shield: '#4cb8ff', magnet: '#c27bff', turbo: '#3ee0a1' };
+const orbs = new Map(), iconTex = {};
+function powerIcon(kind) { // the same SVG path as the HUD icon, drawn white on a canvas
+  return (iconTex[kind] ??= canvasTex(128, 128, (g) => {
+    const d = document.querySelector(`#i-${kind} path`)?.getAttribute('d'); if (!d) return;
+    g.translate(16, 16); g.scale(4, 4); g.fillStyle = '#ffffff'; g.shadowColor = 'rgba(0,0,0,.5)'; g.shadowBlur = 2; g.fill(new Path2D(d));
+  }));
+}
+function orbFor(pu) {
+  let o = orbs.get(pu.id); if (o) return o;
+  const c = PU_COLOR[pu.kind], g = new THREE.Group();
+  const ball = new THREE.Mesh(cached('orb', () => new THREE.SphereGeometry(0.62, 24, 16)), new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 0.55, roughness: 0.15, metalness: 0.1, transparent: true, opacity: 0.85 }));
+  const icon = new THREE.Sprite(new THREE.SpriteMaterial({ map: powerIcon(pu.kind), depthTest: false, transparent: true })); icon.scale.set(0.95, 0.95, 1); icon.renderOrder = 9;
+  const beam = new THREE.Mesh(cached('puBeam', () => new THREE.CylinderGeometry(0.18, 0.5, 7, 12, 1, true).translate(0, 3.5, 0)), new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.18, blending: THREE.AdditiveBlending, depthWrite: false }));
+  const ring = new THREE.Mesh(cached('puRing', () => new THREE.RingGeometry(0.8, 1.05, 32).rotateX(-Math.PI / 2)), new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.7, depthWrite: false }));
+  ball.castShadow = true; g.add(ball, icon, beam, ring); scene.add(g);
+  o = { g, ball, icon, beam, ring, ph: Math.random() * 6 }; orbs.set(pu.id, o); return o;
+}
+function syncOrbs(dt) {
+  const ids = new Set();
+  for (const pu of world.powerups || []) {
+    ids.add(pu.id); const o = orbFor(pu), y = bowlY(Math.hypot(pu.x, pu.z));
+    o.ph += dt * 2.5; o.g.position.set(pu.x, y, pu.z);
+    o.ball.position.y = 1.1 + Math.sin(o.ph) * 0.15; o.icon.position.y = o.ball.position.y; o.ring.position.y = 0.05; o.ring.rotation.y += dt;
+    const blink = pu.t < 4 && Math.sin(simTime * 18) < 0; o.g.visible = !blink && state !== State.COVER;
+  }
+  for (const [id, o] of orbs) if (!ids.has(id)) { scene.remove(o.g); o.icon.material.dispose(); o.ball.material.dispose(); o.beam.material.dispose(); o.ring.material.dispose(); orbs.delete(id); }
+}
 
 // ================================================================ SPARKS (instanced pickups: grow your spin)
 let sparkMesh = null;
@@ -510,27 +556,43 @@ function updateWaves(dt) {
 function shake(a) { if (save.shake !== false && !CAPTURE) shakeAmt = Math.max(shakeAmt, Math.min(a, 0.3)); } // small and smooth: big jolts make people motion sick
 const nearVol = (x, z) => (player ? clamp(1.25 - Math.hypot(x - player.x, z - player.z) / 22, 0.12, 1) : 0.5);
 
-// ================================================================ INPUT (keyboard, mouse steering + click dash, touch joystick + button)
-const keys = new Set(), stick = { id: null, ox: 0, oy: 0, x: 0, y: 0 }, mouse = { on: false, sx: 0, sy: 0 };
-const isTouch = matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
+// ================================================================ INPUT (keyboard + mouse, or touch: floating joystick, tap / bolt button to dash, power button)
+const keys = new Set(), stick = { id: null, ox: 0, oy: 0, x: 0, y: 0, t0: 0, moved: 0 }, mouse = { on: false, sx: 0, sy: 0 };
+let isTouch = matchMedia('(pointer: coarse)').matches || (navigator.maxTouchPoints > 0 && !matchMedia('(hover: hover)').matches);
+function setTouchUI(on) { // the input actually used decides: hybrid laptops, tablets with keyboards, phones that report a fine pointer
+  if (isTouch === on && document.body.classList.contains('touch') === on) return;
+  isTouch = on; document.body.classList.toggle('touch', on);
+  $('menuControls').innerHTML = controlsHTML();
+  if (state === State.PLAYING) { $('btnAction').hidden = !on; $('dashKey').hidden = on; }
+  updatePowerUI();
+}
+addEventListener('touchstart', () => setTouchUI(true), { passive: true, capture: true });
 addEventListener('keydown', (e) => {
   if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
   if (e.repeat) return;
   keys.add(e.code); unlockAudio();
-  if (['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) mouse.on = false;
+  if (['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'KeyE'].includes(e.code)) { mouse.on = false; setTouchUI(false); }
   if (e.code === 'Space' && state === State.PLAYING) playerDash();
+  if (e.code === 'KeyE' && state === State.PLAYING) playerUse();
   if (e.code === 'KeyP') togglePause(); // never Escape: on CrazyGames it exits fullscreen
   if ((e.code === 'Enter' || e.code === 'Space') && state === State.MENU) $('btnPlay').click();
 });
 addEventListener('keyup', (e) => keys.delete(e.code));
 addEventListener('blur', () => keys.clear());
 document.addEventListener('visibilitychange', () => { if (document.hidden && state === State.PLAYING) setState(State.PAUSED); });
+canvas.addEventListener('contextmenu', (e) => e.preventDefault()); // right-click uses the power-up
 canvas.addEventListener('pointerdown', (e) => {
   unlockAudio();
+  if (e.pointerType === 'mouse') {
+    setTouchUI(false); if (state !== State.PLAYING) return;
+    mouse.on = true; mouse.sx = e.clientX; mouse.sy = e.clientY;
+    if (e.button === 0) playerDash(); else if (e.button === 2) playerUse();
+    return;
+  }
+  setTouchUI(true);
   if (state !== State.PLAYING) return;
-  if (e.pointerType === 'mouse') { mouse.on = true; mouse.sx = e.clientX; mouse.sy = e.clientY; if (e.button === 0) playerDash(); return; }
-  if (stick.id !== null) return;
-  stick.id = e.pointerId; stick.ox = e.clientX; stick.oy = e.clientY; stick.x = stick.y = 0;
+  if (stick.id !== null) { playerDash(); return; } // a second finger while steering = dash
+  Object.assign(stick, { id: e.pointerId, ox: e.clientX, oy: e.clientY, x: 0, y: 0, t0: performance.now(), moved: 0 });
   const j = $('joystick'); j.style.left = `${e.clientX}px`; j.style.top = `${e.clientY}px`; j.hidden = false;
   canvas.setPointerCapture(e.pointerId);
 });
@@ -538,13 +600,19 @@ canvas.addEventListener('pointermove', (e) => {
   if (e.pointerType === 'mouse') { if (Math.abs(e.clientX - mouse.sx) + Math.abs(e.clientY - mouse.sy) > 3) mouse.on = true; mouse.sx = e.clientX; mouse.sy = e.clientY; return; }
   if (e.pointerId !== stick.id) return;
   let dx = e.clientX - stick.ox, dy = e.clientY - stick.oy; const d = Math.hypot(dx, dy), max = 50;
+  stick.moved = Math.max(stick.moved, d);
   if (d > max) { dx *= max / d; dy *= max / d; }
   stick.x = dx / max; stick.y = dy / max; $('joystick').firstElementChild.style.transform = `translate(${dx}px, ${dy}px)`;
 });
 canvas.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') mouse.on = false; });
-const releaseStick = (e) => { if (e.pointerId !== stick.id) return; stick.id = null; stick.x = stick.y = 0; $('joystick').hidden = true; $('joystick').firstElementChild.style.transform = ''; };
+const releaseStick = (e) => {
+  if (e.pointerId !== stick.id) return;
+  if (e.type === 'pointerup' && performance.now() - stick.t0 < 230 && stick.moved < 14) playerDash(); // a quick tap anywhere = dash
+  stick.id = null; stick.x = stick.y = 0; $('joystick').hidden = true; $('joystick').firstElementChild.style.transform = '';
+};
 canvas.addEventListener('pointerup', releaseStick); canvas.addEventListener('pointercancel', releaseStick);
-$('btnAction').addEventListener('pointerdown', (e) => { e.preventDefault(); e.stopPropagation(); unlockAudio(); playerDash(); });
+$('btnAction').addEventListener('pointerdown', (e) => { e.preventDefault(); e.stopPropagation(); unlockAudio(); setTouchUI(true); playerDash(); });
+$('btnPower').addEventListener('pointerdown', (e) => { e.preventDefault(); e.stopPropagation(); unlockAudio(); playerUse(); });
 
 const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), groundPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -0.3), hit = new THREE.Vector3();
 function playerInput() { // x/z world direction; the camera has no yaw, so screen right = +x and screen down = +z
@@ -560,7 +628,7 @@ function playerInput() { // x/z world direction; the camera has no yaw, so scree
 
 // ================================================================ STATE (BOOT -> MENU <-> GARAGE / LOBBY, -> PLAYING <-> PAUSED -> GAMEOVER)
 const State = { BOOT: 'BOOT', MENU: 'MENU', GARAGE: 'GARAGE', LOBBY: 'LOBBY', PLAYING: 'PLAYING', PAUSED: 'PAUSED', GAMEOVER: 'GAMEOVER', COVER: 'COVER' };
-let state = State.BOOT, run = null, simTime = 0, dashQueued = false;
+let state = State.BOOT, run = null, simTime = 0, dashQueued = false, useQueued = false;
 
 function setState(s) {
   state = s;
@@ -569,6 +637,7 @@ function setState(s) {
   $('hud').hidden = !(s === State.PLAYING || s === State.PAUSED);
   $('btnAction').hidden = !(s === State.PLAYING && isTouch);
   $('dashKey').hidden = isTouch;
+  updatePowerUI();
   $('roomChip').hidden = mode !== 'online';
   $('btnOverGarage').hidden = mode === 'online';
   if (s !== State.PLAYING) { stick.id = null; stick.x = stick.y = 0; $('joystick').hidden = true; }
@@ -588,12 +657,15 @@ function toast(msg) { const el = $('toast'); el.textContent = msg; el.hidden = f
 const click = (id, fn) => $(id).addEventListener('click', () => { unlockAudio(); playSfx('click', 0.6); fn(); });
 function playerDash() { if (state === State.PLAYING && run && !(run.countdown > 0) && player && alive(player)) dashQueued = true; }
 const takeDash = () => { const d = dashQueued; dashQueued = false; return d; };
+function playerUse() { if (state === State.PLAYING && run && player?.power && alive(player)) useQueued = true; }
+const takeUse = () => { const u = useQueued; useQueued = false; return u; };
 
 click('btnPlay', () => startRun());
 click('btnOnline', () => openLobby());
 click('btnGarage', () => openGarage());
 click('btnOverGarage', () => { toMenuWorld(); openGarage(); });
 click('btnGarageDone', () => { setState(State.MENU); refreshMenu(); });
+click('btnGarageX', () => { setState(State.MENU); refreshMenu(); }); // compact header button on short screens
 click('btnPause', () => togglePause());
 click('btnResume', () => togglePause());
 click('btnShake', () => { save.shake = save.shake === false; persist(); refreshShakeButton(); });
@@ -616,8 +688,8 @@ $('codeInput').addEventListener('input', () => { $('codeInput').value = $('codeI
 // ================================================================ UI (menu, garage, lobby, HUD, leaderboard, feed, banners)
 function controlsHTML() {
   const k = (s) => `<span class="key">${s}</span>`;
-  if (isTouch) return `<span><svg><use href="#i-move"/></svg>${t('ctlDrag')}</span><span><svg class="gold"><use href="#i-dash"/></svg>${t('ctlTap')}</span>`;
-  return `<span>${k('W')}${k('A')}${k('S')}${k('D')} / ${t('ctlMouse')}: ${t('ctlMove')}</span><span>${k('Space')} / ${t('ctlClick')}: ${t('ctlDash')}</span><span>${k('P')}: ${t('ctlPause')}</span>`;
+  if (isTouch) return `<span><svg><use href="#i-move"/></svg>${t('ctlDrag')}</span><span><svg class="gold"><use href="#i-dash"/></svg>${t('ctlTapDash')}</span><span><svg class="gold"><use href="#i-blast"/></svg>${t('ctlPowerBtn')}</span>`;
+  return `<span>${k('W')}${k('A')}${k('S')}${k('D')} / ${t('ctlMouse')}: ${t('ctlMove')}</span><span>${k('Space')} / ${t('ctlClick')}: ${t('ctlDash')}</span><span>${k('E')} / ${t('ctlRight')}: ${t('ctlPower')}</span><span>${k('P')}: ${t('ctlPause')}</span>`;
 }
 function refreshMenu() {
   $('menuBest').textContent = save.best; $('menuGears').textContent = save.gears; $('garageGears').textContent = save.gears;
@@ -671,8 +743,9 @@ function renderBoard() {
     const mine = tp.id === meId;
     return `<li class="${mine ? 'me' : tp.human ? 'hu' : ''} ${extra}"><span>${i === 0 ? '<svg><use href="#i-crown"/></svg>' : i + 1 + '.'}</span><i class="sw" style="background:${topColor(tp)}"></i>${escapeHTML(mine ? t('you') : tp.name)}<b>${Math.round(tp.spin)}</b></li>`;
   };
-  list.slice(0, 5).forEach((tp, i) => rows.push(row(tp, i)));
-  if (me >= 5) rows.push(row(list[me], me, 'gap'));
+  const n = isShort() ? 3 : 5;
+  list.slice(0, n).forEach((tp, i) => rows.push(row(tp, i)));
+  if (me >= n) rows.push(row(list[me], me, 'gap'));
   $('board').innerHTML = rows.join('');
 }
 const escapeHTML = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -681,7 +754,7 @@ function feed(killer, victim, how) {
   const el = document.createElement('div'), name = (tp) => `<b style="color:${tp.id === meId ? '#ffc531' : topColor(tp)}">${escapeHTML(tp.id === meId ? t('you') : tp.name)}</b>`;
   el.innerHTML = killer ? `${name(killer)}<em>${t(how === 'ringout' ? 'feedRing' : 'feedTopple')}</em>${name(victim)}` : `${name(victim)}<em>${t(how === 'ringout' ? 'fell' : 'spunOut')}</em>`;
   if (killer?.id === meId || victim.id === meId) el.className = 'me';
-  const f = $('feed'); f.prepend(el); while (f.children.length > 4) f.lastChild.remove();
+  const f = $('feed'); f.prepend(el); while (f.children.length > (isShort() ? 2 : 4)) f.lastChild.remove();
   setTimeout(() => el.remove(), 4500);
 }
 let bannerTimer = 0;
@@ -699,7 +772,17 @@ function updateHUD() {
   if (ev) { $('eventChip').hidden = false; $('eventName').textContent = t('ev_' + ev.id).replace('!', ''); $('eventTime').textContent = `${Math.max(0, Math.ceil(ev.t))}s`; }
   else $('eventChip').hidden = true;
   if (mode === 'online') { $('roomCode').textContent = net.code; $('roomInfo').textContent = `${t('players', { n: net.players })} · ${Math.round(net.rtt)} ms`; }
+  updatePowerUI();
 }
+let powerShown = '';
+function updatePowerUI() { // the held power-up: an icon with a 10 s ring; it must be used before the ring runs out
+  const pw = state === State.PLAYING && player && alive(player) ? player.power : null;
+  const slot = isTouch ? $('btnPower') : $('powerKey'), other = isTouch ? $('powerKey') : $('btnPower');
+  other.hidden = true; slot.hidden = !pw; if (!pw) { powerShown = ''; return; }
+  if (powerShown !== pw.kind + isTouch) { powerShown = pw.kind + isTouch; slot.querySelector('use').setAttribute('href', `#i-${pw.kind}`); slot.dataset.kind = pw.kind; }
+  slot.style.setProperty('--pt', clamp(pw.t / CFG.powerHold, 0, 1).toFixed(3)); slot.classList.toggle('urgent', pw.t < 3);
+}
+const isShort = () => Math.min(innerWidth, innerHeight) < 520; // phones: compact HUD, camera pulled back
 
 // ================================================================ EVENTS (what the world reports -> particles, sounds, banners; same for solo and online)
 const pos3 = (x, z, up = 0.4) => new THREE.Vector3(x, bowlY(Math.hypot(x, z)) + up, z);
@@ -708,6 +791,7 @@ const quietFx = () => document.hidden || (mode === 'online' && performance.now()
 function handleEvent(e) {
   const tp = infoOf(e.id);
   switch (e.type) {
+    case 'add': if (tp) remember(tp); break;
     case 'land':
       if (!tp) break;
       if (!CAPTURE) playSfx('launch', 0.5 * nearVol(tp.x, tp.z));
@@ -747,6 +831,40 @@ function handleEvent(e) {
       playSfx('topple', e.id === meId ? 1 : 0.7 * nearVol(tp.x, tp.z));
       if (e.id === meId && run) { run.slow = 1.1; shake(0.15); }
       break;
+    case 'puAdd':
+      if (mode === 'online' && !world.powerups.some((q) => q.id === e.id)) world.powerups.push({ id: e.id, kind: e.kind, x: e.x, z: e.z, t: CFG.powerLife });
+      burst(pos3(e.x, e.z, 0.6), PU_COLOR[e.kind], 12, 4);
+      break;
+    case 'puTake': {
+      if (mode === 'online') world.powerups = world.powerups.filter((q) => q.id !== e.id);
+      const taker = infoOf(e.top); if (taker) burst(pos3(taker.x, taker.z, 0.8), PU_COLOR[e.kind], 16, 5);
+      if (e.top === meId) {
+        playSfx('puTake', 0.8);
+        banner(t('pu_' + e.kind), `${t('pud_' + e.kind)} · ${t(isTouch ? 'puUseTouch' : 'puUseKey')}`, false, 2.2);
+        if (mode === 'online' && player) player.power = { kind: e.kind, t: CFG.powerHold };
+      }
+      break;
+    }
+    case 'puGone': if (mode === 'online') world.powerups = world.powerups.filter((q) => q.id !== e.id); break;
+    case 'puExpire':
+      if (e.id === meId) { toast(t('puLost')); playSfx('puLost', 0.7); if (player) player.power = null; }
+      break;
+    case 'puUse': {
+      if (!tp) break;
+      const snd = { shield: 'puShield', magnet: 'puMagnet', turbo: 'puTurbo' }[e.kind];
+      playSfx(snd, e.id === meId ? 0.9 : 0.5 * nearVol(tp.x, tp.z));
+      burst(pos3(tp.x, tp.z, 0.7), PU_COLOR[e.kind], 20, 6); shockwave(tp.x, bowlY(Math.hypot(tp.x, tp.z)), tp.z, tp.r * 2.5, PU_COLOR[e.kind]);
+      if (mode === 'online' && tp.id !== meId) tp.fx = { kind: e.kind, t: 1 };
+      break;
+    }
+    case 'fxEnd': if (mode === 'online' && tp && tp.id !== meId) tp.fx = null; break;
+    case 'blast': {
+      const p = pos3(e.x, e.z, 0.5), mine = e.id === meId, near = player && Math.hypot(player.x - e.x, player.z - e.z) < CFG.blastRadius + 2;
+      shockwave(e.x, p.y - 0.3, e.z, CFG.blastRadius * 2, '#ff8a3d'); shockwave(e.x, p.y - 0.2, e.z, CFG.blastRadius * 1.3, '#ffe27a');
+      burst(p, '#ff8a3d', 30, 12); burst(p, '#ffe27a', 16, 9);
+      playSfx('puBlast', mine ? 1 : nearVol(e.x, e.z)); if (mine || near) shake(0.15);
+      break;
+    }
     case 'elim': onElim(e); break;
     case 'event': onEventStart(e); break;
     case 'eventEnd': onEventEnd(e); break;
@@ -804,7 +922,7 @@ const newRun = (extra = {}) => ({
 function startRun() {
   closeOnline(); stopHum(); clearViews(); mode = 'solo';
   const tutorial = !save.tut && !CAPTURE;
-  world = S.createWorld(); world.eventsOn = !tutorial; world.frozen = !CAPTURE;
+  world = S.createWorld(); world.eventsOn = world.powersOn = !tutorial; world.frozen = !CAPTURE;
   player = S.addTop(world, { parts: save.sel, name: 'You', human: true }); meId = player.id;
   if (tutorial) { player.noDecay = true; player.dmgTaken = 0.3; }
   for (let i = 0; i < CFG.bots; i++) { const b = S.spawnBot(world, { ring: i, avoidPaint: save.sel.paint }); b.timer = 0.6 + Math.random() * 0.6; if (tutorial) b.ai = 'passive'; }
@@ -815,7 +933,7 @@ function startRun() {
   setState(State.PLAYING); startHum();
   if (!CAPTURE) { voice('go'); playSfx('launch', 0.8); }
 }
-const soloInput = (tp) => (tp.id !== meId ? null : AUTOPLAY ? S.botMove(world, tp, STEP) : { ...playerInput(), dash: takeDash() });
+const soloInput = (tp) => (tp.id !== meId ? null : AUTOPLAY ? S.botMove(world, tp, STEP) : { ...playerInput(), dash: takeDash(), use: takeUse() });
 function endRun(e, killer) {
   run.over = true; run.how = e.how; run.killer = killer;
   Object.assign(player, { score: e.score ?? player.score, kos: e.kos ?? player.kos, peak: e.peak ?? player.peak, state: 'dead' });
@@ -892,15 +1010,16 @@ function finishTutorial(skipped) {
   const dummy = S.topById(world, run.dummyId); if (dummy) dummy.ai = 'normal';
   for (const tp of world.tops) if (tp.ai === 'passive') tp.ai = 'normal';
   player.noDecay = false; player.dmgTaken = 1;
-  world.eventsOn = true; world.nextEvent = world.time + CFG.eventFirst;
+  world.eventsOn = world.powersOn = true; world.nextEvent = world.time + CFG.eventFirst; world.powerT = 6;
   if (!skipped) { banner(t('tutDone'), '', false, 2); playSfx('unlock', 0.7); }
 }
 
 // ================================================================ ONLINE (no account: join a public match, or a private room by code / invite link)
 // The server runs the authoritative world; this client mirrors it. Other tops are drawn INTERP seconds in the past between
 // two snapshots; my own top is predicted locally (same sim.integrate) and eased toward the server so steering feels instant.
-const net = { joinable: null, ws: null, status: 'off', code: '', priv: false, name: '', players: 0, rtt: 0, offset: null, snaps: [], srvMe: null, me: null, leaving: false, sendT: 0, pingT: 0, sx: 9, sy: 9, dash: false };
+const net = { use: false, joinable: null, ws: null, status: 'off', code: '', priv: false, name: '', players: 0, rtt: 0, offset: null, snaps: [], srvMe: null, me: null, leaving: false, sendT: 0, pingT: 0, sx: 9, sy: 9, dash: false };
 const STATE_NAME = ['spawn', 'alive', 'falling', 'toppling'];
+const FX_NAME = ['', 'shield', 'magnet', 'turbo'];
 function connectOnline(joinMsg) {
   if (CAPTURE) return;
   closeOnline();
@@ -953,7 +1072,7 @@ function mirrorTop(info) {
     id: info.id, name: info.name, human: !!info.human, parts, stats: S.statsOf(parts), x: 0, z: 0, vx: 0, vz: 0, spin: CFG.startSpin, peak: CFG.startSpin,
     r: 1, mass: 1, state: 'spawn', timer: 0.6, fallY: 0, fallV: 0, dashT: 0, cd: 0, shield: 0, kos: 0, score: 0, hitWob: 0, faceX: 0, faceZ: 1, age: 0, placed: false,
   };
-  S.updateMass(tp); world.tops.push(tp);
+  S.updateMass(tp); world.tops.push(tp); remember(tp);
 }
 function mirrorSpark([i, x, z, vx, vz, fall, big]) { const s = world.sparks[i]; if (s) Object.assign(s, { on: true, x, z, vx, vz, fall, big, y: 0.4 + fall }); }
 function enterOnline(d) {
@@ -964,6 +1083,7 @@ function enterOnline(d) {
   for (const info of d.tops) mirrorTop(info);
   for (const sp of d.sparks) mirrorSpark(sp);
   world.event = d.ev ? { ...d.ev } : null; world.leader = d.leader;
+  world.powerups = (d.pu || []).map((q) => ({ ...q, t: CFG.powerLife }));
   chevrons.visible = world.event?.id === 'tilt'; if (chevrons.visible) chevrons.rotation.y = -PIT_ANGLES[world.event.pit];
   net.joinable = d.players < 10; sdkRoom({ roomId: d.code, isJoinable: net.joinable, inviteParams: { roomId: d.code } });
   if (d.priv) toast(t('shareCode', { c: d.code }));
@@ -994,17 +1114,24 @@ function onSnapshot(d) {
     }
     if (!tp.placed) { tp.x = a[1]; tp.z = a[2]; tp.placed = true; }
     tp.spin = a[5]; tp.peak = Math.max(tp.peak, tp.spin); tp.shield = a[7] & 2 ? 1 : 0; tp.dashT = a[7] & 1 ? 0.1 : 0; S.updateMass(tp);
+    const fxk = FX_NAME[(a[7] >> 2) & 3]; if (tp.id !== meId) tp.fx = fxk ? { kind: fxk, t: tp.fx?.t || 1 } : null;
     if (tp.id === meId) net.srvMe = { tm: d.tm, x: a[1], z: a[2], vx: a[3], vz: a[4] };
   }
   world.tops = world.tops.filter((tp) => seen.has(tp.id) || ((tp.state === 'falling' || tp.state === 'toppling') && tp.timer > 0)); // let a fall finish locally
   net.snaps.push({ tm: d.tm, tops: seen }); if (net.snaps.length > 30) net.snaps.shift();
   if (d.e && world.event) world.event.t = d.e.t; else if (!d.e && world.event) onEventEnd({ id: world.event.id });
-  if (d.me && player && d.me.id === player.id) { player.score = d.me.score; player.kos = d.me.kos; player.peak = Math.max(player.peak, d.me.peak); player.cd = Math.max(player.cd, d.me.cd - 0.15); }
+  if (d.me && player && d.me.id === player.id) {
+    player.score = d.me.score; player.kos = d.me.kos; player.peak = Math.max(player.peak, d.me.peak); player.cd = Math.max(player.cd, d.me.cd - 0.15);
+    player.power = d.me.pw && !net.use ? { kind: d.me.pw[0], t: d.me.pw[1] } : net.use ? player.power : null;
+    player.fx = d.me.fx ? { kind: d.me.fx[0], t: d.me.fx[1] } : null;
+  }
   const joinable = d.n < 10; if (joinable !== net.joinable) { net.joinable = joinable; sdkRoom({ isJoinable: joinable }); }
 }
 function netStep(dt) { // per fixed step while online: local animation, my prediction, input upload
   S.updateSparks(world, dt);
   if (world.event) world.event.t -= dt;
+  for (const q of world.powerups) q.t -= dt;
+  if (player?.power) player.power.t -= dt;
   for (const tp of world.tops) {
     tp.hitWob = Math.max(0, tp.hitWob - dt * 0.8);
     if (tp.state === 'falling' || tp.state === 'toppling') S.animateDying(tp, dt);
@@ -1015,6 +1142,7 @@ function netStep(dt) { // per fixed step while online: local animation, my predi
   if (me && alive(me) && playing) {
     inp = playerInput();
     if (takeDash() && me.cd <= 0) { S.dash(world, me, inp); dashFx(me, me.faceX, me.faceZ); net.dash = true; world.events.length = 0; }
+    if (takeUse() && me.power) { net.use = true; me.power = null; } // the server answers with the effect
     S.integrate(world, me, inp, dt); S.walls(world, me, true); S.updateMass(me);
     const srv = net.srvMe;
     if (srv) { // ease toward where the server says I am (extrapolated to now); snap when far off
@@ -1024,9 +1152,9 @@ function netStep(dt) { // per fixed step while online: local animation, my predi
     }
   }
   net.sendT -= dt; net.pingT -= dt;
-  if (net.sendT <= 0 && (net.dash || Math.abs(inp.x - net.sx) + Math.abs(inp.y - net.sy) > 0.05 || net.sendT < -0.25)) {
-    netSend({ t: 'i', x: Math.round(inp.x * 100) / 100, y: Math.round(inp.y * 100) / 100, d: net.dash ? 1 : 0 });
-    net.sx = inp.x; net.sy = inp.y; net.dash = false; net.sendT = 0.05;
+  if (net.sendT <= 0 && (net.dash || net.use || Math.abs(inp.x - net.sx) + Math.abs(inp.y - net.sy) > 0.05 || net.sendT < -0.25)) {
+    netSend({ t: 'i', x: Math.round(inp.x * 100) / 100, y: Math.round(inp.y * 100) / 100, d: net.dash ? 1 : 0, u: net.use ? 1 : 0 });
+    net.sx = inp.x; net.sy = inp.y; net.dash = false; net.use = false; net.sendT = 0.05;
   }
   if (net.pingT <= 0) { net.pingT = 2; netSend({ t: 'p', c: performance.now() }); }
 }
@@ -1092,17 +1220,23 @@ function syncTop(tp, v, dt) {
   const sp = Math.hypot(tp.vx, tp.vz), lean = clamp(sp * 0.014, 0, 0.13), lx = sp > 0.1 ? tp.vx / sp : 0, lz = sp > 0.1 ? tp.vz / sp : 0;
   m.tilt.rotation.x = lean * lz + amp * Math.sin(v.prec); m.tilt.rotation.z = -lean * lx + amp * Math.cos(v.prec);
   m.blur.material.opacity = tp.state === 'alive' || tp.state === 'spawn' ? 0.12 + 0.42 * spinFrac : 0.05;
+  const fx = alive(tp) ? tp.fx?.kind : null; // active power-up effects
+  v.bubble.visible = fx === 'shield'; if (fx === 'shield') v.bubble.material.opacity = 0.2 + 0.08 * Math.sin(simTime * 10);
+  v.field.visible = fx === 'magnet'; if (fx === 'magnet') { v.field.rotation.y += dt * 4; v.field.scale.setScalar(1 + 0.15 * Math.sin(simTime * 6)); }
+  m.blur.material.color.set(fx === 'turbo' ? PU_COLOR.turbo : topColor(tp));
+  if (fx === 'turbo' && (v.trailT -= dt) <= 0) { v.trailT = 0.06; burst(new THREE.Vector3(tp.x, y + 0.3 * s, tp.z), PU_COLOR.turbo, 2, 1.5, 0.2); }
   if (me) m.ring.material.opacity = tp.cd <= 0 ? 0.7 + 0.25 * Math.sin(simTime * 8) : 0.4;
   m.ring.visible = tp.state === 'alive' && !(tp.shield > 0 && Math.sin(simTime * 30) < -0.3);
   v.label.visible = state !== State.COVER && (state === State.PLAYING || state === State.GAMEOVER || state === State.PAUSED);
   v.label.position.set(tp.x, y + 0.95 * s + 0.75, tp.z);
-  const ls = 2.5 + s * 0.4; v.label.scale.set(ls, ls * 0.22, 1);
+  const ls = (2.5 + s * 0.4) * (isShort() ? 1.3 : 1); v.label.scale.set(ls, ls * 0.22, 1); // the phone camera sits further back
   v.tp = tp;
 }
 function render(dt) {
   const ids = new Set();
   for (const tp of world.tops) { ids.add(tp.id); syncTop(tp, viewFor(tp), dt); }
   for (const id of [...views.keys()]) if (!ids.has(id)) dropView(id);
+  syncOrbs(dt);
   renderSparks();
   const lead = S.topById(world, world.leader);
   if (lead && alive(lead) && (state === State.PLAYING || state === State.GAMEOVER || state === State.PAUSED)) {
@@ -1133,7 +1267,7 @@ function updateCamera(dt) {
   } else {
     // Calm follow: a small velocity lead and smoothed look target, so knock-backs and topples do not whip the view around
     camera.clearViewOffset();
-    const s = player ? player.r : 1, zoom = (1 + (s - 1) * 0.45) * (portrait ? 1.55 : 1);
+    const s = player ? player.r : 1, zoom = (1 + (s - 1) * 0.45) * (portrait ? 1.55 : 1) * (isShort() && !portrait ? 1.3 : 1);
     const px = player ? player.x : 0, pz = player ? player.z : 0;
     const lead = state === State.PLAYING && player && alive(player) ? 0.12 : 0;
     lookGoal.set(px + (player?.vx || 0) * lead, 0, pz + (player?.vz || 0) * lead);
@@ -1198,16 +1332,17 @@ async function boot() {
     window.__game = {
       start: () => startRun(),
       frame: (dt = 1 / 30) => { advance(dt); render(dt); },
-      skip: (sec) => { for (let s = 0; s < sec; s += STEP) { advance(STEP); if (state === State.GAMEOVER) startRun(); } },
+      skip: (sec) => { for (let s = 0; s < sec; s += STEP) { advance(STEP); if (state === State.GAMEOVER) startRun(); } refreshPlayer(); updateCamera(3); }, // the camera catches up for the shot
       sim: (sec) => { for (let s = 0; s < sec; s += STEP) { advance(STEP); if (run?.over) break; } }, // balance tests: stops when the run ends
       info: () => ({ how: run?.how, state, score: player?.score, spin: player?.spin, time: run?.time, kos: player?.kos, rank: run?.bestRank, over: run?.over }),
       cover: (kind) => stageCover(kind),
+      orb: (k, dx = 3, dz = 0) => { if (player) S.spawnPowerup(world, k, [player.x + dx, player.z + dz]); world.events.length = 0; }, // screenshots of the power-up orbs
     };
     render(0);
     return;
   }
   requestAnimationFrame((n) => { last = n; frame(n); });
-  if (params.has('debug')) window.__wb = () => ({ world, meId, player, net, views, state, mode }); // inspection hook for tests
+  if (params.has('debug')) window.__wb = () => ({ world, meId, player, net, views, state, mode, die: () => { if (player) player.spin = 0; }, give: (k) => { if (player) player.power = { kind: k, t: CFG.powerHold }; } }); // inspection hook for tests
   // invite links and the CrazyGames "instant multiplayer" entry go straight into the right room
   const invited = sdkInviteParam('roomId') || params.get('room');
   const afterFirstFrames = (fn) => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(fn, 0))); // shaders are compiled by then

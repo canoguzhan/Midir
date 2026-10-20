@@ -3,7 +3,7 @@
 //   node mp/whirlbash.mjs            listens on 127.0.0.1:8090 (MP_HOST / MP_PORT); Caddy serves it at wss://<site>/mp/whirlbash
 // No accounts: a player is named by their CrazyGames username when the SDK reports one, otherwise the server picks a guest
 // name. There is no chat and no free-text input, so nothing user-written is ever shown to other players.
-// Protocol (JSON). Client -> server: join {mode: quick|create|code, code?, name?, parts}, play {parts}, i {x, y, d}, p {c}, leave.
+// Protocol (JSON). Client -> server: join {mode: quick|create|code, code?, name?, parts}, play {parts}, i {x, y, d, u}, p {c}, leave.
 // Server -> client: welcome, you, s (snapshot: tops, events, sparks, me), p (pong), err {e}.
 import { WebSocketServer } from 'ws';
 import * as S from '../games/whirlbash/sim.js';
@@ -53,6 +53,7 @@ function joinRoom(c, room) {
     t: 'welcome', code: room.code, priv: room.priv, name: c.name, tm: r2(w.time), players: room.clients.size,
     tops: w.tops.map(topInfo), sparks: w.sparks.map((s, i) => (s.on ? sparkData(s, i) : null)).filter(Boolean),
     ev: w.event ? { id: w.event.id, t: r2(w.event.t), pit: w.event.pit } : null, leader: w.leader,
+    pu: w.powerups.map((q) => ({ id: q.id, kind: q.kind, x: r2(q.x), z: r2(q.z) })),
   });
   spawnHuman(c, c.parts);
 }
@@ -60,7 +61,7 @@ function spawnHuman(c, parts) {
   const room = c.room; if (!room || (c.top && room.world.tops.includes(c.top))) return;
   const [x, z] = S.freeSpot(room.world);
   c.top = S.addTop(room.world, { parts, name: c.name, human: true, x, z });
-  c.top.client = c; c.input = { x: 0, y: 0, dash: false };
+  c.top.client = c; c.input = { x: 0, y: 0, dash: false, use: false };
   send(c, { t: 'you', id: c.top.id });
 }
 function leaveRoom(c) {
@@ -86,7 +87,7 @@ function onMessage(c, raw) {
     case 'i': { // input: a direction (clamped to the unit circle) and a sticky dash flag consumed by the next physics step
       if (!c.input) return;
       let x = Number(m.x) || 0, y = Number(m.y) || 0; const l = Math.hypot(x, y); if (l > 1) { x /= l; y /= l; }
-      c.input.x = x; c.input.y = y; if (m.d) c.input.dash = true;
+      c.input.x = x; c.input.y = y; if (m.d) c.input.dash = true; if (m.u) c.input.use = true;
       return;
     }
     case 'p': send(c, { t: 'p', c: Number(m.c) || 0 }); return;
@@ -120,12 +121,14 @@ function snapshot(room) {
       case 'clash': ev.push({ type: 'clash', a: e.a, b: e.b, x: r2(e.x), z: r2(e.z), rel: r2(e.rel), heavy: e.heavy, aDash: e.aDash, bDash: e.bDash }); break;
       case 'spark': ev.push({ type: 'spark', i: e.i, id: e.id, big: e.big }); break;
       case 'wall': ev.push({ type: 'wall', id: e.id, x: r2(e.x), z: r2(e.z), vn: r2(e.vn) }); break;
+      case 'puAdd': ev.push({ type: 'puAdd', id: e.id, kind: e.kind, x: r2(e.x), z: r2(e.z) }); break;
+      case 'blast': ev.push({ type: 'blast', id: e.id, x: r2(e.x), z: r2(e.z) }); break;
       case 'elim': ev.push({ type: 'elim', id: e.id, killer: e.killer, how: e.how, pts: e.pts, wasLeader: e.wasLeader, x: r2(e.x), z: r2(e.z), peak: Math.round(e.peak), score: e.score, kos: e.kos }); break;
       default: ev.push(e);
     }
   }
   w.events.length = 0;
-  const tops = w.tops.map((tp) => [tp.id, r2(tp.x), r2(tp.z), r2(tp.vx), r2(tp.vz), Math.round(tp.spin * 10) / 10, STATE_CODE[tp.state] ?? 1, (tp.dashT > 0 ? 1 : 0) | (tp.shield > 0 ? 2 : 0)]);
+  const tops = w.tops.map((tp) => [tp.id, r2(tp.x), r2(tp.z), r2(tp.vx), r2(tp.vz), Math.round(tp.spin * 10) / 10, STATE_CODE[tp.state] ?? 1, (tp.dashT > 0 ? 1 : 0) | (tp.shield > 0 ? 2 : 0) | ((S.FX_CODE[tp.fx?.kind] || 0) << 2)]);
   const body = JSON.stringify({ t: 's', tm: r2(w.time), tops, ev, sp, e: w.event ? { id: w.event.id, t: r2(w.event.t), pit: w.event.pit } : null, n: room.clients.size });
   return body.slice(0, -1); // the per-player "me" block is appended below
 }
@@ -134,12 +137,12 @@ setInterval(() => {
   for (const room of rooms.values()) {
     if (!room.clients.size) { if (now - room.emptySince > LIMITS.idleRoom) { rooms.delete(room.code); log('room -', room.code, `(${rooms.size} rooms)`); } continue; }
     const w = room.world;
-    const inputFor = (tp) => { const inp = tp.client?.input; if (!inp) return null; const out = { x: inp.x, y: inp.y, dash: inp.dash }; inp.dash = false; return out; };
+    const inputFor = (tp) => { const inp = tp.client?.input; if (!inp) return null; const out = { x: inp.x, y: inp.y, dash: inp.dash, use: inp.use }; inp.dash = inp.use = false; return out; };
     for (let k = 0; k < STEPS_PER_TICK; k++) S.step(w, S.STEP, inputFor);
     const head = snapshot(room);
     for (const c of room.clients) {
       const tp = c.top && w.tops.includes(c.top) ? c.top : null;
-      send(c, `${head},"me":${JSON.stringify(tp ? { id: tp.id, score: tp.score, kos: tp.kos, cd: r2(tp.cd), peak: Math.round(tp.peak) } : null)}}`);
+      send(c, `${head},"me":${JSON.stringify(tp ? { id: tp.id, score: tp.score, kos: tp.kos, cd: r2(tp.cd), peak: Math.round(tp.peak), pw: tp.power ? [tp.power.kind, r2(tp.power.t)] : null, fx: tp.fx ? [tp.fx.kind, r2(tp.fx.t)] : null } : null)}}`);
     }
   }
 }, TICK_MS);

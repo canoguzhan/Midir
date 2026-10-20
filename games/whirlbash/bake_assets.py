@@ -22,6 +22,8 @@ REUSE = [  # library files shipped as-is (paths as in tools/catalog.py output, w
     'fonts/nunito-latin-800-normal.woff2', 'fonts/nunito-latin-ext-800-normal.woff2',
     'audio/dash_gem.mp3',   # spark pickup tink
     'audio/ui_click.mp3', 'audio/upgrade.mp3', 'audio/unlock.mp3', 'audio/defeat.mp3', 'audio/countdown.mp3',
+    # power-ups: blast, shield, magnet, turbo, pick up, lost
+    'audio/skill_slam.mp3', 'audio/skill_heal.mp3', 'audio/portal.mp3', 'audio/frenzy.mp3', 'audio/gate_good.mp3', 'audio/gate_bad.mp3',
 ]
 
 MODELS = []
