@@ -154,13 +154,14 @@ function joinRoom(c, room) {
   if (!isRound(room)) { fillBots(room); spawnHuman(c, c.parts); }
   else if (room.phase === 'count') { spawnHuman(c, c.parts); fillBots(room); } // still in the countdown: jump in; otherwise watch until the next round
 }
-function spawnHuman(c, parts) {
+const sendYou = (c, room) => { if (c.top) send(c, { t: 'you', id: c.top.id, cd: room.phase === 'count' ? r2(room.phaseT) : 0 }); };
+function spawnHuman(c, parts, tell = true) {
   const room = c.room; if (!room || (c.top && room.world.tops.includes(c.top))) return;
   const w = room.world, [x, z] = S.freeSpot(w);
   c.top = S.addTop(w, { parts, name: c.name, human: true, x, z, team: room.kind === 'teams' ? humanTeam(room) : null });
   if (c.carry) { c.top.score = c.carry.score; c.top.kos = c.carry.kos; } // Teams: a respawn keeps your score
   c.top.client = c; c.input = { x: 0, y: 0, dash: false, use: false };
-  send(c, { t: 'you', id: c.top.id, cd: room.phase === 'count' ? r2(room.phaseT) : 0 });
+  if (tell) sendYou(c, room);
   if (room.kind === 'teams') { // keep six a side: drop a bot from the human's team
     const b = w.tops.find((t) => !t.human && !t.boss && !S.isDecoy(t) && t.team === c.top.team && S.alive(t)) || w.tops.find((t) => !t.human && !t.boss && !S.isDecoy(t) && t.team === c.top.team);
     if (b && w.tops.filter((t) => t.team === c.top.team && !S.isDecoy(t)).length > LIMITS.roomTops / 2) S.removeTop(w, b);
@@ -187,8 +188,9 @@ function startRound(room) { // a fresh world in the arena the room voted for; ev
   if (room.opts) { const tally = room.opts.map((a) => [...room.votes.values()].filter((v) => v === a).length), best = Math.max(...tally), top = room.opts.filter((_, i) => tally[i] === best); arena = top[(Math.random() * top.length) | 0]; }
   room.opts = null; room.votes.clear();
   room.world = newWorld(room, arena); room.phase = 'count'; room.phaseT = ROUND.count; room.world.frozen = true;
-  for (const c of room.clients) { c.top = null; c.carry = null; c.place = 0; welcome(c, room); spawnHuman(c, c.parts); }
+  for (const c of room.clients) { c.top = null; c.carry = null; c.place = 0; spawnHuman(c, c.parts, false); }
   fillBots(room); room.world.events.length = 0;
+  for (const c of room.clients) { welcome(c, room); sendYou(c, room); } // only now: the welcome must list every top of the new round
 }
 
 function onMessage(c, raw) {

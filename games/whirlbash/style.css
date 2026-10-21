@@ -81,7 +81,7 @@ button.icon { width: calc(var(--u) * 2.7); height: calc(var(--u) * 2.7); padding
 #leftPill span { color: var(--dim); }
 #eventChip span { opacity: .85; font-variant-numeric: tabular-nums; }
 
-#roomChip { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; align-items: center; gap: .6em; padding: .3em .4em .3em .9em;
+#roomChip { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; align-items: center; gap: .6em; padding: .3em .4em .3em .9em;
   border-radius: 999px; background: var(--panel); font-size: calc(var(--u) * .92); pointer-events: auto; white-space: nowrap; }
 #roomChip svg { color: var(--sky); }
 #roomChip small { color: var(--dim); }
@@ -109,6 +109,7 @@ button.icon { width: calc(var(--u) * 2.7); height: calc(var(--u) * 2.7); padding
   padding: .6em .8em .6em .7em; border-radius: 18px; background: var(--panel); border: 2px solid var(--accent); font-size: var(--u); max-width: calc(100vw - 24px);
   animation: coachIn .3s ease-out; }
 @keyframes coachIn { from { transform: translate(-50%, 20px); opacity: 0; } }
+@keyframes coachInL { from { transform: translateY(20px); opacity: 0; } }
 .coach-icon { display: flex; gap: .25em; align-items: center; font-size: calc(var(--u) * 1.1); }
 .coach-icon .key { min-width: 1.7em; text-align: center; }
 .coach-icon .keys { display: grid; grid-template-columns: repeat(3, auto); gap: .2em; }
@@ -298,7 +299,16 @@ body.touch #btnPause { width: 48px; height: 48px; }
 body.touch #btnPause svg { width: 22px; height: 22px; }
 body.touch .touch-btn:not(.power-slot) { width: 96px; height: 96px; right: calc(22px + env(safe-area-inset-right)); bottom: calc(22px + env(safe-area-inset-bottom)); }
 body.touch .touch-btn:not(.power-slot) svg { width: 50px; height: 50px; }
-body.touch #roomChip { bottom: auto; top: calc(12px + env(safe-area-inset-top)); }
+/* touch: the room chip joins the right column under the pause button, compact (code + invite icon), clear of the spin meter */
+body.touch #roomChip { position: static; transform: none; gap: .45em; padding: .2em .25em .2em .7em; }
+body.touch #roomChip small, body.touch #roomChip #roomInfo, body.touch #btnInvite span { display: none; }
+body.touch #btnInvite { display: grid; place-items: center; width: 40px; min-height: 40px; height: 40px; padding: 0; border-radius: 50%; }
+body.touch #btnInvite svg { width: 20px; height: 20px; color: #06263f; }
+/* touch: tips and the tutorial coach never sit under the dash / power buttons (landscape: bottom-left; portrait: above them) */
+body.touch #missionPop { left: calc(12px + env(safe-area-inset-left)); transform: none; max-width: calc(100vw - 250px - env(safe-area-inset-right)); animation-name: coachInL; }
+@media (max-aspect-ratio: 1/1) {
+  body.touch #missionPop, body.touch #coach { left: 50%; transform: translateX(-50%); max-width: calc(100vw - 24px); bottom: calc(132px + env(safe-area-inset-bottom)); animation-name: coachIn; }
+}
 body.touch #centerChips { top: calc(56px + env(safe-area-inset-top)); }
 body.touch button { min-height: 44px; }
 .hud-left { left: calc(12px + env(safe-area-inset-left)); top: calc(12px + env(safe-area-inset-top)); }
@@ -314,7 +324,7 @@ body.touch button { min-height: 44px; }
   #banner b { font-size: calc(var(--u) * 2.8); }
   #countdown { font-size: calc(var(--u) * 5.5); }
   #coach { bottom: calc(8px + env(safe-area-inset-bottom)); max-width: calc(100vw - 260px); }
-  body.touch #coach { left: calc(50% - 60px); }
+  body.touch #coach { left: calc(12px + env(safe-area-inset-left)); transform: none; max-width: calc(100vw - 250px - env(safe-area-inset-right)); animation-name: coachInL; } /* clear of the dash + power buttons */
   .screen { padding: 8px; }
   .screen.side { padding-left: max(12px, 4vw, env(safe-area-inset-left)); }
   .card { padding: calc(var(--u) * .9) calc(var(--u) * 1.1); gap: calc(var(--u) * .5); max-height: calc(100vh - 16px); border-radius: 18px; }
@@ -334,6 +344,15 @@ body.touch button { min-height: 44px; }
   .results .grid div { padding: .3em; }
   .results .row, .results > button { margin: 0; }
   #menu .tagline, #menu .controls { display: none; }
+  /* phones in landscape: the menu fits without scrolling (level + stats share a row, Play + Play online side by side; the part stats live in the garage) */
+  #menu .card { display: grid; grid-template-columns: 1fr 1fr; align-items: center; width: min(540px, 66vw); }
+  #menu .card > * { grid-column: 1 / -1; }
+  #menu .card > .lvrow { grid-column: 1; }
+  #menu .card > .stats { grid-column: 2; justify-content: flex-end; font-size: var(--u); }
+  #menu .card > #btnPlay { grid-column: 1; }
+  #menu .card > #btnOnline { grid-column: 2; }
+  #menu .card > .big { justify-content: center; padding: .3em .5em; font-size: calc(var(--u) * 1.45); white-space: nowrap; }
+  #menu .minestats { display: none; }
   .profile { width: min(640px, 70vw); }
   .profile #btnProfileDone { display: none; }
   .profile button.done-x { display: grid; place-items: center; margin-left: .6em; width: 44px; height: 44px; background: var(--accent); color: #3b2300; box-shadow: 0 3px 0 var(--accent-dark); }
