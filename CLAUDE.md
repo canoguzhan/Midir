@@ -24,7 +24,7 @@ games/<slug>/dist/       build output: <slug>.zip and web/ (the flat upload), pl
 studio.json              studio identity for press kits: BroadGamesPro, https://broadgames.pro, contact email, about text
 tools/                   new_game.py, factory.py, catalog.py, build.py, playtest.mjs, capture.mjs, release.py, balance.py, optimize_models.sh, mp_stats.py (anonymous play counters an online game server keeps)
 mp/<slug>.mjs            online game servers (Node + ws), e.g. mp/whirlbash.mjs: systemd `broadgames-mp.service`, port 8090,
-                         public at wss://broadgames.pro/mp/<slug> (no password; press kits at /releases/<slug>/presskit/ are public too)
+                         public at wss://broadgames.pro/mp/<slug> (the only Caddy route without the password)
 server.py                studio site (systemd `midir.service`, Caddy with password at https://broadgames.pro): releases with
                          download links at /, games at /games/<slug>/, published packages at /releases/<slug>/
 /srv/broadgames/releases/<slug>/   published release (outside git): upload zip, full-package zip, presskit/ page + media
