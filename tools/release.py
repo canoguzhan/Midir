@@ -86,8 +86,13 @@ def facts(meta, studio):
     ]
 
 
+def press_of(meta, studio):  # game.json press texts with the {studio} / {title} placeholders filled in
+    fill = lambda v: v.replace('{studio}', studio['name']).replace('{title}', meta['title']) if isinstance(v, str) else [fill(x) for x in v] if isinstance(v, list) else v
+    return {k: fill(v) for k, v in meta.get('press', {}).items()}
+
+
 def press_markdown(meta, studio):
-    p = meta.get('press', {})
+    p = press_of(meta, studio)
     lines = [f'# {p.get("headline", meta["title"])}', '', f'**FOR IMMEDIATE RELEASE · {time.strftime("%B %d, %Y")}**', '', p.get('summary', meta.get('description', '')), '',
              meta.get('description', ''), '', '## Key features', ''] + [f'- {f}' for f in p.get('features', [])]
     if p.get('quote'): lines += ['', f'> "{p["quote"]}"', f'> The {studio["name"]} team']
@@ -135,7 +140,7 @@ Build checks passed: SDK v3 in <head>, gameplayStart/Stop, muteAudio, relative p
 
 
 def press_html(meta, studio, media, links):
-    p, e = meta.get('press', {}), html.escape
+    p, e = press_of(meta, studio), html.escape
     shots = ''.join(f'<a href="{e(s)}"><img src="{e(s)}" alt="Screenshot {i + 1}" loading="lazy"></a>' for i, s in enumerate(media['screenshots']))
     covers = ''.join(f'<a href="{e(c)}"><img src="{e(c)}" alt="{e(k)} cover" loading="lazy"></a>' for k, c in media['covers'].items())
     vids = ''.join(f'<figure><video src="{e(v)}" controls muted loop playsinline preload="metadata"></video><figcaption>{e(k)}</figcaption></figure>' for k, v in media['videos'].items())
