@@ -33,3 +33,5 @@ for field in ('mode', 'arena', 'how'):
 tut = total('tut'); pu = total('pu')
 print(f'tutorial: finished {tut.get("done", 0)}, skipped {tut.get("skipped", 0)} ({pct(tut.get("skipped", 0), tut.get("done", 0) + tut.get("skipped", 0))} skip)')
 print(f'power-ups: used {pu.get("used", 0)}, lost unused {pu.get("lost", 0)} ({pct(pu.get("lost", 0), pu.get("used", 0) + pu.get("lost", 0))} wasted); Perfect hits per run {sum(days[k].get("perfect", 0) for k in keys) / max(1, tot["runs"]):.1f}')
+ev = total('ev') # server-side happenings: rematches (Play again / Play now), live watchers, private matches started, daily challenge runs
+if ev: print('online: ' + '  '.join(f'{name} {n}' for name, n in sorted(ev.items(), key=lambda x: -x[1])))

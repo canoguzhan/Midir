@@ -2,7 +2,7 @@
 // server (mp/whirlbash.mjs). No DOM and no THREE here: step() changes the world and pushes what happened to world.events
 // ({ type: 'clash' | 'dash' | 'wall' | 'land' | 'spark' | 'sparkAdd' | 'fall' | 'topple' | 'elim' | 'add' | 'remove' |
 // 'event' | 'eventEnd' | 'leader' | 'puAdd' | 'puTake' | 'puGone' | 'puExpire' | 'puUse' | 'fxEnd' | 'blast' | 'decoyPop' |
-// 'boss' | 'bossLeave' | 'pull' | 'win' | 'teamWin', ... }); the view (game.js) turns those into particles, sounds and HUD updates.
+// 'boss' | 'bossLeave' | 'split' | 'pull' | 'win' | 'teamWin', ... }); the view (game.js) turns those into particles, sounds and HUD updates.
 
 export const STEP = 1 / 60; // fixed simulation step: identical physics at 60/144/165 Hz and on the server
 export const CFG = {
@@ -32,6 +32,12 @@ export const CFG = {
   pullEvery: 7, pullTime: 2.2, pullRadius: 11, pullForce: 13,
   // Teams: two teams of six, a timed round, knockout points go to the team
   teamRound: 180,
+  // a new player's first seconds: the pits act as walls (a safety net), and bots go easy on a small newcomer
+  spawnNet: 8, newcomer: 60,
+  // Sinkhole (arena event): the centre caves in after a sinkWarn s warning and swallows whoever is on it
+  sinkR: 3.6, sinkWarn: 3,
+  // the Twinspin (the third boss) splits into two smaller twins the first time its spin halves
+  splitAt: 0.5, twinPoints: 0.6,
 };
 export const POWERS = ['blast', 'shield', 'magnet', 'turbo', 'anchor', 'decoy'];
 export const FX_CODE = { shield: 1, magnet: 2, turbo: 3, anchor: 4 }; // lasting effects (a blast and a decoy are instant)
@@ -39,7 +45,8 @@ const FX_TIME = { shield: CFG.shieldTime, magnet: CFG.magnetTime, turbo: CFG.tur
 export const R = CFG.arenaR;
 export const pitAngles = (n) => Array.from({ length: n }, (_, i) => -Math.PI / 2 + (i * Math.PI * 2) / n + Math.PI / n);
 export const PIT_ANGLES = pitAngles(CFG.pitCount);
-export const EVENT_DUR = { storm: 6, tilt: 7, overdrive: 8 };
+export const EVENT_DUR = { storm: 6, tilt: 7, overdrive: 8, sink: 9 };
+export const sinkOpen = (w) => w.event?.id === 'sink' && w.event.t <= w.event.dur - CFG.sinkWarn; // the hole is open (after the warning)
 
 // ---------------------------------------------------------------- arenas (same bowl, different rules)
 export const ARENAS = {
@@ -88,7 +95,7 @@ export const PARTS = {
     { id: 'violet', cost: 80, c: '#a77bff' }, { id: 'lime', cost: 80, c: '#b6f03c' }, { id: 'tangerine', cost: 120, c: '#ff8a3d' }, { id: 'snow', cost: 120, c: '#eef1f8' },
     { id: 'ruby', lvl: 6, c: '#e8234f' }, { id: 'jade', lvl: 9, c: '#14b892' }, { id: 'aurora', lvl: 15, c: '#ff7ce0' }, // earned by levelling up, never bought
     { id: 'nova', season: 20, c: '#5ee7ff' }, // the season track's last reward
-    { id: 'champ', hidden: true, c: '#2e2a5c' }, { id: 'magnetar', hidden: true, c: '#4b2a86' }, // the bosses' own colours: no player can wear them
+    { id: 'champ', hidden: true, c: '#2e2a5c' }, { id: 'magnetar', hidden: true, c: '#4b2a86' }, { id: 'twins', hidden: true, c: '#127a6b' }, // the bosses' own colours: no player can wear them
   ],
   trail: [ // cosmetic only: sparks left behind while moving, also the colour of your dash burst
     { id: 'none', cost: 0, c: [] }, { id: 'sparkle', cost: 150, c: ['#ffe066', '#ffffff'] }, { id: 'bubble', cost: 250, c: ['#ff7ce0', '#c27bff'] },
@@ -242,15 +249,30 @@ export function freeSpot(w, minGap = 7) { // where a newly joined human (or the 
   }
   return best;
 }
-export const BOSSES = ['champion', 'magnetar']; // they take turns: the Champion slams, the Magnetar pulls everything in
+export const BOSSES = ['champion', 'magnetar', 'twins']; // they take turns: the Champion slams, the Magnetar pulls everything in, the Twinspin splits in two
+const BOSS_LOOK = {
+  champion: { parts: { crown: 'razor', core: 'iron', tip: 'needle' }, name: 'Champion', spin: 1, stats: { atk: 1.25, def: 1.5, mass: 1.7, sta: 2.2, spd: 0.92, acc: 0.85 } },
+  magnetar: { parts: { crown: 'comet', core: 'heart', tip: 'glide' }, name: 'Magnetar', spin: 0.9, stats: { atk: 1.1, def: 1.35, mass: 1.6, sta: 2.2, spd: 1, acc: 0.9 } },
+  twins: { parts: { crown: 'bastion', core: 'heart', tip: 'grip' }, name: 'Twinspin', spin: 0.95, stats: { atk: 1.15, def: 1.3, mass: 1.5, sta: 2.2, spd: 1.02, acc: 0.95 } },
+};
+const BOSS_PAINT = { champion: 'champ', magnetar: 'magnetar', twins: 'twins' };
 export function spawnBoss(w, kind = BOSSES[w.bossCount % BOSSES.length]) {
-  const heat = heatOf(w), [x, z] = freeSpot(w, 8), mag = kind === 'magnetar';
-  const tp = addTop(w, { parts: mag ? { crown: 'comet', core: 'heart', tip: 'glide' } : { crown: 'razor', core: 'iron', tip: 'needle' }, name: mag ? 'Magnetar' : 'Champion', spin: Math.round(Math.min(900, CFG.bossSpin * (mag ? 0.9 : 1) + heat * 0.6)), x, z, ai: 'boss', skill: 0.92, aggro: 1 });
-  tp.boss = true; tp.bossKind = kind; tp.parts.paint = mag ? 'magnetar' : 'champ';
-  tp.stats = mag ? { atk: 1.1, def: 1.35, mass: 1.6, sta: 2.2, spd: 1, acc: 0.9 } : { atk: 1.25, def: 1.5, mass: 1.7, sta: 2.2, spd: 0.92, acc: 0.85 };
-  tp.slamT = 4; tp.pullT = 4; tp.pulling = 0; tp.bossT = w.bossStay; updateMass(tp); w.bossCount++;
+  const heat = heatOf(w), [x, z] = freeSpot(w, 8), L = BOSS_LOOK[kind] || BOSS_LOOK.champion;
+  const tp = addTop(w, { parts: L.parts, name: L.name, spin: Math.round(Math.min(900, CFG.bossSpin * L.spin + heat * 0.6)), x, z, ai: 'boss', skill: 0.92, aggro: 1 });
+  tp.boss = true; tp.bossKind = kind; tp.parts.paint = BOSS_PAINT[kind]; tp.stats = { ...L.stats };
+  tp.slamT = 4; tp.pullT = 4; tp.pulling = 0; tp.bossT = w.bossStay; tp.canSplit = kind === 'twins'; updateMass(tp); w.bossCount++;
   emit(w, { type: 'boss', id: tp.id, kind });
   return tp;
+}
+function splitTwins(w, b) { // the Twinspin halves: a twin rolls off the other way with the same spin and the time it has left
+  b.canSplit = false;
+  const a = w.rng() * Math.PI * 2, c = Math.cos(a), s = Math.sin(a), off = b.r * 1.2;
+  const twin = addTop(w, { parts: b.parts, name: b.name, spin: b.spin, x: b.x + c * off, z: b.z + s * off, ai: 'boss', spawn: false, skill: 0.92, aggro: 1 });
+  Object.assign(twin, { boss: true, bossKind: 'twins', stats: { ...b.stats }, slamT: 4, pullT: 4, pulling: 0, bossT: b.bossT, canSplit: false, shield: 0.6 });
+  twin.parts.paint = BOSS_PAINT.twins; b.shield = 0.6;
+  b.x -= c * off; b.z -= s * off; b.vx -= c * 9; b.vz -= s * 9; twin.vx = c * 9; twin.vz = s * 9;
+  updateMass(b); updateMass(twin);
+  emit(w, { type: 'split', id: b.id, twin: twin.id, x: (b.x + twin.x) / 2, z: (b.z + twin.z) / 2 });
 }
 function tickMagnetar(w, b, dt) { // every pullEvery s: a pullTime s tug on every top and spark within reach
   if (b.pulling > 0) {
@@ -309,7 +331,7 @@ export function walls(w, tp, predict = false) {
   const r = Math.hypot(tp.x, tp.z), lim = R - tp.r * 0.92;
   if (r <= lim) return;
   const ang = Math.atan2(tp.z, tp.x), nx = tp.x / r, nz = tp.z / r;
-  if (pitAt(w, ang, tp.r) >= 0) { if (!predict && r > R - tp.r * 0.3) startFall(w, tp); return; }
+  if (pitAt(w, ang, tp.r) >= 0 && !(tp.human && tp.age < CFG.spawnNet)) { if (!predict && r > R - tp.r * 0.3) startFall(w, tp); return; } // a newcomer bounces off the pits
   const vn = tp.vx * nx + tp.vz * nz;
   if (vn > 0) bounce(w, tp, nx, nz, vn, [nx * R, nz * R], predict);
   tp.x = nx * lim; tp.z = nz * lim;
@@ -357,9 +379,11 @@ function collectSpark(w, tp, i) {
   tp.score += s.big ? 2 : 1;
   emit(w, { type: 'spark', i, id: tp.id, x: s.x, z: s.z, big: s.big });
 }
-function startFall(w, tp) {
-  tp.state = 'falling'; tp.timer = 1.1; tp.fallY = bowlY(R); tp.fallV = -2;
-  const sp = Math.hypot(tp.vx, tp.vz), r = Math.hypot(tp.x, tp.z); if (sp < 4) { tp.vx += (tp.x / r) * 4; tp.vz += (tp.z / r) * 4; }
+function startFall(w, tp, sink = false) { // sink: into the Sinkhole in the middle, straight down
+  const r = Math.hypot(tp.x, tp.z);
+  tp.state = 'falling'; tp.timer = 1.1; tp.fallY = bowlY(r); tp.fallV = -2;
+  if (sink) { tp.vx *= 0.2; tp.vz *= 0.2; }
+  else { const sp = Math.hypot(tp.vx, tp.vz); if (sp < 4) { tp.vx += (tp.x / r) * 4; tp.vz += (tp.z / r) * 4; } }
   emit(w, { type: 'fall', id: tp.id });
 }
 function startTopple(w, tp) { tp.state = 'toppling'; tp.timer = 0.9; tp.spin = 0; emit(w, { type: 'topple', id: tp.id }); }
@@ -374,7 +398,7 @@ function eliminate(w, tp, how) {
   let pts = 0;
   if (killer) {
     killer.kos++;
-    pts = (how === 'ringout' ? CFG.ringoutPoints : CFG.koPoints) + Math.round(tp.peak * 0.1) + (tp.boss ? CFG.bossPoints : 0);
+    pts = (how === 'ringout' ? CFG.ringoutPoints : CFG.koPoints) + Math.round(tp.peak * 0.1) + (tp.boss ? Math.round(CFG.bossPoints * (tp.bossKind === 'twins' ? CFG.twinPoints : 1)) : 0);
     if (wasLeader) pts *= 2;
     killer.score += pts;
     if (killer.team != null) w.teamScore[killer.team] += pts;
@@ -496,6 +520,8 @@ function decide(w, b) {
   // 0. Last Top Spinning: get back inside the safe zone
   const zr = zoneR(w);
   if (zr < R && r > zr - 2.5) { b.goal = { x: -b.x / (r || 1), z: -b.z / (r || 1), dash: r > zr && b.skill > 0.5 && b.spin > 30 }; return; }
+  // 0.5 the Sinkhole: get off the middle while it is warning or open
+  if (w.event?.id === 'sink' && r < CFG.sinkR + 3) { const l = r || 1; b.goal = { x: r > 0.1 ? b.x / l : 1, z: r > 0.1 ? b.z / l : 0, dash: r < CFG.sinkR + 1 && sinkOpen(w) === false && b.skill > 0.4 }; return; }
   // 1. stay out of the pits: steer back to the centre when close to an opening
   if (r > R - 4.5 && pit.diff < w.arena.pitHalf + 0.28) { b.goal = { x: -b.x / r, z: -b.z / r, dash: r > R - 2.5 && b.skill > 0.5 }; return; }
   let flee = null, prey = null, preyScore = 0;
@@ -507,6 +533,7 @@ function decide(w, b) {
     if (aggro > 0 && ratio < 0.95 && d < 9) { // only hunt tops smaller than you
       let s = (12 - d) * (1.3 - ratio) * aggro;
       if (o.human && !b.human) s *= o.age < CFG.graceTime || ratio > 0.8 ? 0 : 0.9; // a quiet start, and only clearly smaller players get hunted
+      if (o.human && !b.human && o.age < CFG.newcomer && o.spin < (w.avgSpin || 0)) s *= 0.4; // a small newcomer gets a gentler first minute
       if (o.id === w.leader) s *= 1.4;
       const op = nearestPit(w, o.x, o.z); if (Math.hypot(o.x, o.z) > R - 7 && op.diff < 0.45) s *= 1.7; // easy ring-out
       if (o.ai === 'dummy') s = 0;
@@ -538,7 +565,7 @@ function decide(w, b) {
 
 // ---------------------------------------------------------------- arena events (every ~40 s: Spark Storm, Arena Tilt, Overdrive)
 function startEvent(w) {
-  const ids = ['storm', 'tilt', 'overdrive'].filter((e) => e !== w.lastEvent), id = ids[(w.rng() * ids.length) | 0];
+  const ids = ['storm', 'tilt', 'overdrive', 'sink'].filter((e) => e !== w.lastEvent && !(e === 'sink' && w.mode === 'last')), id = ids[(w.rng() * ids.length) | 0]; // Last Top's ring closes on the middle: no Sinkhole there
   const open = w.pits.map((_, i) => i).filter((i) => pitOpen(w, i)), pit = open[(w.rng() * open.length) | 0] ?? 0;
   w.event = { id, t: EVENT_DUR[id], dur: EVENT_DUR[id], pit, ang: pitAng(w, pit), acc: 0 };
   w.lastEvent = id;
@@ -547,6 +574,10 @@ function startEvent(w) {
 function tickEvent(w, dt) {
   const ev = w.event; ev.t -= dt;
   if (ev.id === 'storm') { ev.acc += dt * 8; while (ev.acc >= 1) { ev.acc--; const [x, z] = randomSpot(w, R * 0.75); addSpark(w, x, z, { fall: 7, big: w.rng() < 0.25 ? 1 : 0 }); } }
+  if (ev.id === 'sink' && sinkOpen(w)) { // the hole swallows whatever is on it: tops (a ring out for whoever pushed them) and sparks
+    for (const tp of w.tops) if (alive(tp) && !tp.boss && Math.hypot(tp.x, tp.z) < CFG.sinkR - tp.r * 0.35) startFall(w, tp, true);
+    for (const s of w.sparks) if (s.on && Math.hypot(s.x, s.z) < CFG.sinkR) s.on = false;
+  }
   if (ev.t <= 0) { emit(w, { type: 'eventEnd', id: ev.id }); w.event = null; w.nextEvent = w.time + CFG.eventEvery; }
 }
 
@@ -613,7 +644,11 @@ export function step(w, dt, inputFor) {
   const active = w.sparks.reduce((n, s) => n + (s.on ? 1 : 0), 0);
   if (active < w.sparkTarget && w.rng() < dt * (w.mut === 'rush' ? 9 : 6)) addSpark(w, ...randomSpot(w));
   w.leaderT -= dt;
-  if (w.leaderT <= 0) { w.leaderT = 0.25; const lead = rankList(w)[0]?.id ?? null; if (lead !== w.leader) { w.leader = lead; emit(w, { type: 'leader', id: lead }); } }
+  if (w.leaderT <= 0) {
+    w.leaderT = 0.25; const ranks = rankList(w), lead = ranks[0]?.id ?? null; if (lead !== w.leader) { w.leader = lead; emit(w, { type: 'leader', id: lead }); }
+    w.avgSpin = ranks.length ? ranks.reduce((n, tp) => n + tp.spin, 0) / ranks.length : 0; // how big the field is: bots spare newcomers below it
+  }
+  for (const tp of T) if (tp.canSplit && alive(tp) && tp.spin < tp.peak * CFG.splitAt) splitTwins(w, tp);
   if (w.eventsOn) { if (w.event) tickEvent(w, dt); else if (w.time >= w.nextEvent) startEvent(w); }
   tickPowers(w, dt);
   if (w.bossOn && heatOf(w) >= w.bossAt && !T.some((tp) => tp.boss)) spawnBoss(w);

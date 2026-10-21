@@ -122,6 +122,27 @@ const STRINGS = {
     mode_ranked: 'Ranked', rankedNeedLogin: 'Log in to CrazyGames to play Ranked', rankedTop: 'Ranked top 10', rating: 'Rating {r} ({d})', vote: 'Next arena:',
     mut_rush: 'This week: Spark Rush, sparks are worth more', mut_overdrive: 'This week: Overdrive, everyone is faster', mut_bosses: 'This week: Boss Rush, bosses come early and often', mut_frenzy: 'This week: Power Frenzy, power-ups everywhere',
     e0: 'GG!', e1: 'Nice hit!', e2: 'Oops!', e3: 'Team up?', e4: 'Come at me!', e5: 'Good luck!',
+    e6: 'Rematch?', e7: 'Well played!',
+    // 1.6: private room lobby, watching live, rematch, revenge, run story, daily challenge, sets, phone settings, new event + boss
+    privateRoom: 'Private room', start: 'Start', leave: 'Leave', host: 'Host', youTag: 'you', waitHost: 'Waiting for the host to start…', roomN: '{n}/10 players',
+    needTwo: 'Humans only needs at least 2 players: invite a friend, or turn bots on', botsOn: 'Bots fill seats', botsOff: 'Humans only', seg_random: 'Random', arena_random: 'Random arena',
+    pickTeam: 'Your team', endMatch: 'End match', backToRoom: 'Back to room', roomHint: 'Share the code. Start whenever you are ready.',
+    watchLive: 'Watch live', noWatch: 'No live matches right now. Start one!', noWatch2: 'No other live match right now', watchEnd: 'That match has ended',
+    live: 'LIVE', nextMatch: 'Next match', results: 'Results', watch: 'Watch', playNow: 'Play now',
+    revenge: 'Revenge!', nemesisOn: 'Knock out {n} for a revenge bonus', finalBlow: 'Final blow!',
+    story_hit: 'Biggest hit', story_by: 'Knocked out by', story_moment: 'Best moment', story_nobody: 'Nobody!', story_arena: 'The arena',
+    mo_boss: 'Beat a boss', mo_leader: 'Took down the leader', mo_perfect: '{n} perfect hits', mo_lead: 'Led for {t}', mo_kos: '{n} knockouts', mo_sparks: '{n} sparks', mo_spark1: '1 spark', mo_revenge: 'Got revenge',
+    near_second: 'So close: one top away from victory!', near_top: 'Top {p}! The crown is within reach.', near_best: 'Only {n} points short of your best!',
+    near_rank: 'You reached #{p}: so close to the crown!', near_early: 'Tip: stay near the middle at first. The pits are at the rim.',
+    daily: 'Daily', dailyTitle: 'Daily challenge', dailySub: '{a} · {m}', dailyBest: 'Today: {s}', dailyNew: 'New daily best!', dailyRank: '#{p} on today\'s challenge board',
+    dailyFirst: 'First daily run today: +{n} gears', dailyLine: 'Daily best {s}',
+    vibOn: 'Vibration: on', vibOff: 'Vibration: off', flickOn: 'Flick the stick to dash: on', flickOff: 'Flick the stick to dash: off', autoOn: 'Auto-use power-ups before they expire: on', autoOff: 'Auto-use power-ups before they expire: off',
+    tab_sets: 'Sets', setDone: 'Set complete!', equipSet: 'Equip set', setOf: '{a}/{b} parts', setReward: '+{n} gears when complete', setOn: 'Wearing it',
+    set_striker: 'Striker', setd_striker: 'All attack: Razor, Feather, Glide', set_fortress: 'Fortress', setd_fortress: 'Hard to move: Bastion, Iron, Grip',
+    set_marathon: 'Marathon', setd_marathon: 'Spins forever: Halo, Heartcore, Needle', set_stellar: 'Stellar', setd_stellar: 'Comet crown, Sky paint, Comet trail',
+    ev_sink: 'Sinkhole!', ev_sinkSub: 'The middle caves in: get out!', twins: 'The Twinspin', twinsIn: 'The Twinspin has entered!', twinsSub: 'Hit it hard and it splits in two: +{n} per twin',
+    split: 'It split in two!', hw_twins: 'splits into two twins when hit hard', h_boss_twins: 'The Twinspin splits in two: take the twins one at a time',
+    safeNet: 'For your first seconds the pits cannot catch you', bySink: 'Pushed into the Sinkhole by {n}', selfSink: 'The Sinkhole swallowed you',
 
   },
   tr: {
@@ -194,6 +215,26 @@ const STRINGS = {
     mode_ranked: 'Dereceli', rankedNeedLogin: 'Dereceli oynamak için CrazyGames hesabına giriş yap', rankedTop: 'Dereceli ilk 10', rating: 'Puan {r} ({d})', vote: 'Sonraki arena:',
     mut_rush: 'Bu hafta: Kıvılcım Akını, kıvılcımlar daha değerli', mut_overdrive: 'Bu hafta: Aşırı Hız, herkes daha hızlı', mut_bosses: 'Bu hafta: Boss Akını, bosslar erken ve sık gelir', mut_frenzy: 'Bu hafta: Güç Çılgınlığı, her yerde güç',
     e0: 'İyi oyundu!', e1: 'Güzel vuruş!', e2: 'Hay aksi!', e3: 'Birlikte mi?', e4: 'Gel bakalım!', e5: 'Bol şans!',
+    e6: 'Rövanş?', e7: 'Güzel oyundu!',
+    privateRoom: 'Özel oda', start: 'Başlat', leave: 'Ayrıl', host: 'Kurucu', youTag: 'sen', waitHost: 'Kurucunun başlatması bekleniyor…', roomN: '{n}/10 oyuncu',
+    needTwo: 'Sadece insanlar için en az 2 oyuncu gerek: bir arkadaşını çağır ya da botları aç', botsOn: 'Botlar boş yerleri doldurur', botsOff: 'Sadece insanlar', seg_random: 'Rastgele', arena_random: 'Rastgele arena',
+    pickTeam: 'Takımın', endMatch: 'Maçı bitir', backToRoom: 'Odaya dön', roomHint: 'Kodu paylaş. Hazır olunca başlat.',
+    watchLive: 'Canlı izle', noWatch: 'Şu an canlı maç yok. Bir tane başlat!', noWatch2: 'Şu an başka canlı maç yok', watchEnd: 'Bu maç bitti',
+    live: 'CANLI', nextMatch: 'Sonraki maç', results: 'Sonuçlar', watch: 'İzle', playNow: 'Hemen oyna',
+    revenge: 'İntikam!', nemesisOn: 'İntikam bonusu için {n} rakibini nakavt et', finalBlow: 'Son darbe!',
+    story_hit: 'En sert vuruş', story_by: 'Seni deviren', story_moment: 'En iyi an', story_nobody: 'Kimse!', story_arena: 'Arena',
+    mo_boss: 'Bir boss yendin', mo_leader: 'Lideri devirdin', mo_perfect: '{n} mükemmel vuruş', mo_lead: '{t} lider kaldın', mo_kos: '{n} nakavt', mo_sparks: '{n} kıvılcım', mo_spark1: '1 kıvılcım', mo_revenge: 'İntikamını aldın',
+    near_second: 'Kıl payı: zafere bir topaç kaldı!', near_top: 'İlk {p}! Taç çok yakın.', near_best: 'Rekoruna sadece {n} puan kaldı!',
+    near_rank: '{p}. sıraya çıktın: taç çok yakındı!', near_early: 'İpucu: başta ortada kal. Çukurlar kenarda.',
+    daily: 'Günlük', dailyTitle: 'Günlük meydan okuma', dailySub: '{a} · {m}', dailyBest: 'Bugün: {s}', dailyNew: 'Yeni günlük rekor!', dailyRank: 'Bugünün listesinde {p}. sıradasın',
+    dailyFirst: 'Bugünün ilk günlük turu: +{n} dişli', dailyLine: 'Günlük rekor {s}',
+    vibOn: 'Titreşim: açık', vibOff: 'Titreşim: kapalı', flickOn: 'Çubuğu fırlatınca atıl: açık', flickOff: 'Çubuğu fırlatınca atıl: kapalı', autoOn: 'Gücü bitmeden otomatik kullan: açık', autoOff: 'Gücü bitmeden otomatik kullan: kapalı',
+    tab_sets: 'Setler', setDone: 'Set tamamlandı!', equipSet: 'Seti tak', setOf: '{a}/{b} parça', setReward: 'Tamamlayınca +{n} dişli', setOn: 'Takılı',
+    set_striker: 'Forvet', setd_striker: 'Tam saldırı: Ustura, Tüy, Kayış', set_fortress: 'Kale', setd_fortress: 'Yerinden oynamaz: Kale, Demir, Tutuş',
+    set_marathon: 'Maraton', setd_marathon: 'Hiç durmaz: Hale, Kalp, İğne', set_stellar: 'Yıldız', setd_stellar: 'Kuyruklu Yıldız tacı, Gök boyası, Kuyruklu Yıldız izi',
+    ev_sink: 'Çöküntü!', ev_sinkSub: 'Orta çöküyor: hemen çık!', twins: 'İkiz Topaç', twinsIn: 'İkiz Topaç arenaya çıktı!', twinsSub: 'Sert vurursan ikiye bölünür: ikiz başına +{n}',
+    split: 'İkiye bölündü!', hw_twins: 'sert vurulunca iki ikize bölünür', h_boss_twins: 'İkiz Topaç ikiye bölünür: ikizleri tek tek al',
+    safeNet: 'İlk saniyelerinde çukurlar seni yakalayamaz', bySink: '{n} seni çöküntüye itti', selfSink: 'Çöküntü seni yuttu',
 
   },
 };
@@ -386,12 +427,14 @@ const DEFAULT_SAVE = () => ({
   sel: { crown: 'halo', core: 'gyro', tip: 'dome', paint: 'sun', trail: 'none' },
   vol: { music: 0.8, sfx: 0.9 }, gfx: 'auto', hints: {}, nick: null, calm: false, cb: false, totals: {}, badges: {}, season: { id: 0, xp: 0, tier: 0 },
   missions: { day: '', list: [] }, rec: { score: 0, kos: 0, ringouts: 0, lead: 0, peak: 0, time: 0, wins: 0 },
+  vib: true, flick: true, autoPw: true, daily: { day: -1, best: 0, runs: 0 }, sets: {},
 });
 let save = DEFAULT_SAVE();
 function loadSave() {
   const d = DEFAULT_SAVE(), s = loadData(`${SAVE_KEY}:save`, null) || {};
   save = { ...d, ...s, owned: { ...d.owned, ...(s.owned || {}) }, sel: { ...d.sel, ...(s.sel || {}) }, missions: { ...d.missions, ...(s.missions || {}) }, rec: { ...d.rec, ...(s.rec || {}) },
-    vol: { ...d.vol, ...(s.vol || {}) }, hints: { ...(s.hints || {}) }, totals: { ...(s.totals || {}) }, badges: { ...(s.badges || {}) }, season: { ...d.season, ...(s.season || {}) } };
+    vol: { ...d.vol, ...(s.vol || {}) }, hints: { ...(s.hints || {}) }, totals: { ...(s.totals || {}) }, badges: { ...(s.badges || {}) }, season: { ...d.season, ...(s.season || {}) },
+    daily: { ...d.daily, ...(s.daily || {}) }, sets: { ...(s.sets || {}) } };
   save.rec.score = Math.max(save.rec.score, save.best); // saves from before 1.3 only kept the best score
   if (!Array.isArray(save.missions.list)) save.missions = d.missions;
   for (const [lv, [kind, id]] of Object.entries(LEVEL_REWARDS)) if (save.level >= lv && PARTS[kind] && !save.owned[kind].includes(id)) save.owned[kind].push(id); // rewards added after a player passed that level
@@ -403,9 +446,9 @@ const persist = () => saveData(`${SAVE_KEY}:save`, save);
 
 // ================================================================ PROGRESS (player level + XP, level rewards, daily missions, personal records)
 const xpFor = (lv) => 120 + 80 * (lv - 1); // XP to go from lv to lv + 1: the first levels come after one or two runs
-const LEVEL_REWARDS = { 2: ['mode', 'last'], 3: ['arena', 'turntable'], 4: ['mode', 'teams'], 5: ['arena', 'shutter'], 6: ['paint', 'ruby'], 7: ['arena', 'orbit'], 8: ['crown', 'razor'], 9: ['paint', 'jade'],
+const LEVEL_REWARDS = { 2: ['arena', 'turntable'], 3: ['mode', 'teams'], 4: ['arena', 'shutter'], 5: ['trail', 'sparkle'], 6: ['paint', 'ruby'], 7: ['arena', 'orbit'], 8: ['crown', 'razor'], 9: ['paint', 'jade'],
   10: ['core', 'heart'], 11: ['trail', 'flame'], 12: ['crown', 'comet'], 13: ['tip', 'grip'], 14: ['trail', 'rainbow'], 15: ['paint', 'aurora'] };
-const UNLOCK_LV = { mode: { endless: 1, last: 2, teams: 4 }, arena: { bowl: 1, turntable: 3, shutter: 5, orbit: 7 } };
+const UNLOCK_LV = { mode: { endless: 1, last: 1, teams: 3 }, arena: { bowl: 1, turntable: 2, shutter: 4, orbit: 7 } }; // 1.6: Last Top from the start (the round modes are the most social)
 const arenaOfDay = () => S.ARENA_IDS[Math.floor(Date.now() / 86_400_000) % S.ARENA_IDS.length]; // double XP there today
 const isUnlocked = (kind, id) => save.level >= (UNLOCK_LV[kind]?.[id] ?? 1);
 const rewardName = ([kind, id]) => (kind === 'mode' ? t('rw_mode', { x: t('modeName_' + id) }) : kind === 'arena' ? t('rw_arena', { x: t('arena_' + id) }) : t('rw_part', { x: t((kind === 'paint' ? 'c_' : kind === 'trail' ? 't_' : 'p_') + id) }));
@@ -447,11 +490,24 @@ function checkBadges() {
     notice({ icon: 'medal', small: t('badgeGot'), text: t('b_' + b.id), extra: `+${b.gears}`, sfx: 'unlock' });
   }
 }
+// ---- part sets: own every part of a set once for a gear bonus; a finished set can be worn in one tap
+const SETS = [
+  { id: 'striker', p: { crown: 'razor', core: 'feather', tip: 'glide' }, gears: 150 }, { id: 'fortress', p: { crown: 'bastion', core: 'iron', tip: 'grip' }, gears: 150 },
+  { id: 'marathon', p: { crown: 'halo', core: 'heart', tip: 'needle' }, gears: 200 }, { id: 'stellar', p: { crown: 'comet', paint: 'sky', trail: 'comet' }, gears: 250 },
+];
+const setOwned = (st) => Object.entries(st.p).filter(([k, id]) => save.owned[k].includes(id)).length;
+function checkSets() {
+  for (const st of SETS) {
+    if (save.sets[st.id] || setOwned(st) < Object.keys(st.p).length) continue;
+    save.sets[st.id] = 1; save.gears += st.gears; persist();
+    if (state === State.PLAYING) notice({ icon: 'check', small: t('setDone'), text: t('set_' + st.id), extra: `+${st.gears}`, sfx: 'unlock' }); else { toast(`${t('setDone')} ${t('set_' + st.id)} +${st.gears}`); playSfx('unlock', 0.7); }
+  }
+}
 // Missions: three a day. run: counts the best single run; otherwise a running total. lv: offered from this level on.
 const MISSIONS = [
   { id: 'ringouts', n: 2, run: true, gears: 40 }, { id: 'kos', n: 6, gears: 40 }, { id: 'sparks', n: 200, gears: 30 }, { id: 'leader', n: 1, run: true, gears: 50 },
   { id: 'lead', n: 45, gears: 50 }, { id: 'powers', n: 5, gears: 30 }, { id: 'perfect', n: 4, gears: 40 }, { id: 'survive', n: 3, run: true, gears: 50 },
-  { id: 'peak', n: 400, run: true, gears: 40 }, { id: 'champion', n: 1, gears: 80, lv: 3 }, { id: 'lasttop', n: 1, gears: 60, lv: 2 }, { id: 'online', n: 1, gears: 40 }, { id: 'teams', n: 1, gears: 60, lv: 4 },
+  { id: 'peak', n: 400, run: true, gears: 40 }, { id: 'champion', n: 1, gears: 80, lv: 3 }, { id: 'lasttop', n: 1, gears: 60 }, { id: 'online', n: 1, gears: 40 }, { id: 'teams', n: 1, gears: 60, lv: 3 },
 ];
 const MISSION_XP = 60;
 const missionDef = (id) => MISSIONS.find((m) => m.id === id);
@@ -814,6 +870,16 @@ function labelSprite(text, color, person = false) { // person: a little player i
   const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace;
   const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthWrite: false, depthTest: false, transparent: true })); s.renderOrder = 10; return s;
 }
+const nemSprite = (() => { // online: a red target over the top that knocked you out last (knock it out for a revenge bonus)
+  const tex = canvasTex(128, 128, (g) => { g.lineWidth = 10; g.strokeStyle = '#1d0b16'; for (const [r, c] of [[50, '#ff5d73'], [30, '#ffffff'], [12, '#ff5d73']]) { g.beginPath(); g.arc(64, 64, r, 0, Math.PI * 2); g.fillStyle = c; g.fill(); g.stroke(); } });
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthTest: false, transparent: true })); s.renderOrder = 11; s.visible = false; return s;
+})();
+const sinkView = (() => { // the Sinkhole in the middle of the bowl: a dark swirl and a flashing rim
+  const g = new THREE.Group(); g.visible = false;
+  const hole = new THREE.Mesh(new THREE.CircleGeometry(CFG.sinkR, 48).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: '#05030f', transparent: true, opacity: 0.9, depthWrite: false }));
+  const rim = new THREE.Mesh(new THREE.RingGeometry(CFG.sinkR - 0.25, CFG.sinkR + 0.15, 48, 1).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: '#ffc531', transparent: true, opacity: 0.8, depthWrite: false, side: THREE.DoubleSide }));
+  hole.position.y = 0.05; rim.position.y = 0.06; hole.renderOrder = 2; rim.renderOrder = 3; g.add(hole, rim); return g;
+})();
 const crownSprite = (() => {
   const tex = canvasTex(128, 128, (g) => { g.fillStyle = '#ffc531'; g.strokeStyle = '#3b1d00'; g.lineWidth = 8; g.lineJoin = 'round'; g.beginPath(); g.moveTo(14, 40); g.lineTo(40, 64); g.lineTo(64, 22); g.lineTo(88, 64); g.lineTo(114, 40); g.lineTo(104, 104); g.lineTo(24, 104); g.closePath(); g.stroke(); g.fill(); });
   const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthTest: false, transparent: true })); s.renderOrder = 11; s.visible = false; return s;
@@ -839,15 +905,19 @@ function viewFor(tp) {
     for (const [r, tx, tz] of [[1.15, 0.5, 0], [1.3, 0, 0.6]]) { const o = new THREE.Mesh(new THREE.TorusGeometry(r, 0.05, 8, 48), glow); o.position.y = 0.5; o.rotation.set(Math.PI / 2 + tx, 0, tz); o.userData.orbit = true; mesh.tilt.add(o); }
     pullRing = new THREE.Mesh(cached('pullRing', () => new THREE.RingGeometry(0.94, 1, 72).rotateX(-Math.PI / 2)), new THREE.MeshBasicMaterial({ color: '#c27bff', transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
     pullRing.position.y = 0.06; pullRing.visible = false; mesh.root.add(pullRing); mesh.mats.push(pullRing.material);
+  } else if (tp.bossKind === 'twins') { // the Twinspin: a teal ring and two little moons that circle it (one for each twin it becomes)
+    mesh.ring.material.color.set('#2ee6c5'); mesh.ring.material.opacity = 0.9;
+    const teal = new THREE.MeshStandardMaterial({ color: '#7ff5e0', emissive: '#16b89a', emissiveIntensity: 0.7, roughness: 0.3 }); mesh.mats.push(teal);
+    for (const k of [0, 1]) { const m = new THREE.Mesh(cached('moon', () => new THREE.SphereGeometry(0.17, 16, 12)), teal); const a = k * Math.PI; m.position.set(Math.cos(a) * 1.05, 0.62, Math.sin(a) * 1.05); m.castShadow = true; mesh.spin.add(m); }
   } else if (tp.boss) { // the Champion: a gold spike crown and a hot aura ring
     mesh.ring.material.color.set('#ff8a3d'); mesh.ring.material.opacity = 0.9;
     const gold = new THREE.MeshStandardMaterial({ color: '#ffc531', roughness: 0.25, metalness: 0.7, emissive: '#ff8a3d', emissiveIntensity: 0.35 }); mesh.mats.push(gold);
     for (let k = 0; k < 8; k++) { const sp = new THREE.Mesh(cached('spike', () => new THREE.ConeGeometry(0.11, 0.42, 8)), gold); const a = (k / 8) * Math.PI * 2; sp.position.set(Math.cos(a) * 0.92, 0.56, Math.sin(a) * 0.92); sp.rotation.set(Math.sin(a) * 1.2, 0, -Math.cos(a) * 1.2); sp.castShadow = true; mesh.spin.add(sp); }
     const band = new THREE.Mesh(cached('band', () => new THREE.TorusGeometry(0.4, 0.06, 8, 32).rotateX(Math.PI / 2)), gold); band.position.y = 0.86; mesh.spin.add(band);
   }
-  const who = owner || tp, name = tp.boss ? t('champion') : mine ? t('decoy') : who.id === meId ? t('you') : who.name; // a decoy wears its owner's name tag (yours reads "Decoy")
+  const who = owner || tp, name = tp.boss ? bossName(tp) : mine ? t('decoy') : who.id === meId ? t('you') : who.name; // a decoy wears its owner's name tag (yours reads "Decoy")
   const teamLabel = teamCol && who.id !== meId && !mine && player?.team != null ? (who.team === player.team ? '#9ee7ff' : '#ffb3be') : null; // Teams: friends blue, rivals red
-  const label = labelSprite(name, tp.bossKind === 'magnetar' ? '#d9b8ff' : tp.boss ? '#ffc531' : mine ? '#b9b6dc' : who.id === meId ? '#ffc531' : teamLabel || (who.human ? '#9ee7ff' : '#ffffff'), mode === 'online' && who.human && who.id !== meId && !mine);
+  const label = labelSprite(name, tp.bossKind === 'magnetar' ? '#d9b8ff' : tp.bossKind === 'twins' ? '#9ff7e6' : tp.boss ? '#ffc531' : mine ? '#b9b6dc' : who.id === meId ? '#ffc531' : teamLabel || (who.human ? '#9ee7ff' : '#ffffff'), mode === 'online' && who.human && who.id !== meId && !mine);
   const bubble = new THREE.Mesh(cached('bubble', () => new THREE.SphereGeometry(1.35, 24, 16)), new THREE.MeshBasicMaterial({ color: PU_COLOR.shield, transparent: true, opacity: 0.25, depthWrite: false, blending: THREE.AdditiveBlending }));
   bubble.position.y = 0.45; bubble.visible = false; mesh.root.add(bubble); mesh.mats.push(bubble.material);
   const field = new THREE.Mesh(cached('field', () => new THREE.TorusGeometry(1.8, 0.05, 6, 48).rotateX(Math.PI / 2)), new THREE.MeshBasicMaterial({ color: PU_COLOR.magnet, transparent: true, opacity: 0.7, depthWrite: false }));
@@ -966,6 +1036,8 @@ function updateWaves(dt) {
 const calm = () => !!save.calm && !CAPTURE; // Reduced effects: no freeze frames, flashes or shake, fewer particles
 const teamColor = (k) => (k === 1 && save.cb ? '#ffb02e' : TEAM_COLOR[k]); // colour-blind teams: blue vs orange, and Red's ring is dashed
 function shake(a) { if (save.shake !== false && !CAPTURE && !save.calm) shakeAmt = Math.max(shakeAmt, Math.min(a, 0.3)); } // small and smooth: big jolts make people motion sick
+function vib(pattern) { if (save.vib && isTouch && !calm() && !CAPTURE && navigator.vibrate) try { navigator.vibrate(pattern); } catch {} } // phones: a short buzz on hits and knockouts
+let finalT = 0; // the last knockout of a round: the camera leans in for a moment
 let hitStop = 0; // a few frames of freeze on big hits (solo only: online the server keeps time)
 // floating damage numbers and callouts that stick to a point in the arena
 const pops = [], projV = new THREE.Vector3();
@@ -1023,7 +1095,9 @@ addEventListener('keydown', (e) => {
   if (['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'KeyE'].includes(e.code)) { mouse.on = false; setTouchUI(false); }
   if (e.code === 'Space' && state === State.PLAYING) playerDash();
   if (e.code === 'KeyE' && state === State.PLAYING) playerUse();
-  if (/^Digit[1-6]$/.test(e.code)) sendEmote(Number(e.code.slice(5)) - 1); // quick chat (online)
+  if (/^Digit[1-8]$/.test(e.code)) sendEmote(Number(e.code.slice(5)) - 1); // quick chat (online)
+  if (state === State.SPECTATE && (e.code === 'ArrowRight' || e.code === 'KeyD')) specCycle(1);
+  if (state === State.SPECTATE && (e.code === 'ArrowLeft' || e.code === 'KeyA')) specCycle(-1);
   if (e.code === 'KeyP') togglePause(); // never Escape: on CrazyGames it exits fullscreen
   if ((e.code === 'Enter' || e.code === 'Space') && state === State.MENU && !settingsOpen) $('btnPlay').click();
 });
@@ -1034,22 +1108,26 @@ canvas.addEventListener('contextmenu', (e) => e.preventDefault()); // right-clic
 canvas.addEventListener('pointerdown', (e) => {
   unlockAudio();
   if (e.pointerType === 'mouse') {
-    setTouchUI(false); if (state !== State.PLAYING) return;
+    setTouchUI(false); if (state === State.SPECTATE) { specCycle(1); return; } if (state !== State.PLAYING) return;
     mouse.on = true; mouse.sx = e.clientX; mouse.sy = e.clientY;
     if (e.button === 0) playerDash(); else if (e.button === 2) playerUse();
     return;
   }
   setTouchUI(true);
+  if (state === State.SPECTATE) { specCycle(1); return; } // watching: a tap moves the camera to the next top
   if (state !== State.PLAYING) return;
   if (stick.id !== null) { playerDash(); return; } // a second finger while steering = dash
-  Object.assign(stick, { id: e.pointerId, ox: e.clientX, oy: e.clientY, x: 0, y: 0, t0: performance.now(), moved: 0 });
+  Object.assign(stick, { id: e.pointerId, ox: e.clientX, oy: e.clientY, x: 0, y: 0, t0: performance.now(), moved: 0, lastD: 0, lastT: performance.now() });
   const j = $('joystick'); j.style.left = `${e.clientX}px`; j.style.top = `${e.clientY}px`; j.hidden = false;
   canvas.setPointerCapture(e.pointerId);
 });
 canvas.addEventListener('pointermove', (e) => {
   if (e.pointerType === 'mouse') { if (Math.abs(e.clientX - mouse.sx) + Math.abs(e.clientY - mouse.sy) > 3) mouse.on = true; mouse.sx = e.clientX; mouse.sy = e.clientY; return; }
   if (e.pointerId !== stick.id) return;
-  let dx = e.clientX - stick.ox, dy = e.clientY - stick.oy; const d = Math.hypot(dx, dy), max = 50;
+  let dx = e.clientX - stick.ox, dy = e.clientY - stick.oy; const d = Math.hypot(dx, dy), max = 50, now = performance.now();
+  // flick to dash: a fast push outward from near the centre of the stick
+  if (save.flick && d > 34 && stick.lastD < 26 && (d - stick.lastD) / Math.max(1, now - stick.lastT) > 1.4 && now - (stick.flickAt || 0) > 450) { stick.flickAt = now; playerDash(); }
+  stick.lastD = d; stick.lastT = now;
   stick.moved = Math.max(stick.moved, d);
   if (d > max) { dx *= max / d; dy *= max / d; }
   stick.x = dx / max; stick.y = dy / max; $('joystick').firstElementChild.style.transform = `translate(${dx}px, ${dy}px)`;
@@ -1077,25 +1155,28 @@ function playerInput() { // x/z world direction; the camera has no yaw, so scree
 }
 
 // ================================================================ STATE (BOOT -> MENU <-> GARAGE / LOBBY / PROFILE, -> PLAYING <-> PAUSED -> GAMEOVER)
-const State = { BOOT: 'BOOT', MENU: 'MENU', GARAGE: 'GARAGE', LOBBY: 'LOBBY', PROFILE: 'PROFILE', PLAYING: 'PLAYING', PAUSED: 'PAUSED', GAMEOVER: 'GAMEOVER', SPECTATE: 'SPECTATE', COVER: 'COVER' }; // SPECTATE: online, watching a round until the next one
-const inMenus = (s = state) => s === State.MENU || s === State.GARAGE || s === State.LOBBY || s === State.PROFILE;
+const State = { BOOT: 'BOOT', MENU: 'MENU', GARAGE: 'GARAGE', LOBBY: 'LOBBY', ROOM: 'ROOM', PROFILE: 'PROFILE', PLAYING: 'PLAYING', PAUSED: 'PAUSED', GAMEOVER: 'GAMEOVER', SPECTATE: 'SPECTATE', COVER: 'COVER' }; // SPECTATE: watching (a live match, the rest of a round after you are out, or until the next round); ROOM: a private room's lobby
+const inMenus = (s = state) => s === State.MENU || s === State.GARAGE || s === State.LOBBY || s === State.PROFILE || s === State.ROOM;
 const wantTrack = () => ((state === State.PLAYING || state === State.PAUSED) && world && (world.mode === 'last' || world.tops.some((tp) => tp.boss)) ? 'showdown' : 'arena');
 let state = State.BOOT, run = null, simTime = 0, dashQueued = false, useQueued = false;
 
 function setState(s) {
   state = s;
-  $('menu').hidden = s !== State.MENU; $('garage').hidden = s !== State.GARAGE; $('lobby').hidden = s !== State.LOBBY; $('profile').hidden = s !== State.PROFILE;
+  $('menu').hidden = s !== State.MENU; $('garage').hidden = s !== State.GARAGE; $('lobby').hidden = s !== State.LOBBY; $('profile').hidden = s !== State.PROFILE; $('room').hidden = s !== State.ROOM;
+  $('btnEndMatch').hidden = !(s === State.PAUSED && mode === 'online' && net.priv && net.room?.host);
   $('paused').hidden = s !== State.PAUSED; $('gameover').hidden = s !== State.GAMEOVER;
   $('hud').hidden = !(s === State.PLAYING || s === State.PAUSED || s === State.SPECTATE); $('hud').classList.toggle('spectating', s === State.SPECTATE);
   $('btnAction').hidden = !(s === State.PLAYING && isTouch);
   $('dashKey').hidden = isTouch;
   updatePowerUI();
-  $('roomChip').hidden = mode !== 'online';
+  $('roomChip').hidden = mode !== 'online' || net.watch;
+  if (s !== State.SPECTATE) outWatch = false;
   $('btnOverGarage').hidden = mode === 'online';
   if (s !== State.PLAYING) { stick.id = null; stick.x = stick.y = 0; $('joystick').hidden = true; }
   if (s !== State.PLAYING && s !== State.PAUSED) { $('coach').hidden = true; $('countdown').hidden = true; $('banner').hidden = true; bannerTimer = 0; }
   if (s === State.PLAYING) onGameplayStart(); else onGameplayStop(); // stop on every break: menus, pause, game over, waiting for a round
   $('chat').hidden = !(s === State.PLAYING && mode === 'online'); $('chatMenu').hidden = true; // quick chat: online play only
+  $('overEmotes').hidden = !(s === State.GAMEOVER && mode === 'online' && !net.watch);
   if (s !== State.GAMEOVER && s !== State.SPECTATE) { $('overVote').hidden = $('specVote').hidden = true; $('overRating').hidden = true; }
   if (s !== State.PLAYING) { notices.length = 0; missionPopTimer = 0; $('missionPop').hidden = true; } // notices belong to play: never over a menu or the results
   if (s !== State.GAMEOVER) { $('btnRetry').disabled = false; $('btnRetry').textContent = t('again'); $('overTop').hidden = true; }
@@ -1116,6 +1197,7 @@ const click = (id, fn) => $(id).addEventListener('click', () => { unlockAudio();
 function playerDash() { if (state === State.PLAYING && run && !(run.countdown > 0) && player && alive(player)) dashQueued = true; }
 const takeDash = () => { const d = dashQueued; dashQueued = false; return d; };
 function playerUse() { if (state === State.PLAYING && run && player?.power && alive(player)) useQueued = true; }
+let outWatch = false, specFollow = 0; // outWatch: watching the rest of a match after you are out (Results brings the card back)
 const takeUse = () => { const u = useQueued; useQueued = false; return u; };
 
 click('btnPlay', () => startRun());
@@ -1143,7 +1225,25 @@ click('btnHowX', () => { $('howto').hidden = true; });
 click('btnChat', () => { $('chatMenu').hidden = !$('chatMenu').hidden; });
 click('btnQuit', () => { leaveToMenu(); });
 click('btnMenu', () => { leaveToMenu(); }); // navigation: never an ad here
-click('btnRetry', () => triggerMidgameAd(() => (mode === 'online' ? onlinePlayAgain() : startRun()))); // between runs: the right moment for a midgame ad
+click('btnRetry', () => {
+  if (mode === 'online' && net.priv && net.room?.ph === 'lobby') { openRoom(); return; } // a private match ended: back to the room's lobby
+  const again = run?.daily ? { daily: true } : {};
+  triggerMidgameAd(() => (mode === 'online' ? onlinePlayAgain() : startRun(again))); // between runs: the right moment for a midgame ad
+});
+click('btnDaily', () => startRun({ daily: true }));
+click('btnWatch', () => connectOnline({ t: 'join', mode: 'watch' }));
+click('btnWatchOut', () => { outWatch = true; specFollow = run?.spectate || 0; setState(State.SPECTATE); updateChips(); });
+click('btnSpecBack', () => { if (run) showResults(); });
+click('btnSpecPrev', () => specCycle(-1));
+click('btnSpecNext', () => specCycle(1));
+click('btnSpecRoom', () => netSend({ t: 'watchNext' }));
+click('btnEndMatch', () => { netSend({ t: 'endMatch' }); });
+click('btnRoomStart', () => { if (net.room?.host) netSend({ t: 'start' }); });
+click('btnRoomLeave', () => leaveToMenu());
+click('btnRoomInvite', () => shareInvite());
+click('btnVib', () => { save.vib = !save.vib; persist(); refreshShakeButton(); vib(30); });
+click('btnFlick', () => { save.flick = !save.flick; persist(); refreshShakeButton(); });
+click('btnAutoPw', () => { save.autoPw = !save.autoPw; persist(); refreshShakeButton(); });
 click('btnDouble', () => {
   $('btnDouble').hidden = true;
   triggerRewardedAd(() => { save.gears += run.gearsEarned; persist(); run.gearsEarned *= 2; $('overGears').textContent = run.gearsEarned; toast(t('doubled')); playSfx('unlock'); refreshMenu(); }, () => {});
@@ -1167,7 +1267,9 @@ function controlsHTML() {
 }
 const curMode = () => (isUnlocked('mode', save.mode) ? save.mode : 'endless');
 const curArena = () => (isUnlocked('arena', save.arena) ? save.arena : 'bowl');
-const displayName = (tp) => (tp.boss ? t(tp.bossKind === 'magnetar' ? 'magnetar' : 'champion') : tp.id === meId ? t('you') : tp.name);
+const BOSS_NAME = { champion: 'champion', magnetar: 'magnetar', twins: 'twins' };
+const bossName = (tp) => t(BOSS_NAME[tp.bossKind] || 'champion');
+const displayName = (tp) => (tp.boss ? bossName(tp) : tp.id === meId ? t('you') : tp.name);
 // ---- settings: music + sound volume, graphics quality, camera shake (an overlay over the menu or the pause card)
 let settingsOpen = false;
 function openSettings() { settingsOpen = true; $('settings').hidden = false; renderSettings(); }
@@ -1194,6 +1296,8 @@ function refreshMenu() {
   $('menuStats').innerHTML = ['atk', 'def', 'sta', 'spd'].map((k) => `<div><span>${t('st_short_' + k)}</span><i><b style="width:${Math.round(ds[k] * 100)}%"></b></i></div>`).join('');
   renderSegs();
   $('weekly').textContent = t('mut_' + S.weekMutator()); // this week's Endless twist
+  const dc = dailyCfg(); $('dailyBadge').textContent = save.daily.day === dc.day && save.daily.best ? save.daily.best : t(dc.mode === 'last' ? 'mode_last' : 'mode_endless');
+  $('btnDaily').title = `${t('dailyTitle')}: ${t('dailySub', { a: t('arena_' + dc.arena), m: t('modeName_' + dc.mode) })}`;
 }
 function openHowto() { // one screen: controls, modes, power-ups, bosses, arenas, events, tricks
   const p = (icon, color, title, text) => `<p><svg style="--ic:${color}"><use href="#i-${icon}"/></svg><span>${title ? `<b>${title}</b> ` : ''}${text}</span></p>`;
@@ -1202,9 +1306,9 @@ function openHowto() { // one screen: controls, modes, power-ups, bosses, arenas
     sec('h_controls', [p('move', '#4cb8ff', '', t('hw_move')), p('dash', '#ffc531', '', t('hw_dash')), p('blast', '#ff8a3d', '', t('hw_power')), p('move', '#3ee0a1', '', t('hw_touch'))]),
     sec('h_modes', ['endless', 'last', 'teams', 'ranked'].map((m) => p(m === 'teams' ? 'team' : m === 'ranked' ? 'medal' : m === 'last' ? 'target' : 'spin', '#a77bff', t('mode_' + m), t('hw_' + m)))),
     sec('h_powers', S.POWERS.map((k) => p(k, PU_COLOR[k], t('pu_' + k).replace('!', ''), t('pud_' + k)))),
-    sec('h_bosses', [p('crown', '#2e2a5c', t('champion'), t('hw_champion')), p('magnet', '#4b2a86', t('magnetar'), t('hw_magnetar')), p('star', '#ffc531', '', t('hw_bossTip', { n: CFG.bossPoints }))]),
+    sec('h_bosses', [p('crown', '#2e2a5c', t('champion'), t('hw_champion')), p('magnet', '#4b2a86', t('magnetar'), t('hw_magnetar')), p('decoy', '#127a6b', t('twins'), t('hw_twins')), p('star', '#ffc531', '', t('hw_bossTip', { n: CFG.bossPoints }))]),
     sec('h_arenas', S.ARENA_IDS.map((a) => p('globe', ARENA_LOOK[a].floor[0], t('arena_' + a), t('hw_' + a)))),
-    sec('h_events', ['storm', 'tilt', 'overdrive'].map((ev) => p(ev === 'storm' ? 'spark' : ev === 'tilt' ? 'pit' : 'turbo', '#ff5d73', t('ev_' + ev).replace('!', ''), t(`ev_${ev}Sub`)))),
+    sec('h_events', ['storm', 'tilt', 'overdrive', 'sink'].map((ev) => p(ev === 'storm' ? 'spark' : ev === 'tilt' || ev === 'sink' ? 'pit' : 'turbo', '#ff5d73', t('ev_' + ev).replace('!', ''), t(`ev_${ev}Sub`)))),
     sec('h_tricks', [p('dash', '#ffc531', '', t('hw_perfect')), p('pit', '#ff5d73', '', t('hw_ringout')), p('crown', '#ffc531', '', t('hw_leader')), p('spark', '#ffe066', '', t('hw_spark'))]),
   ].join('');
   $('howto').hidden = false;
@@ -1283,7 +1387,11 @@ function renderLobbySeg() {
   $('lobbySeg').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { playSfx('click', 0.5); save.onlineKind = b.dataset.k; persist(); renderLobbySeg(); }));
 }
 function showOnlineCount() { const el = $('onlineCount'); el.hidden = !(onlineN > 0); el.textContent = t('playingNow', { n: onlineN }); }
-const refreshShakeButton = () => { $('btnShake').textContent = t(save.shake === false ? 'shakeOff' : 'shakeOn'); $('btnCalm').textContent = t(save.calm ? 'calmOn' : 'calmOff'); $('btnCb').textContent = t(save.cb ? 'cbOn' : 'cbOff'); };
+const refreshShakeButton = () => {
+  $('btnShake').textContent = t(save.shake === false ? 'shakeOff' : 'shakeOn'); $('btnCalm').textContent = t(save.calm ? 'calmOn' : 'calmOff'); $('btnCb').textContent = t(save.cb ? 'cbOn' : 'cbOff');
+  $('btnVib').textContent = t(save.vib ? 'vibOn' : 'vibOff'); $('btnVib').hidden = !navigator.vibrate; // iPhones have no vibration API
+  $('btnFlick').textContent = t(save.flick ? 'flickOn' : 'flickOff'); $('btnAutoPw').textContent = t(save.autoPw ? 'autoOn' : 'autoOff');
+};
 function displayStats(p) { // 0..1 bars for the garage
   const s = S.statsOf(p), n = (v) => Math.max(0.05, Math.min(1, (v - 0.6) / 1.0));
   return { atk: n(s.atk), def: n(s.def * Math.sqrt(s.mass)), sta: n(s.sta), spd: n(s.spd * Math.pow(s.acc, 0.4)) };
@@ -1292,7 +1400,10 @@ let garageTab = 'crown';
 function openGarage() { setState(State.GARAGE); renderGarage(); }
 function renderGarage() {
   $('garageGears').textContent = save.gears;
-  $('garageTabs').innerHTML = S.PART_KINDS.map((k) => `<button data-tab="${k}" class="${k === garageTab ? 'on' : ''}">${t('tab_' + k)}</button>`).join('');
+  $('garageTabs').innerHTML = [...S.PART_KINDS, 'sets'].map((k) => `<button data-tab="${k}" class="${k === garageTab ? 'on' : ''}">${t('tab_' + k)}</button>`).join('');
+  $('garageTabs').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { playSfx('click', 0.5); garageTab = b.dataset.tab; renderGarage(); }));
+  if (garageTab === 'sets') { renderSets(); return; }
+  $('garageParts').classList.remove('sets');
   $('garageParts').innerHTML = PARTS[garageTab].filter((p) => !p.hidden).map((p) => {
     const owned = save.owned[garageTab].includes(p.id), on = save.sel[garageTab] === p.id;
     const label = garageTab === 'paint' ? t('c_' + p.id) : garageTab === 'trail' ? t('t_' + p.id) : t('p_' + p.id);
@@ -1303,12 +1414,26 @@ function renderGarage() {
   }).join('');
   const ds = displayStats(save.sel);
   $('garageStats').innerHTML = ['atk', 'def', 'sta', 'spd'].map((k) => `<span>${t('st_' + k)}</span><div class="bar"><i style="width:${Math.round(ds[k] * 100)}%"></i><s data-k="${k}" hidden></s></div>`).join('');
-  $('garageTabs').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { playSfx('click', 0.5); garageTab = b.dataset.tab; renderGarage(); }));
   $('garageParts').querySelectorAll('button').forEach((b) => {
     b.addEventListener('click', () => selectPart(garageTab, b.dataset.id));
     b.addEventListener('pointerenter', () => previewPart(garageTab, b.dataset.id)); b.addEventListener('focus', () => previewPart(garageTab, b.dataset.id));
     b.addEventListener('pointerleave', () => previewPart()); b.addEventListener('blur', () => previewPart());
   });
+}
+function renderSets() { // part sets: what you own of each, the bonus, and one tap to wear a finished set
+  const el = $('garageParts'); el.classList.add('sets');
+  el.innerHTML = SETS.map((st) => {
+    const n = Object.keys(st.p).length, have = setOwned(st), done = have === n, on = Object.entries(st.p).every(([k, id]) => save.sel[k] === id);
+    const chips = Object.entries(st.p).map(([k, id]) => `<i class="${save.owned[k].includes(id) ? 'got' : ''}">${t((k === 'paint' ? 'c_' : k === 'trail' ? 't_' : 'p_') + id)}</i>`).join('');
+    return `<div class="set ${done ? 'done' : ''}"><b>${t('set_' + st.id)}</b><small>${t('setd_' + st.id)}</small><span class="chips">${chips}</span>`
+      + (done ? (on ? `<em>${t('setOn')}</em>` : `<button data-set="${st.id}">${t('equipSet')}</button>`) : `<em>${t('setOf', { a: have, b: n })} · ${t('setReward', { n: st.gears })}</em>`) + '</div>';
+  }).join('');
+  el.querySelectorAll('button[data-set]').forEach((b) => b.addEventListener('click', () => {
+    const st = SETS.find((x) => x.id === b.dataset.set); Object.assign(save.sel, st.p); persist(); playSfx('upgrade', 0.6);
+    if (player) { player.parts = S.cleanParts(save.sel); player.stats = S.statsOf(player.parts); S.updateMass(player); dropView(player.id); burst(new THREE.Vector3(player.x, 1, player.z), '#ffe066', 18, 5); }
+    renderGarage(); refreshMenu();
+  }));
+  $('garageStats').innerHTML = '';
 }
 function previewPart(kind, id) { // a gold outline on each stat bar shows what that part would change
   const ds = kind && kind !== 'paint' && kind !== 'trail' ? displayStats({ ...save.sel, [kind]: id }) : null;
@@ -1320,7 +1445,7 @@ function selectPart(kind, id) {
   if (!save.owned[kind].includes(id) && p.season) { toast(t('seasonItem', { n: p.season })); playSfx('wall', 0.6); return; }
   if (!save.owned[kind].includes(id)) {
     if (save.gears < p.cost) { toast(t('notEnough')); playSfx('wall', 0.6); return; }
-    save.gears -= p.cost; save.owned[kind].push(id); toast(t('unlocked')); playSfx('unlock', 0.8);
+    save.gears -= p.cost; save.owned[kind].push(id); toast(t('unlocked')); playSfx('unlock', 0.8); checkSets();
   } else playSfx('upgrade', 0.5);
   save.sel[kind] = id; persist(); renderGarage(); refreshMenu();
   if (player) { // the garage preview is my top in the menu world: give it the new part
@@ -1388,10 +1513,12 @@ function updateChips() { // top-centre chips: event, boss, Last Top ring, Teams 
   }
   const teams = world.mode === 'teams'; $('teamChip').hidden = !teams;
   if (teams) { const left = Math.max(0, Math.ceil(world.roundEnd - world.time)); $('team1').style.background = teamColor(1); $('team0').textContent = world.teamScore[0]; $('team1').textContent = world.teamScore[1]; $('teamTime').textContent = `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`; }
-  const watch = spectateTarget(), spec = $('specChip');
-  const waiting = state === State.SPECTATE && net.rp ? (net.rp.ph === 'play' ? t('roundLive') : t('nextRound', { n: Math.ceil(net.rp.t) })) : '';
+  const watch = spectateTarget(), spec = $('specChip'), specOn = state === State.SPECTATE;
+  const waiting = specOn && mode === 'online' && net.rp && !net.watch ? (net.rp.ph === 'play' ? t('roundLive') : t('nextRound', { n: Math.ceil(net.rp.t) })) : '';
   spec.hidden = !(watch && watch.id !== meId) && !waiting;
   if (!spec.hidden) $('specText').textContent = [waiting, watch && watch.id !== meId ? t('watching', { n: displayName(watch) }) : ''].filter(Boolean).join(' · ');
+  $('specLive').hidden = !(specOn && net.watch); $('btnSpecRoom').hidden = !(specOn && net.watch); $('btnSpecBack').hidden = !(specOn && outWatch);
+  $('btnSpecPrev').hidden = $('btnSpecNext').hidden = !specOn;
 }
 let powerShown = '';
 function updatePowerUI() { // the held power-up: an icon with a 10 s ring; it must be used before the ring runs out
@@ -1428,12 +1555,13 @@ function handleEvent(e) {
       burst(p, e.heavy ? '#ff9a3d' : '#7fd8ff', e.heavy ? 10 : 4, 5);
       if (e.heavy) shockwave(e.x, p.y - 0.4, e.z, 2.5 + e.rel * 0.15, '#ffd27a');
       playSfx(e.heavy ? 'clashHeavy' : 'clash', (mine ? 1 : nearVol(e.x, e.z) * 0.6) * clamp(0.4 + e.rel / 14, 0.4, 1), e.heavy ? 1 : 1.1);
-      if (mine && e.heavy) { shake(0.15); if (!calm()) hitStop = Math.max(hitStop, 0.045); }
+      if (mine && e.heavy) { shake(0.15); vib(25); if (!calm()) hitStop = Math.max(hitStop, 0.045); }
       if (mode === 'online') for (const id of [e.a, e.b]) { const o = S.topById(world, id); if (o) o.hitWob = Math.min(0.45, o.hitWob + (e.heavy ? 0.3 : 0.12)); }
       for (const [id, d] of [[e.a, e.dA], [e.b, e.dB]]) { const vv = views.get(id); if (vv && d > 2 && !calm()) vv.flash = Math.min(0.16, 0.05 + d * 0.006); } // short emissive pulse on whoever got hurt
       if ((e.a === meId && e.aPerf) || (e.b === meId && e.bPerf)) perfectFx(e.x, e.z);
       if (mine) { // my hits: the spin I took off them floats up from the victim
         const dealt = e.a === meId ? e.dB : e.dA, victim = infoOf(e.a === meId ? e.b : e.a);
+        if (run && !run.over && victim && !isDecoy(victim)) run.bigHit = Math.max(run.bigHit || 0, Math.round(dealt)); // the run story's biggest hit
         if (dealt >= 3 && victim && !isDecoy(victim) && !calm()) popText(victim.x, victim.z, 1.2 + (victim.r || 1), `-${Math.round(dealt)}`, 'dmg', 0.8);
       }
       if (run?.tutorial && run.tutStep === 2 && run.dummyId && [e.a, e.b].includes(meId) && [e.a, e.b].includes(run.dummyId) && (e.a === meId ? e.aDash : e.bDash)) run.tutDashHit = true;
@@ -1449,12 +1577,14 @@ function handleEvent(e) {
     case 'fall':
       if (!tp) break;
       playSfx('ringout', e.id === meId ? 1 : 0.8 * nearVol(tp.x, tp.z));
-      if (e.id === meId && run) { run.slow = 1.1; shake(0.2); }
+      if (e.id === meId && run) { run.slow = 1.1; shake(0.2); if (world.event?.id === 'sink' && Math.hypot(tp.x, tp.z) < CFG.sinkR + 1.5) run.sunk = true; } // the Sinkhole, not a rim pit
+      finalBlow(tp);
       break;
     case 'topple':
       if (!tp) break;
       playSfx('topple', e.id === meId ? 1 : 0.7 * nearVol(tp.x, tp.z));
       if (e.id === meId && run) { run.slow = 1.1; shake(0.15); }
+      finalBlow(tp);
       break;
     case 'puAdd':
       if (mode === 'online' && !world.powerups.some((q) => q.id === e.id)) world.powerups.push({ id: e.id, kind: e.kind, x: e.x, z: e.z, t: CFG.powerLife });
@@ -1465,7 +1595,7 @@ function handleEvent(e) {
       const taker = infoOf(e.top); if (taker) burst(pos3(taker.x, taker.z, 0.8), PU_COLOR[e.kind], 16, 5);
       if (e.top === meId) {
         playSfx('puTake', 0.8);
-        banner(t('pu_' + e.kind), `${t('pud_' + e.kind)} · ${t(isTouch ? 'puUseTouch' : 'puUseKey')}`, false, 2.2);
+        banner(t('pu_' + e.kind), `${t('pud_' + e.kind)} · ${t(isTouch ? 'puUseTouch' : 'puUseKey')}`, false, 2.2); vib(15);
         if (mode === 'online' && player) player.power = { kind: e.kind, t: CFG.powerHold };
       }
       break;
@@ -1499,15 +1629,28 @@ function handleEvent(e) {
       break;
     }
     case 'boss': {
-      const b = infoOf(e.id), kind = e.kind || b?.bossKind || 'champion', mag = kind === 'magnetar', col = mag ? '#c27bff' : '#ffc531';
-      banner(t(mag ? 'magnetarIn' : 'championIn'), t(mag ? 'magnetarSub' : 'championSub', { n: CFG.bossPoints }), false, 2.6); playSfx('champion', 0.8); voice(mag ? 'magnetar' : 'champion'); cheer();
+      const b = infoOf(e.id), kind = e.kind || b?.bossKind || 'champion', mag = kind === 'magnetar', tw = kind === 'twins', col = mag ? '#c27bff' : tw ? '#2ee6c5' : '#ffc531';
+      banner(t(mag ? 'magnetarIn' : tw ? 'twinsIn' : 'championIn'), t(mag ? 'magnetarSub' : tw ? 'twinsSub' : 'championSub', { n: tw ? Math.round(CFG.bossPoints * CFG.twinPoints) : CFG.bossPoints }), false, 2.6); playSfx('champion', 0.8); voice(mag ? 'magnetar' : 'champion'); cheer();
       if (b) { shockwave(b.x, bowlY(Math.hypot(b.x, b.z)), b.z, 6, col); burst(pos3(b.x, b.z, 1), col, 26, 9); }
       if (state === State.PLAYING) playMusic(audio.musicVol, 'showdown');
       setTimeout(() => hint('boss_' + kind), 2800);
       break;
     }
     case 'pull': if (e.on && tp) playSfx('pull', 0.9 * nearVol(tp.x, tp.z)); break;
-    case 'emote': if (tp) { popText(tp.x, tp.z, 2 + (tp.r || 1), t('e' + e.e), 'say', 2.2); playSfx('click', 0.5 * nearVol(tp.x, tp.z)); } break;
+    case 'split': { // the Twinspin breaks in two
+      const p = pos3(e.x, e.z, 0.6); shockwave(e.x, p.y - 0.3, e.z, 5, '#2ee6c5'); burst(p, '#7ff5e0', 26, 9); playSfx('puDecoy', 0.9); cheer();
+      banner(t('split'), '', false, 1.6); if (e.twin) { const tw = S.topById(world, e.twin); if (tw) remember(tw); }
+      break;
+    }
+    case 'revenge': // the server's bonus for knocking out whoever last knocked you out
+      if (e.id === meId) { banner(t('revenge'), `+${e.pts}`, false, 1.8); playSfx('cheer', 0.6); cheer(); vib([30, 40, 30]); net.nemesis = 0; if (run) run.revenge = true; }
+      break;
+    case 'emote': {
+      const phrase = t('e' + e.e);
+      if (tp && (state === State.PLAYING || state === State.SPECTATE)) { popText(tp.x, tp.z, 2 + (tp.r || 1), phrase, 'say', 2.2); playSfx('click', 0.5 * nearVol(tp.x, tp.z)); }
+      else if (e.n && e.n !== net.name) { toast(`${e.n}: ${phrase}`); playSfx('click', 0.4); } // from the results screen (or off camera)
+      break;
+    }
     case 'teamWin': {
       world.teamScore = e.scores || world.teamScore;
       if (run && !run.over && player) endRun({ how: e.team < 0 ? 'teamdraw' : e.team === player.team ? 'teamwin' : 'teamlose', score: player.score, kos: player.kos, peak: player.peak }, null);
@@ -1522,13 +1665,20 @@ function handleEvent(e) {
       break;
     case 'win': // Last Top Spinning: the last top standing
       if (e.id === meId && run && !run.over && player) endRun({ how: 'win', score: player.score, kos: player.kos, peak: player.peak }, null);
-      else if (mode === 'online' && tp) toast(t('roundWinner', { n: displayName(tp) }));
+      else if (tp) { toast(t('roundWinner', { n: displayName(tp) })); const v = views.get(tp.id); if (v) v.hop = 0.6; burst(pos3(tp.x, tp.z, 1.2), '#ffe066', 30, 8); cheer(); if (state === State.SPECTATE) specFollow = tp.id; }
       break;
     case 'elim': onElim(e); break;
     case 'event': onEventStart(e); break;
     case 'eventEnd': onEventEnd(e); break;
     case 'leader': onLeader(e.id); break;
   }
+}
+function finalBlow(tp) { // Last Top: the second-to-last top is going down: slow motion (solo) and the camera leans in
+  if (world.mode !== 'last' || isDecoy(tp) || world.over) return;
+  const left = world.tops.filter((o) => o !== tp && !isDecoy(o) && (alive(o) || o.state === 'spawn'));
+  if (left.length !== 1) return;
+  finalT = 2.2; banner(t('finalBlow'), '', false, 1.4); cheer();
+  if (mode === 'solo' && run && !calm()) run.slow = Math.max(run.slow, 1.6);
 }
 function dashFx(tp, dx, dz) {
   const trail = tp.parts?.trail && tp.parts.trail !== 'none' ? part('trail', tp.parts.trail).c[0] : null; // your trail colours your dash too
@@ -1540,13 +1690,18 @@ function onElim(e) {
   if (e.how === 'topple') { const p = pos3(e.x, e.z, 0.5); burst(p, topColor(victim), 22, 7); shockwave(e.x, p.y - 0.4, e.z, (victim.r || 1) * 3, topColor(victim)); }
   feed(killer, victim, e.how);
   if (e.killer && e.killer === meId) {
-    if (e.boss) { banner(t(e.boss === 'magnetar' ? 'bossDown' : 'champDown'), `+${e.pts}`, false, 2.4); voice('champdown'); bump('champion'); hitStop = Math.max(hitStop, 0.12); }
+    vib(e.boss ? [40, 50, 40, 50, 80] : [30, 40, 30]);
+    if (run && !run.over) { if (e.boss) run.bossKO = true; if (e.wasLeader) run.leaderKO = true; }
+    if (e.boss) { banner(t(e.boss === 'champion' ? 'champDown' : 'bossDown'), `+${e.pts}`, false, 2.4); voice('champdown'); bump('champion'); hitStop = Math.max(hitStop, 0.12); }
     else { banner(t(e.how === 'ringout' ? 'ringout' : 'topple'), e.wasLeader ? t('leaderDown') : `+${e.pts}`); voice(e.how === 'ringout' ? 'ringout' : 'topple'); }
     playSfx('cheer', 0.55); cheer(); shake(0.1);
     bump('kos'); if (e.how === 'ringout') bump('ringouts');
-  } else if (e.boss) { banner(t(e.boss === 'magnetar' ? 'bossDown' : 'champDown'), '', false, 1.8); cheer(); }
+  } else if (e.boss) { banner(t(e.boss === 'champion' ? 'champDown' : 'bossDown'), '', false, 1.8); cheer(); }
+  if (e.id === meId && killer && !killer.boss && mode === 'online' && (net.kind === 'endless' || net.kind === 'teams')) net.nemesis = killer.id; // back in, get back at them
+  if (e.id === net.nemesis && e.killer !== meId) net.nemesis = 0;
   if (e.boss) setTimeout(() => { if (state === State.PLAYING) playMusic(audio.musicVol, wantTrack()); }, 0);
   if (e.id === meId && run && !run.over) {
+    vib(120);
     if (world.mode === 'teams') { // Teams: you come back after a short wait; the run ends with the round
       run.respawnT = CFG.respawn; run.spectate = killer?.id || 0; stopHum();
       banner(t('respawning', { n: CFG.respawn }), '', true, 1.6); hint('respawn');
@@ -1589,9 +1744,29 @@ function modeHints() { // first time in a mode or arena: a few words on what is 
   if (world.mode === 'last') hint('zone'); if (world.mode === 'teams') hint('teams'); if (world.arenaId !== 'bowl') hint('arena_' + world.arenaId);
 }
 function spectateTarget() { // who the camera follows when it is not you: your knocker for a moment, the leader while waiting for a round
-  if (state === State.SPECTATE) return S.topById(world, world.leader) || world.tops.find(alive) || null;
+  if (state === State.SPECTATE) { const f = S.topById(world, specFollow); return f && (alive(f) || f.state === 'spawn') ? f : S.topById(world, world.leader) || world.tops.find(alive) || null; }
   if (run && (run.over || run.respawnT > 0) && run.spectate) { const k = S.topById(world, run.spectate); if (k && (alive(k) || k.state === 'spawn')) return k; }
   return null;
+}
+function specCycle(dir) { // watching: the next (or previous) top on the leaderboard
+  if (state !== State.SPECTATE || !world) return;
+  const list = S.rankList(world).filter((tp) => tp.id !== meId); if (!list.length) return;
+  const cur = spectateTarget(), i = list.findIndex((tp) => tp.id === cur?.id);
+  specFollow = list[(i + dir + list.length) % list.length].id; playSfx('click', 0.4); updateChips();
+}
+// Daily Challenge: the same arena, mode, weekly rule and rivals for everyone today (the bots come from a seeded random)
+function dailyCfg(now = Date.now()) {
+  const day = Math.floor(now / 86_400_000), h = (day * 2654435761) >>> 0;
+  return { day, seed: h, arena: S.ARENA_IDS[h % S.ARENA_IDS.length], mode: day % 2 ? 'last' : 'endless', mutator: S.MUTATORS[(h >>> 4) % S.MUTATORS.length] };
+}
+function seeded(a) { return () => { a = (a + 0x6D2B79F5) | 0; let x = Math.imul(a ^ (a >>> 15), 1 | a); x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x; return ((x ^ (x >>> 14)) >>> 0) / 4294967296; }; }
+function sendDaily(score) { // today's board on the game server: the verified CrazyGames name, else the picked one
+  if (CAPTURE || params.has('nocount')) return;
+  let ws; try { ws = new WebSocket(MP_URL); } catch { return; }
+  const kill = setTimeout(() => { try { ws.close(); } catch {} }, 9000);
+  ws.onopen = async () => { const tok = await Promise.race([sdkToken(), new Promise((r) => setTimeout(() => r(null), 2500))]); ws.send(JSON.stringify({ t: 'daily', s: score, name: pickedName(), tok })); };
+  ws.onmessage = (m) => { try { const d = JSON.parse(m.data); if (d.t === 'top') { dailyTop = d; if (state === State.GAMEOVER) renderOverTop(); clearTimeout(kill); ws.close(); } } catch {} };
+  ws.onerror = () => {};
 }
 function respawnPlayer() { // solo Teams: back in after the wait, keeping your score
   const [x, z] = S.freeSpot(world), old = player;
@@ -1601,21 +1776,24 @@ function respawnPlayer() { // solo Teams: back in after the wait, keeping your s
 const newRun = (extra = {}) => ({
   time: 0, countdown: 0, gearsEarned: 0, slow: 0, over: false, overTimer: 0, how: '', killer: null, leaderSaid: -99, happy: false, bestRank: 99, isBest: false,
   tutorial: false, tutStep: -1, tutMoved: 0, tutSparks: 0, tutDashHit: false, tutT: 0, dummyId: 0,
-  stats: {}, missionsDone: [], levelUps: [], seasonUps: [], xpEarned: 0, records: [], place: 0, field: 0, won: false, zoneWarned: false, puLost: 0, tutStat: null, ...extra,
+  stats: {}, missionsDone: [], levelUps: [], seasonUps: [], xpEarned: 0, records: [], place: 0, field: 0, won: false, zoneWarned: false, puLost: 0, tutStat: null,
+  daily: false, bigHit: 0, bossKO: false, leaderKO: false, revenge: false, shown: false, ...extra,
 });
 function startRun(opts = {}) {
   closeOnline(); stopHum(); clearViews(); mode = 'solo';
   if (CAPTURE) opts = { mode: params.get('mode') || undefined, arena: params.get('arena') || undefined, ...opts }; // capture restarts keep the scene
-  const tutorial = !save.tut && !CAPTURE;
-  const gameMode = tutorial ? 'endless' : opts.mode || curMode(), arena = tutorial ? 'bowl' : opts.arena || curArena(); // the first run is the tutorial in the Grand Bowl
-  world = S.createWorld({ arena, mode: gameMode, mutator: tutorial ? null : S.weekMutator() }); buildArena(arena);
+  const dc = opts.daily ? dailyCfg() : null, tutorial = !save.tut && !CAPTURE && !dc;
+  const gameMode = tutorial ? 'endless' : dc ? dc.mode : opts.mode || curMode(), arena = tutorial ? 'bowl' : dc ? dc.arena : opts.arena || curArena(); // the first run is the tutorial in the Grand Bowl
+  world = S.createWorld({ arena, mode: gameMode, mutator: tutorial ? null : dc ? dc.mutator : S.weekMutator(), rng: dc ? seeded(dc.seed) : Math.random }); buildArena(arena);
   world.eventsOn = world.powersOn = !tutorial; world.bossOn = gameMode === 'endless' && !tutorial; world.frozen = !CAPTURE;
   if (CAPTURE) { world.bossAt = Number(params.get('boss')) || 35; if (params.get('bosskind') === 'magnetar') world.bossCount = 1; } // the trailer and screenshots get to see a boss
   player = S.addTop(world, { parts: save.sel, name: 'You', human: true }); meId = player.id;
   if (tutorial) { player.noDecay = true; player.dmgTaken = 0.3; }
+  else if (save.runs < 3) setTimeout(() => hint('safenet', t('safeNet')), 3400); // the first runs: say why the pits are not biting yet
   for (let i = 0; i < CFG.bots; i++) { const b = S.spawnBot(world, { ring: i, avoidPaint: save.sel.paint }); b.timer = 0.6 + Math.random() * 0.6; if (tutorial) b.ai = 'passive'; }
   world.events.length = 0; world.tops.forEach(remember); // their 'add' events were just dropped: the feed still needs their names
-  run = newRun({ countdown: CAPTURE ? 0 : 2.6, tutorial, field: world.tops.length });
+  run = newRun({ countdown: CAPTURE ? 0 : 2.6, tutorial, field: world.tops.length, daily: !!dc });
+  if (dc) toast(`${t('dailyTitle')}: ${t('dailySub', { a: t('arena_' + dc.arena), m: t('modeName_' + dc.mode) })}`);
   save.runs++; refreshMissions(); persist();
   $('feed').innerHTML = ''; boardTimer = 0;
   audio.track = ''; setState(State.PLAYING); startHum(); // a new run: a new song from the pool
@@ -1645,16 +1823,42 @@ function endRun(e, killer) {
   let xp = Math.round(player.score * 0.5 + player.kos * 8 + run.time / 5 + placeBonus * 6 + (run.won ? 60 : 0));
   run.dayBonus = world.arenaId === arenaOfDay(); if (run.dayBonus) xp *= 2; // Arena of the Day
   run.xpEarned += xp; run.levelUps.push(...addXP(xp));
-  persist();
+  if (run.daily) { // the Daily Challenge: today's best, a first-run bonus, and the shared board
+    const dc = dailyCfg();
+    if (save.daily.day !== dc.day) save.daily = { day: dc.day, best: 0, runs: 0 };
+    run.dailyFirst = save.daily.runs === 0; save.daily.runs++;
+    if (run.dailyFirst) { save.gears += 50; run.gearsEarned += 50; }
+    run.dailyBest = player.score > save.daily.best; if (run.dailyBest) save.daily.best = player.score;
+    sendDaily(player.score);
+  }
+  run.near = nearMiss(); if (!run.won) vib(120);
+  persist(); checkSets();
   run.overTimer = run.won ? 2.2 : run.spectate ? 2.6 : 1.2;
   checkBadges(); sendStat(e.how);
+}
+function nearMiss() { // one encouraging line when a run ends short of something
+  const r = run; if (r.won || r.tutorial) return '';
+  if (world.mode === 'last' && r.place === 2) return t('near_second');
+  if (world.mode === 'last' && r.place > 2 && r.place <= 4) return t('near_top', { p: r.place });
+  if (!r.isBest && save.best > 50 && player.score >= save.best * 0.75) return t('near_best', { n: save.best - player.score });
+  if (world.mode !== 'last' && r.bestRank >= 2 && r.bestRank <= 3) return t('near_rank', { p: r.bestRank });
+  if (r.time < 30 && r.how === 'ringout' && !r.sunk) return t('near_early');
+  return '';
+}
+function storyHTML() { // the run story: biggest hit, who got you, the best moment
+  const r = run, k = r.killer, card = (label, val, cls = '') => `<div class="${cls}"><small>${label}</small><b>${val}</b></div>`;
+  const lead = r.stats.lead || 0, fmt = (v) => `${Math.floor(v / 60)}:${String(Math.floor(v % 60)).padStart(2, '0')}`;
+  const moment = r.bossKO ? t('mo_boss') : r.revenge ? t('mo_revenge') : r.leaderKO ? t('mo_leader') : (r.stats.perfect || 0) >= 2 ? t('mo_perfect', { n: r.stats.perfect })
+    : lead >= 8 ? t('mo_lead', { t: fmt(lead) }) : player.kos >= 2 ? t('mo_kos', { n: player.kos }) : (r.stats.sparks === 1 ? t('mo_spark1') : t('mo_sparks', { n: r.stats.sparks || 0 }));
+  const by = r.won ? t('story_nobody') : k ? `<i style="background:${k.boss ? '#ffc531' : topColor(k)}"></i>${escapeHTML(displayName(k))}` : r.how.startsWith('team') ? '–' : t('story_arena');
+  return card(t('story_hit'), r.bigHit ? `-${r.bigHit}` : '–') + card(t('story_by'), by, 'by') + card(t('story_moment'), moment);
 }
 function showResults() {
   const r = run, k = r.killer, last = world.mode === 'last';
   const teamEnd = r.how.startsWith('team');
   $('overTitle').textContent = teamEnd ? t(r.how === 'teamwin' ? 'teamWin' : r.how === 'teamlose' ? 'teamLose' : 'teamDraw') : t(r.won ? 'victory' : 'eliminated');
   $('gameover').querySelector('.results').classList.toggle('win', r.won);
-  const by = k ? t(r.how === 'ringout' ? 'byRingout' : 'byTopple', { n: displayName(k) }) : t(r.how === 'ringout' ? 'selfRingout' : 'selfTopple');
+  const by = r.sunk ? (k ? t('bySink', { n: displayName(k) }) : t('selfSink')) : k ? t(r.how === 'ringout' ? 'byRingout' : 'byTopple', { n: displayName(k) }) : t(r.how === 'ringout' ? 'selfRingout' : 'selfTopple');
   $('overBy').textContent = teamEnd ? t('teamScore', { a: world.teamScore[0], b: world.teamScore[1] }) : r.won ? t('lastStanding') : last ? `${t('outPlace', { p: r.place, n: r.field })} · ${by}` : by;
   $('finalScore').textContent = player.score; $('overBest').textContent = save.best; $('newBest').hidden = !r.isBest;
   $('overRankLabel').textContent = t(last ? 'place' : 'rank'); $('overRank').textContent = last ? `#${r.place}` : `#${r.bestRank < 99 ? r.bestRank : '-'}`;
@@ -1663,6 +1867,11 @@ function showResults() {
   $('overGears').textContent = r.gearsEarned;
   $('btnDouble').hidden = !(adsAvailable() && r.gearsEarned > 0);
   $('btnOverInvite').hidden = !(mode === 'online' && net.priv);
+  $('overNear').hidden = !r.near; $('overNear').textContent = r.near || '';
+  $('overStory').innerHTML = storyHTML();
+  $('btnWatchOut').hidden = !(world.tops.filter((tp) => tp.id !== meId && !isDecoy(tp) && (alive(tp) || tp.state === 'spawn')).length >= 2 && !(mode === 'online' && net.kind === 'endless')); // the rest of the match is still on
+  $('overEmotes').innerHTML = mode === 'online' ? [0, 6, 1, 7].map((i) => `<button data-e="${i}">${t('e' + i)}</button>`).join('') : '';
+  $('overEmotes').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => sendEmote(Number(b.dataset.e))));
   // XP bar fills up to where the player now is; level-ups, broken records and finished missions show as chips
   $('overLv').textContent = t('lv', { n: save.level }); $('overXpText').textContent = t('xpGain', { n: r.xpEarned });
   const bar = $('overXp'); bar.style.transition = 'none'; bar.style.width = '0%'; void bar.offsetWidth; bar.style.transition = ''; requestAnimationFrame(() => { bar.style.width = `${Math.round((100 * save.xp) / xpFor(save.level))}%`; });
@@ -1672,11 +1881,16 @@ function showResults() {
     ...r.seasonUps.map((u) => `<span class="lvup"><svg><use href="#i-medal"/></svg>${t('seasonUp', { t: u.tier })}${u.reward ? ' · ' + rewardName(u.reward) : ''}</span>`),
     ...(r.dayBonus ? [`<span class="rec"><svg><use href="#i-star"/></svg>${t('arenaDay')}</span>`] : []),
     ...r.missionsDone.map((id) => `<span><svg><use href="#i-check"/></svg>${missionText(id)}</span>`),
+    ...(r.dailyFirst ? [`<span class="lvup"><svg><use href="#i-star"/></svg>${t('dailyFirst', { n: 50 })}</span>`] : []),
+    ...(r.dailyBest && !r.dailyFirst ? [`<span class="rec"><svg><use href="#i-crown"/></svg>${t('dailyNew')}</span>`] : []),
+    ...(mode === 'online' && net.nemesis && S.topById(world, net.nemesis) ? [`<span><svg><use href="#i-target"/></svg>${t('nemesisOn', { n: escapeHTML(displayName(S.topById(world, net.nemesis))) })}</span>`] : []),
   ];
   $('overChips').innerHTML = chips.slice(0, 5).join('');
+  const first = !r.shown; r.shown = true;
   setState(State.GAMEOVER); refreshMenu();
-  if (mode === 'online') { netSend({ t: 'top' }); if (net.kind !== 'endless') $('btnRetry').disabled = true; renderOverRating(); } // round rooms bring you back by themselves
-  if (r.levelUps.length) setTimeout(() => { if (state === State.GAMEOVER) { playSfx('levelUp', 0.8); voice('levelup'); } }, 500);
+  if (mode === 'online') { if (first) netSend({ t: 'top' }); renderOverRating(); retryLabel(); } // round rooms bring you back by themselves
+  if (r.daily) renderOverTop();
+  if (first && r.levelUps.length) setTimeout(() => { if (state === State.GAMEOVER) { playSfx('levelUp', 0.8); voice('levelup'); } }, 500);
 }
 function tickRun(dt) {
   if (!run) return;
@@ -1696,6 +1910,7 @@ function tickRun(dt) {
   if (run.over) { run.overTimer -= dt; if (run.overTimer <= 0 && state === State.PLAYING) showResults(); }
   else run.time += dt;
   if (run.respawnT > 0 && !run.over) { run.respawnT -= dt; if (run.respawnT <= 0 && mode === 'solo') respawnPlayer(); } // online, the server sends you back in
+  if (!run.over && isTouch && save.autoPw && player?.power && alive(player) && player.power.t < 0.7 && !player.power.auto) { player.power.auto = true; playerUse(); } // phones: never lose a power-up to the timer
   if (!run.over && !run.tutorial && run.time > 15) hint('perfect');
   if (!run.over && player && alive(player)) {
     const rk = S.rankList(world).findIndex((tp) => tp.id === meId) + 1; if (rk > 0) run.bestRank = Math.min(run.bestRank, rk);
@@ -1751,7 +1966,7 @@ function finishTutorial(skipped) {
 // ================================================================ ONLINE (no account: join a public match, or a private room by code / invite link)
 // The server runs the authoritative world; this client mirrors it. Other tops are drawn INTERP seconds in the past between
 // two snapshots; my own top is predicted locally (same sim.integrate) and eased toward the server so steering feels instant.
-const net = { use: false, joinable: null, ws: null, status: 'off', code: '', priv: false, name: '', players: 0, rtt: 0, offset: null, snaps: [], srvMe: null, me: null, leaving: false, sendT: 0, pingT: 0, sx: 9, sy: 9, dash: false };
+const net = { use: false, joinable: null, ws: null, status: 'off', code: '', priv: false, name: '', players: 0, rtt: 0, offset: null, snaps: [], srvMe: null, me: null, leaving: false, sendT: 0, pingT: 0, sx: 9, sy: 9, dash: false, room: null, watch: false, nemesis: 0 };
 const STATE_NAME = ['spawn', 'alive', 'falling', 'toppling'];
 const FX_NAME = ['', 'shield', 'magnet', 'turbo', 'anchor'];
 function connectOnline(joinMsg) {
@@ -1783,7 +1998,49 @@ function closeOnline() {
   if (!net.ws && net.status === 'off') return;
   net.leaving = true; const ws = net.ws; net.ws = null; net.status = 'off';
   try { ws?.send(JSON.stringify({ t: 'leave' })); ws?.close(); } catch {}
-  if (mode === 'online') sdkLeftRoom();
+  if (mode === 'online' || net.room) sdkLeftRoom();
+  net.room = null; net.watch = false; net.nemesis = 0; net.priv = false;
+}
+// ---- private room lobby: the players, the host's settings, the Start button (the arena behind is the menu's)
+function onRoom(d) {
+  const first = !net.room; net.room = d; net.code = d.code; net.priv = true;
+  if (first) sdkRoom({ roomId: d.code, isJoinable: d.players.length < 10, inviteParams: { roomId: d.code } });
+  if (d.ph === 'lobby') {
+    if (state === State.GAMEOVER) { retryLabel(); return; } // finish reading the results first
+    if (state !== State.ROOM) openRoom(); else renderRoom();
+  } else if (state === State.ROOM) renderRoom();
+}
+function openRoom() {
+  if (mode === 'online') { stopHum(); toMenuWorld(); } else if (!world) toMenuWorld();
+  run = null; setState(State.ROOM); renderRoom();
+}
+function renderRoom() {
+  const r = net.room; if (!r) return;
+  $('roomCodeBig').textContent = r.code; $('roomCount').textContent = t('roomN', { n: r.players.length });
+  $('roomPlayers').innerHTML = r.players.map((p) => `<li class="${p.n === r.me ? 'me' : ''}">${p.team != null ? `<i class="tm" style="background:${teamColor(p.team)}"></i>` : '<svg><use href="#i-user"/></svg>'}<span>${escapeHTML(p.n)}${p.n === r.me ? ` <small>(${t('youTag')})</small>` : ''}</span>${p.h ? `<b><svg><use href="#i-crown"/></svg>${t('host')}</b>` : ''}</li>`).join('');
+  const seg = (box, items, cur, onPick, enabled) => {
+    $(box).innerHTML = items.map(([id, label]) => `<button class="${cur === id ? 'on' : ''}" data-id="${id}" role="radio" aria-checked="${cur === id}"${enabled ? '' : ' disabled'}>${label}</button>`).join('');
+    $(box).querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { playSfx('click', 0.5); onPick(b.dataset.id); }));
+  };
+  const host = r.host;
+  seg('roomKind', S.MODES.map((m) => [m, t('mode_' + m)]), r.kind, (id) => netSend({ t: 'cfg', kind: id }), host);
+  seg('roomArena', ['random', ...S.ARENA_IDS].map((a) => [a, t('seg_' + a)]), r.arena, (id) => netSend({ t: 'cfg', arena: id }), host);
+  seg('roomBots', [['on', t('botsOn')], ['off', t('botsOff')]], r.bots ? 'on' : 'off', (id) => netSend({ t: 'cfg', bots: id === 'on' }), host);
+  const teams = r.kind === 'teams', mine = r.players.find((p) => p.n === r.me);
+  $('roomTeamRow').hidden = !teams;
+  if (teams) seg('roomTeam', [['0', t('teamBlue')], ['1', t('teamRed')]], String(mine?.team ?? 0), (id) => netSend({ t: 'team', k: Number(id) }), true);
+  const need2 = !r.bots && r.players.length < 2;
+  $('btnRoomStart').disabled = !host || need2; $('btnRoomStart').textContent = host ? t('start') : t('waitHost');
+  $('roomStatus').textContent = need2 ? t('needTwo') : ''; $('roomStatus').classList.toggle('bad', need2);
+}
+function retryLabel() { // the results button online: back to the room, play again, play now (rematch), or the next round's countdown
+  const b = $('btnRetry'); b.disabled = false;
+  if (net.priv && net.room?.ph === 'lobby') { b.textContent = t('backToRoom'); return; }
+  if (net.kind === 'endless') { b.textContent = t('again'); return; }
+  if (net.priv) { b.disabled = true; b.textContent = t('backToRoom'); return; } // the room's lobby comes back by itself when the round is over
+  if (net.rp?.ph === 'end') { b.disabled = true; b.textContent = t('nextRound', { n: Math.ceil(net.rp.t) }); return; }
+  if (net.kind === 'ranked') { b.disabled = true; b.textContent = t('roundLive'); return; }
+  b.textContent = t('playNow'); // mid-round: a rematch in a round that is about to start
 }
 const netSend = (m) => { if (net.ws?.readyState === 1) net.ws.send(JSON.stringify(m)); };
 function joinByCode(code) {
@@ -1793,7 +2050,11 @@ function joinByCode(code) {
 }
 function onNet(d) {
   switch (d.t) {
-    case 'err': onlineFail(d.e === 'noroom' ? 'noRoom' : d.e === 'full' ? 'roomFull' : d.e === 'ranked' ? 'rankedNeedLogin' : 'connFail'); break;
+    case 'err':
+      if (d.e === 'need2') { toast(t('needTwo')); playSfx('wall', 0.5); break; }
+      if (d.e === 'nowatch2') { toast(t('noWatch2')); break; }
+      onlineFail(d.e === 'noroom' ? 'noRoom' : d.e === 'full' ? 'roomFull' : d.e === 'ranked' ? 'rankedNeedLogin' : d.e === 'nowatch' ? 'noWatch' : d.e === 'watchEnd' ? 'watchEnd' : 'connFail'); break;
+    case 'room': onRoom(d); break;
     case 'rank': net.rating = d; if (d.place && state === State.GAMEOVER) renderOverRating(); break;
     case 'welcome': enterOnline(d); break;
     case 'you': meId = d.id; startOnlineLife(d.cd || 0); break;
@@ -1810,7 +2071,7 @@ function mirrorTop(info) {
     id: info.id, name: info.name, human: !!info.human, parts, stats: S.statsOf(parts), x: 0, z: 0, vx: 0, vz: 0, spin: CFG.startSpin, peak: CFG.startSpin,
     r: 1, mass: 1, state: 'spawn', timer: 0.6, fallY: 0, fallV: 0, dashT: 0, cd: 0, shield: 0, kos: 0, score: 0, hitWob: 0, faceX: 0, faceZ: 1, age: 0, placed: false,
   };
-  if (info.boss) { tp.boss = true; tp.bossKind = info.boss === 'magnetar' ? 'magnetar' : 'champion'; tp.parts.paint = tp.bossKind === 'magnetar' ? 'magnetar' : 'champ'; }
+  if (info.boss) { tp.boss = true; tp.bossKind = BOSS_NAME[info.boss] ? info.boss : 'champion'; tp.parts.paint = { champion: 'champ', magnetar: 'magnetar', twins: 'twins' }[tp.bossKind]; }
   if (info.team != null) tp.team = info.team;
   if (info.decoy) { tp.ai = 'decoy'; tp.decoyOf = info.decoy; }
   S.updateMass(tp); world.tops.push(tp); remember(tp);
@@ -1818,7 +2079,7 @@ function mirrorTop(info) {
 function mirrorSpark([i, x, z, vx, vz, fall, big]) { const s = world.sparks[i]; if (s) Object.assign(s, { on: true, x, z, vx, vz, fall, big, y: 0.4 + fall }); }
 function enterOnline(d) {
   stopHum(); clearViews(); mode = 'online'; run = null; player = null; meId = 0;
-  Object.assign(net, { status: 'in', code: d.code, priv: d.priv, name: d.name, players: d.players, snaps: [], offset: null, srvMe: null, me: null, kind: d.kind || 'endless', rp: d.rp || null });
+  Object.assign(net, { status: 'in', code: d.code, priv: d.priv, name: d.name, players: d.players, snaps: [], offset: null, srvMe: null, me: null, kind: d.kind || 'endless', rp: d.rp || null, watch: !!d.watch });
   $('roomCode').textContent = d.code; $('roomInfo').textContent = t('players', { n: d.players });
   world = S.createWorld({ bots: 0, sparks: 0, arena: d.arena, mode: net.kind === 'ranked' ? 'last' : net.kind, mutator: S.weekMutator() }); world.events.length = 0; world.time = d.tm; buildArena(world.arenaId);
   if (d.ts) world.teamScore = d.ts;
@@ -1827,11 +2088,12 @@ function enterOnline(d) {
   world.event = d.ev ? { ...d.ev, ang: S.pitAng(world, d.ev.pit) } : null; world.leader = d.leader;
   world.powerups = (d.pu || []).map((q) => ({ ...q, t: CFG.powerLife }));
   chevrons.visible = world.event?.id === 'tilt'; if (chevrons.visible) chevrons.rotation.y = -world.event.ang;
-  net.joinable = d.players < 10; sdkRoom({ roomId: d.code, isJoinable: net.joinable, inviteParams: { roomId: d.code } });
-  if (d.priv && state === State.LOBBY) toast(t('shareCode', { c: d.code }));
+  if (!d.watch) { net.joinable = d.players < 10; sdkRoom({ roomId: d.code, isJoinable: net.joinable, inviteParams: { roomId: d.code } }); }
+  if (d.watch) { specFollow = 0; boardTimer = 0; setState(State.SPECTATE); updateChips(); return; } // watching a live match: no top of my own
   if (net.kind !== 'endless' && net.rp && net.rp.ph !== 'count') { boardTimer = 0; setState(State.SPECTATE); } // a round is on: watch until the next one
 }
 function startOnlineLife(cd = 0) {
+  outWatch = false;
   const respawn = run && !run.over && world.mode === 'teams'; // Teams: the same run goes on after a knockout
   player = S.topById(world, meId) || player;
   if (respawn) { run.respawnT = 0; run.spectate = 0; startHum(); return; }
@@ -1840,12 +2102,18 @@ function startOnlineLife(cd = 0) {
   audio.track = ''; setState(State.PLAYING); startHum(); playSfx('launch', 0.8);
   if (!cd) setTimeout(modeHints, 1500);
 }
-function onlinePlayAgain() { if (net.status === 'in') netSend({ t: 'play', parts: save.sel }); else leaveToMenu(); }
-function sendEmote(e) { // quick chat: fixed phrases only, online, a few seconds apart
-  if (mode !== 'online' || state !== State.PLAYING || !player || !alive(player) || performance.now() - (sendEmote.at || 0) < 2500) return;
-  sendEmote.at = performance.now(); netSend({ t: 'emote', e }); $('chatMenu').hidden = true;
+function onlinePlayAgain() {
+  if (net.status !== 'in') { leaveToMenu(); return; }
+  if (net.kind === 'endless') netSend({ t: 'play', parts: save.sel });
+  else if (!net.priv && net.rp?.ph === 'play') { netSend({ t: 'requeue' }); $('btnRetry').disabled = true; } // rematch: the server moves you to a round that is starting
 }
-function renderChat() { $('chatMenu').innerHTML = [0, 1, 2, 3, 4, 5].map((i) => `<button data-e="${i}">${isTouch ? '' : `<span class="key">${i + 1}</span>`}${t('e' + i)}</button>`).join(''); $('chatMenu').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => sendEmote(Number(b.dataset.e)))); }
+function sendEmote(e) { // quick chat: fixed phrases only, online, a few seconds apart (in play, or from the results screen)
+  const ok = state === State.PLAYING ? player && alive(player) : state === State.GAMEOVER;
+  if (mode !== 'online' || net.watch || !ok || performance.now() - (sendEmote.at || 0) < 2500) return;
+  sendEmote.at = performance.now(); netSend({ t: 'emote', e }); $('chatMenu').hidden = true;
+  if (state === State.GAMEOVER) toast(`${t('you')}: ${t('e' + e)}`);
+}
+function renderChat() { $('chatMenu').innerHTML = [0, 1, 2, 3, 4, 5, 6, 7].map((i) => `<button data-e="${i}">${isTouch ? '' : `<span class="key">${i + 1}</span>`}${t('e' + i)}</button>`).join(''); $('chatMenu').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => sendEmote(Number(b.dataset.e)))); }
 let voteSig = '', myVote = '';
 function renderVote() { // round rooms, between rounds: vote on the next arena (results card, or the spectate bar)
   const rp = net.rp, on = mode === 'online' && rp?.ph === 'end' && rp.opts, box = state === State.SPECTATE ? $('specVote') : $('overVote');
@@ -1858,12 +2126,16 @@ function renderOverRating() { const r = net.rating, el = $('overRating'); el.hid
 // Anonymous counters for tuning: what was played and how it went. No ids, no names; never sent from tests or local builds.
 function sendStat(how) {
   if (CAPTURE || params.has('nocount') || /^(localhost|127\.0\.0\.1)$|\.test$/.test(location.hostname) || !run) return;
-  const m = { t: 'stat', mode: mode === 'online' ? net.kind : world.mode, arena: world.arenaId, time: Math.round(run.time), how, online: mode === 'online', tut: run.tutStat,
+  const m = { t: 'stat', mode: mode === 'online' ? net.kind : world.mode, arena: world.arenaId, time: Math.round(run.time), how, online: mode === 'online', tut: run.tutStat, daily: !!run.daily,
     puUsed: run.stats.powers || 0, puLost: run.puLost || 0, perfect: run.stats.perfect || 0, gfxLow: !!gfxLow, touch: isTouch };
   if (mode === 'online' && net.ws?.readyState === 1) { netSend(m); return; }
   try { const ws = new WebSocket(MP_URL); ws.onopen = () => { ws.send(JSON.stringify(m)); setTimeout(() => ws.close(), 300); }; ws.onerror = () => {}; } catch {}
 }
-function renderOverTop() { // online results: where you stand on today's board
+function renderOverTop() { // online results: where you stand on today's board (Daily Challenge: your best today and your place on its board)
+  if (run?.daily) {
+    const list = dailyTop?.dc || [], me = pickedName(), i = list.findIndex((e) => e.n === me || e.n === net.name), el = $('overTop');
+    el.hidden = false; el.textContent = [t('dailyLine', { s: save.daily.best }), i >= 0 ? t('dailyRank', { p: i + 1 }) : ''].filter(Boolean).join(' · '); return;
+  }
   const list = dailyTop?.list || [], i = list.findIndex((e) => e.n === net.name), el = $('overTop');
   el.hidden = mode !== 'online' || (!list.length && i < 0);
   el.textContent = i >= 0 ? t('topYou', { p: i + 1 }) : list.length >= 10 ? t('topNeed', { s: Math.round(list[list.length - 1].s) + 1 }) : '';
@@ -1915,6 +2187,7 @@ function netStep(dt) { // per fixed step while online: local animation, my predi
   }
   const me = S.topById(world, meId), playing = state === State.PLAYING && run && !run.over && !(run.countdown > 0); // the server holds everyone during a round's countdown
   let inp = { x: 0, y: 0 };
+  if (me && alive(me)) me.age = (me.age || 0) + dt; // the pit safety net in prediction needs my top's age
   if (me && alive(me) && playing) {
     inp = playerInput();
     if (takeDash() && me.cd <= 0) { S.dash(world, me, inp); dashFx(me, me.faceX, me.faceZ); net.dash = true; world.events.length = 0; }
@@ -1963,11 +2236,12 @@ function step(dt) {
     tickRun(dt);
     if ((state === State.SPECTATE || state === State.GAMEOVER) && (uiTimer -= dt) <= 0) { // waiting for a round: board, chips, the next-round countdown
       uiTimer = 0.25; if (state === State.SPECTATE) { renderBoard(); updateChips(); } renderVote();
-      if (state === State.GAMEOVER && net.kind !== 'endless' && net.rp) $('btnRetry').textContent = net.rp.ph === 'end' ? t('nextRound', { n: Math.ceil(net.rp.t) }) : t('roundLive');
+      if (state === State.GAMEOVER) retryLabel();
     }
     return;
   }
-  if (state === State.PLAYING || state === State.GAMEOVER) {
+  if (state === State.PLAYING || state === State.GAMEOVER || state === State.SPECTATE) { // solo: the match goes on behind the results, or while you watch it
+    if (state === State.SPECTATE && (uiTimer -= dt) <= 0) { uiTimer = 0.25; renderBoard(); updateChips(); }
     S.step(world, dt, soloInput);
     for (const e of world.events) handleEvent(e);
     world.events.length = 0;
@@ -2008,8 +2282,8 @@ function syncTop(tp, v, dt) {
   const sp = Math.hypot(tp.vx, tp.vz), lean = clamp(sp * 0.014, 0, 0.13), lx = sp > 0.1 ? tp.vx / sp : 0, lz = sp > 0.1 ? tp.vz / sp : 0;
   m.tilt.rotation.x = lean * lz + amp * Math.sin(v.prec); m.tilt.rotation.z = -lean * lx + amp * Math.cos(v.prec);
   m.blur.material.opacity = tp.state === 'alive' || tp.state === 'spawn' ? 0.12 + 0.42 * spinFrac : 0.05;
-  const fx = alive(tp) ? tp.fx?.kind : null; // active power-up effects
-  v.bubble.visible = fx === 'shield'; if (fx === 'shield') v.bubble.material.opacity = 0.2 + 0.08 * Math.sin(simTime * 10);
+  const fx = alive(tp) ? tp.fx?.kind : null, spawnGuard = alive(tp) && tp.human && !fx && tp.shield > 0; // active power-up effects; the landing shield of a player
+  v.bubble.visible = fx === 'shield' || spawnGuard; if (v.bubble.visible) v.bubble.material.opacity = spawnGuard ? 0.1 + 0.05 * Math.sin(simTime * 12) : 0.2 + 0.08 * Math.sin(simTime * 10);
   v.field.visible = fx === 'magnet'; if (fx === 'magnet') { v.field.rotation.y += dt * 4; v.field.scale.setScalar(1 + 0.15 * Math.sin(simTime * 6)); }
   v.anchor.visible = fx === 'anchor'; if (fx === 'anchor') v.anchor.material.emissiveIntensity = 0.4 + 0.3 * Math.sin(simTime * 5);
   if (v.flash > 0) v.flash = Math.max(0, v.flash - dt); m.mats[0].emissiveIntensity = v.flash * 3.5; // hit flash: a short white pulse, never a flat tint
@@ -2042,6 +2316,17 @@ function render(dt) {
   if (lead && alive(lead) && (state === State.PLAYING || state === State.GAMEOVER || state === State.PAUSED || state === State.SPECTATE)) {
     crownSprite.visible = true; crownSprite.position.set(lead.x, views.get(lead.id).mesh.root.position.y + 0.95 * lead.r + 1.55, lead.z); const cs = 0.9 + lead.r * 0.15; crownSprite.scale.set(cs, cs, 1);
   } else crownSprite.visible = false;
+  const nem = mode === 'online' && net.nemesis && state === State.PLAYING ? S.topById(world, net.nemesis) : null; // the top that got you last: a target to get back at
+  if (nem && alive(nem) && views.get(nem.id)) { nemSprite.visible = true; const nv = views.get(nem.id); nemSprite.position.set(nem.x, nv.mesh.root.position.y + 0.95 * nem.r + (nem.id === world.leader ? 2.5 : 1.55), nem.z); const ns = (0.8 + nem.r * 0.12) * (1 + 0.08 * Math.sin(simTime * 6)); nemSprite.scale.set(ns, ns, 1); }
+  else nemSprite.visible = false;
+  const ev = world.event, sink = ev?.id === 'sink' && (state === State.PLAYING || state === State.PAUSED || state === State.GAMEOVER || state === State.SPECTATE); // the Sinkhole: a warning ring, then the hole
+  sinkView.visible = sink;
+  if (sink) {
+    const open = ev.t <= S.EVENT_DUR.sink - CFG.sinkWarn, k = open ? 1 : clamp(1 - (ev.t - (S.EVENT_DUR.sink - CFG.sinkWarn)) / CFG.sinkWarn, 0, 1);
+    sinkView.children[0].material.opacity = open ? 0.95 : 0.25 + 0.5 * k; sinkView.children[0].scale.setScalar(open ? 1 : 0.3 + 0.7 * k); // the hole opens up
+    sinkView.children[1].material.opacity = open ? 0.9 : 0.4 + 0.55 * Math.abs(Math.sin(simTime * (6 + 10 * k))); // the rim flashes faster as it gives way
+    sinkView.children[1].material.color.set(open ? '#ff5d73' : '#ffc531'); sinkView.rotation.y += dt * (open ? 2.5 : 0.6);
+  }
   // stadium life
   crowdCheer = Math.max(0, crowdCheer - dt);
   if (crowd) {
@@ -2050,6 +2335,7 @@ function render(dt) {
     crowd.instanceMatrix.needsUpdate = true;
   }
   for (const b of beams) { b.rotation.z = Math.sin(simTime * 0.4 + b.userData.a) * 0.35; b.rotation.x = Math.cos(simTime * 0.3 + b.userData.a) * 0.35; }
+  finalT = Math.max(0, finalT - dt);
   animateArena(dt);
   const zr = S.zoneR(world), showZone = zr < R + 1 && (state === State.PLAYING || state === State.PAUSED || state === State.GAMEOVER || state === State.SPECTATE);
   zoneWall.visible = showZone && zr > 0.05; zoneFloor.visible = showZone;
@@ -2078,7 +2364,7 @@ function updateCamera(dt) {
     const lead = state === State.PLAYING && focus && alive(focus) ? 0.12 : 0;
     lookGoal.set(px + (focus?.vx || 0) * lead, 0, pz + (focus?.vz || 0) * lead);
     camLook.lerp(lookGoal, 1 - Math.exp(-dt * 4));
-    const over = state === State.GAMEOVER ? 1.25 : 1;
+    const over = (state === State.GAMEOVER ? 1.25 : 1) * (finalT > 0 && !calm() ? 0.78 : 1); // the final blow: lean in
     camPos.set(camLook.x, 15 * zoom * over, camLook.z + 12.5 * zoom * over);
     camera.position.lerp(camPos, 1 - Math.exp(-dt * 3.5));
   }
@@ -2097,7 +2383,7 @@ addEventListener('resize', resize);
 // ================================================================ COVER (tools/game_covers.py: honest key art rendered from the game itself)
 function stageCover(kind) {
   state = State.COVER; document.body.classList.add('cover');
-  for (const id of ['menu', 'garage', 'lobby', 'profile', 'settings', 'howto', 'paused', 'gameover', 'hud', 'banner', 'coach', 'countdown', 'toast', 'btnAction', 'joystick', 'missionPop']) $(id).hidden = true;
+  for (const id of ['menu', 'garage', 'lobby', 'room', 'profile', 'settings', 'howto', 'paused', 'gameover', 'hud', 'banner', 'coach', 'countdown', 'toast', 'btnAction', 'joystick', 'missionPop']) $(id).hidden = true;
   camera.clearViewOffset(); clearViews(); mode = 'solo';
   world = S.createWorld({ bots: 0, sparks: 0 }); buildArena('bowl'); zoneWall.visible = zoneFloor.visible = false;
   player = S.addTop(world, { parts: { crown: 'razor', core: 'heart', tip: 'needle', paint: 'sun' }, name: 'You', human: true, spin: 220, x: -1.15, z: 0.3, spawn: false }); meId = player.id; player.hitWob = 0.12;
@@ -2127,7 +2413,7 @@ async function boot() {
     document.fonts?.load('800 32px UI').catch(() => {}), document.fonts?.load('32px Display').catch(() => {})];
   let done = 0; jobs.forEach((p) => Promise.resolve(p).finally(() => { done++; $('loadBar').style.width = `${(100 * done) / jobs.length}%`; }));
   await Promise.race([Promise.all(jobs), new Promise((r) => setTimeout(r, 12000))]); // never hang on a slow asset
-  buildStadium(); initSparks(); scene.add(crownSprite); applyMute();
+  buildStadium(); initSparks(); scene.add(crownSprite, nemSprite, sinkView); applyMute();
   toMenuWorld();
   $('menuControls').innerHTML = controlsHTML(); refreshMenu(); refreshShakeButton(); renderChat();
   resize(); applyGfx();
