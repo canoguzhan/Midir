@@ -13,6 +13,12 @@ broadgames.pro, 104-207-80-220.sslip.io {
 	handle /mp/* {
 		reverse_proxy 127.0.0.1:8090
 	}
+	# press kits (covers, key art, screenshots, preview videos, press release) are public: stores and press link to them
+	@presskit path_regexp ^/releases/[a-z0-9-]+/presskit/
+	handle @presskit {
+		encode gzip
+		reverse_proxy 127.0.0.1:8080
+	}
 	handle {
 		import protected
 	}
