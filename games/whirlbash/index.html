@@ -60,7 +60,9 @@
     <div id="bossChip" hidden><svg><use href="#i-crown"/></svg><b data-i18n="champion">The Champion</b><div class="meter"><i id="bossBar"></i></div><span id="bossTime"></span></div>
     <div id="zoneChip" hidden><b id="zoneText"></b></div>
     <div id="teamChip" hidden><b class="t0" id="team0">0</b><span id="teamTime">3:00</span><b class="t1" id="team1">0</b></div>
-    <div id="specChip" hidden><svg><use href="#i-eye"/></svg><span id="specText"></span><button id="btnSpecLeave" data-i18n="menu">Menu</button></div>
+    <div id="specChip" hidden><svg><use href="#i-eye"/></svg><b class="live" id="specLive" hidden data-i18n="live">LIVE</b><span id="specText"></span>
+      <button id="btnSpecPrev" class="cyc" aria-label="Previous player">&#9664;</button><button id="btnSpecNext" class="cyc" aria-label="Next player">&#9654;</button>
+      <button id="btnSpecRoom" hidden data-i18n="nextMatch">Next match</button><button id="btnSpecBack" hidden data-i18n="results">Results</button><button id="btnSpecLeave" data-i18n="menu">Menu</button></div>
     <div class="vote" id="specVote" hidden></div>
   </div>
   <div class="hud-right">
@@ -98,7 +100,7 @@
     <div class="seg" id="arenaSeg" role="radiogroup"></div>
     <button id="btnPlay" class="big"><svg><use href="#i-play"/></svg><span data-i18n="play">Play</span></button>
     <button id="btnOnline" class="big online"><svg><use href="#i-globe"/></svg><span><span data-i18n="playOnline">Play online</span><small id="onlineCount" hidden></small></span></button>
-    <div class="row menu-row"><button id="btnGarage"><svg><use href="#i-gear"/></svg><span data-i18n="garage">Garage</span><i class="dot" id="garageDot" hidden></i></button><button id="btnMissions"><svg><use href="#i-target"/></svg><span data-i18n="missions">Missions</span><b class="badge" id="missionBadge">0/3</b></button></div>
+    <div class="row menu-row"><button id="btnGarage"><svg><use href="#i-gear"/></svg><span data-i18n="garage">Garage</span><i class="dot" id="garageDot" hidden></i></button><button id="btnMissions"><svg><use href="#i-target"/></svg><span data-i18n="missions">Missions</span><b class="badge" id="missionBadge">0/3</b></button><button id="btnDaily"><svg><use href="#i-star"/></svg><span data-i18n="daily">Daily</span><b class="badge" id="dailyBadge"></b></button></div>
     <div class="minestats" id="menuStats"></div>
     <div class="controls" id="menuControls"></div>
   </div>
@@ -123,12 +125,27 @@
       <div class="namerow" id="nameRow"><span data-i18n="yourName">Your name</span><select id="nameA" aria-label="Name, first word"></select><select id="nameB" aria-label="Name, second word"></select><select id="nameN" aria-label="Name number"></select><button id="btnNameDice" class="icon" aria-label="Random name"><svg><use href="#i-shuffle"/></svg></button></div>
       <div class="seg" id="lobbySeg" role="radiogroup"></div>
       <button id="btnQuick" class="big online"><svg><use href="#i-globe"/></svg><span data-i18n="quickMatch">Quick match</span></button>
-      <button id="btnCreate" class="wide"><svg><use href="#i-link"/></svg><span data-i18n="createRoom">Private room</span></button>
+      <div class="row lobby-row"><button id="btnCreate" class="wide"><svg><use href="#i-link"/></svg><span data-i18n="createRoom">Private room</span></button><button id="btnWatch" class="wide"><svg><use href="#i-eye"/></svg><span data-i18n="watchLive">Watch live</span></button></div>
       <div class="codeRow"><label for="codeInput" data-i18n="joinCode">Join with a code</label><input id="codeInput" maxlength="5" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCDE"><button id="btnJoinCode" data-i18n="join">Join</button></div>
       <p class="status" id="lobbyStatus" aria-live="polite"></p>
       <button id="btnLobbyBack" data-i18n="back">Back</button>
     </div>
     <div class="dailytop"><small class="sub" data-i18n="todayTop">Today's top 10</small><ol id="topList"></ol></div>
+  </div>
+</section>
+
+<section id="room" class="screen side" hidden>
+  <div class="card room">
+    <div class="garage-head"><h2 data-i18n="privateRoom">Private room</h2><span class="code" id="roomCodeBig">-----</span><button id="btnRoomInvite" class="icon done-x show" aria-label="Invite"><svg><use href="#i-link"/></svg></button></div>
+    <p class="tagline" data-i18n="roomHint">Share the code. Start whenever you are ready.</p>
+    <small class="sub" id="roomCount">1/10 players</small>
+    <ul class="players" id="roomPlayers"></ul>
+    <div class="seg" id="roomKind" role="radiogroup"></div>
+    <div class="seg" id="roomArena" role="radiogroup"></div>
+    <div class="seg" id="roomBots" role="radiogroup"></div>
+    <div class="setrow" id="roomTeamRow" hidden><span data-i18n="pickTeam">Your team</span><div class="seg" id="roomTeam" role="radiogroup"></div></div>
+    <p class="status" id="roomStatus" aria-live="polite"></p>
+    <div class="row room-row"><button id="btnRoomStart" class="big" data-i18n="start">Start</button><button id="btnRoomLeave" class="wide" data-i18n="leave">Leave</button></div>
   </div>
 </section>
 
@@ -165,6 +182,9 @@
     <button id="btnShake" class="wide subtle">Camera shake: on</button>
     <button id="btnCalm" class="wide subtle">Reduced effects: off</button>
     <button id="btnCb" class="wide subtle">Colour-blind teams: off</button>
+    <button id="btnVib" class="wide subtle touch-only">Vibration: on</button>
+    <button id="btnFlick" class="wide subtle touch-only">Flick the stick to dash: on</button>
+    <button id="btnAutoPw" class="wide subtle touch-only">Auto-use power-ups before they expire: on</button>
     <button id="btnSettingsDone" class="big" data-i18n="done">Done</button>
   </div>
 </section>
@@ -173,6 +193,7 @@
   <div class="card center">
     <h2 data-i18n="paused">Paused</h2>
     <button id="btnResume" class="big" data-i18n="resume">Resume</button>
+    <button id="btnEndMatch" class="wide" hidden data-i18n="endMatch">End match</button>
     <button id="btnQuit" class="wide" data-i18n="menu">Menu</button>
     <button id="btnPauseSettings" class="wide subtle"><svg><use href="#i-sliders"/></svg><span data-i18n="settings">Settings</span></button>
   </div>
@@ -182,6 +203,7 @@
   <div class="card center results">
     <h2 id="overTitle" data-i18n="eliminated">Eliminated!</h2>
     <p class="by" id="overBy"></p>
+    <p class="near" id="overNear" hidden></p>
     <p class="final"><b id="finalScore">0</b></p>
     <p class="best"><span data-i18n="best">Best</span>: <b id="overBest">0</b> <span id="newBest" data-i18n="newBest" hidden>New best!</span></p>
     <div class="grid">
@@ -190,15 +212,17 @@
       <div><small data-i18n="peak">Peak spin</small><b id="overPeak">0</b></div>
       <div><small data-i18n="time">Time</small><b id="overTime">0:00</b></div>
     </div>
+    <div class="story" id="overStory"></div>
     <p class="earned"><svg class="gold"><use href="#i-gear"/></svg>+<b id="overGears">0</b> <span data-i18n="gears">gears</span></p>
     <div class="lvrow over"><span class="lv" id="overLv">Lv 1</span><div class="xpbar"><i id="overXp"></i></div><small id="overXpText"></small></div>
     <div class="chips" id="overChips"></div>
     <p class="daily" id="overTop" hidden></p>
     <p class="daily" id="overRating" hidden></p>
     <div class="vote" id="overVote" hidden></div>
+    <div class="emotes" id="overEmotes" hidden></div>
     <button id="btnDouble" class="reward" hidden><svg><use href="#i-video"/></svg><span data-i18n="double">Double gears</span></button>
     <button id="btnRetry" class="big" data-i18n="again">Play again</button>
-    <div class="row"><button id="btnOverInvite" hidden><svg><use href="#i-link"/></svg><span data-i18n="inviteFriends">Invite friends</span></button><button id="btnOverGarage" class="wide" data-i18n="garage">Garage</button><button id="btnMenu" class="wide" data-i18n="menu">Menu</button></div>
+    <div class="row"><button id="btnWatchOut" hidden><svg><use href="#i-eye"/></svg><span data-i18n="watch">Watch</span></button><button id="btnOverInvite" hidden><svg><use href="#i-link"/></svg><span data-i18n="inviteFriends">Invite friends</span></button><button id="btnOverGarage" class="wide" data-i18n="garage">Garage</button><button id="btnMenu" class="wide" data-i18n="menu">Menu</button></div>
   </div>
 </section>
 
