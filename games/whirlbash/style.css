@@ -187,7 +187,15 @@ button.icon { width: calc(var(--u) * 2.7); height: calc(var(--u) * 2.7); padding
 #onlineCount { font: 800 calc(var(--u) * .7) "UI", sans-serif; letter-spacing: 0; opacity: .8; }
 .menu-row { width: 100%; justify-content: flex-start; }
 .menu-row button { flex: 1; position: relative; }
-.badge { padding: .05em .45em; border-radius: 8px; background: rgba(0, 0, 0, .3); font-size: .8em; }
+.badge { padding: .05em .45em; border-radius: 8px; background: rgba(0, 0, 0, .3); font-size: .8em; white-space: nowrap; }
+/* 2.0 menu: a compact grid (level + best on one row, Play and Play online side by side); the part stats live in the garage */
+#menu .card { display: grid; grid-template-columns: 1fr 1fr; align-items: center; width: min(31em, 46vw); }
+#menu .card > * { grid-column: 1 / -1; }
+#menu .card > .lvrow { grid-column: 1; }
+#menu .card > .stats { grid-column: 2; justify-content: flex-end; }
+#menu .card > #btnPlay { grid-column: 1; }
+#menu .card > #btnOnline { grid-column: 2; }
+#menu .card > .big { justify-content: center; padding: .4em .5em; white-space: nowrap; }
 .badge.todo { background: var(--coral); }
 .minestats { display: grid; grid-template-columns: repeat(4, 1fr); gap: .3em .6em; width: 100%; font-size: calc(var(--u) * .78); color: var(--dim); }
 .minestats div { display: flex; flex-direction: column; gap: .2em; }
@@ -269,6 +277,7 @@ button.icon { width: calc(var(--u) * 2.7); height: calc(var(--u) * 2.7); padding
 @media (max-aspect-ratio: 1/1) {
   .screen.side { justify-content: center; align-items: flex-end; padding: 12px; background: linear-gradient(0deg, rgba(10, 10, 32, .75), rgba(10, 10, 32, 0) 60%); }
   .screen.side .card { width: 100%; align-items: center; text-align: center; }
+  #menu .card { width: 100%; }
   .garage, .lobby, .profile { width: 100%; max-height: 62vh; }
   #roomChip #roomInfo { display: none; }
   .grid { grid-template-columns: repeat(2, 1fr); }
@@ -352,7 +361,6 @@ body.touch button { min-height: 44px; }
   #menu .card > #btnPlay { grid-column: 1; }
   #menu .card > #btnOnline { grid-column: 2; }
   #menu .card > .big { justify-content: center; padding: .3em .5em; font-size: calc(var(--u) * 1.45); white-space: nowrap; }
-  #menu .minestats { display: none; }
   .profile { width: min(640px, 70vw); }
   .profile #btnProfileDone { display: none; }
   .profile button.done-x { display: grid; place-items: center; margin-left: .6em; width: 44px; height: 44px; background: var(--accent); color: #3b2300; box-shadow: 0 3px 0 var(--accent-dark); }
