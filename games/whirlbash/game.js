@@ -1014,6 +1014,7 @@ function setTouchUI(on) { // the input actually used decides: hybrid laptops, ta
   if (state === State.PLAYING) { $('btnAction').hidden = !on; $('dashKey').hidden = on; }
   updatePowerUI();
 }
+document.body.classList.toggle('touch', isTouch); // from the start: switching on the first touchstart re-laid out the menu under the finger, so the first tap missed
 addEventListener('touchstart', () => setTouchUI(true), { passive: true, capture: true });
 addEventListener('keydown', (e) => {
   if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
