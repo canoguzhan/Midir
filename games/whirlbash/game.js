@@ -97,6 +97,7 @@ const STRINGS = {
     perfect: 'Perfect!', zoneSoon: 'Ring closes in {n}s', zoneClosing: 'The ring is closing!', zoneSub: 'Stay inside or lose spin fast', left: 'left',
     lastTopGo: 'Last Top Spinning!', lastTopSub: 'No respawns. Be the last top in the ring.', playingNow: '{n} playing now', inviteFriends: 'Invite friends',
     st_short_atk: 'ATK', st_short_def: 'DEF', st_short_sta: 'STA', st_short_spd: 'SPD',
+    privacy: 'Privacy: Whirlbash has no accounts of its own. Your progress is saved on this device, and in your CrazyGames account when you are signed in. Online play sends your player name, your top and your moves to the BroadGamesPro game server; it keeps the daily top 10 names and scores and anonymous play counts, nothing else.',
     settings: 'Settings', music: 'Music', sound: 'Sound', graphics: 'Graphics', gfx_auto: 'Auto', gfx_high: 'High', gfx_low: 'Fast',
     mode_teams: 'Teams', modeName_teams: 'Teams', seg_orbit: 'Orbit', arena_orbit: 'Orbit Ring', arenaSub_orbit: 'The pits travel round the rim',
     arenaDay: 'Arena of the Day: 2× XP', xp2: '2× XP', t_none: 'None', t_sparkle: 'Sparkle', t_bubble: 'Bubbles', t_frost: 'Frost', t_flame: 'Flame', t_rainbow: 'Rainbow', tab_trail: 'Trail',
@@ -190,6 +191,7 @@ const STRINGS = {
     perfect: 'Mükemmel!', zoneSoon: 'Halka {n} sn içinde daralıyor', zoneClosing: 'Halka daralıyor!', zoneSub: 'İçeride kal yoksa dönüşün hızla biter', left: 'kaldı',
     lastTopGo: 'Son Dönen Topaç!', lastTopSub: 'Yeniden doğma yok. Halkada kalan son topaç ol.', playingNow: 'Şu an {n} kişi oynuyor', inviteFriends: 'Arkadaşlarını davet et',
     st_short_atk: 'SAL', st_short_def: 'SAV', st_short_sta: 'DAY', st_short_spd: 'HIZ',
+    privacy: 'Gizlilik: Whirlbash\'in kendi hesap sistemi yoktur. İlerlemen bu cihazda, giriş yaptıysan CrazyGames hesabında da saklanır. Çevrimiçi oyunda oyuncu adın, topacın ve hareketlerin BroadGamesPro oyun sunucusuna gider; sunucu yalnızca günün ilk 10 isim ve skorunu ve anonim oyun sayılarını tutar.',
     settings: 'Ayarlar', music: 'Müzik', sound: 'Ses', graphics: 'Grafik', gfx_auto: 'Otomatik', gfx_high: 'Yüksek', gfx_low: 'Hızlı',
     mode_teams: 'Takımlar', modeName_teams: 'Takımlar', seg_orbit: 'Yörünge', arena_orbit: 'Yörünge Halkası', arenaSub_orbit: 'Çukurlar kenar boyunca döner',
     arenaDay: 'Günün Arenası: 2× XP', xp2: '2× XP', t_none: 'Yok', t_sparkle: 'Pırıltı', t_bubble: 'Baloncuk', t_frost: 'Ayaz', t_flame: 'Alev', t_rainbow: 'Gökkuşağı', tab_trail: 'İz',
@@ -264,7 +266,11 @@ const sdkReady = () => !!crazySdk && sdkEnv !== 'disabled';
 const adsAvailable = () => sdkReady() && !adsFailed && !!crazySdk.ad;
 function sdkCall(fn) { if (!sdkReady()) return; try { fn(crazySdk); } catch (e) { console.warn('[CrazyGames]', e); } }
 function sdkLocale() { if (!sdkReady()) return null; try { return crazySdk.user?.systemInfo?.locale || null; } catch { return null; } }
-function applySdkSettings(s) { if (s?.muteAudio) muteAudio('sdk'); else unmuteAudio('sdk'); } // platform mute overrides everything
+let chatOff = false; // the platform's disableChat: no quick chat at all (no button, nothing sent, other players' phrases not shown)
+function applySdkSettings(s) {
+  if (s?.muteAudio) muteAudio('sdk'); else unmuteAudio('sdk'); // platform mute overrides everything
+  chatOff = !!s?.disableChat; if (chatOff) { $('chat').hidden = true; $('chatMenu').hidden = true; }
+}
 
 function onGameplayStart() { if (gameplayActive) return; gameplayActive = true; sdkCall((s) => s.game.gameplayStart()); }
 function onGameplayStop() { if (!gameplayActive) return; gameplayActive = false; sdkCall((s) => s.game.gameplayStop()); }
@@ -317,7 +323,7 @@ async function sdkToken() { // a signed CrazyGames user token: the game server r
   if (!sdkReady()) return null;
   try { if (!crazySdk.user?.isUserAccountAvailable) return null; return (await crazySdk.user.getUserToken()) || null; } catch { return null; }
 }
-const sdkRoom = (info) => sdkCall((s) => s.game.updateRoom?.(info));
+const sdkRoom = (info) => { sdkCall((s) => s.game.updateRoom?.(info)); if (info.roomId) inviteLinkFor(info.roomId); }; // the invite link is made as soon as a room exists, ready for the CrazyGames invite flow
 const sdkLeftRoom = () => sdkCall((s) => s.game.leftRoom?.());
 async function sdkUsername() { // CrazyGames username when logged in (required to be shown in multiplayer); guests get a server-made name
   if (!sdkReady()) return null;
@@ -1228,7 +1234,7 @@ function setState(s) {
   if (s !== State.PLAYING) { stick.id = null; stick.x = stick.y = 0; $('joystick').hidden = true; }
   if (s !== State.PLAYING && s !== State.PAUSED) { $('coach').hidden = true; $('countdown').hidden = true; $('banner').hidden = true; bannerTimer = 0; }
   if (s === State.PLAYING) onGameplayStart(); else onGameplayStop(); // stop on every break: menus, pause, game over, waiting for a round
-  $('chat').hidden = !(s === State.PLAYING && mode === 'online'); $('chatMenu').hidden = true; // quick chat: online play only
+  $('chat').hidden = chatOff || !(s === State.PLAYING && mode === 'online'); $('chatMenu').hidden = true; // quick chat: online play only
   $('overEmotes').hidden = !(s === State.GAMEOVER && mode === 'online' && !net.watch);
   if (s !== State.GAMEOVER && s !== State.SPECTATE) { $('overVote').hidden = $('specVote').hidden = true; $('overRating').hidden = true; }
   if (s !== State.PLAYING) { notices.length = 0; missionPopTimer = 0; $('missionPop').hidden = true; } // notices belong to play: never over a menu or the results
@@ -1697,6 +1703,7 @@ function handleEvent(e) {
       if (e.id === meId) { banner(t('revenge'), `+${e.pts}`, false, 1.8); playSfx('cheer', 0.6); cheer(); vib([30, 40, 30]); net.nemesis = 0; if (run) run.revenge = true; }
       break;
     case 'emote': {
+      if (chatOff) break;
       const phrase = t('e' + e.e);
       if (tp && (state === State.PLAYING || state === State.SPECTATE)) { popText(tp.x, tp.z, 2 + (tp.r || 1), phrase, 'say', 2.2); playSfx('click', 0.5 * nearVol(tp.x, tp.z)); }
       else if (e.n && e.n !== net.name) { toast(`${e.n}: ${phrase}`); playSfx('click', 0.4); } // from the results screen (or off camera)
@@ -2160,7 +2167,7 @@ function onlinePlayAgain() {
 }
 function sendEmote(e) { // quick chat: fixed phrases only, online, a few seconds apart (in play, or from the results screen)
   const ok = state === State.PLAYING ? player && alive(player) : state === State.GAMEOVER;
-  if (mode !== 'online' || net.watch || !ok || performance.now() - (sendEmote.at || 0) < 2500) return;
+  if (chatOff || mode !== 'online' || net.watch || !ok || performance.now() - (sendEmote.at || 0) < 2500) return;
   sendEmote.at = performance.now(); netSend({ t: 'emote', e }); $('chatMenu').hidden = true;
   if (state === State.GAMEOVER) toast(`${t('you')}: ${t('e' + e)}`);
 }
