@@ -14,6 +14,7 @@ const CAPTURE = params.has('capture'); // deterministic frame stepping for press
 const AUTOPLAY = CAPTURE || params.has('autoplay'); // the player's top is driven by the bot brain (trailer footage, balance tests)
 const { CFG, R, PARTS, part, bowlY, angDiff, clamp, alive, isDecoy } = S;
 const MP_URL = /^wss?:\/\//.test(params.get('mp') || '') ? params.get('mp') : 'wss://broadgames.pro/mp/whirlbash'; // online arena (?mp= for local tests)
+const CAM = { height: 9.6, back: 12.6, ahead: 1.8, tallHeight: 12.5, tallBack: 8.5, tallAhead: 0.6 }; // gameplay chase camera: height and distance behind the focus, how far past it the view centres; portrait screens look down more steeply
 const INTERP = 0.12; // online: other tops are drawn this far in the past, between two server snapshots
 const SFX_FILES = {
   clash: 'assets/audio/whirl_clash.mp3', clashHeavy: 'assets/audio/whirl_clash_heavy.mp3', dash: 'assets/audio/whirl_dash.mp3',
@@ -601,8 +602,23 @@ function canvasTex(w, h, draw) {
 }
 
 // The stadium around the bowl never changes: lights, stands + crowd, sky, light beams, tilt chevrons, the Last Top ring wall.
+// Reflections: a tiny studio (night dome, bright light strips, pink + cyan stadium glows) baked once into a PMREM map, so the
+// metal parts, glossy plastic and the lacquered floor catch real highlights instead of reading as flat colour.
+function buildEnv() {
+  const env = new THREE.Scene();
+  env.add(new THREE.Mesh(new THREE.SphereGeometry(50, 32, 16), new THREE.MeshBasicMaterial({ color: '#141033', side: THREE.BackSide })));
+  const strip = (c, k, w, h, x, y, z) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(c).multiplyScalar(k), side: THREE.DoubleSide })); m.position.set(x, y, z); m.lookAt(0, 0, 0); env.add(m); };
+  strip('#ffffff', 6, 34, 5, 0, 36, 14); strip('#ffffff', 4, 34, 4, 0, 36, -16); // floodlight rigs
+  strip('#ff7fd0', 2.2, 60, 10, -38, 8, -10); strip('#7fd8ff', 2.2, 60, 10, 38, 8, 10); // stadium glow
+  strip('#ffc531', 1.4, 80, 4, 0, 3, -42); strip('#4cb8ff', 1.2, 80, 4, 0, 3, 42); // ad-board bands round the bowl
+  const pm = new THREE.PMREMGenerator(renderer);
+  scene.environment = pm.fromScene(env, 0.04).texture; scene.environmentIntensity = 0.85;
+  pm.dispose(); env.traverse((o) => { o.geometry?.dispose(); o.material?.dispose(); });
+}
+
 function buildStadium() {
-  scene.add(new THREE.HemisphereLight('#c9d0ff', '#2a1d4a', 1.25));
+  buildEnv();
+  scene.add(new THREE.HemisphereLight('#c9d0ff', '#2a1d4a', 0.7));
   const sun = new THREE.DirectionalLight('#ffffff', 2.3); sun.position.set(10, 30, 14); sun.castShadow = true; sunLight = sun;
   sun.shadow.mapSize.set(2048, 2048); Object.assign(sun.shadow.camera, { left: -28, right: 28, top: 28, bottom: -28, near: 1, far: 80 }); sun.shadow.bias = -0.0005;
   scene.add(sun);
@@ -687,24 +703,54 @@ function buildArena(id) {
   // bowl floor: lathe profile with planar UVs so the painted rings stay round
   const prof = []; for (let i = 0; i <= 32; i++) { const r = (i / 32) * (R + 0.3); prof.push(new THREE.Vector2(r, bowlY(Math.min(r, R)))); }
   const floorGeo = new THREE.LatheGeometry(prof, 128); planarUV(floorGeo, R + 0.3);
-  const floorTex = canvasTex(1024, 1024, (g, w) => {
-    const c = w / 2, rr = c;
-    const grad = g.createRadialGradient(c, c, 0, c, c, rr); grad.addColorStop(0, look.floor[0]); grad.addColorStop(0.7, look.floor[1]); grad.addColorStop(1, look.floor[2]);
+  // 2.0 floor: a lacquered arena deck. Concentric plate rings with seams and rivets, a faint hex weave, soft wear, a deep
+  // edge vignette and a few clean painted guides (no busy spoke grid); the gloss comes from the environment map.
+  const floorTex = canvasTex(2048, 2048, (g, w) => {
+    const c = w / 2, rr = c, TAU = Math.PI * 2;
+    const grad = g.createRadialGradient(c, c, 0, c, c, rr); grad.addColorStop(0, look.floor[0]); grad.addColorStop(0.62, look.floor[1]); grad.addColorStop(1, look.floor[2]);
     g.fillStyle = grad; g.fillRect(0, 0, w, w);
-    g.strokeStyle = `rgba(${look.line}, .28)`; g.lineWidth = 3;
-    for (let a = 0; a < 24; a++) { g.beginPath(); g.moveTo(c, c); g.lineTo(c + Math.cos((a / 24) * Math.PI * 2) * rr, c + Math.sin((a / 24) * Math.PI * 2) * rr); g.stroke(); }
-    for (const [f, lw, col] of [[0.2, 6, `rgba(${look.line}, .5)`], [0.42, 5, `rgba(${look.line}, .45)`], [0.64, 8, 'rgba(255, 197, 49, .55)'], [0.86, 5, `rgba(${look.line}, .45)`], [0.985, 10, 'rgba(255, 232, 194, .8)']]) {
-      g.lineWidth = lw; g.strokeStyle = col; g.beginPath(); g.arc(c, c, rr * f, 0, Math.PI * 2); g.stroke();
+    // plates: alternate rings a touch lighter / darker, each ring cut into panels by seams
+    const bands = [0, 0.2, 0.42, 0.64, 0.86, 1];
+    for (let b = 0; b < bands.length - 1; b++) {
+      g.fillStyle = b % 2 ? 'rgba(255, 255, 255, .035)' : 'rgba(0, 0, 0, .06)';
+      g.beginPath(); g.arc(c, c, rr * bands[b + 1], 0, TAU); g.arc(c, c, rr * bands[b], 0, TAU, true); g.fill();
+      const panels = [1, 6, 12, 18, 24][b];
+      if (panels > 1) {
+        g.strokeStyle = 'rgba(8, 6, 30, .35)'; g.lineWidth = 3;
+        for (let k = 0; k < panels; k++) { const a = (k / panels) * TAU + b * 0.13; g.beginPath(); g.moveTo(c + Math.cos(a) * rr * bands[b], c + Math.sin(a) * rr * bands[b]); g.lineTo(c + Math.cos(a) * rr * bands[b + 1], c + Math.sin(a) * rr * bands[b + 1]); g.stroke(); }
+      }
     }
-    if (!def.turnR) { // centre swirl emblem (the turntable disc covers the centre instead)
-      g.lineCap = 'round'; g.lineWidth = 7; g.strokeStyle = 'rgba(255, 214, 92, .55)';
-      for (let k = 0; k < 3; k++) { g.beginPath(); g.arc(c, c, rr * 0.1, (k * Math.PI * 2) / 3, (k * Math.PI * 2) / 3 + 1.5); g.stroke(); }
+    // hex weave, very faint (reads as a material, not as a pattern)
+    g.strokeStyle = 'rgba(255, 255, 255, .035)'; g.lineWidth = 2;
+    const hx = 38, hy = hx * Math.sqrt(3) / 2;
+    for (let y = 0, row = 0; y < w + hy; y += hy, row++) for (let x = (row % 2) * hx * 0.75; x < w + hx; x += hx * 1.5) {
+      g.beginPath(); for (let k = 0; k <= 6; k++) { const a = (k / 6) * TAU; g[k ? 'lineTo' : 'moveTo'](x + Math.cos(a) * hx * 0.5, y + Math.sin(a) * hx * 0.5); } g.stroke();
     }
-    g.fillStyle = 'rgba(255, 232, 194, .7)';
-    for (let a = 0; a < 72; a++) { const ang = (a / 72) * Math.PI * 2; g.beginPath(); g.arc(c + Math.cos(ang) * rr * 0.93, c + Math.sin(ang) * rr * 0.93, 4, 0, Math.PI * 2); g.fill(); }
+    // wear: soft scuffs and spin marks where tops have ground the paint
+    for (let k = 0; k < 260; k++) {
+      const a = Math.random() * TAU, r = Math.sqrt(Math.random()) * rr * 0.95, len = 0.05 + Math.random() * 0.3;
+      g.strokeStyle = `rgba(255, 255, 255, ${0.015 + Math.random() * 0.03})`; g.lineWidth = 1 + Math.random() * 3;
+      g.beginPath(); g.arc(c, c, r, a, a + len); g.stroke();
+    }
+    // painted guides: seam rings, the gold midline and the cream edge line; rivets on every seam ring
+    for (const [f, lw, col] of [[0.2, 4, `rgba(${look.line}, .4)`], [0.42, 4, `rgba(${look.line}, .35)`], [0.64, 12, 'rgba(255, 197, 49, .7)'], [0.86, 4, `rgba(${look.line}, .35)`], [0.985, 16, 'rgba(255, 232, 194, .85)']]) {
+      g.lineWidth = lw; g.strokeStyle = col; g.beginPath(); g.arc(c, c, rr * f, 0, TAU); g.stroke();
+    }
+    g.fillStyle = 'rgba(255, 255, 255, .22)';
+    for (const f of [0.42, 0.86]) for (let a = 0; a < 96; a++) { const ang = (a / 96) * TAU; g.beginPath(); g.arc(c + Math.cos(ang) * rr * (f + 0.012), c + Math.sin(ang) * rr * (f + 0.012), 3, 0, TAU); g.fill(); }
+    if (!def.turnR) { // centre emblem: a gold swirl on a dark medallion (the turntable disc covers the centre instead)
+      g.fillStyle = 'rgba(10, 8, 34, .45)'; g.beginPath(); g.arc(c, c, rr * 0.15, 0, TAU); g.fill();
+      g.lineCap = 'round'; g.lineWidth = 16; g.strokeStyle = 'rgba(255, 214, 92, .8)';
+      for (let k = 0; k < 3; k++) { g.beginPath(); g.arc(c, c, rr * 0.1, (k * TAU) / 3, (k * TAU) / 3 + 1.5); g.stroke(); }
+      g.fillStyle = 'rgba(255, 214, 92, .8)'; g.beginPath(); g.arc(c, c, rr * 0.025, 0, TAU); g.fill();
+    }
+    g.fillStyle = 'rgba(255, 232, 194, .75)';
+    for (let a = 0; a < 96; a++) { const ang = (a / 96) * TAU; g.beginPath(); g.arc(c + Math.cos(ang) * rr * 0.935, c + Math.sin(ang) * rr * 0.935, 5, 0, TAU); g.fill(); }
+    const vig = g.createRadialGradient(c, c, rr * 0.55, c, c, rr); vig.addColorStop(0, 'rgba(6, 4, 24, 0)'); vig.addColorStop(1, 'rgba(6, 4, 24, .45)'); // the edge falls into shadow
+    g.fillStyle = vig; g.fillRect(0, 0, w, w);
   });
-  v.texs.push(floorTex);
-  const floor = add(new THREE.Mesh(floorGeo, new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.32, metalness: 0.15, side: THREE.DoubleSide })));
+  floorTex.anisotropy = 8; v.texs.push(floorTex);
+  const floor = add(new THREE.Mesh(floorGeo, new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.26, metalness: 0.2, side: THREE.DoubleSide })));
   floor.receiveShadow = true;
   const skirt = add(new THREE.Mesh(new THREE.CylinderGeometry(R + 0.35, R * 0.7, 9, 96, 1, true), new THREE.MeshStandardMaterial({ color: look.skirt, roughness: 0.8, side: THREE.DoubleSide })));
   skirt.position.y = bowlY(R) - 4.5;
@@ -811,8 +857,8 @@ function crownGeometry(id) {
     };
     for (let i = 0; i <= N; i++) { const a = (i / N) * TAU, r = rad(a); if (i === 0) shape.moveTo(Math.cos(a) * r, Math.sin(a) * r); else shape.lineTo(Math.cos(a) * r, Math.sin(a) * r); }
     const hole = new THREE.Path(); hole.absarc(0, 0, 0.36, 0, TAU, true); shape.holes.push(hole);
-    const g = new THREE.ExtrudeGeometry(shape, { depth: 0.14, bevelEnabled: true, bevelThickness: 0.035, bevelSize: 0.03, bevelSegments: 2, curveSegments: 6 });
-    g.rotateX(-Math.PI / 2); g.translate(0, 0.47, 0); return g;
+    const g = new THREE.ExtrudeGeometry(shape, { depth: 0.2, bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.04, bevelSegments: 3, curveSegments: 6 }); // 2.0: a chunkier toy ring with a rounded edge that catches the light
+    g.rotateX(-Math.PI / 2); g.translate(0, 0.42, 0); return g;
   });
 }
 function buildTopMesh(parts, paintId, accentHex) {
@@ -978,24 +1024,31 @@ function syncOrbs(dt) {
 }
 
 // ================================================================ SPARKS (instanced pickups: grow your spin)
-let sparkMesh = null;
+// 2.0: each spark is a cut gem (faceted crown + pavilion, flat-shaded so every facet catches the environment) floating over a
+// soft additive glow pool on the floor, so the field reads as treasure rather than confetti.
+let sparkMesh = null, sparkGlow = null;
 function initSparks() {
-  sparkMesh = new THREE.InstancedMesh(new THREE.OctahedronGeometry(0.3), new THREE.MeshStandardMaterial({ color: '#ffe066', emissive: '#ffb000', emissiveIntensity: 1.1, roughness: 0.3, metalness: 0.2 }), CFG.sparkMax);
+  const prof = [new THREE.Vector2(0, -0.3), new THREE.Vector2(0.27, 0.02), new THREE.Vector2(0.27, 0.06), new THREE.Vector2(0.15, 0.2), new THREE.Vector2(0, 0.2)];
+  const gem = new THREE.LatheGeometry(prof, 8);
+  sparkMesh = new THREE.InstancedMesh(gem, new THREE.MeshStandardMaterial({ color: '#ffd84a', emissive: '#ff9d00', emissiveIntensity: 0.55, roughness: 0.12, metalness: 0.55, flatShading: true }), CFG.sparkMax);
   sparkMesh.castShadow = false; sparkMesh.frustumCulled = false; scene.add(sparkMesh);
+  const glowTexS = canvasTex(64, 64, (g, w) => { const gr = g.createRadialGradient(w / 2, w / 2, 0, w / 2, w / 2, w / 2); gr.addColorStop(0, 'rgba(255, 210, 80, .9)'); gr.addColorStop(0.4, 'rgba(255, 170, 40, .35)'); gr.addColorStop(1, 'rgba(255, 150, 20, 0)'); g.fillStyle = gr; g.fillRect(0, 0, w, w); });
+  sparkGlow = new THREE.InstancedMesh(new THREE.PlaneGeometry(1.3, 1.3).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ map: glowTexS, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.55 }), CFG.sparkMax);
+  sparkGlow.frustumCulled = false; sparkGlow.renderOrder = 1; scene.add(sparkGlow);
 }
 const sparkTmp = new THREE.Object3D();
 function renderSparks() {
   const sparks = world.sparks;
   for (let i = 0; i < CFG.sparkMax; i++) {
     const s = sparks[i];
-    if (!s?.on) sparkTmp.scale.setScalar(0);
-    else {
-      const sc = (s.big ? 1.25 + 0.25 * Math.sin(s.ph * 2) : 1) * (s.fall > 0 ? 0.8 : 1);
-      sparkTmp.position.set(s.x, bowlY(Math.hypot(s.x, s.z)) + s.y + Math.sin(s.ph) * 0.1, s.z); sparkTmp.rotation.set(0, s.ph, 0); sparkTmp.scale.setScalar(sc);
-    }
+    if (!s?.on) { sparkTmp.scale.setScalar(0); sparkTmp.updateMatrix(); sparkMesh.setMatrixAt(i, sparkTmp.matrix); sparkGlow.setMatrixAt(i, sparkTmp.matrix); continue; }
+    const sc = (s.big ? 1.3 + 0.2 * Math.sin(s.ph * 2) : 0.9) * (s.fall > 0 ? 0.8 : 1), fy = bowlY(Math.hypot(s.x, s.z));
+    sparkTmp.position.set(s.x, fy + s.y + 0.12 + Math.sin(s.ph) * 0.1, s.z); sparkTmp.rotation.set(0.25, s.ph * 1.4, 0); sparkTmp.scale.setScalar(sc);
     sparkTmp.updateMatrix(); sparkMesh.setMatrixAt(i, sparkTmp.matrix);
+    sparkTmp.position.set(s.x, fy + 0.04, s.z); sparkTmp.rotation.set(0, 0, 0); sparkTmp.scale.setScalar(sc * (s.y > 0.5 ? 0.6 : 1));
+    sparkTmp.updateMatrix(); sparkGlow.setMatrixAt(i, sparkTmp.matrix);
   }
-  sparkMesh.instanceMatrix.needsUpdate = true;
+  sparkMesh.instanceMatrix.needsUpdate = true; sparkGlow.instanceMatrix.needsUpdate = true;
 }
 
 // ================================================================ FX (pooled additive sparks + shockwave rings, camera shake)
@@ -1292,8 +1345,6 @@ function refreshMenu() {
   $('menuLv').textContent = t('lv', { n: save.level }); $('menuXp').style.width = `${Math.round((100 * save.xp) / xpFor(save.level))}%`;
   $('menuXpText').textContent = t('xp', { a: save.xp, b: xpFor(save.level) });
   refreshMissions(); $('missionBadge').textContent = `${3 - missionLeft()}/3`;
-  const ds = displayStats(save.sel);
-  $('menuStats').innerHTML = ['atk', 'def', 'sta', 'spd'].map((k) => `<div><span>${t('st_short_' + k)}</span><i><b style="width:${Math.round(ds[k] * 100)}%"></b></i></div>`).join('');
   renderSegs();
   $('weekly').textContent = t('mut_' + S.weekMutator()); // this week's Endless twist
   const dc = dailyCfg(); $('dailyBadge').textContent = save.daily.day === dc.day && save.daily.best ? save.daily.best : t(dc.mode === 'last' ? 'mode_last' : 'mode_endless');
@@ -2362,10 +2413,12 @@ function updateCamera(dt) {
     const s = focus ? Math.min(focus.r, 2) : 1, zoom = (1 + (s - 1) * 0.45) * (portrait ? 1.55 : 1) * (isShort() && !portrait ? 1.3 : 1);
     const px = focus ? focus.x : 0, pz = focus ? focus.z : 0;
     const lead = state === State.PLAYING && focus && alive(focus) ? 0.12 : 0;
-    lookGoal.set(px + (focus?.vx || 0) * lead, 0, pz + (focus?.vz || 0) * lead);
+    lookGoal.set(px + (focus?.vx || 0) * lead, 0, pz + (focus?.vz || 0) * lead - (portrait ? CAM.tallAhead : CAM.ahead));
     camLook.lerp(lookGoal, 1 - Math.exp(-dt * 4));
     const over = (state === State.GAMEOVER ? 1.25 : 1) * (finalT > 0 && !calm() ? 0.78 : 1); // the final blow: lean in
-    camPos.set(camLook.x, 15 * zoom * over, camLook.z + 12.5 * zoom * over);
+    // 2.0: a lower chase angle (about 37 degrees) so the tops read as 3D toys and the lit stands fill the horizon; the
+    // look point sits a little past the focus so your top rides in the lower middle with the arena ahead of it
+    camPos.set(camLook.x, (portrait ? CAM.tallHeight : CAM.height) * zoom * over, camLook.z + (portrait ? CAM.tallBack : CAM.back) * zoom * over);
     camera.position.lerp(camPos, 1 - Math.exp(-dt * 3.5));
   }
   shakeAmt = Math.max(0, shakeAmt - dt * 2.5);
@@ -2431,7 +2484,7 @@ async function boot() {
       cover: (kind) => stageCover(kind),
       orb: (k, dx = 3, dz = 0) => { if (player) S.spawnPowerup(world, k, [player.x + dx, player.z + dz]); world.events.length = 0; }, // screenshots of the power-up orbs
     };
-    render(0);
+    updateCamera(5); render(0); // the menu camera starts in place: the first press shot is the menu over the live arena
     return;
   }
   requestAnimationFrame((n) => { last = n; frame(n); });
