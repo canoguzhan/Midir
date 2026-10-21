@@ -529,3 +529,4 @@ body:not(.touch) .touch-only { display: none; }
   .results .final { font-size: calc(var(--u) * 2.6); }
   .results .grid div, .results .story div { padding-top: .18em; padding-bottom: .18em; }
 }
+.legal { margin: 0; max-width: 30em; color: var(--dim); font-size: calc(var(--u) * .78); line-height: 1.35; text-align: left; }
