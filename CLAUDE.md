@@ -24,7 +24,11 @@ games/<slug>/dist/       build output: <slug>.zip and web/ (the flat upload), pl
 studio.json              studio identity for press kits and the portal: DevCan Games, https://devcangames.com, contact email, about text
 brand/devcan/            DevCan Games logo masters (SVG), PNG and favicon exports, generator scripts in src/
 portal/                  the public site devcangames.com (Node, no dependencies): portal/server.mjs, systemd `devcan-portal.service`,
-                         port 8100; games run from play.devcangames.com, a separate origin, inside a frame on the game page
+                         port 8100; games run from play.devcangames.com, a separate origin, inside a frame on the game page.
+                         Accounts (portal/accounts.mjs, SQLite in /srv/devcan/db): email+password and Google sign-in, 16+ only,
+                         word-list player names, cloud saves. Secrets in /etc/devcan/portal.env (root-only, never in the repo).
+                         On the portal the CrazyGames SDK tag becomes /devcan-sdk.js (portal/assets): same API, data module =
+                         the player's cloud save, no ads. Games need no portal-specific code.
 /srv/devcan/             portal data (not in the repo): play/<slug>/ game builds, media/<slug>/ card and hero images, catalog.json
 tools/                   new_game.py, factory.py, catalog.py, build.py, playtest.mjs, capture.mjs, release.py, balance.py, optimize_models.sh, mp_stats.py (anonymous play counters an online game server keeps)
 mp/<slug>.mjs            online game servers (Node + ws), e.g. mp/whirlbash.mjs: systemd `broadgames-mp.service`, port 8090,
