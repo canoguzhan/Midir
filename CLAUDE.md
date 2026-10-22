@@ -1,4 +1,4 @@
-# BroadGamesPro Game Factory: CrazyGames Studio Architect
+# DevCan Games Game Factory: CrazyGames Studio Architect
 
 This repo is a game-creation agent. Every time the user asks for a game, build a **new, complete, original HTML5 game** that is ready to upload to CrazyGames.com, using pre-baked AI assets (Tripo3D, ElevenLabs, Higgsfield) and the shared asset library.
 
@@ -21,11 +21,15 @@ template/                starter game: index.html, style.css, game.js, bake_asse
 games/<slug>/            one folder per game; this folder is exactly what ships (minus bake_assets.py, game.json, covers/, dist/)
 games/<slug>/covers/     the 3 submission covers: landscape 1920x1080, portrait 800x1200, square 800x800
 games/<slug>/dist/       build output: <slug>.zip and web/ (the flat upload), playtest screenshots, release work files (gitignored)
-studio.json              studio identity for press kits: BroadGamesPro, https://broadgames.pro, contact email, about text
+studio.json              studio identity for press kits and the portal: DevCan Games, https://devcangames.com, contact email, about text
+brand/devcan/            DevCan Games logo masters (SVG), PNG and favicon exports, generator scripts in src/
+portal/                  the public site devcangames.com (Node, no dependencies): portal/server.mjs, systemd `devcan-portal.service`,
+                         port 8100; games run from play.devcangames.com, a separate origin, inside a frame on the game page
+/srv/devcan/             portal data (not in the repo): play/<slug>/ game builds, media/<slug>/ card and hero images, catalog.json
 tools/                   new_game.py, factory.py, catalog.py, build.py, playtest.mjs, capture.mjs, release.py, balance.py, optimize_models.sh, mp_stats.py (anonymous play counters an online game server keeps)
 mp/<slug>.mjs            online game servers (Node + ws), e.g. mp/whirlbash.mjs: systemd `broadgames-mp.service`, port 8090,
                          public at wss://broadgames.pro/mp/<slug> (the only Caddy route without the password)
-server.py                studio site (systemd `midir.service`, Caddy with password at https://broadgames.pro): releases with
+server.py                private studio site (systemd `midir.service`, Caddy with password at https://broadgames.pro): releases with
                          download links at /, games at /games/<slug>/, published packages at /releases/<slug>/
 /srv/broadgames/releases/<slug>/   published release (outside git): upload zip, full-package zip, presskit/ page + media
 ```
@@ -60,12 +64,16 @@ server.py                studio site (systemd `midir.service`, Caddy with passwo
      - a press page at `/releases/<slug>/presskit/`.
    - The studio site's front page lists the release with download links automatically.
    - Look at the screenshots and at least one video frame (`ffmpeg -ss 8 -i <video> -frames:v 1 x.png`) before reporting.
+   - Publish to the portal with `python3 tools/publish_devcan.py <slug>`. It copies the build without the CrazyGames SDK tag
+     to /srv/devcan, makes the card and hero images, and updates catalog.json; the game appears on https://devcangames.com
+     at once, with no restart. Never link to devcangames.com from a game: the CrazyGames build must not cross-promote.
 7. **Report** in the directive's output protocol:
    - the blueprint;
    - what `bake_assets.py` reused and generated, plus anything that failed;
    - the files written;
    - the exact commands to re-bake, preview and package;
    - the download links: https://broadgames.pro/ (front page), `/releases/<slug>/<slug>-full-package.zip` and `/releases/<slug>/presskit/`;
+   - the public page: https://devcangames.com/games/<slug>;
    - the store fields from `game.json`.
    Code lives in the files. Do not paste whole files into chat.
 8. **Commit** the game folder on a branch and push it. Then ask the user to merge, and after the merge pull `main` in `/root/midir` and `systemctl restart midir`, so the Play link works on the site. Releases in `/srv/broadgames/releases` show up without a merge.

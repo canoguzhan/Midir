@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""BroadGamesPro studio site + game preview server (stdlib only).
+"""DevCan Games private studio site (broadgames.pro) + game preview server (stdlib only).
 
   python3 server.py            http://localhost:8080
 

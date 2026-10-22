@@ -20,7 +20,7 @@
   },
   "capture": { "warmup": 28, "shots": [0, 4, 28, 60, 100] },
   "press": {
-    "headline": "BroadGamesPro launches Potion Sort 3D, a cozy color-sorting puzzle playable instantly in the browser",
+    "headline": "{studio} launches Potion Sort 3D, a cozy color-sorting puzzle playable instantly in the browser",
     "summary": "Potion Sort 3D turns the hugely popular color-sort puzzle into a warm, fully 3D alchemist's workshop. Players tilt glass flasks to pour layered potions until every flask holds a single color. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
     "features": [
       "Satisfying 3D pouring: flasks tilt, potions stream and corks pop when a color is complete",

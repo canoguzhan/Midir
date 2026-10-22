@@ -20,7 +20,7 @@
   },
   "capture": { "warmup": 75, "shots": [0, 20, 75, 150, 300] },
   "press": {
-    "headline": "BroadGamesPro launches Merge Siege Defense, a 3D merge tower-defense playable instantly in the browser",
+    "headline": "{studio} launches Merge Siege Defense, a 3D merge tower-defense playable instantly in the browser",
     "summary": "Merge Siege Defense blends the satisfying drag-and-merge loop of merge games with classic castle defense. Players summon heroes, fuse matching pairs into ten increasingly powerful tiers and hold the gate against endless waves of wolves and siege golems. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
     "features": [
       "Drag-and-merge combat: fuse matching heroes to climb ten tiers, from Recruit to Celestial",

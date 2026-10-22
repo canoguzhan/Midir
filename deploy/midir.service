@@ -1,5 +1,5 @@
 [Unit]
-Description=BroadGamesPro preview server (gallery of games/)
+Description=DevCan Games studio preview server (gallery of games/)
 After=network-online.target
 
 [Service]

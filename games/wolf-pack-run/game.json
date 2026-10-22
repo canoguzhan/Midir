@@ -20,7 +20,7 @@
   },
   "capture": { "warmup": 6, "shots": [0, 4, 11, 19.6, 45] },
   "press": {
-    "headline": "BroadGamesPro launches Wolf Pack Run, a 3D crowd runner with hundreds of wolves, playable instantly in the browser",
+    "headline": "{studio} launches Wolf Pack Run, a 3D crowd runner with hundreds of wolves, playable instantly in the browser",
     "summary": "Wolf Pack Run puts a howling wolf pack at the heart of the hugely popular crowd-runner genre. Players steer through number gates to multiply their pack, dodge traps, battle rival packs and charge a giant Stone Warden at the end of every road. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
     "features": [
       "Hundreds of fully animated 3D wolves running together",
