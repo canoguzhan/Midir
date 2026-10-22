@@ -20,7 +20,7 @@
   },
   "capture": { "warmup": 55, "shots": [0, 6, 30, 60, 120] },
   "press": {
-    "headline": "BroadGamesPro launches Rune Mahjong 3D, a relaxing tile-match mahjong puzzle playable instantly in the browser",
+    "headline": "{studio} launches Rune Mahjong 3D, a relaxing tile-match mahjong puzzle playable instantly in the browser",
     "summary": "Rune Mahjong 3D brings the cozy satisfaction of tile-match mahjong to a fully 3D fantasy table. Players tap free rune tiles from layered piles, collect three of a kind in their tray and chain quick matches into combos. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
     "features": [
       "Relaxing triple-match mahjong on a magical 3D rune table",

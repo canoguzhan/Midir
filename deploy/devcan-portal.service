@@ -1,0 +1,13 @@
+[Unit]
+Description=DevCan Games public portal (devcangames.com + play.devcangames.com)
+After=network-online.target
+
+[Service]
+WorkingDirectory=/root/midir
+ExecStart=/usr/bin/node /root/midir/portal/server.mjs
+Environment=PORT=8100 DEVCAN_DIR=/srv/devcan
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

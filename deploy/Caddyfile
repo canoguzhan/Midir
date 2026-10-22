@@ -1,4 +1,5 @@
-# /etc/caddy/Caddyfile — BroadGamesPro preview site, password protected (HTTP Basic Auth, user: broadgames).
+# /etc/caddy/Caddyfile — DevCan Games: private studio preview at broadgames.pro (HTTP Basic Auth, user: broadgames)
+# and the public portal at devcangames.com.
 # The real file holds the bcrypt hash; generate one with: caddy hash-password --plaintext '<password>'
 (protected) {
 	basicauth {
@@ -20,4 +21,15 @@ broadgames.pro, 104-207-80-220.sslip.io {
 
 www.broadgames.pro {
 	redir https://broadgames.pro{uri} permanent
+}
+
+# DevCan Games public portal (portal/server.mjs, devcan-portal.service): no password, this is where players play
+devcangames.com, play.devcangames.com {
+	encode gzip zstd
+	header Strict-Transport-Security "max-age=31536000"
+	reverse_proxy 127.0.0.1:8100
+}
+
+www.devcangames.com {
+	redir https://devcangames.com{uri} permanent
 }

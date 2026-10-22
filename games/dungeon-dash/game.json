@@ -20,7 +20,7 @@
   },
   "capture": { "warmup": 290, "shots": [0, 60, 200, 304, 470] },
   "press": {
-    "headline": "BroadGamesPro launches Dungeon Dash, a 3D survivor-like roguelite playable instantly in the browser",
+    "headline": "{studio} launches Dungeon Dash, a 3D survivor-like roguelite playable instantly in the browser",
     "summary": "Dungeon Dash brings the addictive one-more-run loop of survivor-likes to a fully 3D dungeon. Players pick a hero, dodge through ever-growing swarms of wolves and stone golems while their weapons fire automatically, and build a different loadout every run from level-up cards. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
     "features": [
       "Four heroes with unique starting weapons: Warrior, Assassin, Shaman and Sura",

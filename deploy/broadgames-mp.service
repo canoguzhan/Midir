@@ -1,5 +1,5 @@
 [Unit]
-Description=BroadGamesPro online game server (Whirlbash rooms over WebSocket)
+Description=DevCan Games online game server (Whirlbash rooms over WebSocket)
 After=network-online.target
 
 [Service]
