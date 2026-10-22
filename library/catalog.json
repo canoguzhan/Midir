@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-20 15:02",
-  "count": 467,
+  "updated": "2026-10-22 06:48",
+  "count": 477,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -37,6 +37,32 @@
       "tags": [
         "battle",
         "bgm"
+      ]
+    },
+    {
+      "path": "audio/bgm_bloom_dusk.mp3",
+      "prompt": "calm dreamy instrumental for a peaceful idle garden game at dusk, soft music box and harp, warm felt piano, gentle strings pad, slow and soothing, autumn and winter mood, seamless loop, no vocals",
+      "game": "bloomtide",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "bgm",
+        "bloom",
+        "dusk"
+      ]
+    },
+    {
+      "path": "audio/bgm_bloom_meadow.mp3",
+      "prompt": "gentle cozy pastoral instrumental for a relaxing garden game, warm acoustic guitar, soft marimba and kalimba, light flute melody, brushed percussion, happy and calm, spring morning, seamless loop, no vocals",
+      "game": "bloomtide",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "bgm",
+        "bloom",
+        "meadow"
       ]
     },
     {
@@ -186,6 +212,103 @@
         "bgm",
         "run",
         "wolf"
+      ]
+    },
+    {
+      "path": "audio/bloom_birds.mp3",
+      "prompt": "peaceful morning meadow ambience, a few distant songbirds chirping softly, light breeze, calm, loop",
+      "game": "bloomtide",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 126,
+      "tags": [
+        "birds",
+        "bloom"
+      ]
+    },
+    {
+      "path": "audio/bloom_butterfly.mp3",
+      "prompt": "a golden butterfly caught, quick ascending harp glissando with sparkles, joyful and magical",
+      "game": "bloomtide",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 24,
+      "tags": [
+        "bloom",
+        "butterfly"
+      ]
+    },
+    {
+      "path": "audio/bloom_helper.mp3",
+      "prompt": "a small fluffy cloud puffing into existence, soft airy whoosh with a cute bubbly pop",
+      "game": "bloomtide",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "bloom",
+        "helper"
+      ]
+    },
+    {
+      "path": "audio/bloom_petal.mp3",
+      "prompt": "tiny soft magical petal pickup, bright gentle glass chime tink, airy, very short",
+      "game": "bloomtide",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "bloom",
+        "petal"
+      ]
+    },
+    {
+      "path": "audio/bloom_pop.mp3",
+      "prompt": "a single flower bud softly popping open, tiny gentle wooden pluck with a light airy sparkle, cute, very short",
+      "game": "bloomtide",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 10,
+      "tags": [
+        "bloom",
+        "pop"
+      ]
+    },
+    {
+      "path": "audio/bloom_rain_loop.mp3",
+      "prompt": "gentle soft rain falling on leaves and grass, calm and cozy, steady, no thunder, seamless loop",
+      "game": "bloomtide",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 94,
+      "tags": [
+        "bloom",
+        "loop",
+        "rain"
+      ]
+    },
+    {
+      "path": "audio/bloom_season.mp3",
+      "prompt": "seasons changing, warm magical swell of wind chimes and soft strings rising into a bright shimmer, uplifting",
+      "game": "bloomtide",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 63,
+      "tags": [
+        "bloom",
+        "season"
+      ]
+    },
+    {
+      "path": "audio/bloom_zone.mp3",
+      "prompt": "a dry meadow gate opening, soft wooden creak then a warm bright chime and rustling leaves, rewarding",
+      "game": "bloomtide",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 32,
+      "tags": [
+        "bloom",
+        "zone"
       ]
     },
     {
