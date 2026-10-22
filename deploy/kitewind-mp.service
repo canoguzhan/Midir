@@ -1,0 +1,13 @@
+[Unit]
+Description=DevCan Games online game server (Kitewind co-op skies over WebSocket)
+After=network-online.target
+
+[Service]
+WorkingDirectory=/root/midir
+ExecStart=/usr/bin/node /root/midir/mp/kitewind.mjs
+Environment=MP_HOST=127.0.0.1 MP_PORT=8091
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

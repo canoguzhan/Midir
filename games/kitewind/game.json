@@ -1,0 +1,64 @@
+{
+  "title": "Kitewind",
+  "slug": "kitewind",
+  "version": "1.0.0",
+  "blueprint": "You fly a cheerful kite tethered to a kid on a seaside beach: the kite's ribbon tail paints the grey clouds it sweeps through, painted clouds bloom (they smile, burst into confetti and rain colour on the village), and the island below wakes up with lights, bunting and cheering villagers. Eight skies with a new twist each (bird flocks, rings, giant clouds, shifting wind, storm clouds, lantern nights, an aurora) and an endless Free Sky, breeze to spend on string, tail, ribbon, speed and dash upgrades, unlockable kites, and online co-op skies for up to four kites. Controls: WASD / arrow keys or hold the mouse to steer (drag on touch), Space or the bolt button for a gust dash, P to pause. The midgame ad plays only on Next sky between two skies; the optional rewarded ad doubles the breeze on the results card and is hidden when ads are unavailable.",
+  "description": "Fly a kite over a sunny island and paint the sky! Your kite's ribbon tail colours every grey cloud it sweeps through, and when a cloud is fully painted it smiles, bursts into confetti and rains colour on the village below. Loop around clouds, ride bird flocks, dodge storm clouds, and wake up the whole island across eight skies from dawn to the aurora. Upgrade your kite, unlock new ones, or paint one sky together with friends online.",
+  "controls": {
+    "desktop": "WASD / arrow keys (or hold the left mouse button) to steer the kite, Space for a gust dash, P to pause; fly a full circle for a loop; online: 1 to 5 for quick chat",
+    "mobile": "Drag anywhere to steer the kite, tap the bolt button for a gust dash; online: tap the quick-chat buttons"
+  },
+  "category": "Casual",
+  "tags": [
+    "relaxing",
+    "flying",
+    "coloring",
+    "multiplayer",
+    "cute",
+    "3d",
+    "casual"
+  ],
+  "orientation": "landscape",
+  "mobile": true,
+  "multiplayer": true,
+  "languages": [
+    "en",
+    "tr"
+  ],
+  "pegi": "PEGI 3",
+  "ads": {
+    "midgame": "Only on the results card's Next sky button, between two skies (the level end). Never on menu, pause, workshop or online buttons.",
+    "rewarded": "Optional 'Watch an ad: double breeze' on the results card; reward only on adFinished, hidden when ads are unavailable or after an ad error"
+  },
+  "quality": {
+    "hook": "CrazyGames' most popular colouring games (Numicolor, Color Tap: Coloring by Numbers, Paint to Hide!) are static colour-by-number puzzles, and the famous 'paint the map' game, Paper.io, is a competitive territory grab; no game on the flying or colouring tag pages is about kites. Kitewind makes painting physical and calm: you steer a real-feeling kite on a string (it needs speed to stay up, rises when you let go, loops when you circle), its ribbon paints clouds, and every painted cloud visibly wakes up the island below. Online it is cooperative, not competitive: up to four kids on one beach paint one sky together, and every bloom pays everyone.",
+    "onboarding": "A guided first sky, a few words per step: 1) 'Steer your kite' with WASD and arrow-key icons (on touch a ghost hand drags across the screen); 2) 'Fly through a grey cloud to paint it' with an arrow over the nearest cloud; 3) 'Fly a full circle: a loop paints everything inside' with a hand tracing a circle around the kite (it never blocks: it ends on its own). Later one-off tips appear when relevant: gust dash in sky 2 (Space icon or the bolt button), bird flocks, rings, shifting wind, storm clouds, a too-short string, and the Workshop (its button glows on the results card). A Skip tips button is on every tip.",
+    "art_style": "One soft pastel low-poly seaside diorama, all procedural Three.js: puffy clouds that turn from grey to candy colours and get happy faces, flat-shaded houses with lit windows, palm trees, a striped lighthouse, round villagers, an animated sea, gradient skies (stars and an aurora at night), and kites drawn as cute flat cartoons (the same drawings appear in the Workshop). UI: cream rounded panels with Lilita One titles and Nunito text, and covers rendered in-engine from the same scene. Each sky swaps the whole palette (sky, light, sea, sand, grass, clouds) while keeping the style.",
+    "content": "Eight hand-tuned skies (Dawn Bay, Gull Cliffs, Sunny Harbor, Rainbow Reef, Sunset Lagoon, Storm Point, Lantern Night, Aurora Isle), each adding a mechanic (bird flocks for speed, rings that refill the dash, giant multi-pass clouds, wind that changes side, storm clouds that zap kites and can be calmed with a loop, lanterns at night, an aurora finale), 3 stars per sky (finish, beat par, no crash), five upgrade lines (string reach gates the farther clouds, tail, ribbon, speed, dash), six kites with perks unlocked by stars, an endless Free Sky with a best streak, and online co-op skies for up to four players with quick chat. With the autoplay bot the campaign takes about 4 minutes of perfect flying and 3 stars on most skies; players take roughly 2.5 times as long (about 10 minutes), plus replays for stars, Free Sky and online play.",
+    "name_check": "Kitewind is a coined word (kite + wind), not a genre word, and no game of that name appears on CrazyGames' flying or colouring tag pages we checked. The title, the kite on the covers and the painted clouds say what the game is.",
+    "visual_review": "Reviewed the menu, onboarding at 800x450, gameplay in several skies at 1216x684 and on a phone, the results card, workshop, skies map, online lobby and a two-player online sky, then fixed what I found. The kite was too small and hid behind clouds (bigger, always drawn in front, ribbon too); clouds looked much bigger than their painting area (puffs now match the gameplay radius); unpainted dawn clouds read as muddy brown (lighter neutral greys per sky); '+Bloom!' pop texts piled up (only combo pops now); the sea poked through the beach as jagged blue shapes (lower water, gentler waves); the menu showed an all-grey sky (half in bloom behind the menu now); the ribbon tail was too short and faint to read (longer base tail with paint rate rebalanced, wider, stronger colour with white bows); the 'Sky in full bloom!' banner showed through the results card (hidden when the card opens); the Workshop hint pulse made the button resize (glow only). Gameplay bugs fixed on the way: a cloud-placement loop that never ended, a bot orbit just outside the paint radius, loops that were too strong, an online loop echo, a results screen that waited on a timer in capture mode, online connections that never sent their join (the CrazyGames token wait and a 1 KB server message limit). Kites, kids and villagers are all animated; there are no rigged characters, so no T-poses."
+  },
+  "capture": {
+    "warmup": 28,
+    "shots": [
+      0,
+      14,
+      60,
+      150,
+      300
+    ]
+  },
+  "press": {
+    "headline": "{studio} launches {title}, a cosy kite-flying game where your kite paints the sky, playable instantly in the browser",
+    "summary": "Kitewind hands players a cheerful kite on a seaside beach. Its ribbon tail paints every grey cloud it sweeps through, fully painted clouds smile and rain colour on the village below, and the whole island wakes up with lights, bunting and cheering villagers. Eight skies from dawn to the aurora, kite upgrades and unlockable kites, an endless Free Sky and online co-op for up to four friends make it easy to pick up and hard to put down. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
+    "features": [
+      "Steer a kite that feels like a real one: it needs speed to stay up, rises when you let go, and loops when you fly a circle",
+      "Paint the sky: your ribbon tail colours clouds, painted clouds smile, burst into confetti and rain colour on the island",
+      "Eight skies with a new twist each: bird flocks, rings, giant clouds, shifting wind, storm clouds, lantern nights and an aurora",
+      "Upgrade string, tail, ribbon, speed and gust dash, and unlock six kites from a classic diamond to a dragon",
+      "Online co-op for up to four players: paint one sky together, with quick chat and invite codes",
+      "Keyboard, mouse and touch controls, English and Turkish"
+    ],
+    "quote": "We wanted the feeling of a windy afternoon on the beach with a kite in your hands. Painting the sky with friends turned out to be the most relaxing thing we have made so far."
+  }
+}

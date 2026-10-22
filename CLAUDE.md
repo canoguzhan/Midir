@@ -31,8 +31,9 @@ portal/                  the public site devcangames.com (Node, no dependencies)
                          the player's cloud save, no ads. Games need no portal-specific code.
 /srv/devcan/             portal data (not in the repo): play/<slug>/ game builds, media/<slug>/ card and hero images, catalog.json
 tools/                   new_game.py, factory.py, catalog.py, build.py, playtest.mjs, capture.mjs, release.py, balance.py, optimize_models.sh, mp_stats.py (anonymous play counters an online game server keeps)
-mp/<slug>.mjs            online game servers (Node + ws), e.g. mp/whirlbash.mjs: systemd `broadgames-mp.service`, port 8090,
-                         public at wss://broadgames.pro/mp/<slug> (the only Caddy route without the password)
+mp/<slug>.mjs            online game servers (Node + ws): mp/whirlbash.mjs (systemd `broadgames-mp.service`, port 8090) and
+                         mp/kitewind.mjs (co-op skies, client-flown kites, server-kept sky; `kitewind-mp.service`, port 8091),
+                         public at wss://broadgames.pro/mp/<slug> (the only Caddy routes without the password; one port per game)
 server.py                private studio site (systemd `midir.service`, Caddy with password at https://broadgames.pro): releases with
                          download links at /, games at /games/<slug>/, published packages at /releases/<slug>/
 /srv/broadgames/releases/<slug>/   published release (outside git): upload zip, full-package zip, presskit/ page + media

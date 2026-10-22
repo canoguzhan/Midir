@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-22 06:48",
-  "count": 477,
+  "updated": "2026-10-22 18:44",
+  "count": 490,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -72,6 +72,32 @@
       "tags": [
         "bgm",
         "field"
+      ]
+    },
+    {
+      "path": "audio/bgm_kite_day.mp3",
+      "prompt": "breezy uplifting instrumental for a relaxing kite flying game by the sea, light ukulele and acoustic guitar, airy flute melody, soft hand percussion and glockenspiel, sunny and carefree, gentle tempo, seamless loop, no vocals",
+      "game": "kitewind",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1407,
+      "tags": [
+        "bgm",
+        "day",
+        "kite"
+      ]
+    },
+    {
+      "path": "audio/bgm_kite_night.mp3",
+      "prompt": "dreamy calm instrumental for flying a kite under stars and an aurora, soft piano and harp, warm synth pads, gentle music box sparkles, slow and wondrous, seamless loop, no vocals",
+      "game": "kitewind",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1407,
+      "tags": [
+        "bgm",
+        "kite",
+        "night"
       ]
     },
     {
@@ -621,6 +647,142 @@
       "kb": 16,
       "tags": [
         "hit"
+      ]
+    },
+    {
+      "path": "audio/kite_bloom.mp3",
+      "prompt": "a cloud bursting into bright colors, soft bubbly pop followed by a cascade of gentle wind chime sparkles, joyful",
+      "game": "kitewind",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 26,
+      "tags": [
+        "bloom",
+        "kite"
+      ]
+    },
+    {
+      "path": "audio/kite_crash.mp3",
+      "prompt": "a fabric kite tumbling and flapping wildly then landing softly in sand, cartoon, not harsh",
+      "game": "kitewind",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "crash",
+        "kite"
+      ]
+    },
+    {
+      "path": "audio/kite_dash.mp3",
+      "prompt": "quick strong gust of wind whooshing past, energetic air rush, short",
+      "game": "kitewind",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 11,
+      "tags": [
+        "dash",
+        "kite"
+      ]
+    },
+    {
+      "path": "audio/kite_flutter_loop.mp3",
+      "prompt": "a fabric kite fluttering and humming in steady wind, soft rapid cloth flapping, light and airy, seamless loop",
+      "game": "kitewind",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 63,
+      "tags": [
+        "flutter",
+        "kite",
+        "loop"
+      ]
+    },
+    {
+      "path": "audio/kite_lantern.mp3",
+      "prompt": "paper sky lantern lighting up and floating away, warm soft whoosh of flame and a gentle magical twinkle",
+      "game": "kitewind",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 24,
+      "tags": [
+        "kite",
+        "lantern"
+      ]
+    },
+    {
+      "path": "audio/kite_loop.mp3",
+      "prompt": "a kite doing a full loop in the sky, rising swirling whoosh ending in a bright magical sparkle, exciting",
+      "game": "kitewind",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "kite",
+        "loop"
+      ]
+    },
+    {
+      "path": "audio/kite_paint.mp3",
+      "prompt": "soft magical brush stroke swoosh through a cloud, airy shimmering sparkle, gentle and satisfying, short",
+      "game": "kitewind",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 13,
+      "tags": [
+        "kite",
+        "paint"
+      ]
+    },
+    {
+      "path": "audio/kite_ring.mp3",
+      "prompt": "flying through a glowing ring in the sky, bright clear bell chime with an airy shimmer, short",
+      "game": "kitewind",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 11,
+      "tags": [
+        "kite",
+        "ring"
+      ]
+    },
+    {
+      "path": "audio/kite_shore_loop.mp3",
+      "prompt": "peaceful seaside ambience, small waves lapping on a sandy beach, a few distant seagulls, light breeze, seamless loop",
+      "game": "kitewind",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 157,
+      "tags": [
+        "kite",
+        "loop",
+        "shore"
+      ]
+    },
+    {
+      "path": "audio/kite_sky_done.mp3",
+      "prompt": "festival celebration on a beach: cheerful short fanfare of flutes and bells rising, then sparkles, joyful and warm",
+      "game": "kitewind",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 47,
+      "tags": [
+        "done",
+        "kite",
+        "sky"
+      ]
+    },
+    {
+      "path": "audio/kite_wind_loop.mp3",
+      "prompt": "steady gentle sea breeze high in the sky, soft airy wind whoosh, calm and pleasant, no gusts, seamless loop",
+      "game": "kitewind",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 126,
+      "tags": [
+        "kite",
+        "loop",
+        "wind"
       ]
     },
     {
