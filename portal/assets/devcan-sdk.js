@@ -2,7 +2,8 @@
    puts this script where the CrazyGames SDK tag was). Games call the same functions they call on CrazyGames:
    - data.getItem/setItem: the signed-in player's cloud save for this game, loaded before init() resolves; guests get
      null, so the game keeps using localStorage exactly like it does off-platform.
-   - no ads (window.CrazyGames.SDK.ad is undefined, so games hide their rewarded buttons and skip midgame breaks).
+   - ads through Google H5 Games Ads when the portal turns them on (see below); otherwise SDK.ad is undefined, so games
+     hide their rewarded buttons and skip midgame breaks.
    - gameplayStart/Stop, happytime, loading* and the room calls are no-ops; invite links point at devcangames.com.
    It talks to the game page (portal/assets/bridge.js) with postMessage; opened on its own, it is simply a guest. */
 (function () {
@@ -33,12 +34,58 @@
   addEventListener('pagehide', flush); document.addEventListener('visibilitychange', function () { if (document.hidden) flush(); });
   var settings = { muteAudio: false, disableChat: true };
   var noop = function () {};
+
+  // Ads: Google H5 Games Ads (Ad Placement API, adBreak) when the portal sets window.DEVCAN_ADS = { client, test }.
+  // The game's own requestAd('midgame' | 'rewarded', { adStarted, adFinished, adError }) maps onto adBreak: midgame only
+  // where the game already pauses (with at least MIDGAME_GAP_MS between two), rewarded only after the player taps a reward
+  // button, and the reward only when Google reports the ad as viewed. No ad available -> adError, the game carries on.
+  var ADS = window.DEVCAN_ADS || null, adsReady = false, lastMidgame = 0, MIDGAME_GAP_MS = 90000;
+  if (ADS && /[?&]adtest=1(&|$)/.test(location.search)) ADS.test = true; // /games/<slug>?adtest=1 previews Google's test ads
+  var adBreak = noop, adConfig = noop;
+  if (ADS && ADS.client) {
+    window.adsbygoogle = window.adsbygoogle || [];
+    window.adsbygoogle.requestNonPersonalizedAds = 1; // family audience: non-personalised ads for everyone
+    adBreak = adConfig = function (o) { window.adsbygoogle.push(o); };
+    var tag = document.createElement('script');
+    tag.async = true; tag.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + encodeURIComponent(ADS.client);
+    tag.setAttribute('data-ad-client', ADS.client); tag.setAttribute('data-ad-frequency-hint', '90s'); tag.crossOrigin = 'anonymous';
+    if (ADS.test) tag.setAttribute('data-adbreak-test', 'on');
+    tag.onerror = function () { adsReady = false; };
+    document.head.appendChild(tag);
+    adConfig({ sound: 'on', preloadAdBreaks: 'on', onReady: function () { adsReady = true; } });
+  }
+  function requestAd(type, cb) {
+    cb = cb || {}; var started = false, rewarded = false;
+    var fail = function () { (cb.adError || noop)({ code: 'unfilled', message: 'No ad available' }); };
+    if (!adsReady) { setTimeout(fail, 0); return; }
+    if (type === 'midgame') {
+      if (Date.now() - lastMidgame < MIDGAME_GAP_MS) { setTimeout(fail, 0); return; }
+      adBreak({ type: 'next', name: 'midgame',
+        beforeAd: function () { started = true; lastMidgame = Date.now(); (cb.adStarted || noop)(); },
+        adBreakDone: function () { if (started) (cb.adFinished || noop)(); else fail(); } });
+      return;
+    }
+    if (type === 'rewarded') {
+      adBreak({ type: 'reward', name: 'rewarded',
+        beforeReward: function (showAdFn) { showAdFn(); },
+        beforeAd: function () { started = true; (cb.adStarted || noop)(); },
+        adViewed: function () { rewarded = true; },
+        adDismissed: function () { rewarded = false; },
+        adBreakDone: function () { if (rewarded) (cb.adFinished || noop)(); else fail(); } });
+      return;
+    }
+    setTimeout(fail, 0);
+  }
   var params = new URLSearchParams(location.search);
   var SDK = {
     environment: 'devcan',
     init: function () {
-      return ask('hello', null, 2500).then(function (r) {
-        if (r && r.user) { signedIn = true; cache = r.saves || {}; }
+      var adsWait = new Promise(function (resolve) { // give the ad API a moment to get ready, never more than 2.5 s
+        if (!ADS || !ADS.client) { resolve(); return; }
+        var t0 = Date.now(); (function poll() { if (adsReady || Date.now() - t0 > 2500) resolve(); else setTimeout(poll, 100); })();
+      });
+      return Promise.all([ask('hello', null, 2500), adsWait]).then(function (r) {
+        if (r[0] && r[0].user) { signedIn = true; cache = r[0].saves || {}; }
       });
     },
     data: {
@@ -69,5 +116,8 @@
       updateRoom: noop, leftRoom: noop, addJoinRoomListener: noop, removeJoinRoomListener: noop, showInviteButton: noop, hideInviteButton: noop,
     },
   };
+  var adModule = { requestAd: requestAd, hasAdblock: function () { return Promise.resolve(!adsReady); }, addAdblockPopupListener: noop, removeAdblockPopupListener: noop };
+  // games check `!!SDK.ad` before offering a rewarded button: it only exists once Google's ad API is ready
+  Object.defineProperty(SDK, 'ad', { enumerable: true, get: function () { return adsReady ? adModule : undefined; } });
   window.CrazyGames = { SDK: SDK };
 })();

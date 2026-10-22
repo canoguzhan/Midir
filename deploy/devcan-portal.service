@@ -6,6 +6,8 @@ After=network-online.target
 WorkingDirectory=/root/midir
 ExecStart=/usr/bin/node /root/midir/portal/server.mjs
 Environment=PORT=8100 DEVCAN_DIR=/srv/devcan
+# Google ads (AdSense + H5 Games Ads). Add ADS_SLOT_HOME / ADS_SLOT_GAME (ad unit IDs) for display banners; ADS_TEST=on for test ads.
+Environment=ADS_CLIENT=ca-pub-8786267623751774
 # secrets (Google OAuth, SMTP, SESSION_SECRET), root-only, never in the repo
 EnvironmentFile=/etc/devcan/portal.env
 Restart=always

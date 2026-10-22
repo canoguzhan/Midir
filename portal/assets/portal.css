@@ -138,3 +138,8 @@ nav { align-items: center; }
 .btn.danger { background: #5a1630; box-shadow: 0 4px 0 #2e0a19; }
 .btn:disabled { opacity: .6; cursor: default; }
 @media (max-width: 560px) { .namepick { grid-template-columns: 1fr 1fr; } .namepick .btn { grid-column: 1 / -1; } }
+
+/* ad banners: below the game or the grid, labelled, never over gameplay */
+.ad { display: grid; gap: 4px; margin: 6px 0 18px; min-height: 0; }
+.ad small { color: var(--dim); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+.ad:has(ins.adsbygoogle[data-ad-status="unfilled"]) { display: none; } /* no gap when Google has nothing to show */
