@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Bloomtide</title>
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+<script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-petal" viewBox="0 0 24 24"><path d="M12 2c2.6 2.4 3.9 4.9 3.9 7.4 0 1.2-.3 2.3-.9 3.2 1-.4 2.1-.6 3.3-.5 2.4.2 4.2 1.5 5.4 3.9-2.4 1.6-4.8 2.1-7.2 1.4-1.1-.3-2-.9-2.8-1.6.4 1 .6 2.1.4 3.3-.3 2.4-1.7 4.1-4.1 5.2-1.4-2.5-1.7-4.9-.8-7.2.4-1 1-1.9 1.8-2.6-1 .4-2.1.5-3.2.3C5.4 14.4 3.7 13 2.6 10.6 5.1 9.2 7.5 9 9.8 9.9c.5.2 1 .5 1.4.8-.2-.5-.3-1-.3-1.6C10.9 6.6 11.3 4.3 12 2z"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 2.5C8.4 7.4 5.5 11 5.5 14.5a6.5 6.5 0 0 0 13 0C18.5 11 15.6 7.4 12 2.5zm-3 12.7c0 1.7 1.3 3.1 3 3.3v1.6c-2.6-.2-4.6-2.3-4.6-4.9H9z"/></symbol>
+  <symbol id="i-rain" viewBox="0 0 24 24"><path d="M7 15a5 5 0 0 1-.6-10A6 6 0 0 1 18 6.1 4.5 4.5 0 0 1 17.5 15H7zm1 2h1.8l-1.3 4H6.7zm4.2 0H14l-1.3 4h-1.8zm4.2 0h1.8l-1.3 4h-1.8z"/></symbol>
+  <symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 9h11a2.5 2.5 0 1 0-2.5-2.5h-2A4.5 4.5 0 1 1 14 11H3zm0 4h15a3.5 3.5 0 1 1-3.5 3.5h2A1.5 1.5 0 1 0 18 15H3zm0 4h7v2H3z"/></symbol>
+  <symbol id="i-roots" viewBox="0 0 24 24"><path d="M11 2h2v7.2c1.3-1.6 3.2-2.7 5.5-2.7v2c-3 0-5.5 2.5-5.5 5.5v1.4l3.3 3.3-1.4 1.4-1.9-1.9V22h-2v-3.8l-1.9 1.9-1.4-1.4 3.3-3.3V14c0-3-2.5-5.5-5.5-5.5v-2c2.3 0 4.2 1.1 5.5 2.7z"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M6.5 19a5 5 0 0 1-.8-9.9A6.5 6.5 0 0 1 18.2 8 5.5 5.5 0 0 1 17.5 19h-11z"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.5 2 4 13.5h6.2L9 22l10-12h-6.4z"/></symbol>
+  <symbol id="i-fly" viewBox="0 0 24 24"><path d="M11 6.5h2V18h-2zm.2-1.5C10.6 3.5 9.4 2.6 8 2.5l.1-1c1.9.1 3.4 1.3 3.9 3.2.5-1.9 2-3.1 3.9-3.2l.1 1c-1.4.1-2.6 1-3.2 2.5zM10 8C8.6 5.2 6.4 4 3.5 4.2 2 7.8 3.2 11 6.5 12c-2.4 1.1-3.2 3.3-2.3 6.3 2.6.3 4.7-1 5.8-3.6zm4 0c1.4-2.8 3.6-4 6.5-3.8 1.5 3.6.3 6.8-3 7.8 2.4 1.1 3.2 3.3 2.3 6.3-2.6.3-4.7-1-5.8-3.6z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1.5v11h-13V10zm2 0h6V8a3 3 0 0 0-6 0z"/></symbol>
+  <symbol id="i-seed" viewBox="0 0 24 24"><path d="M12 2c4.6 3.4 6.9 7.1 6.9 11A6.9 6.9 0 0 1 12 20a6.9 6.9 0 0 1-6.9-7C5.1 9.1 7.4 5.4 12 2zm0 15.5c1.9 0 3.5-1.6 3.5-3.5h-1.6c0 1-.9 1.9-1.9 1.9z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M6 4h4.5v16H6zm7.5 0H18v16h-4.5z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M3 6h9.2a3 3 0 0 1 5.6 0H21v2h-3.2a3 3 0 0 1-5.6 0H3zm0 10h3.2a3 3 0 0 1 5.6 0H21v2h-9.2a3 3 0 0 1-5.6 0H3z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M9.5 16.2 4.8 11.5 3.4 13l6.1 6.1L21 7.6l-1.4-1.4z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M12 3l8 9h-5v9H9v-9H4z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm-1-6h2v4h-2zm0 18h2v4h-2zM1 11h4v2H1zm18 0h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8L7 8.4zm12.4 12.4 1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4 7 15.6 8.4 17l-2.8 2.8zM16.6 7 19.4 4.2l1.4 1.4L18 8.4z"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 3c.6 7.7-2.2 13.4-8.3 15.1-1.7.5-3.4.4-4.9-.2L4.4 21 3 19.6l2.7-2.7c-.8-1.8-.9-3.9-.1-6C7.2 6.4 12.7 3.8 20 3zm-4.2 3.9c-3.6 1.3-6.5 3.9-8.4 7.8l1.8.9c1.7-3.4 4.2-5.6 7.3-6.8z"/></symbol>
+  <symbol id="i-snow" viewBox="0 0 24 24"><path d="M11 1h2v4.2l2.1-2.1 1.4 1.4L13 8v2.3l2-1.2 1.3-4.8 1.9.5-.8 2.9 3.6-2.1 1 1.7-3.6 2.1 2.9.8-.5 1.9-4.8-1.3-2 1.2 2 1.2 4.8-1.3.5 1.9-2.9.8 3.6 2.1-1 1.7-3.6-2.1.8 2.9-1.9.5-1.3-4.8-2-1.2V16l3.5 3.5-1.4 1.4-2.1-2.1V23h-2v-4.2l-2.1 2.1-1.4-1.4L11 16v-2.3l-2 1.2-1.3 4.8-1.9-.5.8-2.9-3.6 2.1-1-1.7 3.6-2.1-2.9-.8.5-1.9 4.8 1.3 2-1.2-2-1.2-4.8 1.3-.5-1.9 2.9-.8L1.1 7.3l1-1.7 3.6 2.1-.8-2.9 1.9-.5L8 9.1l2 1.2V8L6.5 4.5l1.4-1.4L10 5.2z"/></symbol>
+  <symbol id="i-blossom" viewBox="0 0 24 24"><path d="M12 9.2a2.8 2.8 0 1 1 0 5.6 2.8 2.8 0 0 1 0-5.6zm0-7.2c2 0 3.5 1.7 3.2 3.8l-.4 2.4-1.9-.9h-1.8l-1.9.9-.4-2.4C8.5 3.7 10 2 12 2zm9.4 6.8c.6 1.9-.6 3.8-2.7 4.3l-2.4.5.3-2.1-.6-1.7-1.5-1.4 2.2-1.1c1.9-.9 4.1 0 4.7 1.5zm-3.6 11c-1.6 1.2-3.9.7-4.9-1.2l-1.1-2.2 2.1-.3 1.5-1.1 1-1.8 1.7 1.8c1.4 1.5 1.3 3.8-.3 4.8zm-11.6 0c-1.6-1-1.7-3.3-.3-4.8l1.7-1.8 1 1.8 1.5 1.1 2.1.3-1.1 2.2c-1 1.9-3.3 2.4-4.9 1.2zM2.6 8.8c.6-1.5 2.8-2.4 4.7-1.5l2.2 1.1-1.5 1.4-.6 1.7.3 2.1-2.4-.5C3.2 12.6 2 10.7 2.6 8.8z"/></symbol>
+</svg>
+
+<canvas id="game"></canvas>
+<div id="vignette"></div>
+<div id="flash" hidden></div>
+
+<div id="hud" hidden>
+  <div class="hud-left">
+    <div class="pill big-pill"><svg class="petal-ico"><use href="#i-petal"/></svg><b id="petals">0</b></div>
+    <div class="pill small-pill"><span id="income">+0</span><span data-i18n="perSec">/s</span></div>
+  </div>
+  <div class="hud-mid">
+    <div class="season-chip"><svg id="seasonIco"><use href="#i-blossom"/></svg><b id="seasonName">Spring</b><small id="yearName">Year 1</small></div>
+    <div class="goal"><div class="goal-bar"><i id="goalFill"></i></div><small id="goalText"></small></div>
+    <button id="btnSeason" class="season-btn" hidden></button>
+  </div>
+  <div class="hud-right"><button id="btnPause" class="icon" aria-label="Pause"><svg><use href="#i-pause"/></svg></button></div>
+</div>
+
+<div id="dock" hidden></div>
+<div id="zonePrompt" hidden><span id="zoneName"></span><button id="btnZone"></button></div>
+<div id="arrow" hidden><svg><use href="#i-arrow"/></svg></div>
+<div id="pops"></div>
+<div id="banner" hidden><b id="bannerText"></b><small id="bannerSub"></small></div>
+
+<div id="thunder" hidden>
+  <button id="btnThunder" aria-label="Thunder"><svg><use href="#i-bolt"/></svg><i id="thunderCd"></i></button>
+  <span class="key keyhint" id="thunderKey">Space</span>
+</div>
+
+<div id="coach" hidden>
+  <div class="coach-keys" id="coachKeys"></div>
+  <span id="coachText"></span>
+  <button id="btnSkipTips" class="skip" data-i18n="skipTips">Skip tips</button>
+</div>
+<div id="hand" hidden></div>
+
+<div id="joystick" hidden><div class="knob"></div></div>
+
+<section id="menu" class="screen" hidden>
+  <div class="card menu-card">
+    <h1>Bloomtide</h1>
+    <p class="tagline" data-i18n="tagline">Rain on a dry valley and watch it bloom.</p>
+    <div class="menu-stats" id="menuStats"></div>
+    <button id="btnPlay" class="big"><svg><use href="#i-play"/></svg><span id="playLabel" data-i18n="play">Play</span></button>
+    <div class="row"><button id="btnSettings" class="subtle"><svg><use href="#i-sliders"/></svg><span data-i18n="settings">Settings</span></button></div>
+    <div class="controls" id="menuControls"></div>
+  </div>
+</section>
+
+<section id="paused" class="screen" hidden>
+  <div class="card center">
+    <h2 data-i18n="paused">Paused</h2>
+    <button id="btnResume" class="big" data-i18n="resume">Resume</button>
+    <div class="row"><button id="btnPauseSettings" class="subtle"><svg><use href="#i-sliders"/></svg><span data-i18n="settings">Settings</span></button><button id="btnQuit" class="subtle" data-i18n="menu">Menu</button></div>
+  </div>
+</section>
+
+<section id="settings" class="screen" hidden>
+  <div class="card center settings">
+    <h2 data-i18n="settings">Settings</h2>
+    <label class="slider"><span data-i18n="music">Music</span><input type="range" id="volMusic" min="0" max="100" step="5"><b id="volMusicVal"></b></label>
+    <label class="slider"><span data-i18n="sound">Sound</span><input type="range" id="volSfx" min="0" max="100" step="5"><b id="volSfxVal"></b></label>
+    <div class="setrow"><span data-i18n="graphics">Graphics</span><div class="seg" id="gfxSeg" role="radiogroup"></div></div>
+    <p class="legal" data-i18n="privacy"></p>
+    <button id="btnSettingsDone" class="big" data-i18n="done">Done</button>
+  </div>
+</section>
+
+<section id="away" class="screen" hidden>
+  <div class="card center">
+    <h2 data-i18n="welcomeBack">Welcome back!</h2>
+    <p class="sub" data-i18n="awaySub">Your valley kept blooming while you were away.</p>
+    <p class="final"><svg class="petal-ico"><use href="#i-petal"/></svg><b id="awayPetals">0</b></p>
+    <button id="btnAwayDouble" class="reward" hidden><svg><use href="#i-play"/></svg><span data-i18n="doubleIt">Watch an ad: double it</span></button>
+    <button id="btnAwayOk" class="big" data-i18n="collect">Collect</button>
+  </div>
+</section>
+
+<section id="seasonEnd" class="screen" hidden>
+  <div class="card center season-card">
+    <h2 id="seasonEndTitle"></h2>
+    <p class="sub" id="seasonEndSub"></p>
+    <div class="seed-gain"><svg><use href="#i-seed"/></svg><b id="seedGain">+0</b><small data-i18n="seedsWord">seeds</small></div>
+    <p class="sub" id="seedBonus"></p>
+    <button id="btnSeedDouble" class="reward" hidden><svg><use href="#i-play"/></svg><span data-i18n="doubleSeeds">Watch an ad: double seeds</span></button>
+    <button id="btnNextSeason" class="big"></button>
+    <button id="btnStay" class="subtle" data-i18n="stay">Keep playing this season</button>
+  </div>
+</section>
+
+<div id="loading"><h1>Bloomtide</h1><div class="bar"><i id="loadBar"></i></div></div>
+<div id="toast" hidden></div>
+<script type="module" src="game.js"></script>
+</body>
+</html>

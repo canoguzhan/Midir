@@ -1,0 +1,63 @@
+{
+  "title": "Bloomtide",
+  "slug": "bloomtide",
+  "version": "1.0.0",
+  "blueprint": "You are a small rain cloud drifting over a dry valley: wherever you rain, the parched ground turns green and tulips, bushes and blossom trees pop up in a wave. Blooms pay petals, ripe flowers glitter and pay again when you rain on them, and petals buy wider rain, a faster breeze, helper clouds, butterflies and thunder bursts and open five more meadows; a valley in full bloom ends the season (prestige: seeds make every petal worth more, and the next season has a new look). Controls: WASD / arrow keys or hold the mouse to steer (drag on touch), Space or the bolt button for thunder, P to pause. The midgame ad plays only between seasons (after Start Summer etc.); optional rewarded ads double the season's seeds and the welcome-back petals, and are hidden when ads are unavailable.",
+  "description": "Drift over a dry valley as a cheerful little rain cloud and watch it bloom. Wherever you rain, the dusty ground turns green and flowers, bushes and blossom trees burst into life. Collect petals, upgrade your rain, call helper clouds and thunder bursts, catch golden butterflies, and open six meadows. When the valley is in full bloom, start a new season: spring tulips, summer daisies, autumn maples and snowy winter pines.",
+  "controls": {
+    "desktop": "WASD / arrow keys (or hold the left mouse button) to move the cloud, Space for thunder, E to unlock the next meadow, P to pause; click the cards to buy upgrades",
+    "mobile": "Drag anywhere to move the cloud, tap the bolt button for thunder, tap the cards to buy upgrades"
+  },
+  "category": "Clicker",
+  "tags": [
+    "idle",
+    "incremental",
+    "relaxing",
+    "flowers",
+    "cute",
+    "3d",
+    "casual"
+  ],
+  "orientation": "landscape",
+  "mobile": true,
+  "languages": [
+    "en",
+    "tr"
+  ],
+  "pegi": "PEGI 3",
+  "ads": {
+    "midgame": "Only between seasons: after the player presses Start <next season> on the season-end screen (the level end). Never on menu, pause, settings or upgrade buttons.",
+    "rewarded": "Optional 'Watch an ad: double seeds' on the season-end screen and 'Watch an ad: double it' on the welcome-back screen; reward only on adFinished, hidden when ads are unavailable or after an ad error"
+  },
+  "quality": {
+    "hook": "The most played incrementals on CrazyGames (Stone Grass: Mowing Simulator, Lumber Harvest: Tree Cutting Game, Farm Ring Idle) all have you cut or harvest a field that keeps refilling. Bloomtide turns that around: you grow the world. A cute rain cloud turns a dusty valley into a lush garden in front of you, the screen gets more colourful the longer you play, ripe flowers glitter to be rained on again, and the prestige is a change of season with a new palette and new plants (tulips and cherry blossoms, daisies and poppies, asters and maples, snowdrops and pines).",
+    "onboarding": "A guided first minute inside gameplay, a few words per step: 1) 'Move your cloud' with WASD and arrow key icons (on touch, a ghost hand drags across the screen); 2) 'Rain on the dry ground until it blooms', with an arrow to dry ground if the player wanders; 3) 'Spend petals on an upgrade', with the cheapest upgrade card outlined in gold and a hand pointing at it. Later one-off tips appear only when relevant: the first affordable meadow (arrow to the gate, E key icon), the first ripe glittering flowers, the first thunder (Space icon, or the bolt button on touch) and the first golden butterfly. A Skip tips button is on every tip.",
+    "art_style": "One soft pastel low-poly diorama look, all procedural Three.js, so nothing mismatches: flat-shaded instanced flowers, bushes and trees with wind sway, a vertex-coloured valley that blends from dusty beige to lush green, a smooth puffy cloud character with a face (eyes, blush, blinking), cream rounded UI panels with Lilita One titles and Nunito text, and covers rendered in-engine from the same scene. Each season swaps the whole palette (sky, fog, light, ground, flowers, trees) while keeping the same style.",
+    "content": "Per season: six meadows that unlock in order (three with ponds that fill as they bloom), seven upgrade lines (Wide Rain, Breeze, Big Drops, Deep Roots, up to six Helper clouds, Butterflies, Thunder) with the helper, butterfly and thunder cards unlocking in meadows 2 and 3, the harvest loop (ripe flowers glitter and pay again), rare blooms worth 12x, golden butterflies to chase, and a 20-second-income bonus plus a rainbow for every meadow in full bloom. The season goal (700, 820, 940 and 1030 flowers in full bloom) ends the season: seeds give +8% petals each forever, the valley dries out again, and the next season has new plants and a new palette. With the autoplay bot, the seasons took 6.8, 6.1, 9.3 and 8.3 minutes (about 32 minutes for Year 1; players will take longer), and Year 2 continues with higher goals. Offline earnings are paid on return.",
+    "name_check": "Bloomtide is a coined word (bloom + tide) for the wave of flowers that follows the rain. It contains no genre words, and no game of that name appears in the CrazyGames idle or incremental category lists we checked. The title, the cloud and the cover say what the game is: you rain and things bloom.",
+    "visual_review": "Reviewed the menu, onboarding, gameplay at 1216x684 and 800x450, every season, the goal, season-end, pause, settings and away screens, and all covers, then fixed what I found. Economy: the first draft finished a season in 98 s, and later versions had a 4-minute wait with nothing to rain on, so I added the harvest loop and rebalanced (now 6 to 9 minutes per season). Visuals: dead twigs read as spiders (fewer, smaller, lighter); locked meadows read as grey concrete (now dimmer soil of the same hue); the cloud grew too large and its shadow was too dark (smaller growth, lighter shadow); the dry valley looked like an empty beige box (straw-coloured tufts that turn green, warm dust motes), but the first straw was dark and buggy (lightened and thinned); hill trees covered flowers at the valley edge (pushed further out, only small ones in front); ponds had jagged polygon edges and stayed full in locked meadows after a season change (water sits above the floor with a shore ring, and the fill snaps on reset); the toast overlapped banners (moved); rain splash rings showed as half-buried arcs (now droplet sprays); winter hills melted into the white fog (bluer snow); lock badges over every meadow crowded the HUD (only the next meadow has one); the zone prompt showed during onboarding (now only when nearly affordable). On covers, the golden butterfly was a yellow smear (smaller) and the rainbow never faded in (fixed). In the flat-build playtest, the lock badge peeked out from behind the mobile menu card (badges now show only during play), and the brand-new valley was all beige on the menu (each season now starts with a small blooming patch under the cloud). In a live run with no bot, that patch skipped the rain tip and showed the buy tip at 0 petals (the rain tip now counts new sprouts, and the buy tip waits until an upgrade is affordable). The cloud is always animated (bobbing, squash, blinking); there are no rigged characters, so no T-poses."
+  },
+  "capture": {
+    "warmup": 70,
+    "shots": [
+      0,
+      20,
+      80,
+      190,
+      330
+    ]
+  },
+  "press": {
+    "headline": "{studio} launches {title}, a cosy rain-cloud idle game that makes a dry valley bloom, playable instantly in the browser",
+    "summary": "Bloomtide puts players in charge of a cheerful little rain cloud over a dusty valley. Wherever it rains the ground turns green and flowers, bushes and blossom trees burst into life, and every bloom pays petals for wider rain, helper clouds, butterflies and thunder bursts. Six meadows, a harvest loop that rewards active play, and four seasons that each repaint the whole valley make it a relaxing game to return to. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
+    "features": [
+      "A dusty valley turns into a lush garden wherever your cloud rains, with flowers, bushes and blossom trees popping up in waves",
+      "Ripe flowers glitter: rain on them again to harvest more petals, or let helper clouds do it for you",
+      "Seven upgrade lines: wider rain, a faster breeze, bigger drops, deeper roots, up to six helper clouds, butterflies and thunder bursts",
+      "Six meadows to open, ponds that fill as they bloom, rare flowers, golden butterflies and a rainbow for every meadow in full bloom",
+      "Four seasons with their own colours and plants: spring tulips, summer daisies, autumn maples and winter pines, with seeds that carry your progress forward",
+      "Keyboard, mouse and touch controls, offline earnings, and English and Turkish text"
+    ],
+    "quote": "Most idle games ask you to cut something down. We wanted the opposite: a game where the screen gets more beautiful the longer you play, and a single cloud is enough to bring a whole valley back to life."
+  }
+}
