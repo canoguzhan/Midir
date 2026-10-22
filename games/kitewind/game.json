@@ -39,13 +39,13 @@
     "visual_review": "Reviewed the menu, onboarding at 800x450, gameplay in several skies at 1216x684 and on a phone, the results card, workshop, skies map, online lobby and a two-player online sky, then fixed what I found. The kite was too small and hid behind clouds (bigger, always drawn in front, ribbon too); clouds looked much bigger than their painting area (puffs now match the gameplay radius); unpainted dawn clouds read as muddy brown (lighter neutral greys per sky); '+Bloom!' pop texts piled up (only combo pops now); the sea poked through the beach as jagged blue shapes (lower water, gentler waves); the menu showed an all-grey sky (half in bloom behind the menu now); the ribbon tail was too short and faint to read (longer base tail with paint rate rebalanced, wider, stronger colour with white bows); the 'Sky in full bloom!' banner showed through the results card (hidden when the card opens); the Workshop hint pulse made the button resize (glow only). Gameplay bugs fixed on the way: a cloud-placement loop that never ended, a bot orbit just outside the paint radius, loops that were too strong, an online loop echo, a results screen that waited on a timer in capture mode, online connections that never sent their join (the CrazyGames token wait and a 1 KB server message limit). Kites, kids and villagers are all animated; there are no rigged characters, so no T-poses."
   },
   "capture": {
-    "warmup": 28,
+    "warmup": 52,
     "shots": [
       0,
       14,
       60,
       150,
-      300
+      260
     ]
   },
   "press": {

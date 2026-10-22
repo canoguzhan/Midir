@@ -898,7 +898,7 @@ function finishSolo() { // the sky is in full bloom: stars, breeze, the island p
   banner(t('resDone'), '', 2400);
   const show = () => { if (state !== State.PLAYING || world?.def !== def) return; $('banner').hidden = true; renderResults(); setState(State.RESULTS); if (AUTOPLAY && !CAPTURE) setTimeout(() => botResults(), 1500); };
   solo.doubled = false;
-  if (CAPTURE) show(); else setTimeout(show, 2600);
+  if (CAPTURE) { botResults(); return; } else setTimeout(show, 2600); // capture: the bot flies straight on, so press shots and the trailer stay in the sky
   $('banner').hidden = true; // capture: right away (skip() moves on to the next sky itself)
 }
 function renderResults() {
@@ -1115,7 +1115,7 @@ function botInput(k) {
   const l = Math.hypot(dx, dy) || 1; return { x: dx / l, y: dy / l, dash: d > 8 };
 }
 function botResults() { // capture / autoplay: spend breeze (string first when the next sky reaches further), fly on
-  if (state !== State.RESULTS) return;
+  if (state !== State.RESULTS && !CAPTURE) return;
   for (;;) {
     const nxt = S.SKIES[Math.min(solo.next, S.SKIES.length - 1)], L = S.UPGRADES.string.val(save.ups.string | 0);
     let pick = L < nxt.reach + 0.5 && (save.ups.string | 0) < S.UPGRADES.string.max ? 'string' : null;
