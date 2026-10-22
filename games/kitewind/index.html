@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Kitewind</title>
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+<script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-kite" viewBox="0 0 24 24"><path d="M12 1.5 19.5 9 12 16.5 4.5 9zM12 4.3 7.3 9 12 13.7 16.7 9z"/><path d="M12 16.5c-.4 1.5.3 2.5 1.3 3.2 1 .7 1.2 1.6.6 2.8l-1.2-.6c.3-.6.2-.9-.3-1.2-1.6-1.1-2.3-2.6-1.8-4.4z"/></symbol>
+  <symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 9h11a2.5 2.5 0 1 0-2.5-2.5h-2A4.5 4.5 0 1 1 14 11H3zm0 4h15a3.5 3.5 0 1 1-3.5 3.5h2A1.5 1.5 0 1 0 18 15H3zm0 4h7v2H3z"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 21l1.6-7L2 9.2l7.1-.6z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M6 4h4.5v16H6zm7.5 0H18v16h-4.5z"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M6.5 19a5 5 0 0 1-.8-9.9A6.5 6.5 0 0 1 18.2 8 5.5 5.5 0 0 1 17.5 19h-11z"/></symbol>
+  <symbol id="i-people" viewBox="0 0 24 24"><path d="M8.5 11a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7zm8-1a3 3 0 1 1 0-6 3 3 0 0 1 0 6zM1.5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5zm15.5 0c0-1.9-.7-3.6-1.9-4.9.6-.2 1.2-.2 1.9-.2 3 0 5.5 2.3 5.5 5.1z"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="m9 3 6 2 6-2v18l-6 2-6-2-6 2V5zm1 2.3v13.4l4 1.3V6.6z"/></symbol>
+  <symbol id="i-tools" viewBox="0 0 24 24"><path d="M21.7 6.3a5.5 5.5 0 0 1-7.2 6.5l-7.7 7.7a2.1 2.1 0 0 1-3-3l7.7-7.7a5.5 5.5 0 0 1 6.5-7.2l-3.3 3.3.6 2.8 2.8.6z"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M3 6h9.2a3 3 0 0 1 5.6 0H21v2h-3.2a3 3 0 0 1-5.6 0H3zm0 10h3.2a3 3 0 0 1 5.6 0H21v2h-9.2a3 3 0 0 1-5.6 0H3z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1.5v11h-13V10zm2 0h6V8a3 3 0 0 0-6 0z"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10.6 13.4a1 1 0 0 0 1.4 0l4.6-4.6a3 3 0 0 0-4.2-4.2L10.8 6.2l1.4 1.4 1.6-1.6a1 1 0 0 1 1.4 1.4l-4.6 4.6a1 1 0 0 0 0 1.4zm2.8-2.8a1 1 0 0 0-1.4 0l-4.6 4.6a3 3 0 0 0 4.2 4.2l1.6-1.6-1.4-1.4-1.6 1.6a1 1 0 0 1-1.4-1.4l4.6-4.6a1 1 0 0 0 0-1.4z"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.5 2 4 13.5h6.2L9 22l10-12h-6.4z"/></symbol>
+  <symbol id="i-loop" viewBox="0 0 24 24"><path d="M12 4a8 8 0 1 0 7.7 10.2l-1.9-.6A6 6 0 1 1 16.2 7.8L14 10h6V4l-2.4 2.4A8 8 0 0 0 12 4z"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 4h16v11H9l-5 4zm4 5h2v2H8zm3 0h2v2h-2zm3 0h2v2h-2z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M9.5 16.2 4.8 11.5 3.4 13l6.1 6.1L21 7.6l-1.4-1.4z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M12 3l8 9h-5v9H9v-9H4z"/></symbol>
+</svg>
+
+<canvas id="game"></canvas>
+<div id="vignette"></div>
+<div id="flash" hidden></div>
+
+<div id="hud" hidden>
+  <div class="hud-left">
+    <div class="pill big-pill"><svg class="breeze-ico"><use href="#i-wind"/></svg><b id="breeze">0</b></div>
+    <div class="pill small-pill" id="comboPill" hidden><span id="combo">x2</span></div>
+  </div>
+  <div class="hud-mid">
+    <div class="sky-chip"><svg><use href="#i-kite"/></svg><b id="skyName">Dawn Bay</b><small id="timer">0:00</small></div>
+    <div class="goal"><div class="goal-bar"><i id="goalFill"></i><span class="par" id="parMark"></span></div><small id="goalText"></small></div>
+  </div>
+  <div class="hud-right"><button id="btnPause" class="icon" aria-label="Pause"><svg><use href="#i-pause"/></svg></button></div>
+</div>
+<div id="players" hidden></div>
+<div id="roomChip" hidden><span id="roomCode"></span><button id="btnInvite" class="small"><svg><use href="#i-link"/></svg><span data-i18n="invite">Invite</span></button></div>
+<div id="chatBar" hidden></div>
+<div id="pops"></div>
+<div id="banner" hidden><b id="bannerText"></b><small id="bannerSub"></small></div>
+<div id="windWarn" hidden><svg><use href="#i-wind"/></svg><span id="windText"></span></div>
+
+<div id="dash" hidden>
+  <button id="btnDash" aria-label="Gust dash"><svg><use href="#i-bolt"/></svg><i id="dashCd"></i></button>
+  <span class="key keyhint">Space</span>
+</div>
+
+<div id="coach" hidden>
+  <div class="coach-keys" id="coachKeys"></div>
+  <span id="coachText"></span>
+  <button id="btnSkipTips" class="skip" data-i18n="skipTips">Skip tips</button>
+</div>
+<div id="hand" hidden></div>
+<div id="arrow" hidden><svg><use href="#i-arrow"/></svg></div>
+<div id="joystick" hidden><div class="knob"></div></div>
+
+<section id="menu" class="screen" hidden>
+  <div class="card menu-card">
+    <h1>Kitewind</h1>
+    <p class="tagline" data-i18n="tagline">Fly a kite, paint the sky, wake up the island.</p>
+    <div class="menu-stats" id="menuStats"></div>
+    <button id="btnPlay" class="big"><svg><use href="#i-play"/></svg><span id="playLabel" data-i18n="play">Play</span></button>
+    <button id="btnOnline" class="big alt"><svg><use href="#i-people"/></svg><span data-i18n="flyTogether">Fly together</span></button>
+    <div class="row three">
+      <button id="btnSkies" class="subtle"><svg><use href="#i-map"/></svg><span data-i18n="skies">Skies</span></button>
+      <button id="btnWorkshop" class="subtle"><svg><use href="#i-tools"/></svg><span data-i18n="workshop">Workshop</span></button>
+      <button id="btnSettings" class="subtle"><svg><use href="#i-sliders"/></svg><span data-i18n="settings">Settings</span></button>
+    </div>
+    <div class="controls" id="menuControls"></div>
+  </div>
+</section>
+
+<section id="skies" class="screen" hidden>
+  <div class="card wide">
+    <div class="card-head"><h2 data-i18n="skies">Skies</h2><span class="stars-total" id="skiesStars"></span></div>
+    <div class="sky-grid" id="skyGrid"></div>
+    <button id="btnSkiesBack" class="subtle" data-i18n="back">Back</button>
+  </div>
+</section>
+
+<section id="workshop" class="screen" hidden>
+  <div class="card wide">
+    <div class="card-head"><h2 data-i18n="workshop">Workshop</h2><div class="pill"><svg class="breeze-ico"><use href="#i-wind"/></svg><b id="wsBreeze">0</b></div></div>
+    <div class="up-grid" id="upGrid"></div>
+    <h3 data-i18n="kites">Kites</h3>
+    <div class="kite-grid" id="kiteGrid"></div>
+    <button id="btnWsBack" class="big" data-i18n="done">Done</button>
+  </div>
+</section>
+
+<section id="results" class="screen" hidden>
+  <div class="card center results-card">
+    <h2 id="resTitle"></h2>
+    <div class="res-stars" id="resStars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div>
+    <p class="sub" id="resSub"></p>
+    <div class="res-breeze"><svg class="breeze-ico"><use href="#i-wind"/></svg><b id="resBreeze">+0</b></div>
+    <button id="btnResDouble" class="reward" hidden><svg><use href="#i-play"/></svg><span data-i18n="doubleBreeze">Watch an ad: double breeze</span></button>
+    <button id="btnResNext" class="big"></button>
+    <div class="row">
+      <button id="btnResWorkshop" class="subtle"><svg><use href="#i-tools"/></svg><span data-i18n="workshop">Workshop</span></button>
+      <button id="btnResReplay" class="subtle" data-i18n="replay">Fly again</button>
+      <button id="btnResMenu" class="subtle" data-i18n="menu">Menu</button>
+    </div>
+  </div>
+</section>
+
+<section id="online" class="screen" hidden>
+  <div class="card center online-card">
+    <h2 data-i18n="flyTogether">Fly together</h2>
+    <p class="sub" data-i18n="onlineSub">Paint one sky with up to 3 other players. Every cloud you bloom pays breeze to everyone.</p>
+    <button id="btnQuick" class="big"><svg><use href="#i-people"/></svg><span data-i18n="quickJoin">Join a sky</span></button>
+    <button id="btnCreate" class="big alt"><svg><use href="#i-link"/></svg><span data-i18n="createRoom">Invite friends</span></button>
+    <form id="codeForm" class="code-row"><input id="codeInput" maxlength="5" autocomplete="off" spellcheck="false" aria-label="Room code" placeholder="ABCDE"><button type="submit" class="subtle" data-i18n="joinCode">Join with code</button></form>
+    <p class="sub small" id="onlineStatus"></p>
+    <button id="btnOnlineBack" class="subtle" data-i18n="back">Back</button>
+  </div>
+</section>
+
+<section id="paused" class="screen" hidden>
+  <div class="card center">
+    <h2 data-i18n="paused">Paused</h2>
+    <button id="btnResume" class="big" data-i18n="resume">Resume</button>
+    <div class="row"><button id="btnPauseSettings" class="subtle"><svg><use href="#i-sliders"/></svg><span data-i18n="settings">Settings</span></button><button id="btnQuit" class="subtle" data-i18n="menu">Menu</button></div>
+  </div>
+</section>
+
+<section id="settings" class="screen" hidden>
+  <div class="card center settings">
+    <h2 data-i18n="settings">Settings</h2>
+    <label class="slider"><span data-i18n="music">Music</span><input type="range" id="volMusic" min="0" max="100" step="5"><b id="volMusicVal"></b></label>
+    <label class="slider"><span data-i18n="sound">Sound</span><input type="range" id="volSfx" min="0" max="100" step="5"><b id="volSfxVal"></b></label>
+    <div class="setrow"><span data-i18n="graphics">Graphics</span><div class="seg" id="gfxSeg" role="radiogroup"></div></div>
+    <p class="legal" data-i18n="privacy"></p>
+    <button id="btnSettingsDone" class="big" data-i18n="done">Done</button>
+  </div>
+</section>
+
+<div id="loading"><h1>Kitewind</h1><div class="bar"><i id="loadBar"></i></div></div>
+<div id="toast" hidden></div>
+<script type="module" src="game.js"></script>
+</body>
+</html>
