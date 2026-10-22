@@ -58,7 +58,8 @@ def publish(slug, cat):
         if f.startswith('assets/vendor/three') and 'three' not in open(os.path.join(gdir, 'index.html'), encoding='utf-8').read(): continue
         s, d = os.path.join(gdir, f), os.path.join(tmp, f); os.makedirs(os.path.dirname(d), exist_ok=True); shutil.copy2(s, d)
     page = os.path.join(tmp, 'index.html'); html = open(page, encoding='utf-8').read()
-    html, n = SDK_TAG.subn('', html); open(page, 'w', encoding='utf-8').write(html)
+    html, n = SDK_TAG.subn('\n<script src="/devcan-sdk.js"></script>', html, count=1)  # the DevCan stand-in (portal/assets/devcan-sdk.js): cloud saves
+    open(page, 'w', encoding='utf-8').write(html)
     shutil.rmtree(dest, ignore_errors=True); os.replace(tmp, dest)
     media = images(gdir, os.path.join(DEVCAN, 'media', slug))
     old = next((g for g in cat['games'] if g['slug'] == slug), {})
@@ -68,7 +69,7 @@ def publish(slug, cat):
              'online': bool(meta.get('multiplayer')) or slug == 'whirlbash', 'media': media,
              'published': old.get('published') or release_date(slug) or time.strftime('%Y-%m-%dT%H:%M:%S'), 'updated': time.strftime('%Y-%m-%dT%H:%M:%S')}
     cat['games'] = [g for g in cat['games'] if g['slug'] != slug] + [entry]
-    log('devcan', f'{slug} v{entry["version"]} -> {os.path.relpath(dest, DEVCAN)}/ ({"SDK tag removed" if n else "no SDK tag found"}, images: {", ".join(media)})')
+    log('devcan', f'{slug} v{entry["version"]} -> {os.path.relpath(dest, DEVCAN)}/ ({"CrazyGames SDK swapped for devcan-sdk.js" if n else "no SDK tag found"}, images: {", ".join(media)})')
 
 
 def release_date(slug):

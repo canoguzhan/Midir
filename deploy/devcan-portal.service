@@ -6,6 +6,8 @@ After=network-online.target
 WorkingDirectory=/root/midir
 ExecStart=/usr/bin/node /root/midir/portal/server.mjs
 Environment=PORT=8100 DEVCAN_DIR=/srv/devcan
+# secrets (Google OAuth, SMTP, SESSION_SECRET), root-only, never in the repo
+EnvironmentFile=/etc/devcan/portal.env
 Restart=always
 RestartSec=2
 
