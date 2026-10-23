@@ -478,13 +478,13 @@ function spawnCoins(x, y, z, n) { for (let i = 0; i < n && coins.length < COIN_N
 function spawnChips(x, y, z, color, n, speed = 4) { _c.set(color); for (let i = 0; i < n && chips.length < CHIP_N; i++) chips.push({ x, y, z, vx: rand(-1, 1) * speed, vy: rand(1.5, 1) * speed, vz: rand(-1, 1) * speed, life: rand(0.5, 0.9), r: rand(0, 6), c: _c.clone().multiplyScalar(rand(0.8, 1.1)) }); }
 function spawnSparks(x, y, z, n, speed = 5) { for (let i = 0; i < n && sparks.length < SPARK_N; i++) sparks.push({ x, y, z, vx: rand(-1, 1) * speed, vy: rand(0.2, 1) * speed, vz: rand(-1, 1) * speed, life: rand(0.2, 0.45) }); }
 function updateFx(dt) {
-  _v.set(-0.82, 0.86, 0.5).unproject(camera); hudTarget.copy(_v);
+  _v.set(-0.82, 0.86, 0.5).unproject(camera).sub(camera.position).normalize(); hudTarget.copy(camera.position).addScaledVector(_v, 12); // toward the coin counter, never into the lens
   let n = 0;
   for (let i = coins.length - 1; i >= 0; i--) {
     const c = coins[i]; c.t += dt;
     if (c.t < c.fly) { c.vy -= 18 * dt; c.x += c.vx * dt; c.y = Math.max(0.2, c.y + c.vy * dt); c.z += c.vz * dt; }
     else { const k = Math.min(1, (c.t - c.fly) * 2.2); c.x = lerp(c.x, hudTarget.x, k * k); c.y = lerp(c.y, hudTarget.y, k * k); c.z = lerp(c.z, hudTarget.z, k * k); if (k >= 1) { coins.splice(i, 1); coinArrived(); continue; } }
-    c.rx += dt * 9; _p.set(c.x, c.y, c.z); _q.setFromEuler(_e.set(c.rx, c.ry, 0)); _s.setScalar(1); _m.compose(_p, _q, _s); coinMesh.setMatrixAt(n++, _m);
+    c.rx += dt * 9; _p.set(c.x, c.y, c.z); _q.setFromEuler(_e.set(c.rx, c.ry, 0)); _s.setScalar(c.t < c.fly ? 1 : Math.max(0.25, 1 - (c.t - c.fly) * 1.6)); _m.compose(_p, _q, _s); coinMesh.setMatrixAt(n++, _m);
   }
   coinMesh.count = n; coinMesh.instanceMatrix.needsUpdate = true;
   n = 0;
