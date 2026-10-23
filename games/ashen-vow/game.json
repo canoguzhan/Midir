@@ -1,0 +1,63 @@
+{
+  "title": "Ashen Vow",
+  "slug": "ashen-vow",
+  "version": "1.0.0",
+  "blueprint": "A fallen knight climbs a burning cathedral one room at a time: you only move (WASD/arrows, or drag on touch) and the knight strikes by itself, while Space or the dodge button rolls out of red-marked attacks. Before each room you may swear a vow (no hits, a time limit, darkness, half health, stand fast) for a bigger reward, after each room you pick a relic, a boss waits every 5 floors across 3 acts, and embers carried out of the tower buy lasting upgrades and 5 weapons at the camp. A midgame ad plays only when you start a new climb after a fall; an optional rewarded ad doubles the embers on the results screen and is hidden when ads are unavailable.",
+  "description": "Climb a cursed cathedral as a fallen knight. Move, and your blade strikes on its own; roll out of the red-marked blows, swear risky vows for bigger rewards, and build your run from 21 relics and 3 patron gods. Beat the Bell Warden, the Choir Lich and the Ashen King, then spend your embers at the camp on new weapons and lasting strength.",
+  "controls": {
+    "desktop": "WASD or arrow keys to move, Space or Shift to dodge-roll, P to pause. Attacks are automatic; pick cards with the mouse or keys 1-3.",
+    "mobile": "Drag anywhere to move, tap the dodge button to roll. Attacks are automatic; tap a card to pick it."
+  },
+  "category": "Action",
+  "tags": [
+    "roguelike",
+    "3d",
+    "knight",
+    "dungeon",
+    "fantasy",
+    "action",
+    "upgrade"
+  ],
+  "orientation": "landscape",
+  "mobile": true,
+  "languages": [
+    "en",
+    "tr"
+  ],
+  "pegi": "PEGI 7",
+  "ads": {
+    "midgame": "Only when 'Climb again' starts a new climb after a fall (between runs; the SDK caps the frequency). Never on menu, camp, settings or during play.",
+    "rewarded": "Optional 'Watch an ad: double embers' on the results screen, once per climb; the non-ad path keeps the normal embers. Hidden when ads are unavailable or fail, granted only on adFinished."
+  },
+  "quality": {
+    "hook": "Peers on CrazyGames: Immortal Dark Slayer (auto-attack room clearer, the direct inspiration) and the many Archero-style and survivor-style arena games. The twist: before every room you swear a Vow, a self-imposed challenge (take no hits, beat the clock, fight in darkness, start at half health, never stand still) that pays an extra relic, a heal or double embers if kept. Risk is a choice you make every room, on top of patron gods and relic synergies.",
+    "onboarding": "The first room teaches by doing, one short tip at a time with visual key icons (a ghost hand on touch): move, walk up to enemies to strike automatically, dodge out of a red mark, walk through the opened door; after the first fall a tip points to the Camp. 'Skip tips' sits on every tip and turns them off for good. Patron and vow picks are one-click cards with one-line effects.",
+    "art_style": "Chunky flat-shaded low-poly, built entirely in-engine: a navy-and-violet cathedral lit by moonbeams and candles, a white-and-gold knight with a red cape, bone-white enemies with glowing eyes; each act shifts the palette (green catacombs, orange burning sky). UI is dark violet panels with gold Lilita One titles, Nunito text and one line-icon set. Covers are rendered in-engine from the same scene.",
+    "content": "15 floors in 3 acts (Cathedral, Catacombs, Burning Sky) with their own palettes and enemy mixes (skeletons, ghouls, exploding wisps, ranged imps, charging brutes, elites), 1-3 waves per room, and 3 bosses with distinct attacks (Bell Warden, Choir Lich, Ashen King), then endless Ascension floors. Per climb: 3 patron gods, 5 vows, 21 stackable relics with highlighted synergies. Between climbs: 6 camp upgrades and 5 weapons with different shapes (longsword arcs, spear thrusts, spinning daggers, stunning hammer shockwave, orbiting flail). In balance runs a bot needed 9 climbs and about 25 minutes to push from floor 5 to floor 9, with camp upgrades carrying it further each time.",
+    "name_check": "'Ashen Vow' has no genre words, names the core twist (swearing vows) and the burning-cathedral mood, and does not match an existing CrazyGames title.",
+    "visual_review": "Looked at the menu (desktop and 390x844 touch portrait), patron pick, vow pick, first room with the key-icon tip, a fight at 800x450, floor 4 with the Swift Judgment timer, the Bell Warden fight, the results screen and the camp. Fixed: south pillars hid the knight from the camera (now low stumps); the cape turned flat black when seen from behind (normals recomputed as it waves, plus a dim emissive); an enemy could freeze with a stuck wind-up timer and softlock a room (found with a 9-climb softlock hunt; 0 stuck after the fix). Every model is procedural and animated (the knight idles on the menu, no T-poses); hit flashes are short emissive pulses; no text overlaps at 800x450; the vow cards fade in with a short stagger."
+  },
+  "capture": {
+    "warmup": 20,
+    "shots": [
+      0,
+      10,
+      30,
+      70,
+      140
+    ]
+  },
+  "press": {
+    "headline": "{studio} launches {title}, a vow-swearing knight roguelite playable instantly in the browser",
+    "summary": "Ashen Vow is a bite-sized action roguelite: you guide a fallen knight up a burning cathedral while the blade swings by itself, so every fight is about positioning, dodging and choices. Before each room you can swear a vow for a bigger reward, and every climb ends at the camp, where embers become new weapons and lasting strength. Free to play in the browser on desktop and mobile.",
+    "features": [
+      "One-thumb combat: move, and your knight strikes on its own; roll out of red-marked attacks",
+      "Swear a Vow before each room (no hits, a time limit, darkness, half health) for relics, heals or double embers",
+      "21 relics with highlighted synergies and 3 patron gods make every climb different",
+      "3 acts, 3 bosses and endless Ascension floors after the Ashen King",
+      "5 weapons with their own feel: longsword, spear, twin daggers, warhammer and orbiting flail",
+      "A camp between climbs where embers buy lasting upgrades; in English and Turkish"
+    ],
+    "quote": "Auto-attack games free you to think about where to stand. Vows add one more question, every single room: how much risk do you dare to take next?"
+  }
+}
