@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-22 21:09",
-  "count": 505,
+  "updated": "2026-10-23 20:14",
+  "count": 513,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -277,6 +277,32 @@
         "bgm",
         "run",
         "wolf"
+      ]
+    },
+    {
+      "path": "audio/bgm_works_bench.mp3",
+      "prompt": "cozy upbeat toy workshop music, plucked pizzicato strings, marimba, glockenspiel and light brushed drums, warm and cheerful, ticking clock feel, relaxing idle game, seamless loop, no vocals",
+      "game": "whirlworks",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "bench",
+        "bgm",
+        "works"
+      ]
+    },
+    {
+      "path": "audio/bgm_works_clock.mp3",
+      "prompt": "playful clockwork music box waltz turned groovy, celesta, bassoon, upright bass and soft shaker, whimsical and bright, steady tempo, seamless loop, no vocals",
+      "game": "whirlworks",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1407,
+      "tags": [
+        "bgm",
+        "clock",
+        "works"
       ]
     },
     {
@@ -3699,6 +3725,81 @@
       "tags": [
         "growl",
         "wolf"
+      ]
+    },
+    {
+      "path": "audio/works_block_crack.mp3",
+      "prompt": "a small wooden toy block cracking apart, bright woody knock and splinter, playful, very short",
+      "game": "whirlworks",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "block",
+        "crack",
+        "works"
+      ]
+    },
+    {
+      "path": "audio/works_coin_jar.mp3",
+      "prompt": "a handful of coins dropping into a glass jar, bright cheerful jingle, short",
+      "game": "whirlworks",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 11,
+      "tags": [
+        "coin",
+        "jar",
+        "works"
+      ]
+    },
+    {
+      "path": "audio/works_fanfare.mp3",
+      "prompt": "a short toy band fanfare with tin trumpets and a drum roll, joyful tournament victory",
+      "game": "whirlworks",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 40,
+      "tags": [
+        "fanfare",
+        "works"
+      ]
+    },
+    {
+      "path": "audio/works_great_block.mp3",
+      "prompt": "a big wooden treasure block bursting open, chunky wood crack, coins spilling out and a happy sparkle",
+      "game": "whirlworks",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 28,
+      "tags": [
+        "block",
+        "great",
+        "works"
+      ]
+    },
+    {
+      "path": "audio/works_register.mp3",
+      "prompt": "an old brass cash register ringing open with a cheerful bell, toy shop, short",
+      "game": "whirlworks",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "register",
+        "works"
+      ]
+    },
+    {
+      "path": "audio/works_whip.mp3",
+      "prompt": "a quick string whip snapping a spinning wooden top, light crack and a rising whirr, short",
+      "game": "whirlworks",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "whip",
+        "works"
       ]
     },
     {
