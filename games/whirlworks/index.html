@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Whirlworks</title>
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+<script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-coin" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm-1 2.5v1.2c-1.6.3-2.6 1.3-2.6 2.6 0 1.6 1.3 2.2 2.9 2.6 1.2.3 1.6.6 1.6 1.1s-.6.9-1.5.9c-1 0-1.7-.4-2-1.2l-1.5.6c.4 1.1 1.3 1.8 2.6 2V18h1.6v-1.2c1.6-.3 2.6-1.3 2.6-2.6 0-1.7-1.4-2.3-3-2.7-1.1-.3-1.5-.5-1.5-1s.5-.9 1.3-.9 1.4.3 1.7 1l1.5-.6c-.4-1-1.2-1.6-2.4-1.8V7.5z"/></symbol>
+  <symbol id="i-top" viewBox="0 0 24 24"><path d="M11 1h2v4h-2zM4 8.5C4 7 7.6 6 12 6s8 1 8 2.5c0 1-1 1.8-2.6 2.3L12.9 21.5a1 1 0 0 1-1.8 0L6.6 10.8C5 10.3 4 9.5 4 8.5z"/></symbol>
+  <symbol id="i-tip" viewBox="0 0 24 24"><path d="M12 22 6 10h12zM5 8l1.5-4h11L19 8z"/></symbol>
+  <symbol id="i-swirl" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9h-2.2A6.8 6.8 0 1 1 12 5.2 4.6 4.6 0 0 1 16.6 9.8a3 3 0 0 1-3 3 1.6 1.6 0 0 1 0-3.2v-2.2a3.8 3.8 0 0 0 0 7.6 5.2 5.2 0 0 0 5.2-5.2A6.8 6.8 0 0 0 12 3z"/></symbol>
+  <symbol id="i-gem" viewBox="0 0 24 24"><path d="M7 3h10l5 6-10 12L2 9zm1.2 2L5.6 8.2h3.7L10.5 5zm4.3 0 1.2 3.2h3.7L15.8 5zm-3.1 5.2L12 17l2.6-6.8z"/></symbol>
+  <symbol id="i-block" viewBox="0 0 24 24"><path d="M12 2 21 7v10l-9 5-9-5V7zm0 2.3L5.4 8 12 11.6 18.6 8zM5 9.7v6.1l6 3.4v-6.2zm14 0-6 3.3v6.2l6-3.4z"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 1l2.6 7.4L22 11l-7.4 2.6L12 21l-2.6-7.4L2 11l7.4-2.6z"/></symbol>
+  <symbol id="i-finger" viewBox="0 0 24 24"><path d="M9 2a2 2 0 0 1 2 2v7.2l1-.2V9a2 2 0 0 1 4 .3V11l1-.1a2 2 0 0 1 2 2V17a5 5 0 0 1-5 5h-2.2a5 5 0 0 1-4-2l-3.6-4.8a1.8 1.8 0 0 1 2.7-2.4L7 14V4a2 2 0 0 1 2-2z"/></symbol>
+  <symbol id="i-launch" viewBox="0 0 24 24"><path d="M4 18h16v3H4zM12 3l6 7h-4v6h-4v-6H6z"/></symbol>
+  <symbol id="i-peg" viewBox="0 0 24 24"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z"/></symbol>
+  <symbol id="i-whip" viewBox="0 0 24 24"><path d="M3 21 13.5 10.5l1.4 1.4L4.4 22.4zM14 3c4 0 7 2.5 7 5.6 0 2.4-2 4.4-4.7 4.4-1.7 0-3-.9-3-2.4 0-1.2 1-2 2.3-2 .9 0 1.5.5 1.6 1.2.8-.2 1.4-.8 1.4-1.6C18.6 6.3 16.6 5 14 5c-2.6 0-4.5 1.3-5.3 3.2l-1.9-.7C7.9 4.9 10.6 3 14 3z"/></symbol>
+  <symbol id="i-merge" viewBox="0 0 24 24"><path d="M4 3h5v2H7.4l4.6 4.6L16.6 5H15V3h5v5h-2V6.4l-5 5V21h-2v-9.6l-5-5V8H4z"/></symbol>
+  <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M6 2h12v2h4v3a5 5 0 0 1-4.6 5A6 6 0 0 1 13 15.9V19h4v3H7v-3h4v-3.1A6 6 0 0 1 6.6 12 5 5 0 0 1 2 7V4h4zm0 4H4v1a3 3 0 0 0 2 2.8zm12 0v3.8A3 3 0 0 0 20 7V6z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M6 4h4.5v16H6zm7.5 0H18v16h-4.5z"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M3 6h9.2a3 3 0 0 1 5.6 0H21v2h-3.2a3 3 0 0 1-5.6 0H3zm0 10h3.2a3 3 0 0 1 5.6 0H21v2h-9.2a3 3 0 0 1-5.6 0H3z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2h1.5v11h-13V10zm2 0h6V8a3 3 0 0 0-6 0z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M9.5 16.2 4.8 11.5 3.4 13l6.1 6.1L21 7.6l-1.4-1.4z"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M14.5 2A9.5 9.5 0 1 0 22 16.4 8 8 0 0 1 14.5 2z"/></symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24"><path d="M3 8h18v4H3zm1 5h7v8H4zm9 0h7v8h-7zM12 7.5C10.5 4 7 3 6.2 4.6 5.4 6.2 8 7.5 12 7.5zm0 0c1.5-3.5 5-4.5 5.8-2.9.8 1.6-1.8 2.9-5.8 2.9zM11 8h2v13h-2z"/></symbol>
+</svg>
+
+<canvas id="game"></canvas>
+<div id="vignette"></div>
+<div id="flash" hidden></div>
+<div id="pops"></div>
+
+<div id="hud" hidden>
+  <div class="hud-left">
+    <div class="pill coins"><svg><use href="#i-coin"/></svg><b id="coinText">0</b></div>
+    <div class="rate"><span id="rateText">0</span><span data-i18n="perSec">/s</span></div>
+  </div>
+  <div class="hud-mid">
+    <div class="arena-chip"><b id="arenaName">Workbench Bowl</b><span id="stageText">Stage 1</span></div>
+    <div class="goal"><i id="goalFill"></i><span id="goalText">0 / 25</span></div>
+    <button id="btnTourney" class="tourney-btn" hidden><svg><use href="#i-trophy"/></svg><span data-i18n="tourneyBtn">Grand Tournament</span></button>
+  </div>
+  <div class="hud-right">
+    <button id="btnPause" class="icon" aria-label="Pause"><svg><use href="#i-pause"/></svg></button>
+  </div>
+</div>
+
+<div id="rack" hidden>
+  <div id="slots"></div>
+  <button id="btnBuy" class="buy"><span class="buy-ico"><svg><use href="#i-top"/></svg><i id="buyTier">1</i></span><span class="buy-txt"><b data-i18n="buyTop">New top</b><span class="cost"><svg><use href="#i-coin"/></svg><span id="buyCost">10</span></span></span></button>
+</div>
+
+<div id="panel" hidden>
+  <div class="panel-head"><b data-i18n="workshop">Workshop</b><span class="mult" id="multText"></span></div>
+  <div id="shopList"></div>
+</div>
+
+<div id="coach" hidden><span id="coachIco"></span><span id="coachText"></span><button id="btnSkipTips" class="subtle" data-i18n="skipTips">Skip tips</button></div>
+<div id="hand" hidden><svg><use href="#i-finger"/></svg></div>
+<div id="banner" hidden><b id="bannerTitle"></b><span id="bannerSub"></span></div>
+<div id="toast" hidden></div>
+
+<div id="menu" class="screen" hidden>
+  <div class="card menu-card">
+    <h1>Whirlworks</h1>
+    <p class="tagline" data-i18n="tagline">Spin tops, smash toy blocks, build the grandest workshop.</p>
+    <button id="btnPlay" class="big"><svg><use href="#i-play"/></svg><span id="playLabel" data-i18n="play">Play</span></button>
+    <div class="menu-row">
+      <button id="btnSettingsMenu" class="subtle"><svg><use href="#i-sliders"/></svg><span data-i18n="settings">Settings</span></button>
+    </div>
+    <div class="menu-stats" id="menuStats"></div>
+    <div class="controls" id="menuControls"></div>
+  </div>
+</div>
+
+<div id="paused" class="screen" hidden>
+  <div class="card center">
+    <h2 data-i18n="paused">Paused</h2>
+    <button id="btnResume" class="big"><svg><use href="#i-play"/></svg><span data-i18n="resume">Resume</span></button>
+    <div class="menu-row">
+      <button id="btnSettingsPause" class="subtle"><svg><use href="#i-sliders"/></svg><span data-i18n="settings">Settings</span></button>
+      <button id="btnQuit" class="subtle" data-i18n="menu">Menu</button>
+    </div>
+  </div>
+</div>
+
+<div id="settings" class="screen" hidden>
+  <div class="card center settings-card">
+    <h2 data-i18n="settings">Settings</h2>
+    <label class="slider"><span data-i18n="music">Music</span><input id="volMusic" type="range" min="0" max="1" step="0.05"></label>
+    <label class="slider"><span data-i18n="sfx">Sounds</span><input id="volSfx" type="range" min="0" max="1" step="0.05"></label>
+    <div class="seg"><span data-i18n="graphics">Graphics</span><button id="gfxAuto" data-gfx="auto" data-i18n="gfxAuto">Auto</button><button id="gfxHigh" data-gfx="high" data-i18n="gfxHigh">High</button><button id="gfxLow" data-gfx="low" data-i18n="gfxLow">Low</button></div>
+    <button id="btnSettingsBack" class="big" data-i18n="back">Back</button>
+  </div>
+</div>
+
+<div id="offline" class="screen" hidden>
+  <div class="card center">
+    <div class="card-ico moon"><svg><use href="#i-moon"/></svg></div>
+    <h2 data-i18n="awayTitle">Welcome back!</h2>
+    <p class="dim" id="awayText"></p>
+    <div class="prize"><svg><use href="#i-coin"/></svg><b id="awayCoins">0</b></div>
+    <button id="btnAwayDouble" class="reward"><svg><use href="#i-play"/></svg><span data-i18n="awayDouble">Watch an ad: double it</span></button>
+    <button id="btnAwayCollect" class="big" data-i18n="collect">Collect</button>
+  </div>
+</div>
+
+<div id="cleared" class="screen" hidden>
+  <div class="card center">
+    <div class="card-ico gift"><svg><use href="#i-gift"/></svg></div>
+    <h2 data-i18n="clearedTitle">Great Block smashed!</h2>
+    <p class="dim" id="clearedText"></p>
+    <div class="prize"><svg><use href="#i-coin"/></svg><b id="clearedCoins">0</b></div>
+    <button id="btnClearTriple" class="reward"><svg><use href="#i-play"/></svg><span data-i18n="clearTriple">Watch an ad: triple the prize</span></button>
+    <button id="btnClearCollect" class="big" data-i18n="collect">Collect</button>
+  </div>
+</div>
+
+<div id="tourney" class="screen" hidden>
+  <div class="card center tourney-card">
+    <div class="card-ico cup"><svg><use href="#i-trophy"/></svg></div>
+    <h2 data-i18n="tourneyTitle">Grand Tournament</h2>
+    <p class="dim" data-i18n="tourneyText">Enter your tops in the Grand Tournament. Your workshop starts over, but every trophy you win makes all tops and blocks stronger, forever.</p>
+    <div class="tourney-grid">
+      <span data-i18n="tourneyWin">Trophies you win</span><b id="tourneyGain">+0</b>
+      <span data-i18n="tourneyBoost">Workshop bonus</span><b id="tourneyMult">x1 → x1</b>
+    </div>
+    <p class="perk-next" id="tourneyPerk"></p>
+    <button id="btnTourneyGo" class="big"><svg><use href="#i-trophy"/></svg><span data-i18n="tourneyGo">Enter the tournament</span></button>
+    <button id="btnTourneyBack" class="subtle" data-i18n="notYet">Not yet</button>
+  </div>
+</div>
+
+<div id="loading">
+  <h1>Whirlworks</h1>
+  <div class="bar"><i id="loadBar"></i></div>
+</div>
+
+<script type="module" src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+{
+  "title": "Whirlworks",
+  "slug": "whirlworks",
+  "version": "1.0.0",
+  "blueprint": "An idle spinning-top workshop: lathe-turned tops spin around a toy bowl by themselves and smash toy blocks into coins. Click or tap a top to whip it, tap blocks to flick them, buy new tops, drag twin tops together to merge them into finer ones, and upgrade the workshop; every stage ends with a gift-wrapped Great Block, every 3 stages opens a new arena with its own twist, and the Grand Tournament resets the workshop for permanent trophies. A midgame ad plays only when a new arena opens or a tournament starts; optional rewarded ads double the welcome-back coins or triple a Great Block prize, and are hidden when ads are unavailable.",
+  "description": "Run a cozy toy workshop where spinning tops do the work. Your tops whirl around a turned wooden bowl, smashing toy blocks into coins while you whip them faster, merge twins into fancier tops and upgrade the workshop. Smash the Great Block to open new arenas - a tin drum with springy bumpers, a turning clockwork plate, a candy saucer and a starlit music box - then enter the Grand Tournament for trophies that make every top stronger. Your tops keep spinning while you are away.",
+  "controls": {
+    "desktop": "Click a top to whip it, click blocks to flick them, drag a top onto its twin in the rack to merge. B buys a top, Space whips the slowest top, M merges a pair, P pauses.",
+    "mobile": "Tap a top to whip it, tap blocks to flick them, drag a top onto its twin to merge, tap the buttons to buy and upgrade."
+  },
+  "category": "Clicker",
+  "tags": [
+    "idle",
+    "incremental",
+    "merge",
+    "tycoon",
+    "clicker",
+    "3d",
+    "casual"
+  ],
+  "orientation": "landscape",
+  "mobile": true,
+  "languages": [
+    "en",
+    "tr"
+  ],
+  "pegi": "PEGI 3",
+  "ads": {
+    "midgame": "Only at natural breaks: when a new arena opens after a Great Block (every 3 stages) and when the Grand Tournament starts. Never on menu, settings, upgrades or during play.",
+    "rewarded": "Optional 'double it' on the welcome-back screen and 'triple the prize' on the Great Block screen; the normal Collect button is always there. Hidden when ads are unavailable or fail, granted only on adFinished."
+  },
+  "quality": {
+    "hook": "Peers on CrazyGames: idle merge games (merge-and-tap number games), idle tycoon/clicker games, and arena top battlers like our own Whirlbash. The twist: the idle loop is a real physics toy - your merged tops actually spin, wobble, ricochet off each other and topple in a turned bowl, so upgrades and merges are visible as livelier tops, and active play (whipping a slowing top, flicking blocks) visibly beats idling. Each arena changes the physics (bumpers, a turning plate, golden blocks, shooting-star blocks) instead of only the numbers.",
+    "onboarding": "Inside gameplay, one short tip at a time with a ghost hand: whip the spinning top (hand over the top), buy a new top (hand on the button), drag it onto its twin (animated drag hand between the two pegs, twins glow), buy an upgrade (the first affordable row glows). Later one-off tips for flicking blocks and the Grand Tournament, and a banner when a Great Block lands. 'Skip tips' sits on every tip. The menu shows controls as icons and key caps.",
+    "art_style": "Warm toy-workshop diorama, all procedural Three.js: honey-wood workbench planks, a teal pegboard with tools, a coin jar that fills with your coins, a trophy shelf, and lathe-turned tops with painted striped shoulders, metal tips, brass rings, gems and crowns by tier. Blocks are soft rounded toy dice with pips. Each arena keeps the same toy language (wood grain bowl, red-and-white tin drum, brass gear plate, pink porcelain saucer, navy velvet music box with a gold rim). UI is walnut panels with honey buttons, Lilita One titles, Nunito text and one line-icon set. Covers are rendered in-engine.",
+    "content": "15 top tiers with names and distinct looks (4 lathe profiles, rings, gems, crowns), 8 upgrades, 3 machines (Whip Arm, Merge Bot, Top Lathe), 5 arenas with their own twist and music, endless stages with a Great Block each, the Grand Tournament prestige with trophies and 5 trophy perks, offline earnings. In balance runs an active bot reached the second arena in ~2-3 minutes, the first tournament after ~7 minutes, and on the second climb the fourth arena by minute 16; the fifth arena and the top tiers take several tournaments.",
+    "name_check": "'Whirlworks' is a coined word (whirl + works, a workshop of spinning tops) with no genre words; it does not match an existing CrazyGames title.",
+    "visual_review": "Looked at menu (1216x684 and 390x844), fresh start at 800x450 with the whip tip and hand, after the first buy (twins glowing), all 5 arenas, the Great Block screen, tournament, welcome-back, pause and settings screens, and all covers. Fixed: camera too close and too steep (bowl overflowed the screen, tops read as pucks) -> pulled back and lowered, stripes moved to the visible shoulder, tops enlarged; bowl inner faces were culled (bench showed through, sawtooth walls) -> double-sided; bowl self-shadow acne -> receive-only; tin-drum stripes painted per face; a top that just landed had no radius which sent blocks to NaN (invisible blocks, phantom hits) -> fixed and the economy re-tuned on correct physics; blocks dropping from high looked like floating boxes near the HUD -> drop lower and pop in; tournament button text wrapped -> one line; desk lamp shade cut into the shot -> moved back. Three very quiet library sounds (pop, ui_click, stack_drop) were dropped."
+  },
+  "capture": {
+    "warmup": 12,
+    "shots": [
+      0,
+      6,
+      20,
+      45,
+      90
+    ]
+  },
+  "press": {
+    "headline": "{studio} launches {title}, a cozy idle spinning-top workshop playable instantly in the browser",
+    "summary": "Whirlworks is an idle tycoon where the work is done by real spinning tops: they whirl around a turned wooden bowl, ricochet off each other and smash toy blocks into coins. Whip them, merge twins into fancier tops, open new arenas and win the Grand Tournament. Free to play in the browser on desktop and mobile.",
+    "features": [
+      "Real physics tops that spin, wobble, ricochet and topple - every merge and upgrade is visible",
+      "Merge twin tops through 15 tiers, from the Pine Twirler to the Eternal Whirl",
+      "5 arenas with their own twist: springy bumpers, a turning clockwork plate, golden blocks and shooting stars",
+      "Gift-wrapped Great Blocks, workshop machines and the Grand Tournament for permanent trophies",
+      "Keeps earning while you are away; play actively to whip and flick for much more",
+      "A cozy toy-workshop look with music, in English and Turkish"
+    ],
+    "quote": "We wanted an idle game where you can actually watch the numbers happen: every coin comes from a top you merged knocking a block across the bowl."
+  }
+}
