@@ -28,7 +28,7 @@ const meta = JSON.parse(await readFile(path.join(dir, 'game.json'), 'utf8'));
 const cap = { warmup: 60, shots: [0, 20, 60, 120, 240], ...(meta.capture || {}) };
 const fps = Number(opt.fps || 24), seconds = Number(opt.seconds || 14);
 
-const TYPES = { '.woff2': 'font/woff2', '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.glb': 'model/gltf-binary',
+const TYPES = { '.woff2': 'font/woff2', '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.glb': 'model/gltf-binary',
   '.webp': 'image/webp', '.png': 'image/png', '.jpg': 'image/jpeg', '.mp3': 'audio/mpeg', '.mp4': 'video/mp4', '.webm': 'video/webm' };
 const server = createServer(async (req, res) => {
   const p = path.normalize(decodeURIComponent(new URL(req.url, 'http://x').pathname)).replace(/^([/\\])+/, '');

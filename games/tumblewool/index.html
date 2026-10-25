@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Tumblewool</title>
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+<script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div id="hud" hidden>
+  <div class="pill lvl"><b id="hudLevel">1-1</b><span id="hudName"></span></div>
+  <div class="pill" id="hudSheep"></div>
+  <div class="pill" id="hudClover"><i class="ico ico-clover"></i><b id="cloverN">0/0</b></div>
+  <div class="pill" id="hudTime"><i class="ico ico-clock"></i><b id="timeN">0:00</b><small id="parN"></small></div>
+  <div class="right">
+    <button id="btnRestart" class="icon" aria-label="Restart">↻</button>
+    <button id="btnPause" class="icon" aria-label="Pause"><span class="bars"></span></button>
+  </div>
+</div>
+
+<div id="joystick" hidden><div class="knob"></div></div>
+<div id="banner" hidden><small id="bannerIsland"></small><b id="bannerName"></b></div>
+<div id="arrow" hidden></div>
+<div id="tip" hidden>
+  <div id="tipIcon"></div>
+  <p id="tipText"></p>
+  <button id="btnSkipTips" data-i18n="skipTips">Skip tips</button>
+</div>
+
+<section id="menu" class="screen menu" hidden>
+  <div class="menu-col">
+    <h1 class="logo">Tumble<span>wool</span></h1>
+    <p class="tag" data-i18n="tagline">Tilt the island. Roll the flock home.</p>
+    <button id="btnPlay" class="big"><span data-i18n="play">Play</span> <small id="playLevel"></small></button>
+    <div class="row">
+      <button id="btnLevels" class="soft"><i class="ico ico-map"></i><span data-i18n="levels">Levels</span></button>
+      <button id="btnFlock" class="soft"><i class="ico ico-sheep"></i><span data-i18n="flock">Flock</span></button>
+    </div>
+    <p class="stars-total"><i class="ico ico-star"></i><b id="menuStars">0</b> <span class="dim">/ <span id="menuStarsMax">72</span></span>
+      <i class="ico ico-wool"></i><b id="menuWool">0</b></p>
+  </div>
+</section>
+
+<section id="levels" class="screen" hidden>
+  <div class="panel wide">
+    <h2 data-i18n="levels">Levels</h2>
+    <div id="islandTabs" class="tabs"></div>
+    <div id="levelGrid" class="level-grid"></div>
+    <button id="btnLevelsBack" class="soft" data-i18n="back">Back</button>
+  </div>
+</section>
+
+<section id="flock" class="screen" hidden>
+  <div class="panel wide">
+    <h2 data-i18n="flockTitle">Your flock</h2>
+    <p class="wallet"><i class="ico ico-wool"></i><b id="flockWool">0</b> <span data-i18n="wool">wool</span></p>
+    <div id="coatGrid" class="coat-grid"></div>
+    <button id="btnFlockBack" class="soft" data-i18n="back">Back</button>
+  </div>
+</section>
+
+<section id="paused" class="screen" hidden>
+  <div class="panel">
+    <h2 data-i18n="paused">Paused</h2>
+    <button id="btnResume" class="big" data-i18n="resume">Resume</button>
+    <div class="row">
+      <button id="btnPauseRestart" class="soft" data-i18n="restart">Restart</button>
+      <button id="btnPauseLevels" class="soft" data-i18n="levels">Levels</button>
+    </div>
+    <button id="btnQuit" class="soft" data-i18n="menu">Menu</button>
+  </div>
+</section>
+
+<section id="results" class="screen" hidden>
+  <div class="panel">
+    <h2 id="resTitle" data-i18n="flockHome">Flock home!</h2>
+    <div class="res-stars">
+      <div class="star" id="star0"><i></i><span data-i18n="starHome">All sheep home</span></div>
+      <div class="star" id="star1"><i></i><span id="starCloverLabel"></span></div>
+      <div class="star" id="star2"><i></i><span id="starParLabel"></span></div>
+    </div>
+    <p class="res-wool"><i class="ico ico-wool"></i>+<b id="resWool">0</b> <span data-i18n="wool">wool</span> <span id="resNew" class="new" hidden></span></p>
+    <button id="btnDouble" class="reward" hidden data-i18n="double">▶ Double wool</button>
+    <button id="btnNext" class="big" data-i18n="next">Next</button>
+    <div class="row">
+      <button id="btnReplay" class="soft" data-i18n="replay">Replay</button>
+      <button id="btnResLevels" class="soft" data-i18n="levels">Levels</button>
+    </div>
+  </div>
+</section>
+
+<div id="loading"><div class="logo small">Tumble<span>wool</span></div><div class="bar"><i id="loadBar"></i></div></div>
+<div id="toast" hidden></div>
+<script type="module" src="game.js"></script>
+</body>
+</html>

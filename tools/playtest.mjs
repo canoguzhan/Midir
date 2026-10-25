@@ -32,7 +32,7 @@ await stat(path.join(dir, 'index.html')).catch(() => {
 console.log(`testing ${opt.source ? 'source' : 'flat upload build'}: ${path.relative(ROOT, dir)}/`);
 await mkdir(shots, { recursive: true });
 
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.glb': 'model/gltf-binary',
+const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.glb': 'model/gltf-binary',
   '.webp': 'image/webp', '.png': 'image/png', '.jpg': 'image/jpeg', '.mp3': 'audio/mpeg', '.mp4': 'video/mp4', '.webm': 'video/webm', '.wasm': 'application/wasm' };
 const server = createServer(async (req, res) => {
   const p = path.normalize(decodeURIComponent(new URL(req.url, 'http://x').pathname)).replace(/^([/\\])+/, '');

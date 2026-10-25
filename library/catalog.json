@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-23 20:14",
-  "count": 513,
+  "updated": "2026-10-25 15:10",
+  "count": 528,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -277,6 +277,32 @@
         "bgm",
         "run",
         "wolf"
+      ]
+    },
+    {
+      "path": "audio/bgm_wool_frost.mp3",
+      "prompt": "cosy calm winter instrumental for a cute sheep puzzle game on frosty floating islands, soft celesta and music box, pizzicato strings, gentle sleigh bells, warm and playful, medium-slow tempo, seamless loop, no vocals",
+      "game": "tumblewool",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "bgm",
+        "frost",
+        "wool"
+      ]
+    },
+    {
+      "path": "audio/bgm_wool_meadow.mp3",
+      "prompt": "bouncy cheerful pastoral instrumental for a cute puzzle game about rolling fluffy sheep on a floating farm island, plucky banjo and acoustic guitar, tin whistle melody, light woodblock and glockenspiel, playful and sunny, medium tempo, seamless loop, no vocals",
+      "game": "tumblewool",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1407,
+      "tags": [
+        "bgm",
+        "meadow",
+        "wool"
       ]
     },
     {
@@ -3725,6 +3751,164 @@
       "tags": [
         "growl",
         "wolf"
+      ]
+    },
+    {
+      "path": "audio/wool_baa_a.mp3",
+      "prompt": "a cute fluffy lamb bleating once, short happy baa, soft and cartoonish, close, no background",
+      "game": "tumblewool",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 14,
+      "tags": [
+        "baa",
+        "wool"
+      ]
+    },
+    {
+      "path": "audio/wool_baa_b.mp3",
+      "prompt": "a small cartoon sheep giving a surprised high-pitched baa, short and funny, close, no background",
+      "game": "tumblewool",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 13,
+      "tags": [
+        "baa",
+        "wool"
+      ]
+    },
+    {
+      "path": "audio/wool_bale.mp3",
+      "prompt": "a heavy round hay bale thudding against a wooden post, dry rustly straw thump, short",
+      "game": "tumblewool",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "bale",
+        "wool"
+      ]
+    },
+    {
+      "path": "audio/wool_barn.mp3",
+      "prompt": "a fluffy sheep trotting into a wooden barn, soft hoof clops, a warm bright bell ding and a happy little chime",
+      "game": "tumblewool",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "barn",
+        "wool"
+      ]
+    },
+    {
+      "path": "audio/wool_boing.mp3",
+      "prompt": "a cartoon bouncy mushroom cap springing, rubbery boing, playful, short",
+      "game": "tumblewool",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "boing",
+        "wool"
+      ]
+    },
+    {
+      "path": "audio/wool_bump.mp3",
+      "prompt": "a soft woolly ball bumping into a wooden fence, muffled fluffy thump, gentle, very short",
+      "game": "tumblewool",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "bump",
+        "wool"
+      ]
+    },
+    {
+      "path": "audio/wool_crack.mp3",
+      "prompt": "thin ice cracking and breaking into a pond, crisp crackle then a small splash, short",
+      "game": "tumblewool",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 14,
+      "tags": [
+        "crack",
+        "wool"
+      ]
+    },
+    {
+      "path": "audio/wool_fan.mp3",
+      "prompt": "a small wooden pinwheel fan spinning and blowing a steady breeze, airy whirr, seamless loop",
+      "game": "tumblewool",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 47,
+      "tags": [
+        "fan",
+        "wool"
+      ]
+    },
+    {
+      "path": "audio/wool_level_done.mp3",
+      "prompt": "cheerful short farmyard fanfare: banjo strum, tin whistle melody rising, a happy sheep baa at the end",
+      "game": "tumblewool",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 47,
+      "tags": [
+        "done",
+        "level",
+        "wool"
+      ]
+    },
+    {
+      "path": "audio/wool_mud.mp3",
+      "prompt": "squelchy mud splat under a small ball, wet and funny, short",
+      "game": "tumblewool",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "mud",
+        "wool"
+      ]
+    },
+    {
+      "path": "audio/wool_plate.mp3",
+      "prompt": "a stone pressure plate clicking down, chunky wooden click and a soft magical hum",
+      "game": "tumblewool",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 10,
+      "tags": [
+        "plate",
+        "wool"
+      ]
+    },
+    {
+      "path": "audio/wool_roll_loop.mp3",
+      "prompt": "soft fluffy wool rolling across short grass, gentle rustling, steady, seamless loop",
+      "game": "tumblewool",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 47,
+      "tags": [
+        "loop",
+        "roll",
+        "wool"
+      ]
+    },
+    {
+      "path": "audio/wool_star.mp3",
+      "prompt": "a single bright magical star appearing with a sparkly twinkle chime, rewarding, short",
+      "game": "tumblewool",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 11,
+      "tags": [
+        "star",
+        "wool"
       ]
     },
     {
