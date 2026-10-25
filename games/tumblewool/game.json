@@ -1,0 +1,63 @@
+{
+  "title": "Tumblewool",
+  "slug": "tumblewool",
+  "version": "1.0.0",
+  "blueprint": "A cosy 3D tilt puzzle on floating farm islands: you never steer a sheep, you tilt the whole island, and every round, fluffy sheep tumbles the same way, so the puzzle is herding a whole flock into the barn with gravity, hedges and edges. Twenty-four handmade levels on four islands keep adding mechanics (open edges and holes, bouncy mushrooms, sticky mud, hay bales that lock onto golden plates to open gates, slippery ice, thin ice that breaks behind you, windmill fans), with three stars per level (all sheep home, all clovers, under par) and wool to spend on flock coats. Controls: WASD / arrow keys or drag anywhere (mouse or touch) to tilt, R to restart, P to pause. The midgame ad plays only on Next between two levels; the optional rewarded ad doubles the wool on the results card and is hidden when ads are unavailable.",
+  "description": "Tilt a tiny floating farm island and roll its round, fluffy sheep into the barn! Every sheep tumbles the same way, so use hedges, mushrooms and clever tilts to steer the whole flock home without anyone rolling off the edge. Push hay bales onto golden plates to open gates, slide across ice, cross thin ice together and ride windmill breezes across 24 levels on four seasonal islands. Collect clovers, beat the par time for three stars and dress your flock in new coats.",
+  "controls": {
+    "desktop": "WASD / arrow keys, or hold the mouse button and drag, to tilt the island; R to restart the level, P to pause",
+    "mobile": "Drag anywhere on the screen to tilt the island; tap the round buttons to restart or pause"
+  },
+  "category": "Puzzle",
+  "tags": [
+    "puzzle",
+    "physics",
+    "cute",
+    "animals",
+    "relaxing",
+    "3d",
+    "casual"
+  ],
+  "orientation": "landscape",
+  "mobile": true,
+  "languages": [
+    "en",
+    "tr"
+  ],
+  "pegi": "PEGI 3",
+  "ads": {
+    "midgame": "Only on the results card's Next button, between two levels (the level end). Never on menu, pause, level select, flock or replay buttons.",
+    "rewarded": "Optional 'Double wool' on the results card; reward only on adFinished, hidden when ads are unavailable or after an ad error"
+  },
+  "quality": {
+    "hook": "CrazyGames' ball-rolling hits (Going Balls, Rollance: Adventure Balls, Ball Run-style tracks) have you steer one ball down a course, and classic tilt mazes move a single marble through a fixed maze. Tumblewool flips both: you tilt the whole island and every loose body reacts at once, so you herd a flock of up to three round sheep plus hay bales with one shared gravity. The puzzle is that a tilt that saves one sheep sends another toward the edge, and the sheep are characters, not balls: they tumble, stand back up, blink, baa and hop happily in the barn.",
+    "onboarding": "Level 1 teaches by doing, a few words per step: 'Tilt the island to roll the sheep' with animated WASD and arrow keycaps plus a dragging mouse icon (an animated hand on touch), then 'Roll the sheep into the barn' with a bouncing arrow over the barn. Each new mechanic gets a one-line tip the first time it appears, with an arrow on the object where it helps (open edge, flock, mushrooms, mud, the bale and golden plate, then the gate, ice, thin ice, fans). Every tip card has a Skip tips button, and tips never pause the game.",
+    "art_style": "One soft pastel low-poly diorama style, all procedural Three.js with flat shading: floating checkerboard islands with rocky undersides, bushy hedges, round trees, a red barn with a straw pen, spotted mushrooms, textured mud, glassy ice, round hay bales, little windmill fans, and sheep built from wool puffs with big-eyed faces. Each island swaps the palette (spring meadow, golden hayfield, snowy frostpond, sunset windmills) without changing the style. UI uses cream rounded panels with Lilita One titles and Nunito text, and the covers are rendered in-engine from the same scene.",
+    "content": "24 handmade levels on four islands (Clover Meadow, Hayfield Hills, Frostpond, Windmill Heights), each island adding mechanics: open edges and holes, one to three sheep, bouncy mushrooms; mud, hay bales, golden plates and gates; ice, thin ice that breaks once something rolls off and refreezes later; windmill fans. Every level has 3 stars (all sheep home, all clovers, under par), so 72 stars in total. Wool from each clear buys 10 flock coats (up to Rainbow and Golden). A perfect bot clears the campaign in about 6.5 minutes of play time; pars are set at about twice the bot's time, so a first playthrough takes roughly 15 to 25 minutes, plus replays for stars and coats.",
+    "name_check": "Tumblewool is a coined word (tumble + wool) with no game of that name in web search results; it is not a genre word. The title, the round sheep on the covers and the barn say what the game is: tumbling sheep.",
+    "visual_review": "Reviewed the menu, level 1 onboarding at 1216x684 and 800x450, levels on all four islands (Muddy Paddock, Bale Push, Harvest Run, Thin Ice, Skating Rink, Fan Gate, Home at Last), the results card, level select, Flock shop, the 5-minute mark (level 17, Frostpond) and all three covers at full size, then fixed what I found: the barn roof was a tall tent (flattened to a barn gable, ridge facing the door); WASD keycaps were laid out in a 2x2 block (now W above A S D); sheep faces were hard to read from the top-down camera (bigger head and eyes, sheep look up at the camera when standing); clouds first loomed over the menu and HUD, then crowded the screen (now smaller and well below the island); mud read as a dark pit (textured puddles with a shine); broken thin ice showed the dirt column (thin ice now sits over icy water); the sunset and hayfield skies were too saturated (softer); white sheep blended into the snow (snow tiles tinted blue-grey); fan pinwheels were too small; menu and results overlays turned the sky a murky grey (light blurred tint); the cover first had no sheep and cropped the barn (staged five sheep facing the camera, one bouncing off a mushroom, and reframed per aspect). There are no rigged models, so no T-poses: every sheep is procedural and always animated (tumbling, standing up, blinking, hopping in the pen), and hit feedback is a short squash plus a wool puff, not a tint. Icons are SVG files in assets/ui, so the flat build has no inline data URIs."
+  },
+  "capture": {
+    "warmup": 6,
+    "shots": [
+      0,
+      5,
+      40,
+      120,
+      260
+    ]
+  },
+  "press": {
+    "headline": "{studio} launches {title}, a cosy tilt puzzle where you roll a flock of round sheep home, playable instantly in the browser",
+    "summary": "Tumblewool hands players a tiny floating farm island and a flock of round, fluffy sheep. Players never steer a sheep: they tilt the whole island, every sheep tumbles the same way, and the puzzle is getting the whole flock into the barn without anyone rolling off the edge. Twenty-four handmade levels across four seasonal islands add mushrooms, mud, hay bales and gates, ice, thin ice and windmill breezes. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
+    "features": [
+      "Tilt the world, not the sheep: one shared gravity moves the whole flock, hay bales included",
+      "24 handmade levels on four seasonal islands: Clover Meadow, Hayfield Hills, Frostpond and Windmill Heights",
+      "New mechanics on every island: bouncy mushrooms, sticky mud, hay bales that open gates, slippery and thin ice, windmill fans",
+      "Three stars per level for bringing every sheep home, grabbing every clover and beating the par time",
+      "Sheep with personality: they tumble, stand back up, blink, baa and hop happily in the barn",
+      "Ten flock coats from Cream to Golden, keyboard, mouse and touch controls, English and Turkish"
+    ],
+    "quote": "We loved the old wooden tilt mazes, but we kept wondering what would happen if the marbles had opinions. Round sheep turned out to be the answer: they never roll where you want them to, and that's exactly the fun."
+  }
+}
