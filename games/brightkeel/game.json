@@ -1,0 +1,63 @@
+{
+  "title": "Brightkeel",
+  "slug": "brightkeel",
+  "version": "1.0.0",
+  "blueprint": "A cosy 3D night-harbour arcade game: you keep the lighthouse of a little cove, and boats inside your beam follow it while boats left in the dark drift toward rocks and the shore, so you sweep one circle of light between several boats and lead each one to the pier with its lantern colour and symbol. Fifteen nights add hidden rocks, currents, the foghorn (every boat in the dark drops anchor), big slow ferries, fog banks, a whirlpool, storms with gusts and lightning, a friendly moonwhale whose splash pushes boats, and a fourth pier; coins buy Lamp Room upgrades, and the endless Long Night unlocks after night 5. Controls: move the mouse (or WASD / arrow keys, or drag on touch) to aim the light, Space or the horn button for the foghorn, R to restart, P to pause. The midgame ad plays only on Next night or Try again on the results card; the optional rewarded ad doubles the night's coins and is hidden when ads are unavailable.",
+  "description": "Keep the lighthouse of a sleepy harbour and bring every little boat home! Boats inside your beam follow your light, but boats left in the dark drift toward the rocks, so sweep your light from boat to boat and lead each one to the pier with its own lantern colour and symbol. Across 15 nights you will meet hidden rocks, currents, fog banks, a whirlpool, stormy gusts and a friendly moonwhale. Sound the foghorn to make every boat wait, earn coins for Lamp Room upgrades, collect stars and see how long you last in the endless Long Night.",
+  "controls": {
+    "desktop": "Move the mouse to aim the lighthouse beam (or use WASD / arrow keys); Space sounds the foghorn; R restarts the night; P pauses",
+    "mobile": "Drag anywhere to move the light (it stays just above your finger); tap the horn button for the foghorn; round buttons restart or pause"
+  },
+  "category": "Casual",
+  "tags": [
+    "casual",
+    "boats",
+    "3d",
+    "relaxing",
+    "strategy",
+    "mouse",
+    "cute"
+  ],
+  "orientation": "landscape",
+  "mobile": true,
+  "languages": [
+    "en",
+    "tr"
+  ],
+  "pegi": "PEGI 3",
+  "ads": {
+    "midgame": "Only on the results card's Next night and Try again buttons, between two nights (or two Long Night runs). Never on menu, pause, night select, Lamp Room or Replay buttons.",
+    "rewarded": "Optional 'Double coins' on the results card; reward only on adFinished, hidden when ads are unavailable or after an ad error"
+  },
+  "quality": {
+    "hook": "CrazyGames' traffic-control and path-drawing games (Traffic Control and Parking Jam-style puzzles, Flight Control-likes) have you draw a route or tap a car, and the boats in harbour games sail on rails. Brightkeel replaces the route with a single circle of light: only boats inside your beam move where you want, everyone else keeps drifting with the sea. The puzzle is attention itself, choosing which boat gets the light next while the others drift toward rocks, and the foghorn, currents, fog, storms and a moonwhale keep changing who needs you most.",
+    "onboarding": "Night 1 teaches by doing with one boat and one pier: 'Move your light onto the boat' with an animated mouse and arrow keycaps (an animated hand on touch) and a bouncing arrow over the boat, then 'Boats follow your light. Lead it to its pier' with the arrow on the pier, then one line about drifting. Every new mechanic gets a single tip card the first time it appears (colours and symbols, hidden rocks plus the warning sign, currents, the foghorn with a Space keycap or the horn button, ferries, fog, whirlpool, four piers, storm, whale). Every card has a Skip tips button, and tips never pause the game.",
+    "art_style": "One cosy low-poly night-harbour diorama, all procedural Three.js with flat shading: a faceted navy sea shader with moonlit glints, current streaks, a spiralling whirlpool and whale ripples; a red-and-white lighthouse on a rocky headland whose warm beam is a real cone of light with a glowing pool on the water; little boats with yellow-raincoat sailors and lanterns in their pier colour; wooden piers with coloured lanterns and boathouses; a town of pastel houses with lit windows. Pier colours always come with a symbol (circle, triangle, square, diamond). UI uses deep-navy rounded panels with gold Lilita One titles and Nunito text, and the covers are rendered in-engine from the same scene.",
+    "content": "15 handmade nights, each adding something: one pier, then two and colour matching, hidden rocks with crash warnings, currents, the foghorn, ferries, fog banks, busier coves, a whirlpool, four piers, storms with gusts and lightning, fog with tides, the moonwhale, a tempest with a whirlpool, and a finale with everything. Every night has 3 stars (every boat in, no wrecks, under par), 45 in total. Coins buy 4 Lamp Room upgrades with 5 levels each (wider beam, faster sweep, longer foghorn, faster lit boats). The endless Long Night (unlocked after night 5) adds fog, the whale, a storm and a whirlpool as it goes on and keeps a best score. A perfect bot clears the campaign in about 19 minutes of play; pars are about 1.6x the bot's time, so a first playthrough takes 25 to 40 minutes, plus stars, upgrades and the Long Night.",
+    "name_check": "Brightkeel is a coined word (bright + keel) with no game of that name in web search results; it avoids the existing iOS puzzle 'Beacon Light Bay'. It is not a genre word, and the title with the lighthouse beam over little boats on the covers says what the game is: lighting boats home.",
+    "visual_review": "Reviewed the menu, night 1 onboarding at 1216x684 and 800x450 (with and without the bot), nights 3, 5, 7, 8, 9, 11 and 13, the results card, night select, Lamp Room and all three covers at full size, then fixed what I found: the gameplay camera was mid-transition in captures (the camera blend now advances with the simulation); boats were too small to read at 800x450 (scaled 1.35x with matching hit sizes); the lighthouse sat in a corner where perspective made it look like it was lying down, so it moved onto the right-hand headland where its beam cone is visible across the bay; side cliffs crowded the screen (lowered and pushed out); the menu camera looked at the backs of big houses (raised and tilted so the lighthouse and bay lead); the foghorn ring effect was a giant arc from the old lighthouse spot (now soft sound-wave rings from the lamp); the whirlpool was too faint (stronger spiral); fog banks were bright white blobs (dimmer, bluer); the shore was a flat grey band (darker sand, waterline pebbles, barrels and crates); the night banner hid the first boat (first arrival now after the banner); the first covers were house roofs and overlapping boats with UI badges (now a low camera past the pier tips: lighthouse, beam shaft, three lit boats, lanterns in the dark and the moonwhale, badges hidden, water left at the bottom for the title, with separate square and portrait framings). There are no rigged models, so no T-poses: boats bob and roll, sailors ride along, wrecks tip over and the crew rows ashore. Audio levels were measured and rebalanced (loud foghorn and toot turned down, a near-silent library click replaced by a soft wooden knock)."
+  },
+  "capture": {
+    "warmup": 6,
+    "shots": [
+      0,
+      5,
+      40,
+      120,
+      220
+    ]
+  },
+  "press": {
+    "headline": "{studio} launches {title}, a cosy lighthouse game where your beam guides little boats home, playable instantly in the browser",
+    "summary": "Brightkeel puts players in charge of the lighthouse of a sleepy harbour at night. Boats inside the beam follow the light, while boats left in the dark drift toward rocks and the shore, so the game is about sweeping one circle of light between several boats and leading each to the pier with its lantern colour. Fifteen nights add currents, fog, a whirlpool, storms and a friendly moonwhale, and the endless Long Night tests how many boats players can bring home. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
+    "features": [
+      "One circle of light: boats in your beam follow it, boats in the dark keep drifting",
+      "15 handmade nights with new twists: hidden rocks, currents, fog banks, a whirlpool, storms and a moonwhale",
+      "A foghorn that makes every boat in the dark drop anchor, when the cove gets too busy",
+      "Colour-and-symbol piers, crash warnings and three stars per night",
+      "Lamp Room upgrades and the endless Long Night with a best score",
+      "Mouse, keyboard and touch controls, English and Turkish"
+    ],
+    "quote": "We kept watching lighthouse beams sweep across the water and thought: what if the boats only knew the way while the light was on them? Every night in Brightkeel is a little juggling act of attention, and we love the moment a whole cove of lanterns makes it home."
+  }
+}
