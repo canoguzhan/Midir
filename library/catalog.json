@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-25 15:10",
-  "count": 528,
+  "updated": "2026-10-25 18:26",
+  "count": 545,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -111,6 +111,32 @@
       "tags": [
         "bgm",
         "field"
+      ]
+    },
+    {
+      "path": "audio/bgm_keel_lullaby.mp3",
+      "prompt": "gentle cosy nocturne for a cute puzzle game about guiding little boats home with a lighthouse at night, soft accordion and harp, warm celesta melody, light brushed percussion, calm and magical seaside lullaby, medium-slow tempo, seamless loop, no vocals",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "bgm",
+        "keel",
+        "lullaby"
+      ]
+    },
+    {
+      "path": "audio/bgm_keel_squall.mp3",
+      "prompt": "playful adventurous sea shanty instrumental for a cosy lighthouse game during a stormy night, fiddle and accordion, pizzicato strings, low tom drums, a bit urgent but still warm and friendly, medium tempo, seamless loop, no vocals",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1407,
+      "tags": [
+        "bgm",
+        "keel",
+        "squall"
       ]
     },
     {
@@ -810,6 +836,191 @@
       "kb": 16,
       "tags": [
         "hit"
+      ]
+    },
+    {
+      "path": "audio/keel_bump.mp3",
+      "prompt": "two small wooden boats gently bonking together on water, hollow wooden knock, cartoon, very short",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "bump",
+        "keel"
+      ]
+    },
+    {
+      "path": "audio/keel_combo.mp3",
+      "prompt": "two bright quick harbour bell dings in a row, cheerful, rewarding, short",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 11,
+      "tags": [
+        "combo",
+        "keel"
+      ]
+    },
+    {
+      "path": "audio/keel_dock.mp3",
+      "prompt": "a little boat docking at a wooden pier: soft rope creak, gentle wooden bump and a bright brass harbour bell ding",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 22,
+      "tags": [
+        "dock",
+        "keel"
+      ]
+    },
+    {
+      "path": "audio/keel_foghorn.mp3",
+      "prompt": "a deep warm lighthouse foghorn blowing one long low note across a calm bay at night, mellow, not harsh",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 39,
+      "tags": [
+        "foghorn",
+        "keel"
+      ]
+    },
+    {
+      "path": "audio/keel_gust.mp3",
+      "prompt": "a strong gust of sea wind sweeping across the water, whooshing, short",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 24,
+      "tags": [
+        "gust",
+        "keel"
+      ]
+    },
+    {
+      "path": "audio/keel_lit.mp3",
+      "prompt": "a soft warm magical glow chime as a lantern catches the light, gentle and short, airy shimmer",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 10,
+      "tags": [
+        "keel",
+        "lit"
+      ]
+    },
+    {
+      "path": "audio/keel_night_done.mp3",
+      "prompt": "short joyful sea shanty fanfare: accordion and fiddle rising melody with a bright bell at the end, celebratory",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 55,
+      "tags": [
+        "done",
+        "keel",
+        "night"
+      ]
+    },
+    {
+      "path": "audio/keel_night_fail.mp3",
+      "prompt": "short gentle sad accordion phrase falling down, soft and sympathetic, not dramatic",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 39,
+      "tags": [
+        "fail",
+        "keel",
+        "night"
+      ]
+    },
+    {
+      "path": "audio/keel_rain_loop.mp3",
+      "prompt": "steady rain falling on a night sea with soft wind, cosy not scary, no thunder, seamless loop",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 94,
+      "tags": [
+        "keel",
+        "loop",
+        "rain"
+      ]
+    },
+    {
+      "path": "audio/keel_sea_loop.mp3",
+      "prompt": "calm night sea ambience, small gentle waves lapping against wooden piers and rocks, a very distant soft buoy bell, peaceful, no seagulls, no wind howl, seamless loop",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 94,
+      "tags": [
+        "keel",
+        "loop",
+        "sea"
+      ]
+    },
+    {
+      "path": "audio/keel_toot.mp3",
+      "prompt": "a small cute fishing boat horn giving two short friendly toots in the distance, cartoonish, soft",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "keel",
+        "toot"
+      ]
+    },
+    {
+      "path": "audio/keel_warn.mp3",
+      "prompt": "a soft bell buoy clanging twice in warning, gentle tension, short",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 13,
+      "tags": [
+        "keel",
+        "warn"
+      ]
+    },
+    {
+      "path": "audio/keel_whale.mp3",
+      "prompt": "a gentle friendly whale song call followed by a big soft water splash and spout whoosh, magical, calm",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 47,
+      "tags": [
+        "keel",
+        "whale"
+      ]
+    },
+    {
+      "path": "audio/keel_whirl_loop.mp3",
+      "prompt": "a swirling whirlpool in the sea, steady gurgling rushing water spinning, seamless loop",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 63,
+      "tags": [
+        "keel",
+        "loop",
+        "whirl"
+      ]
+    },
+    {
+      "path": "audio/keel_wreck.mp3",
+      "prompt": "a small wooden boat bumping onto rocks, cartoon wooden crunch and creak followed by a splash, not violent, short",
+      "game": "brightkeel",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 20,
+      "tags": [
+        "keel",
+        "wreck"
       ]
     },
     {
