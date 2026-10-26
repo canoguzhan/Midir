@@ -1,0 +1,63 @@
+{
+  "title": "Swivel Express",
+  "slug": "swivel-express",
+  "version": "1.0.0",
+  "blueprint": "A cosy 3D toy-railway puzzle on a playroom table: a wind-up tin train runs on a board of track tiles and never stops, so you tap tiles ahead of it to swivel them a quarter turn, keep the line joined up and steer it to stations where peg-doll passengers wait to ride home to the station with their colour and hat symbol. Fifteen stops add the brake, crowded platforms, cows on the line, a second carriage, linked tunnels, spinning tops that knock tiles askew, an express with coins on the track and twin trains, and the endless Endless Line unlocks after stop 5; coins buy Toy Box upgrades and train paints. Controls: click or tap a tile to turn it (right-click turns it back), or move a cursor with WASD / arrow keys and press E; hold Space or the brake button to slow down; tap a cow to shoo it; R restarts, P pauses. The midgame ad plays only on Next stop or Try again on the results card; the optional rewarded ad doubles the coins from a stop and is hidden when ads are unavailable.",
+  "description": "A little wind-up train is running on your table-top railway and it never stops! Tap the track tiles ahead of it to swivel them, keep the line joined up and carry the peg-doll passengers to the station with their colour. Across 15 stops you will meet cows on the line, linked tunnels, spinning tops that knock tiles out of place, an express with coins on the track and two trains at once. Brake when things get tight, earn coins for Toy Box upgrades and new paint for your train, and see how many passengers you can bring home on the Endless Line.",
+  "controls": {
+    "desktop": "Click a track tile to turn it (right-click turns it back), or move the cursor with WASD / arrow keys and press E; hold Space to brake; click a cow to shoo it; R restarts the stop; P pauses",
+    "mobile": "Tap a track tile to turn it; hold the red brake button to slow down; tap a cow to shoo it; round buttons restart or pause"
+  },
+  "category": "Puzzle",
+  "tags": [
+    "puzzle",
+    "train",
+    "3d",
+    "casual",
+    "mouse",
+    "cute",
+    "relaxing"
+  ],
+  "orientation": "landscape",
+  "mobile": true,
+  "languages": [
+    "en",
+    "tr"
+  ],
+  "pegi": "PEGI 3",
+  "ads": {
+    "midgame": "Only on the results card's Next stop and Try again buttons, between two stops (or two Endless Line runs). Never on menu, pause, Stops, Toy Box or Replay buttons.",
+    "rewarded": "Optional 'Double coins' on the results card; reward only on adFinished, hidden when ads are unavailable or after an ad error"
+  },
+  "quality": {
+    "hook": "Rail puzzles on CrazyGames, like Gold Train FRVR, and the classic rotate-a-tile track and pipe puzzles are turn-based: you lay or rotate the whole route, then press go. Swivel Express turns that into real time. The train is already running and never stops, so you swivel tiles just ahead of it while choosing where it should go next: which platform is filling up, which passengers are riding to which colour, and whether a shortcut is worth the risk. Cows on the line, spinning tops that knock tiles askew, linked tunnels and a second train keep changing the board under your fingers.",
+    "onboarding": "Stop 1 teaches by doing on a tiny loop: the train waits at its depot while a bouncing arrow points at the one broken tile, with a hand (touch) or a mouse plus arrow keys and E keycaps (desktop) and 'Tap the tile to turn it and fix the track'. When the track ahead is joined up the train whistles and sets off; the next card says the train never stops and to keep the glowing path joined up, and the last one points at a station with its first waiting passenger until they are delivered. The path ahead of every train is drawn as glowing dots ending in a red cross wherever the track runs out. Every new mechanic gets one card with an icon the first time it appears (dead ends and shortcuts, colours and hat symbols, the brake with a Space keycap or the red button, full platforms, cows, two carriages, tunnels, spinning tops, coins, twin trains). Every card has a Skip tips button, and tips never pause the game.",
+    "art_style": "One cosy low-poly toy railway on a wooden playroom table, all procedural Three.js with flat shading and soft sun shadows: felt-green track tiles with wooden sleepers and silver rails (the ones you can turn carry a curled-arrow mark), a red-and-gold wind-up tin locomotive with a turning key and steam puffs, open toy carriages, wooden peg-doll passengers with white hats in their station's symbol, little stations with colour-and-symbol signs, grassy tunnel hills, cows, striped spinning tops, toy houses, a barn and a pond, and wooden blocks, crayons and a ball on the table around the board. Morning, noon and sunset light change across the stops. UI is deep teal rounded panels with Lilita One titles in cream and gold and Nunito text; icons are flat outlined toy shapes; the covers are rendered in-engine from the same scene.",
+    "content": "15 stops on seeded boards (each one checked by the bot), each adding something: a first loop, shortcuts, three colours, the brake, a bigger town with crowded platforms, cows on the line, a second carriage and four stations, linked tunnels, spinning tops, an express with coins, twin trains, a playtime board with tops and cows, rush hour on a 10x6 board, twin trains through tunnels, and a finale with everything. Every stop has 3 stars (everyone home, no mishaps, under par), 45 in total. Coins buy three Toy Box upgrades with 5 levels each (longer brake, more patient platforms, more coins per passenger) and five extra train paints. The Endless Line (unlocked after stop 5) builds a new board every run and adds spinning tops, cows and speed as it goes, with a best score. The autoplay bot clears the campaign in about 33 minutes of play with near-perfect reactions; pars are about 1.6x the bot's time, so a first playthrough takes well over an hour, plus stars, upgrades and the Endless Line (the bot lasts about 7 minutes there).",
+    "name_check": "Swivel Express is not a genre name and no game uses it (web search shows only unrelated 'Swivel' puzzle and party games); it avoids the existing train games Tiny Rails and Tin Rails, which ruled out the first idea 'Tinrail'. Together with the toy train and track tiles on the covers it says what you do: swivel the track for a running express.",
+    "visual_review": "Reviewed the menu, stop 1 onboarding at 1216x684 and 800x450 (touch), stops 3, 6, 8, 9, 11 and 13, the Endless Line at 200 s, the results card, the Stops grid, the Toy Box and the landscape cover, then fixed what I found: toy blocks and a ball sat behind the menu title and buttons (toys now only behind and right of the board, and the menu board moved right so the tagline never touches it); station canopies hid the waiting passengers from the top-down camera (now an open platform with a small kiosk at the end, and passengers are 20% bigger); the depot's water tower read as a brown blob on stilts and its buffer stop blocked a tile trains loop back through (now a small engine shed in the train's paint, no buffer); menu steam puffs drifted into gameplay (particles clear on every new board); town roofs in green melted into the grass and looked like flat slabs (no green roofs, smaller houses); the lock icon on locked stops was missing (invalid SVG, fixed and every icon validated); the first cover was a far, sunset-orange overview with invisible passengers (now staged at noon from just ahead of a full train approaching a busy station, with a cow on the line behind it). Timed turntables were cut after balance runs showed they could trap the train with no fair way out. There are no rigged models, so no T-poses: the train bobs, its wheels and key turn and it puffs steam, passengers hop on their platforms and jump in and out of carriages, cows walk, graze and trot off, tops spin and wobble. Audio levels were measured and rebalanced (loud whistle and moo turned down, quiet tile click, station bell and lose jingle turned up)."
+  },
+  "capture": {
+    "warmup": 6,
+    "shots": [
+      0,
+      6,
+      40,
+      110,
+      200
+    ]
+  },
+  "press": {
+    "headline": "{studio} launches {title}, a cosy toy-train puzzle where you swivel the track ahead of a train that never stops, playable instantly in the browser",
+    "summary": "Swivel Express puts players in charge of a table-top toy railway. The wind-up train never stops, so players tap the track tiles just ahead of it to swivel them, keep the line joined up and carry peg-doll passengers to the station with their colour. Fifteen stops add cows on the line, linked tunnels, spinning tops, an express with coins and twin trains, and the Endless Line tests how many passengers players can bring home. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
+    "features": [
+      "A train that never stops: swivel track tiles just ahead of it to steer where it goes",
+      "Peg-doll passengers who ride home to the station with their colour and hat symbol",
+      "15 stops with new twists: cows on the line, linked tunnels, spinning tops, an express and twin trains",
+      "A brake for tight moments, crowded platforms to rescue and three stars per stop",
+      "Toy Box upgrades, six train paints and the endless Endless Line with a best score",
+      "Mouse, keyboard and touch controls, English and Turkish"
+    ],
+    "quote": "We kept playing with toy railways where you have to finish the track before the train leaves, and wondered what it would feel like if the train had already set off. Swivel Express is that little panic, turned cosy: a wind-up train, a table full of toys and a tile turned just in time."
+  }
+}

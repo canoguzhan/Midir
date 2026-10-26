@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-25 18:26",
-  "count": 545,
+  "updated": "2026-10-26 08:12",
+  "count": 562,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -190,6 +190,32 @@
       "tags": [
         "bgm",
         "sanctuary"
+      ]
+    },
+    {
+      "path": "audio/bgm_swivel_line.mp3",
+      "prompt": "cheerful cosy instrumental for a cute toy train puzzle game on a playroom table, bouncy ukulele and glockenspiel, marimba, light brushed snare with a gentle train-like shuffle rhythm, warm and playful, medium tempo, seamless loop, no vocals",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "bgm",
+        "line",
+        "swivel"
+      ]
+    },
+    {
+      "path": "audio/bgm_swivel_sunset.mp3",
+      "prompt": "warm mellow instrumental for a cosy toy railway game at golden sunset, soft acoustic guitar and music box, gentle accordion, light shuffle percussion like a little train, relaxed but lively, medium tempo, seamless loop, no vocals",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1407,
+      "tags": [
+        "bgm",
+        "sunset",
+        "swivel"
       ]
     },
     {
@@ -1445,6 +1471,188 @@
       "tags": [
         "swing",
         "sword"
+      ]
+    },
+    {
+      "path": "audio/swv_blocked.mp3",
+      "prompt": "a dull soft wooden thunk, a toy piece that will not move, short muted denied knock",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "blocked",
+        "swv"
+      ]
+    },
+    {
+      "path": "audio/swv_board.mp3",
+      "prompt": "tiny wooden toy figures hopping into a toy train carriage, cute quick pop pop and a soft wooden tap",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 10,
+      "tags": [
+        "board",
+        "swv"
+      ]
+    },
+    {
+      "path": "audio/swv_brake.mp3",
+      "prompt": "a small toy train braking, soft squeaky tin brake squeal and a little steam hiss, gentle, short",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 14,
+      "tags": [
+        "brake",
+        "swv"
+      ]
+    },
+    {
+      "path": "audio/swv_chug_loop.mp3",
+      "prompt": "a small wind-up tin toy train running on a wooden toy railway, soft rhythmic clockwork ticking and gentle clickety-clack of little wheels over track joints, cosy, steady tempo, seamless loop",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 63,
+      "tags": [
+        "chug",
+        "loop",
+        "swv"
+      ]
+    },
+    {
+      "path": "audio/swv_deliver.mp3",
+      "prompt": "a little toy railway station bell ringing ding-ding brightly, with a tiny cheerful cartoon cheer of toy people, short",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 20,
+      "tags": [
+        "deliver",
+        "swv"
+      ]
+    },
+    {
+      "path": "audio/swv_derail.mp3",
+      "prompt": "a small tin toy train tipping over off its wooden track, cartoon metal clatter and rattling wheels, a light wooden bump, funny not harsh, short",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 22,
+      "tags": [
+        "derail",
+        "swv"
+      ]
+    },
+    {
+      "path": "audio/swv_fail.mp3",
+      "prompt": "a short gentle sad toy music box phrase falling down, soft and sympathetic, not dramatic",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 35,
+      "tags": [
+        "fail",
+        "swv"
+      ]
+    },
+    {
+      "path": "audio/swv_grumble.mp3",
+      "prompt": "a few tiny cartoon toy people grumbling impatiently, cute muffled murmuring, not words, short",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "grumble",
+        "swv"
+      ]
+    },
+    {
+      "path": "audio/swv_moo.mp3",
+      "prompt": "a cute cartoon toy cow giving one short friendly moo, soft and funny, close",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 18,
+      "tags": [
+        "moo",
+        "swv"
+      ]
+    },
+    {
+      "path": "audio/swv_room_loop.mp3",
+      "prompt": "a calm sunny playroom ambience indoors, very soft distant birdsong through an open window, quiet and cosy, no voices, no music, seamless loop",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 94,
+      "tags": [
+        "loop",
+        "room",
+        "swv"
+      ]
+    },
+    {
+      "path": "audio/swv_tick.mp3",
+      "prompt": "a clockwork toy turntable ratchet turning, quick mechanical click click clack, small and cute",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 10,
+      "tags": [
+        "swv",
+        "tick"
+      ]
+    },
+    {
+      "path": "audio/swv_tunnel.mp3",
+      "prompt": "a toy train rolling into a little tunnel, soft hollow echoing whoosh, short",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 14,
+      "tags": [
+        "swv",
+        "tunnel"
+      ]
+    },
+    {
+      "path": "audio/swv_turn.mp3",
+      "prompt": "a chunky wooden toy railway tile being turned by hand, satisfying wooden click-clack swivel, short and crisp",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "swv",
+        "turn"
+      ]
+    },
+    {
+      "path": "audio/swv_warn.mp3",
+      "prompt": "a toy railway crossing bell, two quick bright dings of warning, gentle tension, short",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 10,
+      "tags": [
+        "swv",
+        "warn"
+      ]
+    },
+    {
+      "path": "audio/swv_whistle.mp3",
+      "prompt": "a cute little toy steam train whistle, one short cheerful high toot, tin toy, playful, not loud",
+      "game": "swivel-express",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 14,
+      "tags": [
+        "swv",
+        "whistle"
       ]
     },
     {
