@@ -1278,8 +1278,8 @@ function captureApi() {
   window.__game = {
     start: () => startLevel(capLevel),
     frame: (dt = 1 / 30) => { advance(dt); render(dt); },
-    skip: (sec) => { SIMMING = true; for (let s = 0; s < sec; s += STEP) { advance(STEP); if (state === State.GAMEOVER) startLevel(Math.min(LEVELS.length - 1, levelIndex + 1)); } SIMMING = false; },
-    sim: (sec) => { SIMMING = true; const end = clock + sec; while (clock < end && state === State.PLAYING) advance(STEP); SIMMING = false; return window.__game.info(); },
+    skip: (sec) => { SIMMING = true; for (let s = 0; s < sec; s += STEP) { advance(STEP); if (state === State.GAMEOVER) startLevel(Math.min(LEVELS.length - 1, levelIndex + 1)); } SIMMING = false; snapCamera(); }, // the camera catches up at once
+    sim: (sec) => { SIMMING = true; const end = clock + sec; while (clock < end && state === State.PLAYING) advance(STEP); SIMMING = false; snapCamera(); return window.__game.info(); },
     level: (i) => startLevel(i),
     endless: () => startEndless(),
     info: () => ({ state, route: levelIndex + 1, t: W?.t, delivered: W?.delivered, target: W?.target, hearts: W?.hearts, bumps: W?.bumps, misses: W?.misses, late: W?.stats.late, bulls: W?.stats.bulls, result: W?.result, coins: save.coins, stars: totalStars(), timeLeft: W?.timeLeft, y: W?.b.y, x: W?.b.x, z: W?.b.z, carry: W?.b.carry.length, fly: W?.inFlight.length, goal: W?.bot.y, landed: W?.b.landed }),
