@@ -1,0 +1,65 @@
+{
+  "title": "Lampdeep",
+  "slug": "lampdeep",
+  "version": "1.0.0",
+  "blueprint": "A turn-based tactics descent through forty dark floors with one little lamp: your lantern's oil is both your health and your light, and every shadow shows the tiles it will strike after your next move, but only while it stands in light. Each turn you step, bump a shadow to hit it and knock it back (into pits, walls, other shadows or exploding sootpods), Flare to stun everything in your light, Leap two tiles over anything, or wait; braziers you light keep their glow, shrines after depths 3, 6, 9 and every boss offer relics, four bosses guard depths 10, 20, 30 and 40, and every floor comes from a shareable seed so streamers and viewers can race the same deep. Controls: arrow keys / WASD or click/tap a tile, F flare, E then a direction to leap, Space waits, P pauses; the only ad is the midgame ad on the game-over card's Descend again button, and there is no rewarded ad.",
+  "description": "Forty floors down, one little lamp. Lampdeep is a cosy, turn-based descent where your lantern's oil is both your health and your light: shadows show exactly which tiles they will strike after your move, but only while they stand in your light. Step aside, bump them into pits and walls, knock sootpods into crowds, flare to stun, leap over danger and light braziers to push the dark back. Collect embers and relics at shrines, beat the Moth Queen, Old Soot, the Gloom King and the Last Dark, unlock new lanterns and waystones, and race friends down the same seed or today's Daily depth.",
+  "controls": {
+    "desktop": "Arrow keys / WASD (or click a tile) to move, walking into a shadow hits it; F to Flare, E then a direction to Leap, Space to wait, P to pause",
+    "mobile": "Tap a tile to step toward it, tap a shadow next to you to hit it; tap Flare, Leap (then a glowing tile) or Wait; the round button pauses"
+  },
+  "category": "Strategy",
+  "long_play": true,
+  "tags": [
+    "roguelike",
+    "turn-based",
+    "tactics",
+    "dungeon",
+    "puzzle",
+    "strategy",
+    "3d",
+    "cute"
+  ],
+  "orientation": "landscape",
+  "mobile": true,
+  "languages": [
+    "en",
+    "tr"
+  ],
+  "pegi": "PEGI 7",
+  "ads": {
+    "midgame": "Only on the game-over card's Descend again button, between two runs. Never on the menu, setup, pause or shrine buttons, and never during a floor.",
+    "rewarded": "None: nothing in the game is sold for an ad, so there is no rewarded button that could ever do nothing."
+  },
+  "quality": {
+    "hook": "The turn-based roguelikes people stream (Into the Breach's telegraphed attacks, Hoplite's one-hex dance, Slay the Spire's run-and-relic loop) are about perfect information. On CrazyGames the genre is mostly real-time dungeon survivors. Lampdeep makes information itself the resource: your lantern's oil is both your health and your light radius, and a shadow's next strike is shown only while it stands in light, so getting hurt literally makes the board harder to read. Light also changes the rules (Glooms freeze in light, lit braziers keep a zone safe and readable), and knockback turns each floor into a little puzzle of pits, walls and sootpods. For streams, every floor comes from a shareable seed (and a Daily depth everyone shares), with a depth map, a run timer, a cause-of-death line and an old Keeper who narrates bosses and blunders.",
+    "onboarding": "Depth 1 is the same hand-made room for everyone: one flitter, one pit, one oil puddle. A card with WASD and mouse icons (a tapping hand on touch) says 'Move one tile per turn' while an amber ring pulses on the next tile toward the stairs. When the flitter takes aim, its red tiles appear with 'Red tiles get hit after your next move. Step off them!'; when it is next to you, the ring jumps to it with 'Walk into a shadow to hit it and knock it back'. Depth 2 introduces Flare with its F keycap and icon, depth 3 Leap with E. Every new shadow, braziers, oil, cracked floor, sealed stairs, the creeping dark, bosses and shrines get one card with an icon the first time they appear. Cards never pause the game, last a few seconds (or until you do the thing) and have a Skip tips button; tips can be turned back on in the pause menu.",
+    "art_style": "One cosy dark storybook diorama, all procedural Three.js and flat-shaded: chunky stone tiles floating on a rock in velvet darkness (stone colour changes per zone: warm cellar brown, ink blue, mossy green, deep violet), hexagonal pillars, stone braziers with cone flames, glowing oil drops, and stairs that glow teal (violet and sealed when locked). The lamplighter is a chibi in a teal hooded cloak and an amber scarf carrying a brass lantern; every shadow is the same ink-black material with glowing eyes in its own colour (yellow flitters with moth wings, cyan spitwisps, violet hooded glooms, red inkcrabs, orange sootpods, pink duskhounds, green shellshades), and bosses are bigger versions with crowns. The lamp light is drawn exactly as the rules compute it, warm inside and cold violet outside. Telegraphs are hatched red tiles. UI is ink-violet rounded panels with Lilita One titles in amber and Nunito text, flat outlined SVG icons drawn in the same palette, and the covers are rendered in-engine from the same scene.",
+    "content": "Forty floors in four zones (Lantern Cellars, Ink Wells, Hollow Halls, Deep Dark) that add a new shadow or mechanic every few depths: flitters and pits (1), spitwisps with line attacks (3), braziers (4), glooms that only move in the dark (5), inkcrabs (8), sootpods that explode (11), cracked floor (11), duskhounds that run two tiles (14), shellshades with shields (22) and sealed stairs that need every brazier lit (21+). Bosses: the Moth Queen (10), Old Soot (20), the Gloom King (30) and the Last Dark (40), each with its own pattern and summons. 16 relics at shrines after depths 3, 6, 9 and every boss (13 picks in a full run), oil for embers, four lanterns unlocked at depths 10, 20 and 30 (Glass, Iron, Moth), waystones that start runs at 11, 21 and 31, a Daily depth, typed seeds, and endless floors after the Heart is lit. Runs save every few turns and resume. Balance from Node runs of the same rules: a careful two-step lookahead bot that only sees lit intents lights the Heart in about 60% of runs (about 700 turns); a one-step bot with 30% weaker picks reaches a median depth of 23. A full run is roughly 45-90 minutes for a person.",
+    "name_check": "Lampdeep is not a genre word and a web search finds no game with that name (only unrelated lamp games like Lamp and Vamp and LampLighter). It joins lamp (your light and your life) and deep (forty floors down), and with the lantern on the cover it says what you do.",
+    "visual_review": "Reviewed the menu (1216x684, 800x450 touch, Turkish), the first floor at both sizes with its tip cards, the setup, shrine, pause and victory screens at 800x450, autoplay shots at depths 4, 11 (cracked floor, sootpod, inkcrabs) and 20 (Old Soot's floor), the Moth Queen fight with its boss bar, and every cover at full size and zoomed in on the lamplighter. Fixed: the hood was a closed sphere that hid the face, then an open one that showed a bald forehead (now a cap over the crown, open only around the face, with bigger eyes and cheeks); the lamp light sat at head height and blew the face and hood out to a pale green blob (moved above the head, softer, deeper blue-teal cloth); tall pillars in front of the lamplighter hid it (pillars are now waist-high); unlit tiles were pure black (a cold violet tint keeps the dark readable without revealing intents); health pips over shadows looked like a second pair of eyes (now a small red segmented bar); at 800x450 the tip card and subtitle covered the lamplighter (the camera now keeps the board above the action bar, tips are compact and subtitles move to the top on short screens); a depth banner could linger behind the shrine panel (banners hide whenever play stops); the first covers were fully lit and showed the back of the hood (now the Brass lantern's small light pool with glowing eyes in the dark, the lamplighter three-quarters toward the camera, a lit brazier, a wisp's line of red tiles and the stairs). There are no rigged models, so nothing can T-pose: the lamplighter breathes, blinks and swings the lantern, flitters flap, wisps bob, sootpod fuses spark, boss crowns turn and every shadow's eyes glow. The build had one real bug the screenshots could not show: audio paths built from a prefix variable would have 404ed in the flat CrazyGames upload (now written out in full; build.py reports no unreferenced assets). Balance was tuned with Node bots on the same rules: wisps first re-aimed every time you sidestepped (endless dodging, now they aim only after standing still and rest after a shot), and enemy rests were used up in the same turn as the strike (bosses could hit every turn, now they really rest)."
+  },
+  "capture": {
+    "warmup": 30,
+    "shots": [
+      0,
+      6,
+      70,
+      190,
+      330
+    ]
+  },
+  "press": {
+    "headline": "{studio} launches {title}, a cosy turn-based descent where your lamp is your light and your life, playable instantly in the browser",
+    "summary": "Lampdeep sends a little lamplighter forty floors down into the dark. Every shadow shows exactly where it will strike after your next move, but only while it stands in your light, and your lantern's oil is both your light and your health. Step aside, knock shadows into pits and walls, light braziers and collect relics on the way to four bosses and the Heart of the Dark. Every floor comes from a shareable seed and there is a Daily depth, so streamers and their viewers can race the same deep. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
+    "features": [
+      "Turn-based tactics where every shadow telegraphs its strike, but only in your light",
+      "Your lantern's oil is your health and your light radius: getting hurt makes the dark bigger",
+      "Knock shadows into pits, walls, each other and exploding sootpods",
+      "Forty floors, four zones, seven shadows and four bosses, then endless floors below",
+      "16 relics, four lanterns, waystones, shareable seeds and a Daily depth",
+      "An old Keeper narrates your descent (and your blunders), in English and Turkish"
+    ],
+    "quote": "We wanted a tactics game where knowing what is coming is something you have to earn and keep. Your lamp is your health and your eyes, so every hit makes the dark a little closer. Watching people argue with their chat about one tile is our favourite part."
+  }
+}

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Lampdeep</title>
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+<script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div id="hud" hidden>
+  <div class="card lamp">
+    <div class="depth"><small data-i18n="depth">Depth</small><b id="hudDepth">1</b><small id="hudOf">/ 40</small></div>
+    <div id="oil" class="oil" aria-label="Oil"></div>
+  </div>
+  <div class="pill" id="hudEmbers"><i class="ico" data-ico="ember"></i><b id="embers">0</b></div>
+  <div class="mid">
+    <div class="pill small"><i class="ico" data-ico="clock"></i><span id="timer">0:00</span><span class="sep"></span><span class="seed" id="hudSeed"></span></div>
+    <div id="creep" class="pill small warn" hidden><i class="ico" data-ico="moon"></i><span id="creepText"></span></div>
+  </div>
+  <div id="bossBar" hidden><b id="bossName"></b><div class="bar"><i id="bossFill"></i></div></div>
+  <button id="btnPause" class="icon" aria-label="Pause"><span class="bars"></span></button>
+</div>
+<div id="depthMap" hidden><div id="depthTrack"></div></div>
+<div id="relicStrip" hidden></div>
+
+<div id="actions" hidden>
+  <button id="btnFlare" class="act" aria-label="Flare"><i class="ico" data-ico="flare"></i><span data-i18n="flare">Flare</span><kbd>F</kbd><em class="cd"></em></button>
+  <button id="btnLeap" class="act" aria-label="Leap"><i class="ico" data-ico="leap"></i><span data-i18n="leap">Leap</span><kbd>E</kbd><em class="cd"></em></button>
+  <button id="btnWait" class="act" aria-label="Wait"><i class="ico" data-ico="wait"></i><span data-i18n="wait">Wait</span><kbd data-i18n="space">Space</kbd></button>
+</div>
+
+<div id="tip" hidden>
+  <div class="tipPic" id="tipPic"></div>
+  <p id="tipText"></p>
+  <button id="btnSkipTips" class="link" data-i18n="skipTips">Skip tips</button>
+</div>
+<div id="banner" hidden><b id="bannerBig"></b><small id="bannerSmall"></small></div>
+<div id="sub" hidden></div>
+<div id="fade"></div>
+<div id="vig"></div>
+
+<section id="menu" class="screen" hidden>
+  <div class="menuCol">
+    <h1>Lampdeep</h1>
+    <p class="tag" data-i18n="tagline">Forty floors down. One little lamp.</p>
+    <button id="btnPlay" class="big"><span id="playLabel" data-i18n="descend">Descend</span><small id="playSub"></small></button>
+    <div class="row">
+      <button id="btnNew" class="soft" hidden><i class="ico" data-ico="lamp"></i><span data-i18n="newRun">New run</span></button>
+      <button id="btnDaily" class="soft"><i class="ico" data-ico="sun"></i><span data-i18n="daily">Daily depth</span></button>
+      <button id="btnSetup" class="soft"><i class="ico" data-ico="gear"></i><span data-i18n="setup">Lantern &amp; seed</span></button>
+    </div>
+    <p class="stats" id="menuStats"></p>
+  </div>
+</section>
+
+<section id="setup" class="screen panel" hidden>
+  <h2 data-i18n="setupTitle">Choose your lantern</h2>
+  <div id="lanterns" class="cards"></div>
+  <h3 data-i18n="startAt">Start at</h3>
+  <div id="waystones" class="chips"></div>
+  <h3 data-i18n="seed">Seed</h3>
+  <div class="seedRow"><input id="seedInput" maxlength="14" spellcheck="false" autocomplete="off" aria-label="Seed"><button id="btnRandomSeed" class="soft" data-i18n="random">Random</button></div>
+  <p class="note" data-i18n="seedNote">Same seed, same forty floors: race a friend down the same deep.</p>
+  <div class="row"><button id="btnSetupGo" class="big" data-i18n="descend">Descend</button><button id="btnSetupBack" data-i18n="back">Back</button></div>
+</section>
+
+<section id="shrine" class="screen panel" hidden>
+  <h2 data-i18n="shrineTitle">Shrine of Embers</h2>
+  <p class="note" data-i18n="shrineNote">Take one relic. It stays with you for the whole run.</p>
+  <div id="relicCards" class="cards"></div>
+  <div class="row">
+    <button id="btnBuyOil" class="soft"><i class="ico" data-ico="oil"></i><span id="buyOilText"></span></button>
+    <button id="btnReroll" class="soft"><i class="ico" data-ico="ember"></i><span id="rerollText"></span></button>
+    <button id="btnLeave" data-i18n="leave">Leave</button>
+  </div>
+</section>
+
+<section id="paused" class="screen panel" hidden>
+  <h2 data-i18n="paused">Paused</h2>
+  <p class="note" id="pauseInfo"></p>
+  <div id="pauseRelics" class="relicList"></div>
+  <div class="row">
+    <button id="btnSound" class="soft"><i class="ico" data-ico="sound"></i><span data-i18n="sound">Sound</span></button>
+    <button id="btnVoice" class="soft"><i class="ico" data-ico="voice"></i><span data-i18n="voice">Keeper</span></button>
+    <button id="btnTips" class="soft"><i class="ico" data-ico="tip"></i><span data-i18n="tips">Tips</span></button>
+  </div>
+  <button id="btnResume" class="big" data-i18n="resume">Resume</button>
+  <button id="btnQuit" data-i18n="saveQuit">Save &amp; menu</button>
+</section>
+
+<section id="gameover" class="screen panel" hidden>
+  <h2 id="overTitle"></h2>
+  <p class="final"><small data-i18n="depth">Depth</small> <b id="finalDepth">1</b></p>
+  <p class="note" id="overLine"></p>
+  <div class="statGrid" id="overStats"></div>
+  <p class="best" id="overBest"></p>
+  <div class="row">
+    <button id="btnRetry" class="big" data-i18n="again">Descend again</button>
+    <button id="btnDeeper" class="big" data-i18n="deeper" hidden>Keep descending</button>
+  </div>
+  <button id="btnMenu" data-i18n="menu">Menu</button>
+</section>
+
+<div id="loading"><div class="bar"><i id="loadBar"></i></div></div>
+<div id="toast" hidden></div>
+<script type="module" src="game.js"></script>
+</body>
+</html>
