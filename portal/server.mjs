@@ -74,7 +74,7 @@ ${canonical ? `<link rel="canonical" href="https://${SITE}${e(canonical)}">` : '
 ${scripts.map((s) => `<script src="${s}" defer${nonce ? ` nonce="${nonce}"` : ''}></script>`).join('')}</body></html>`;
 }
 const card = (g) => `<a class="card" href="/games/${e(g.slug)}"><span class="thumb"><img src="/media/${e(g.slug)}/${e(g.media?.card || 'card.webp')}" alt="" loading="lazy" width="600" height="600">
-  ${g.online ? '<span class="pill online">Online</span>' : ''}</span><span class="info"><b>${e(g.title)}</b><small>${e(g.category)}</small></span><span class="go" aria-hidden="true">▶</span></a>`;
+  ${g.online ? '<span class="pill online">Online</span>' : ''}</span><span class="info"><b>${e(g.title)}</b><small>${e(CAT_NAMES[g.category] || g.category)}</small></span><span class="go" aria-hidden="true">▶</span></a>`;
 // categories: each game's game.json category, plus collections that cut across them (shown first)
 const CAT_NAMES = { Clicker: 'Idle & Clicker' };
 const CAT_BLURBS = { Action: 'Fast hands, big hits and boss fights.', Adventure: 'Long climbs and journeys with records to chase.',

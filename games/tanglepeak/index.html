@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Tanglepeak</title>
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+<script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div id="hud" hidden>
+  <div class="hgt"><b id="hudHeight">0</b><small>m</small><span id="hudBest"></span></div>
+  <div class="pill zone" id="hudZone"></div>
+  <div class="pill mid"><i class="ico ico-clock"></i><b id="hudTime">0:00</b><span class="sep"></span><i class="ico ico-fall"></i><b id="hudFalls">0</b><span class="sep" id="hudFlowerSep"></span><i class="ico ico-flower"></i><b id="hudFlowers">0</b></div>
+  <div class="right">
+    <button id="btnCamp" class="icon" aria-label="Back to the campfire"><i class="ico ico-fire"></i></button>
+    <button id="btnPause" class="icon" aria-label="Pause"><span class="bars"></span></button>
+  </div>
+</div>
+<div id="split" hidden></div>
+
+<div id="map" hidden><div id="mapTrack"></div><i id="mapBest"></i><i id="mapMe"></i></div>
+
+<button id="btnSwap" class="ctl" hidden aria-label="Swap climbers"><i class="ico ico-swap"></i><kbd class="k">Space</kbd></button>
+
+<div id="aimHint" hidden></div>
+<div id="pops"></div>
+<div id="banner" hidden><small id="bannerSmall"></small><b id="bannerBig"></b></div>
+<div id="arrow" hidden></div>
+<div id="sub" hidden></div>
+<div id="tip" hidden>
+  <div id="tipIcon"></div>
+  <p id="tipText"></p>
+  <button id="btnSkipTips" data-i18n="skipTips">Skip tips</button>
+</div>
+
+<section id="menu" class="screen menu" hidden>
+  <div class="menu-col">
+    <h1 class="logo">Tangle<span>peak</span></h1>
+    <p class="tag" data-i18n="tagline">Two climbers. One rope. One very tall mountain.</p>
+    <button id="btnPlay" class="big"><span id="playLabel" data-i18n="play">Climb</span><small id="playInfo"></small></button>
+    <button id="btnSummit" class="soft long"><span data-i18n="summitRun">Summit Run</span><small id="summitInfo"></small></button>
+    <div class="row">
+      <button id="btnOutfits" class="soft"><i class="ico ico-hat"></i><span data-i18n="outfits">Outfits</span></button>
+      <button id="btnVoice" class="icon soft" aria-label="Narrator"><i class="ico ico-voice"></i></button>
+      <button id="btnMusic" class="icon soft" aria-label="Music"><i class="ico ico-music"></i></button>
+    </div>
+    <p class="stats"><i class="ico ico-mountain"></i><b id="menuBest">0 m</b><i class="ico ico-flower gap"></i><b id="menuFlowers">0</b><span class="dim">/<span id="menuFlowersMax">21</span></span><i class="ico ico-flag gap"></i><b id="menuSummits">0</b></p>
+  </div>
+</section>
+
+<section id="outfits" class="screen" hidden>
+  <div class="panel wide">
+    <h2 data-i18n="outfits">Outfits</h2>
+    <p class="sub" data-i18n="outfitsSub">Find edelweiss on the mountain to unlock new beanies and ropes.</p>
+    <h3 data-i18n="beanies">Beanies</h3>
+    <div id="hatGrid" class="pick-grid"></div>
+    <h3 data-i18n="ropes">Ropes</h3>
+    <div id="ropeGrid" class="pick-grid ropes"></div>
+    <button id="btnOutfitsBack" class="soft" data-i18n="back">Back</button>
+  </div>
+</section>
+
+<section id="paused" class="screen" hidden>
+  <div class="panel">
+    <h2 data-i18n="paused">Paused</h2>
+    <p class="sub" id="pausedInfo"></p>
+    <button id="btnResume" class="big" data-i18n="resume">Resume</button>
+    <div class="row">
+      <button id="btnPauseCamp" class="soft"><i class="ico ico-fire"></i><span data-i18n="toCamp">Back to campfire</span></button>
+      <button id="btnRestartRun" class="soft" data-i18n="restartRun">Restart run</button>
+    </div>
+    <div class="row">
+      <button id="btnPauseVoice" class="soft toggle"><i class="ico ico-voice"></i><span data-i18n="narrator">Narrator</span></button>
+      <button id="btnPauseMusic" class="soft toggle"><i class="ico ico-music"></i><span data-i18n="music">Music</span></button>
+    </div>
+    <button id="btnQuit" class="soft" data-i18n="menu">Menu</button>
+  </div>
+</section>
+
+<section id="confirm" class="screen" hidden>
+  <div class="panel">
+    <h2 data-i18n="restartRun">Restart run</h2>
+    <p class="sub" data-i18n="restartAsk">Start again from the foot of the mountain?</p>
+    <div class="row">
+      <button id="btnConfirmYes" class="big" data-i18n="yes">Yes</button>
+      <button id="btnConfirmNo" class="soft" data-i18n="no">No</button>
+    </div>
+  </div>
+</section>
+
+<section id="results" class="screen" hidden>
+  <div class="panel">
+    <i class="ico ico-flag big"></i>
+    <h2 id="resTitle">Summit!</h2>
+    <p id="resSub" class="sub"></p>
+    <div class="res-grid">
+      <div><i class="ico ico-clock"></i><b id="resTime">0:00</b><span data-i18n="time">Time</span></div>
+      <div><i class="ico ico-fall"></i><b id="resFalls">0</b><span data-i18n="falls">Falls</span></div>
+      <div><i class="ico ico-mountain"></i><b id="resBig">0 m</b><span data-i18n="bigFall">Biggest fall</span></div>
+      <div><i class="ico ico-flower"></i><b id="resFlowers">0</b><span data-i18n="flowers">Edelweiss</span></div>
+      <div><i class="ico ico-grip"></i><b id="resGrabs">0</b><span data-i18n="grabs">Holds grabbed</span></div>
+    </div>
+    <p class="res-best" id="resBest"></p>
+    <button id="btnAgain" class="big" data-i18n="again">Climb again</button>
+    <div class="row">
+      <button id="btnResSummit" class="soft" data-i18n="summitRun">Summit Run</button>
+      <button id="btnResMenu" class="soft" data-i18n="menu">Menu</button>
+    </div>
+  </div>
+</section>
+
+<div id="loading"><div class="logo small">Tangle<span>peak</span></div><div class="bar"><i id="loadBar"></i></div></div>
+<div id="toast" hidden></div>
+<script type="module" src="game.js"></script>
+</body>
+</html>
