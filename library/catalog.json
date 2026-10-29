@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-26 08:12",
-  "count": 562,
+  "updated": "2026-10-29 11:20",
+  "count": 578,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -102,6 +102,32 @@
         "bgm",
         "bloom",
         "meadow"
+      ]
+    },
+    {
+      "path": "audio/bgm_driftpost_day.mp3",
+      "prompt": "cosy cheerful instrumental for a cute hot air balloon mail delivery game over a sunny patchwork countryside, light accordion and pizzicato strings, soft acoustic guitar, glockenspiel accents, gentle swaying waltz feel, airy and hopeful, medium tempo, seamless loop, no vocals",
+      "game": "driftpost",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1406,
+      "tags": [
+        "bgm",
+        "day",
+        "driftpost"
+      ]
+    },
+    {
+      "path": "audio/bgm_driftpost_dusk.mp3",
+      "prompt": "warm mellow instrumental for a hot air balloon drifting over the countryside at golden sunset, soft piano, harp, gentle accordion and light strings, calm floating waltz, nostalgic and cosy, slow medium tempo, seamless loop, no vocals",
+      "game": "driftpost",
+      "source": "elevenlabs",
+      "kind": "music",
+      "kb": 1407,
+      "tags": [
+        "bgm",
+        "driftpost",
+        "dusk"
       ]
     },
     {
@@ -658,6 +684,175 @@
       "tags": [
         "door",
         "open"
+      ]
+    },
+    {
+      "path": "audio/dp_bullseye.mp3",
+      "prompt": "perfect landing reward, bright sparkling magical chime rising with a soft pop of confetti, cheerful, short",
+      "game": "driftpost",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "bullseye",
+        "dp"
+      ]
+    },
+    {
+      "path": "audio/dp_bump.mp3",
+      "prompt": "a hot air balloon bumping into something, soft bouncy fabric boing with a light wicker creak, cartoon, short",
+      "game": "driftpost",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 11,
+      "tags": [
+        "bump",
+        "dp"
+      ]
+    },
+    {
+      "path": "audio/dp_burner_loop.mp3",
+      "prompt": "a hot air balloon propane burner firing steadily, warm deep roaring whoosh of flame, close but not harsh, steady, seamless loop",
+      "game": "driftpost",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 47,
+      "tags": [
+        "burner",
+        "dp",
+        "loop"
+      ]
+    },
+    {
+      "path": "audio/dp_deliver.mp3",
+      "prompt": "a parcel landing softly on a garden lawn, gentle thump, then a cheerful mailbox bell ring and a tiny happy cartoon cheer, short",
+      "game": "driftpost",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 20,
+      "tags": [
+        "deliver",
+        "dp"
+      ]
+    },
+    {
+      "path": "audio/dp_drop.mp3",
+      "prompt": "a small parcel dropped from a balloon, quick airy whoosh and a soft cloth parachute popping open, light, short",
+      "game": "driftpost",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 11,
+      "tags": [
+        "dp",
+        "drop"
+      ]
+    },
+    {
+      "path": "audio/dp_goose.mp3",
+      "prompt": "a few cartoon geese honking in surprise as they fly past, short funny honks and flapping wings, not harsh",
+      "game": "driftpost",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "dp",
+        "goose"
+      ]
+    },
+    {
+      "path": "audio/dp_land.mp3",
+      "prompt": "a wicker balloon basket touching down on grass, soft creaky wicker crunch and a gentle thud, short",
+      "game": "driftpost",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 11,
+      "tags": [
+        "dp",
+        "land"
+      ]
+    },
+    {
+      "path": "audio/dp_miss.mp3",
+      "prompt": "a parcel thudding into a field and bouncing away, soft cardboard bonk and a gentle descending cartoon whistle, funny, short",
+      "game": "driftpost",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 16,
+      "tags": [
+        "dp",
+        "miss"
+      ]
+    },
+    {
+      "path": "audio/dp_pickup.mp3",
+      "prompt": "a parcel hooked up into a wicker basket, quick rope creak, paper parcel rustle and a tiny bright bell ding, cute, short",
+      "game": "driftpost",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 13,
+      "tags": [
+        "dp",
+        "pickup"
+      ]
+    },
+    {
+      "path": "audio/dp_ribbon.mp3",
+      "prompt": "a gust of wind catching, quick soft whoosh with a light fabric ribbon flap, short",
+      "game": "driftpost",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 10,
+      "tags": [
+        "dp",
+        "ribbon"
+      ]
+    },
+    {
+      "path": "audio/dp_thermal.mp3",
+      "prompt": "warm air rising, soft swelling whoosh lifting upward with a gentle airy shimmer, calm, short",
+      "game": "driftpost",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 22,
+      "tags": [
+        "dp",
+        "thermal"
+      ]
+    },
+    {
+      "path": "audio/dp_tick.mp3",
+      "prompt": "a small brass pocket watch ticking quickly, four soft ticks, gentle tension, short",
+      "game": "driftpost",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 14,
+      "tags": [
+        "dp",
+        "tick"
+      ]
+    },
+    {
+      "path": "audio/dp_vent.mp3",
+      "prompt": "a hot air balloon vent opening, soft fabric flutter and a quick airy hiss of warm air escaping, short",
+      "game": "driftpost",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 13,
+      "tags": [
+        "dp",
+        "vent"
+      ]
+    },
+    {
+      "path": "audio/dp_zap.mp3",
+      "prompt": "a small cartoon storm cloud zapping, quick crackle of light electricity and a soft rumble of thunder, playful not scary, short",
+      "game": "driftpost",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "dp",
+        "zap"
       ]
     },
     {

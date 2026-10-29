@@ -1,0 +1,64 @@
+{
+  "title": "Driftpost",
+  "slug": "driftpost",
+  "version": "1.0.0",
+  "blueprint": "A cosy 3D hot-air balloon courier game over a papercraft patchwork valley: you fly the post balloon but can only go up or down, and every height has its own wind (shown as coloured ribbons in the sky and as arrows on an altimeter), so the puzzle is picking the layer that blows where you need to go, dipping low over the post office to hook parcels and dropping each one into the garden ring of its coloured house. Fifteen routes add a basket for two and three parcels, warm thermals, geese flying at your height, drifting storm clouds, turning and shifting winds, express letters on a clock, mountain peaks and island hopping; Sunset Rounds (unlocked after route 5) is an endless race against the setting sun. Controls: hold Space / W / Up / the mouse button or the burner button to rise, let go to sink, S / Down or the vent button to sink fast, E / F / right-click or the drop button to drop a parcel; R restarts, P pauses. The midgame ad plays only on Next route or Try again on the results card; the optional rewarded ad doubles the stamps from a route and is hidden when ads are unavailable.",
+  "description": "Fly the valley's post balloon! You can only go up or down, but every height has its own wind: climb into the breeze that blows toward the next cottage, dip low over the post office to hook a parcel, and drop it into the garden ring when the landing marker turns green. Across 15 routes you will ride warm thermals, dodge geese and storm clouds, race express letters against the clock, hop between islands and climb over mountain peaks. Earn stamps for Workshop upgrades and new balloon paint, and see how many parcels you can deliver before sundown in Sunset Rounds.",
+  "controls": {
+    "desktop": "Hold Space, W, Up or the left mouse button to fire the burner and rise; let go to sink; S or Down to vent and sink fast; E, F or right-click to drop a parcel; R restarts the route; P pauses",
+    "mobile": "Hold the flame button (or anywhere on the sky) to rise, let go to sink; hold the vent button to sink fast; tap the parcel button to drop; round buttons restart or pause"
+  },
+  "category": "Casual",
+  "tags": [
+    "flying",
+    "3d",
+    "casual",
+    "delivery",
+    "puzzle",
+    "cute",
+    "relaxing",
+    "one-button"
+  ],
+  "orientation": "landscape",
+  "mobile": true,
+  "languages": [
+    "en",
+    "tr"
+  ],
+  "pegi": "PEGI 3",
+  "ads": {
+    "midgame": "Only on the results card's Next route and Try again buttons, between two routes (or two Sunset Rounds runs). Never on menu, pause, Routes, Workshop or Replay buttons.",
+    "rewarded": "Optional 'Double stamps' on the results card; reward only on adFinished, hidden when ads are unavailable or after an ad error"
+  },
+  "quality": {
+    "hook": "Flying and delivery games on CrazyGames (Bird Flight-style flyers, Crazy Plane Landing, the many drive-and-deliver games) give you full steering: point where you want to go. Driftpost takes steering away. Like a real balloon pilot you only control height, and each height has its own wind, so getting anywhere is a small route puzzle: which layer blows toward the red cottage, where to switch to come back, and how far the parcel will drift on its little chute before it lands. Thermals, geese at your height, storm clouds that ride their own wind, winds that turn or shift, letters on a clock, mountains and islands keep changing the puzzle, while the controls stay one button plus a drop.",
+    "onboarding": "Route 1 is a straight line between the post office and one red cottage with only two winds, and it teaches by doing: a card with a Space keycap and a mouse (or a hand and the flame button on touch) and an arrow at the burner says 'Hold to fire the burner and rise'; once you are up, the arrow moves to the glowing layer on the altimeter ('Each height has its own wind. The low wind blows to the red house'); near the cottage it points at the garden ring ('Drop when the landing marker turns green inside the ring', E keycap or the drop button), and after the delivery it points at the top layer ('Climb into the top wind, then dip low over the post office'). Routes 1-3 also glow the best wind layer for your current target. Every new mechanic gets one card with an icon the first time it appears (compass, venting, thermals, geese, two parcels, storms, turning winds, letters, peaks, islands, wind shifts, three parcels). Every card has a Skip tips button, and tips never pause the game.",
+    "art_style": "One cosy papercraft diorama, all procedural Three.js with flat shading and soft sun shadows: a patchwork valley of green, wheat and ploughed fields with hedges, a river, round and pointed trees, windmills and low-poly mountains, cream cottages with coloured roofs, white picket yards and red mailboxes, a red-roofed post office with a tower and a flag, a striped hot-air balloon with a wicker basket, a goggled pilot and parcels hanging on strings, white geese in a V, puffy white clouds and dark storm clouds with yellow lightning, and pastel wind ribbons that match the altimeter colours. Morning, day and dusk light change across the routes. UI is deep sky-blue rounded panels with Lilita One titles in cream, gold and post-office red and Nunito text; icons are flat outlined shapes; the covers are rendered in-engine from the same scene.",
+    "content": "15 routes on generated valleys, each adding something: one straight line with two winds, crosswinds, venting, thermals, geese, a basket for two, storm clouds, turning winds, express letters, mountain peaks, island hopping, wind shifts, busy skies, an evening rush with three parcels and a grand round with everything. Every route has 3 stars (all delivered, no bumps or misses, under par), 45 in total. Stamps buy three Workshop upgrades with 5 levels each (faster burner, wider landing rings, more stamps per parcel) and five extra balloon paints. Sunset Rounds (unlocked after route 5) builds a new valley every run, gives seconds back for every delivery and adds geese, storms and turning winds as the sun goes down, with a best score.",
+    "name_check": "Driftpost is not a genre word and no game uses it (a web search finds only unrelated 'Drift' racing games). It joins drift (riding the wind) and post (the mail), and with the balloon and parcels on the covers it says what you do.",
+    "visual_review": "Reviewed the menu (1216x684 and 800x450), route 1 onboarding at 3 s and 14 s, routes 5, 7, 10, 11 and 15 mid-flight, Sunset Rounds results, the touch layout at 800x450 and all three covers at full size, then fixed what I found: the valley's edge mountains were hundreds of units tall and turned the menu background into a grey rock wall (now capped and noise-shaped); balloon gores rendered as a diagonal checker because triangles in one gore picked different colours (now clean vertical stripes with a gold band and crown); keycaps overlapped the Drop/Vent/Burner labels (buttons raised, keys below them); off-screen pointers sat on top of the altimeter and in mid-screen (now clamped clear of the altimeter, HUD and buttons); the bullseye was a filled white blob that hid the garden and the ring edge clipped into terrain (now a thin white target ring on flattened ground); storm clouds read as dark boulders (now rounder slate-blue puffs with a soft rain veil and a yellow bolt); geese were flat planks (now tapered wings with grey tips, black necks and orange beaks); a falling parcel's chute looked like a red mushroom (now a striped parachute with cords); hazard icons were cut off at the right edge of the altimeter (moved inward); wind ribbons were a little busy (fewer, softer). The first covers cropped the balloon and put the target garden under the title, and close clouds looked like rocks in the portrait cover: the cover is now staged in-engine from the south-west with the whole balloon, the post office, a parachute dropping into a red garden ring and a goose V, with no clouds near the lens. There are no rigged models, so no T-poses: the balloon sways and spins slowly, its burner flame flickers, the pilot looks around and waves after a delivery, parcels swing on their strings, geese flap, windmills turn and flags wave. Balance was checked with a forward-simulating bot: it clears all 15 routes in about an hour with near-perfect planning (pars are about 1.7x its times), and the designs that let it get stuck (route 2's middle wind blowing straight back, a too-low post-office reach, parcels drifting 20 units on their chutes) were changed so humans don't get stuck either."
+  },
+  "capture": {
+    "warmup": 6,
+    "shots": [
+      0,
+      6,
+      30,
+      70,
+      140
+    ]
+  },
+  "press": {
+    "headline": "{studio} launches {title}, a cosy hot-air balloon mail game where you steer only with height and the wind, playable instantly in the browser",
+    "summary": "Driftpost makes players the pilot of a little post balloon over a papercraft valley. They can only climb or sink, but every height has its own wind, so each delivery is a small route puzzle: find the breeze that blows toward the right cottage, dip low over the post office to hook a parcel and drop it into the garden ring. Fifteen routes add thermals, geese, storm clouds, turning winds, express letters, mountains and islands, and Sunset Rounds races the setting sun. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
+    "features": [
+      "Steer with height alone: every layer of the sky has its own wind",
+      "Hook parcels at the post office and drop them into garden rings, with a landing marker that shows where they will land",
+      "15 routes with new twists: thermals, geese, storm clouds, turning winds, express letters, peaks and islands",
+      "Three stars per route, Workshop upgrades and six balloon paints",
+      "Sunset Rounds: an endless race against the setting sun with a best score",
+      "One-button controls on mouse, keyboard and touch, in English and Turkish"
+    ],
+    "quote": "Real balloon pilots can't steer, they can only choose their height and read the winds. We loved the idea that a whole game could live in that one decision, so Driftpost gives you a burner, a sky full of winds and a basket of parcels, and lets the valley do the rest."
+  }
+}
