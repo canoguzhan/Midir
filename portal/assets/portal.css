@@ -51,6 +51,7 @@ nav a:hover { color: var(--text); }
 main { padding-block: 34px 56px; }
 .sec { display: grid; gap: 6px; margin: 0 0 18px; }
 .sec p { margin: 0; color: var(--dim); }
+#games { scroll-margin-top: 80px; }
 .cats { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding: 2px 2px 8px; margin: 0 0 26px; }
 .cats::-webkit-scrollbar { display: none; }
 .cats a { flex: none; text-decoration: none; color: var(--text); font: 400 17px/1 var(--display); letter-spacing: .03em; background: var(--panel); border: 1px solid var(--line);

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-29 11:20",
-  "count": 578,
+  "updated": "2026-10-29 15:11",
+  "count": 629,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -1868,6 +1868,90 @@
       ]
     },
     {
+      "path": "audio/tp_camp.mp3",
+      "prompt": "a campfire catching light with a warm whoosh and crackle, then a soft friendly bell chime, cosy, short",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 26,
+      "tags": [
+        "camp",
+        "tp"
+      ]
+    },
+    {
+      "path": "audio/tp_crumble.mp3",
+      "prompt": "a small sandstone rock hold crumbling apart, gritty crunch and little pebbles trickling down a cliff, short",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 19,
+      "tags": [
+        "crumble",
+        "tp"
+      ]
+    },
+    {
+      "path": "audio/tp_fall.mp3",
+      "prompt": "a cartoon falling whistle sliding down in pitch, comedic and light, no impact at the end",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 26,
+      "tags": [
+        "fall",
+        "tp"
+      ]
+    },
+    {
+      "path": "audio/tp_grab.mp3",
+      "prompt": "a small cartoon climber grabbing a rock hold, quick chalky hand slap on stone with a tiny cute effort grunt, short",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 10,
+      "tags": [
+        "grab",
+        "tp"
+      ]
+    },
+    {
+      "path": "audio/tp_land.mp3",
+      "prompt": "a small climber landing on a rocky ledge, soft thud with a little gravel crunch and a cute oof, short",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 11,
+      "tags": [
+        "land",
+        "tp"
+      ]
+    },
+    {
+      "path": "audio/tp_rope.mp3",
+      "prompt": "a climbing rope snapping taut, quick creaky stretch of a thick rope with a soft thwump, short",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 8,
+      "tags": [
+        "rope",
+        "tp"
+      ]
+    },
+    {
+      "path": "audio/tp_slip.mp3",
+      "prompt": "fingers slipping off a rock hold, quick gritty scrape and a small cute cartoon gasp, short",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "kind": "audio",
+      "kb": 13,
+      "tags": [
+        "slip",
+        "tp"
+      ]
+    },
+    {
       "path": "audio/ui_click.mp3",
       "kind": "audio",
       "kb": 8,
@@ -2346,6 +2430,682 @@
         "siege",
         "tr",
         "wave"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_back_en.mp3",
+      "prompt": "And we're back where we were!",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 25,
+      "tags": [
+        "back",
+        "en",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_back_tr.mp3",
+      "prompt": "Ve kaldığımız yere döndük!",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 27,
+      "tags": [
+        "back",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_cable_en.mp3",
+      "prompt": "The old cable hooks still run. Time your grab.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 51,
+      "tags": [
+        "cable",
+        "en",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_cable_tr.mp3",
+      "prompt": "Eski kablo kancaları hâlâ çalışıyor. Zamanlamana dikkat.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 60,
+      "tags": [
+        "cable",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_camp_en.mp3",
+      "prompt": "A warm campfire. Rest your fingers.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 39,
+      "tags": [
+        "camp",
+        "en",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_camp_tr.mp3",
+      "prompt": "Sıcak bir kamp ateşi. Parmaklarını dinlendir.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 50,
+      "tags": [
+        "camp",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_catch_en.mp3",
+      "prompt": "What a catch!",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "catch",
+        "en",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_catch_tr.mp3",
+      "prompt": "Ne yakalayış!",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 19,
+      "tags": [
+        "catch",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_crown_en.mp3",
+      "prompt": "The crown of the mountain. Almost there.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 37,
+      "tags": [
+        "crown",
+        "en",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_crown_tr.mp3",
+      "prompt": "Dağın tacı. Az kaldı.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 28,
+      "tags": [
+        "crown",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_fall_b1_en.mp3",
+      "prompt": "Well... that was a long way down.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 32,
+      "tags": [
+        "b1",
+        "en",
+        "fall",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_fall_b1_tr.mp3",
+      "prompt": "Eh... epey uzun bir düşüştü.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 34,
+      "tags": [
+        "b1",
+        "fall",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_fall_b2_en.mp3",
+      "prompt": "Deep breath. The summit isn't going anywhere.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 43,
+      "tags": [
+        "b2",
+        "en",
+        "fall",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_fall_b2_tr.mp3",
+      "prompt": "Derin bir nefes. Zirve bir yere kaçmıyor.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 45,
+      "tags": [
+        "b2",
+        "fall",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_fall_b3_en.mp3",
+      "prompt": "Every great climber has fallen exactly like that.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 46,
+      "tags": [
+        "b3",
+        "en",
+        "fall",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_fall_b3_tr.mp3",
+      "prompt": "Her büyük tırmanıcı tam da böyle düşmüştür.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 41,
+      "tags": [
+        "b3",
+        "fall",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_fall_h1_en.mp3",
+      "prompt": "Somebody clip that. Actually... maybe don't.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 46,
+      "tags": [
+        "en",
+        "fall",
+        "h1",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_fall_h1_tr.mp3",
+      "prompt": "Biri bunu kaydetsin. Yok, en iyisi kaydetmesin.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 53,
+      "tags": [
+        "fall",
+        "h1",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_fall_h2_en.mp3",
+      "prompt": "Oh dear. I'll put the kettle on.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 33,
+      "tags": [
+        "en",
+        "fall",
+        "h2",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_fall_h2_tr.mp3",
+      "prompt": "Eyvah. Ben çaydanlığı ocağa koyayım.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 41,
+      "tags": [
+        "fall",
+        "h2",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_fall_s1_en.mp3",
+      "prompt": "Oops. Dust yourselves off.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "en",
+        "fall",
+        "s1",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_fall_s1_tr.mp3",
+      "prompt": "Hoppala. Üstünüzü silkeleyin.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 33,
+      "tags": [
+        "fall",
+        "s1",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_fall_s2_en.mp3",
+      "prompt": "The mountain says hello.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 26,
+      "tags": [
+        "en",
+        "fall",
+        "s2",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_fall_s2_tr.mp3",
+      "prompt": "Dağ size merhaba diyor.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "fall",
+        "s2",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_fall_s3_en.mp3",
+      "prompt": "Down is easy. Up is the fun part.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 38,
+      "tags": [
+        "en",
+        "fall",
+        "s3",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_fall_s3_tr.mp3",
+      "prompt": "Aşağı inmek kolay. Asıl eğlence yukarıda.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 47,
+      "tags": [
+        "fall",
+        "s3",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_falls_en.mp3",
+      "prompt": "Wet moss is slippery. Keep moving.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 40,
+      "tags": [
+        "en",
+        "falls",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_falls_tr.mp3",
+      "prompt": "Islak yosun kaygandır. Durma, ilerle.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 51,
+      "tags": [
+        "falls",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_flower_en.mp3",
+      "prompt": "Edelweiss! A lucky find.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 28,
+      "tags": [
+        "en",
+        "flower",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_flower_tr.mp3",
+      "prompt": "Dağ çiçeği! Şanslı bir buluş.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 35,
+      "tags": [
+        "flower",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_frost_en.mp3",
+      "prompt": "Ice steals your grip fast. Be quick!",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 39,
+      "tags": [
+        "en",
+        "frost",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_frost_tr.mp3",
+      "prompt": "Buz tutuşunu çabuk çalar. Hızlı ol!",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 36,
+      "tags": [
+        "frost",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_grab_en.mp3",
+      "prompt": "That's it. One holds on, the other swings.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 42,
+      "tags": [
+        "en",
+        "grab",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_grab_tr.mp3",
+      "prompt": "İşte böyle. Biri tutunur, öteki sallanır.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 48,
+      "tags": [
+        "grab",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_intro_en.mp3",
+      "prompt": "Two climbers, one rope, one very tall mountain. Up we go!",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 62,
+      "tags": [
+        "en",
+        "intro",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_intro_tr.mp3",
+      "prompt": "İki tırmanıcı, bir ip, kocaman bir dağ. Hadi yukarı!",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 56,
+      "tags": [
+        "intro",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_pines_en.mp3",
+      "prompt": "Sandy rocks crumble. Don't linger.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 38,
+      "tags": [
+        "en",
+        "pines",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_pines_tr.mp3",
+      "prompt": "Kumlu kayalar ufalanır. Oyalanma.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 36,
+      "tags": [
+        "pines",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_ridge_en.mp3",
+      "prompt": "Feel that wind? Hold on when the flags snap.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 46,
+      "tags": [
+        "en",
+        "ridge",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_ridge_tr.mp3",
+      "prompt": "Rüzgârı hissettin mi? Bayraklar çırpınınca sıkı tutun.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 60,
+      "tags": [
+        "ridge",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_summit_en.mp3",
+      "prompt": "You made it! Two climbers, one rope, one summit.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 55,
+      "tags": [
+        "en",
+        "summit",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_summit_tr.mp3",
+      "prompt": "Başardınız! İki tırmanıcı, bir ip, bir zirve.",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 51,
+      "tags": [
+        "summit",
+        "tp",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_tired_en.mp3",
+      "prompt": "Fingers are getting tired!",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 24,
+      "tags": [
+        "en",
+        "tired",
+        "tp",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/tp_vo_tired_tr.mp3",
+      "prompt": "Parmaklar yoruluyor!",
+      "game": "tanglepeak",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 23,
+      "tags": [
+        "tired",
+        "tp",
+        "tr",
+        "vo"
       ]
     },
     {

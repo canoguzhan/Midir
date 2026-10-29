@@ -1,0 +1,65 @@
+{
+  "title": "Tanglepeak",
+  "slug": "tanglepeak",
+  "version": "1.0.0",
+  "blueprint": "A long, hard and cosy 3D physics climb up one tall mountain with two little climbers tied by one rope: one grips a hold while you swing the other up to the next one, and when it grabs, the roles swap and the old anchor lets go, so you climb hand over hand as a pair. Grip runs out while your partner dangles, sandstone holds crumble, moss and ice drain your grip faster, golden rings let you rest, gusts shove you on the ridge and cable hooks slide, and every fall can take you a long way down: hold the button while you fall to catch a hold. Controls: point at a hold and hold the mouse button (or your finger) to reach for it, or hold an arrow key / WASD toward it; Space, E or right-click swap who climbs on a ledge; P pauses. Trail mode has campfires that catch you, Summit Run has none and keeps zone splits; the only ad is the midgame ad on the summit card's Climb again / Summit Run buttons, between two climbs, and there is no rewarded ad.",
+  "description": "Two little climbers, one rope and one very tall mountain. One of them grips a hold while you swing the other up to the next one, then they swap: climb hand over hand through seven zones, from a spring meadow past crumbling sandstone, a waterfall, a gusty ridge, a frozen chimney and an old cable line to the starry crown. Grip runs out, holds crumble, ice slips, and a single slip can send you tumbling a long way down, so hold on and catch yourself on the way. Rest by campfires in Trail mode, or try Summit Run with no campfires at all, a run timer and zone splits, collect 21 edelweiss for new beanies and ropes, and listen to an old mountain guide who has seen every fall before.",
+  "controls": {
+    "desktop": "Point at a hold and hold the left mouse button to reach for it (or hold an arrow key / WASD toward it); hold the button while falling to catch a hold; Space, E or right-click swaps who climbs on a ledge; P pauses",
+    "mobile": "Hold your finger on a hold to reach for it; keep holding while falling to catch one; the round swap button changes who climbs on a ledge; round buttons go back to the campfire or pause"
+  },
+  "category": "Adventure",
+  "long_play": true,
+  "tags": [
+    "climbing",
+    "physics",
+    "rope",
+    "mountain",
+    "hard",
+    "speedrun",
+    "3d",
+    "cute"
+  ],
+  "orientation": "landscape",
+  "mobile": true,
+  "languages": [
+    "en",
+    "tr"
+  ],
+  "pegi": "PEGI 3",
+  "ads": {
+    "midgame": "Only on the summit card's Climb again and Summit Run buttons, between two climbs. Never on the menu, pause, outfits or campfire buttons, and never during a climb.",
+    "rewarded": "None: nothing in the game is sold for an ad, so there is no rewarded button that could ever do nothing."
+  },
+  "quality": {
+    "hook": "The big physics-climbing games streamers play (Getting Over It with its hammer, Jump King with its charged jump, the many Only Up-style parkour towers on CrazyGames) are solo: one character, one tool. Tanglepeak is about a pair on one rope. You never move a climber on your own: one always hangs on while you swing the other, and the moment the swinging one grabs, the other lets go, so every move is a little decision about which hold to trust with both of them. Grip that drains while your partner dangles, holds that crumble or slip, gusts and moving hooks turn that into tension, and catching yourself mid-fall by grabbing a passing hold is the clip-worthy moment. It is also deliberately one fixed mountain for everyone (seeded, 390 m), with a run timer, zone splits, a falls counter, a 'biggest fall' stat and a narrator, which is what makes it comparable and watchable on a stream.",
+    "onboarding": "The first climb starts at the foot of the mountain with only stone holds and wide ledges, and teaches by doing: the next hold on the main line glows with a pulsing ring and an arrow, and a card shows a mouse with the left button held (a hand on touch, arrow keycaps when you play with keys) and 'Point at the glowing hold and hold the button to reach for it'. After the first grab it says 'Now the other one lets go. Swing them up to the next hold!', and then points at the grip ring above the hanging climber ('The one holding on gets tired. Keep moving!'). While you aim, a ring shows which hold you would grab (green when it is in reach). Every new thing gets one card with an icon the first time it appears: falling (hold to catch), campfires, crumbling, mossy and icy holds, golden rings, cable hooks, gusts, edelweiss and swapping on a ledge. The narrator says each zone's danger in one line. Every card has a Skip tips button, and tips never pause the climb.",
+    "art_style": "One cosy, flat-shaded low-poly mountain diorama, all procedural Three.js: a faceted cliff whose rock colour changes by altitude (warm meadow stone, sandstone, wet slate, grey ridge, frosty blue, dusky slate, purple crown), rock slabs with grass, moss or snow caps, chunky holds in clear colours on dark sockets (cream stone, orange sandstone, green moss, glassy ice, golden rings, steel hooks), campfires with pennants, a waterfall, bunting, mine timbers and lanterns, glowing crystals, and two chibi climbers in beanies and puffy jackets tied by an orange rope. The sky goes from spring blue through golden hour to a starry night with an aurora at the top. UI is slate-blue rounded panels with Lilita One titles in cream, gold and orange and Nunito text; icons are flat outlined SVGs; the covers are rendered in-engine from the same scene.",
+    "content": "One 390 m mountain in 7 zones, each adding a mechanic: stone holds and ledges (Meadow Crag), crumbling sandstone (Pine Ledges), slippery moss beside a waterfall (Waterfall Wall), wind gusts with a warning (Gusty Ridge), ice (Frost Chimney), sliding cable hooks (Old Cable Line) and everything together at night (The Crown). A first climb takes roughly 30-120 minutes in Trail mode (balance runs with a human-like bot: 27-105 min); the tuned bot needs about 5.5 minutes, which is the speedrun ceiling. Trail mode has 14 campfires that catch you and save your progress; Summit Run has no campfires, a run timer, best time and zone splits. 21 edelweiss sit off the main line (detours) and unlock 8 beanie colourways and 6 ropes; the last beanie needs the summit. Climbs save continuously and resume where you left off.",
+    "name_check": "Tanglepeak is not a genre word and a web search finds no game with that name (only the unrelated mystery game Tangle Tower and the puzzle Tangle Master). It joins tangle (the rope between the two climbers) and peak (the mountain), and with the roped pair on the cover it says what you do.",
+    "visual_review": "Reviewed the menu (1216x684, 800x450, Turkish), the first 30 seconds at both sizes and on touch, shots at 1, 2, 3, 4 and 6 minutes into a bot climb (meadow, pines, waterfall, ridge, frost, cable line, crown), the pause, outfits and summit screens at 800x450, and all covers at full size, then fixed what I found: holds were small, pale and cast soft shadows that looked like holes in the rock (now bigger, more saturated, on a dark socket, no shadows); the climbers were tiny with a camera 19 m away (now 14 m, looking a little up the wall so the way ahead is visible); shadowed rock was nearly black (brighter sky light, softer shadows); upper zones were plain rock (now each zone has its own growth: grass tufts, shrubs, moss, lichen, snow, soot and glowing crystals); ledges read as flat green mats (thinner slabs with faceted grass, moss or snow caps and icicles); skipping time in capture mode stacked dozens of 'Gust!' and 'Caught it!' pops (pops, particles and banners are now skipped while simulating). The first covers were a flat grey wall, then a dramatic low angle where the climbers were tiny and partly under the title; the final covers are rendered in-engine from the pines zone, frontal and close: the anchor hangs from a hold with both arms up, the partner swings out on the orange rope toward an edelweiss, the title sits on open rock below them. There are no rigged models, so no T-poses: the climbers breathe, blink, swing their legs, reach for holds, flail when falling and look worried when tired, and campfires flicker, flags wave, bunting snaps in gusts and the waterfall flows. Balance was checked in Node with the same physics: a precise bot clears all 8 test climbs in 5-7 minutes (so every move on the mountain is possible), and a human-like bot (0.2 s reaction delay, aim wobble, pauses after each grab) summits Trail mode in 27-105 minutes. Fixes from those runs: holds right above a ledge were out of reach (the pull is now a little stronger than gravity), the climber who had just let go re-grabbed the same hold and the pair ping-ponged (a released hold stays locked until you move away), crumbling holds broke before the partner could arrive (2.6 s), ledges could touch the side wall and make dead-end pockets (now always a climber-wide gap), a partner hanging under a ledge could not get round it (the standing partner now walks to the nearer end), and some zones had no campfire (now every zone has a halfway and a top campfire, 14 in all)."
+  },
+  "capture": {
+    "warmup": 8,
+    "shots": [
+      0,
+      12,
+      75,
+      160,
+      250
+    ]
+  },
+  "press": {
+    "headline": "{studio} launches {title}, a cosy but merciless climb up one tall mountain with two climbers on one rope, playable instantly in the browser",
+    "summary": "Tanglepeak gives players two little climbers tied by a single rope. One hangs on while the player swings the other up to the next hold, then they swap, so the whole 390-metre mountain is climbed hand over hand as a pair, while grip runs out, sandstone crumbles, ice slips and gusts push. Every slip can send the pair tumbling a long way down, which makes it a game built for long sessions and for streaming: one fixed mountain for everyone, a run timer with zone splits and a narrator who has seen every fall. It runs instantly in any modern browser on desktop and mobile, with no download or account required.",
+    "features": [
+      "Two climbers, one rope: swing one up while the other hangs on, then they swap",
+      "One fixed 390 m mountain in seven zones, from a spring meadow to a starry crown",
+      "Crumbling sandstone, slippery moss, ice, golden rest rings, gusts and sliding cable hooks",
+      "Trail mode with campfires, or Summit Run with no campfires, a timer and zone splits",
+      "21 edelweiss to find for new beanies and ropes",
+      "A kindly old mountain guide narrates your climb (and your falls), in English and Turkish"
+    ],
+    "quote": "We wanted a climbing game where you are never alone on the wall. With two climbers on one rope, every move is a little act of trust, and every fall is shared. It turned out to be the most fun we have had watching people fall off a mountain."
+  }
+}
