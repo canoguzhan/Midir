@@ -4,6 +4,7 @@
   python3 tools/publish_devcan.py <slug> [<slug> ...]   publish or update these games
   python3 tools/publish_devcan.py --all                 every game in games/ except EXCLUDE
   python3 tools/publish_devcan.py --remove <slug>       take a game off the portal
+  python3 tools/publish_devcan.py --meta <slug> ...     refresh only the catalog fields from game.json (category, tags, long_play, ...)
 
 The portal build is the game folder as it ships to CrazyGames (same files as tools/build.py, folders kept, not flat)
 minus the CrazyGames SDK <script>: inside the portal's frame the game then runs its "no SDK" path (progress in
@@ -49,6 +50,17 @@ def images(gdir, out):
     return made
 
 
+META = ('title', 'version', 'category', 'tags', 'description', 'controls', 'mobile', 'orientation', 'languages')
+
+
+def refresh(slug, cat):
+    meta = read_json(os.path.join(game_dir(slug), 'game.json'), {}) or {}
+    g = next((g for g in cat['games'] if g['slug'] == slug), None)
+    if not g: raise SystemExit(f'{slug}: not on the portal yet, publish it first')
+    g.update({k: meta[k] for k in META if k in meta}, long_play=bool(meta.get('long_play')))
+    log('devcan', f'{slug}: catalog fields refreshed ({g.get("category")}{", long play" if g["long_play"] else ""})')
+
+
 def publish(slug, cat):
     gdir = game_dir(slug); meta = read_json(os.path.join(gdir, 'game.json'), {}) or {}
     if not os.path.exists(os.path.join(gdir, 'index.html')): raise SystemExit(f'{slug}: no index.html')
@@ -66,7 +78,7 @@ def publish(slug, cat):
     entry = {'slug': slug, 'title': meta.get('title', slug), 'version': meta.get('version', ''), 'category': meta.get('category', ''),
              'tags': meta.get('tags', []), 'description': meta.get('description', ''), 'controls': meta.get('controls', {}),
              'mobile': meta.get('mobile', True), 'orientation': meta.get('orientation', 'landscape'), 'languages': meta.get('languages', ['en']),
-             'online': bool(meta.get('multiplayer')) or slug == 'whirlbash', 'media': media,
+             'online': bool(meta.get('multiplayer')) or slug == 'whirlbash', 'long_play': bool(meta.get('long_play')), 'media': media,
              'published': old.get('published') or release_date(slug) or time.strftime('%Y-%m-%dT%H:%M:%S'), 'updated': time.strftime('%Y-%m-%dT%H:%M:%S')}
     cat['games'] = [g for g in cat['games'] if g['slug'] != slug] + [entry]
     log('devcan', f'{slug} v{entry["version"]} -> {os.path.relpath(dest, DEVCAN)}/ ({"CrazyGames SDK swapped for devcan-sdk.js" if n else "no SDK tag found"}, images: {", ".join(media)})')
@@ -86,6 +98,8 @@ def main():
             cat['games'] = [g for g in cat['games'] if g['slug'] != slug]
             for sub in ('play', 'media'): shutil.rmtree(os.path.join(DEVCAN, sub, slug), ignore_errors=True)
             log('devcan', f'removed {slug}')
+    elif args[0] == '--meta':
+        for slug in args[1:]: refresh(slug, cat)
     else:
         slugs = sorted(s for s in os.listdir(os.path.join(ROOT, 'games')) if s not in EXCLUDE and os.path.exists(os.path.join(ROOT, 'games', s, 'game.json'))) if args == ['--all'] else args
         for slug in slugs: publish(slug, cat)

@@ -51,6 +51,21 @@ nav a:hover { color: var(--text); }
 main { padding-block: 34px 56px; }
 .sec { display: grid; gap: 6px; margin: 0 0 18px; }
 .sec p { margin: 0; color: var(--dim); }
+.cats { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding: 2px 2px 8px; margin: 0 0 26px; }
+.cats::-webkit-scrollbar { display: none; }
+.cats a { flex: none; text-decoration: none; color: var(--text); font: 400 17px/1 var(--display); letter-spacing: .03em; background: var(--panel); border: 1px solid var(--line);
+  padding: .65em 1em; border-radius: 999px; box-shadow: 0 3px 0 #0f0629; }
+.cats a span { font: 800 12px/1 var(--ui); color: var(--dim); margin-left: .25em; }
+.cats a:hover { border-color: var(--violet); }
+.cats a.on { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+.cats a.on span { color: var(--ink); }
+.row { margin-bottom: 38px; }
+.sec.head { grid-template-columns: 1fr auto; align-items: end; }
+.sec.head p { grid-column: 1 / -1; }
+.sec h2 a { color: inherit; text-decoration: none; }
+.sec h2 a:hover { color: var(--gold); }
+.more { color: var(--gold); text-decoration: none; font-size: 15px; white-space: nowrap; }
+.tags a { font-size: 13px; color: var(--ink); background: var(--gold); text-decoration: none; padding: .3em .75em; border-radius: 999px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 18px; }
 .grid.small { grid-template-columns: repeat(auto-fill, minmax(min(170px, 100%), 1fr)); }
 .card { position: relative; display: grid; text-decoration: none; background: var(--panel); border: 1px solid var(--line); border-radius: 20px; overflow: hidden;

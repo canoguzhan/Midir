@@ -9,6 +9,7 @@
     "mobile": "Drag anywhere to move with the floating joystick. Weapons attack automatically. Tap a card to pick an upgrade."
   },
   "category": "Action",
+  "long_play": true,
   "tags": ["survivor", "roguelite", "bullet heaven", "3d", "action", "fantasy", "auto battler", "dungeon"],
   "orientation": "landscape",
   "mobile": true,

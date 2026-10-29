@@ -72,6 +72,9 @@ server.py                private studio site (systemd `midir.service`, Caddy wit
    - Publish to the portal with `python3 tools/publish_devcan.py <slug>`. It copies the build without the CrazyGames SDK tag
      to /srv/devcan, makes the card and hero images, and updates catalog.json; the game appears on https://devcangames.com
      at once, with no restart. Never link to devcangames.com from a game: the CrazyGames build must not cross-promote.
+     The portal groups games by `game.json` → `category` (pages at /category/<slug>, all games at /games) plus two
+     collections: Online (`multiplayer`) and Long play (`"long_play": true`, for deep, streamable games). After changing
+     only those fields, `python3 tools/publish_devcan.py --meta <slug>` updates the catalog without a rebuild.
 7. **Report** in the directive's output protocol:
    - the blueprint;
    - what `bake_assets.py` reused and generated, plus anything that failed;

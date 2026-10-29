@@ -68,27 +68,62 @@ ${canonical ? `<link rel="canonical" href="https://${SITE}${e(canonical)}">` : '
 <meta name="theme-color" content="#24104f"><link rel="icon" href="/assets/favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="/assets/devcan-icon.svg"><link rel="apple-touch-icon" href="/assets/devcan-icon-180.png">
 <link rel="preload" href="/assets/lilita-one-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/assets/portal.css">${adHead(nonce)}</head>
 <body><header class="top"><div class="wrap bar"><a class="brand" href="/" aria-label="${e(NAME)} home"><img src="/assets/devcan-logo.svg" alt="${e(NAME)}" width="190" height="62"></a>
-<nav><a href="/#games">Games</a>${account}</nav></div></header>${body}
+<nav><a href="/games">Games</a>${account}</nav></div></header>${body}
 <footer class="foot"><div class="wrap"><img src="/assets/devcan-icon.svg" alt="" width="36" height="36"><div><b>${e(NAME)}</b><p>${e(STUDIO.about || '')}</p>
 <p class="links"><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a>${EMAIL ? ` · <a href="mailto:${e(EMAIL)}">${e(EMAIL)}</a>` : ''} · © ${new Date().getFullYear()} ${e(NAME)}</p></div></div></footer>
 ${scripts.map((s) => `<script src="${s}" defer${nonce ? ` nonce="${nonce}"` : ''}></script>`).join('')}</body></html>`;
 }
 const card = (g) => `<a class="card" href="/games/${e(g.slug)}"><span class="thumb"><img src="/media/${e(g.slug)}/${e(g.media?.card || 'card.webp')}" alt="" loading="lazy" width="600" height="600">
   ${g.online ? '<span class="pill online">Online</span>' : ''}</span><span class="info"><b>${e(g.title)}</b><small>${e(g.category)}</small></span><span class="go" aria-hidden="true">▶</span></a>`;
+// categories: each game's game.json category, plus collections that cut across them (shown first)
+const CAT_NAMES = { Clicker: 'Idle & Clicker' };
+const CAT_BLURBS = { Action: 'Fast hands, big hits and boss fights.', Adventure: 'Long climbs and journeys with records to chase.',
+  Puzzle: 'Brain teasers to sort, match, turn and solve.', Casual: 'Easy to pick up, hard to put down.', Clicker: 'Build, merge and grow, even while you rest.',
+  Strategy: 'Plan ahead and outsmart the board.' };
+const COLLECTIONS = [
+  { slug: 'long-play', name: 'Long play', blurb: 'Deep games for long sessions and streams: hard climbs, long runs and records to beat.', has: (g) => g.long_play },
+  { slug: 'online', name: 'Online', blurb: 'Play live with people from around the world.', has: (g) => g.online },
+];
+const slugify = (s) => String(s).toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+function categories(list) {
+  const by = new Map();
+  for (const g of list) {
+    if (!g.category) continue;
+    const slug = slugify(g.category);
+    if (!by.has(slug)) by.set(slug, { slug, name: CAT_NAMES[g.category] || g.category, blurb: CAT_BLURBS[g.category] || '', games: [] });
+    by.get(slug).games.push(g);
+  }
+  return [...COLLECTIONS.map((c) => ({ ...c, games: list.filter(c.has) })).filter((c) => c.games.length),
+    ...[...by.values()].sort((a, b) => b.games.length - a.games.length || a.name.localeCompare(b.name))];
+}
+const catBar = (cats, total, on) => `<nav class="cats" aria-label="Categories"><a href="/games"${on === 'all' ? ' class="on" aria-current="page"' : ''}>All games <span>${total}</span></a>${
+  cats.map((c) => `<a href="/category/${e(c.slug)}"${on === c.slug ? ' class="on" aria-current="page"' : ''}>${e(c.name)} <span>${c.games.length}</span></a>`).join('')}</nav>`;
+async function listPage(user, slug) { // /games (slug 'all') and /category/<slug>
+  const list = await games(), cats = categories(list), c = slug === 'all' ? { slug: 'all', name: 'All games', blurb: `${list.length} free games for desktop and mobile.`, games: list } : cats.find((x) => x.slug === slug);
+  if (!c) return null;
+  return page(`${c.name} games · ${NAME}`, `<main class="wrap"><div class="sec"><h1>${e(c.name)}</h1><p>${e(c.blurb)}${c.slug === 'all' ? '' : ` ${c.games.length} game${c.games.length === 1 ? '' : 's'}.`}</p></div>
+    ${catBar(cats, list.length, c.slug)}<div class="grid">${c.games.map(card).join('')}</div></main>`,
+  { desc: `${c.name} games on ${NAME}. ${c.blurb}`, canonical: slug === 'all' ? '/games' : `/category/${c.slug}`, user });
+}
 async function home(user, nonce) {
-  const list = await games(), hero = list[0];
+  const list = await games(), hero = list[0], cats = categories(list);
   const heroHtml = hero ? `<section class="hero"><img class="bg" src="/media/${e(hero.slug)}/${e(hero.media?.hero || 'hero.webp')}" alt="" width="1600" height="900">
     <div class="wrap hero-in"><span class="eyebrow">New game</span><h1>${e(hero.title)}</h1><p class="lead">${e(hero.description)}</p>
     <div class="actions"><a class="btn play big" href="/games/${e(hero.slug)}">▶ Play now</a><span class="note">Free · no download · plays in your browser</span></div></div></section>` : '';
   const pitch = user ? '' : '<div class="pitch"><b>Play as a guest, or make a free account</b><span>An account keeps your progress on every device.</span><a class="btn" href="/signup">Create account</a></div>';
-  return page(`${NAME}: free browser games`, `${heroHtml}<main class="wrap" id="games"><div class="sec"><h2>All games</h2><p>${list.length} free games for desktop and mobile. Pick one and play in one click.</p></div>
-    <div class="grid">${list.map(card).join('') || '<p class="lead">The first games are on their way.</p>'}</div>${adUnit(process.env.ADS_SLOT_HOME, nonce)}${pitch}</main>`, { canonical: '/', user, nonce });
+  const row = (c, href = `/category/${c.slug}`) => `<section class="row"><div class="sec head"><h2><a href="${e(href)}">${e(c.name)}</a></h2>${c.games.length > 6 ? `<a class="more" href="${e(href)}">See all ${c.games.length} →</a>` : ''}<p>${e(c.blurb)}</p></div>
+    <div class="grid">${c.games.slice(0, 6).map(card).join('')}</div></section>`;
+  return page(`${NAME}: free browser games`, `${heroHtml}<main class="wrap" id="games"><div class="sec"><h2>Pick a game</h2><p>${list.length} free games for desktop and mobile. Pick one and play in one click.</p></div>
+    ${catBar(cats, list.length, '')}
+    ${list.length ? `${row({ name: 'New games', blurb: 'The latest from the studio.', games: list }, '/games')}${cats.map((c) => row(c)).join('')}` : '<p class="lead">The first games are on their way.</p>'}${adUnit(process.env.ADS_SLOT_HOME, nonce)}${pitch}</main>`, { canonical: '/', user, nonce });
 }
 const keys = (s) => e(s).replace(/\b(WASD|Space|Enter|Shift|P|E|Q|R|F|[A-Z]\b)/g, '<kbd>$1</kbd>');
 async function gamePage(slug, host, user, room, nonce, adtest) {
   const list = await games(), g = list.find((x) => x.slug === slug);
   if (!g) return null;
-  const more = list.filter((x) => x.slug !== slug).slice(0, 6);
+  const more = [...list.filter((x) => x.slug !== slug && x.category === g.category), ...list.filter((x) => x.slug !== slug && x.category !== g.category)].slice(0, 6);
+  const tags = [g.category ? `<a href="/category/${e(slugify(g.category))}">${e(CAT_NAMES[g.category] || g.category)}</a>` : '', g.long_play ? '<a href="/category/long-play">Long play</a>' : '',
+    ...(g.tags || []).slice(0, 6).map((t) => `<span>${e(t)}</span>`)].join('');
   const qs = new URLSearchParams(); if (room) qs.set('room', room); if (adtest) qs.set('adtest', '1');
   const src = `${playBase(host)}/${e(g.slug)}/${qs.toString() ? `?${e(qs.toString())}` : ''}`;
   const saveNote = user ? `<p class="savenote">Signed in as <b>${e(user.name)}</b>: your progress is saved to your account.</p>`
@@ -97,7 +132,7 @@ async function gamePage(slug, host, user, room, nonce, adtest) {
     <div class="stage" id="stage"><iframe id="frame" data-game="${e(g.slug)}" src="${src}" title="${e(g.title)}" allow="autoplay; fullscreen; gamepad; clipboard-write" allowfullscreen></iframe></div>
     <div class="stage-bar"><h1>${e(g.title)}</h1><button class="btn" id="fs" type="button">⛶ Full screen</button></div>${saveNote}
     ${g.orientation === 'landscape' ? '<p class="rotate">Turn your phone sideways for the best view.</p>' : ''}${adUnit(process.env.ADS_SLOT_GAME, nonce)}
-    <div class="about"><div><p class="lead">${e(g.description)}</p><div class="tags">${[g.category, ...(g.tags || [])].filter(Boolean).slice(0, 7).map((t) => `<span>${e(t)}</span>`).join('')}</div></div>
+    <div class="about"><div><p class="lead">${e(g.description)}</p><div class="tags">${tags}</div></div>
     <dl class="controls">${g.controls?.desktop ? `<dt>Keyboard &amp; mouse</dt><dd>${keys(g.controls.desktop)}</dd>` : ''}${g.controls?.mobile ? `<dt>Touch</dt><dd>${e(g.controls.mobile)}</dd>` : ''}</dl></div>
     ${more.length ? `<div class="sec"><h2>More games</h2></div><div class="grid small">${more.map(card).join('')}</div>` : ''}</main>`,
   { desc: g.description, image: `https://${SITE}/media/${g.slug}/${g.media?.share || 'share.jpg'}`, canonical: `/games/${g.slug}`, user, scripts: ['/assets/bridge.js'], nonce });
@@ -215,6 +250,9 @@ createServer(async (req, res) => {
     if (p.startsWith('/__play/') && !isSite(host)) return gameFiles(p.slice(7));
     const user = accounts.publicUser(accounts.currentUser(req)), next = safeNext(url.searchParams.get('next'));
     if (p === '/' || p === '/index.html') { const n = newNonce(); return html(res, await home(user, n), host, 200, n); }
+    if (p === '/games' || p === '/games/') return html(res, await listPage(user, 'all'), host);
+    const cm = p.match(/^\/category\/([a-z0-9-]+)\/?$/);
+    if (cm) { const b = await listPage(user, cm[1]); return b ? html(res, b, host) : notFound(res, user); }
     if (p === '/privacy') return html(res, privacy(user), host);
     if (p === '/terms') return html(res, terms(user), host);
     if (p === '/signin') return user ? redirect(res, next || '/account') : html(res, signinPage(next, url.searchParams.get('error')), host);
@@ -234,7 +272,7 @@ createServer(async (req, res) => {
     if (p.startsWith('/media/')) return sendFile(res, path.join(DATA, 'media'), p.slice(7), { 'Cache-Control': 'public, max-age=3600', ...SEC });
     if (p === '/robots.txt') { res.writeHead(200, { 'Content-Type': 'text/plain' }); res.end(`User-agent: *\nDisallow: /api/\nAllow: /\nSitemap: https://${SITE}/sitemap.xml\n`); return; }
     if (p === '/sitemap.xml') {
-      const urls = ['/', '/privacy', '/terms', ...(await games()).map((g) => `/games/${g.slug}`)];
+      const list = await games(), urls = ['/', '/games', ...categories(list).map((c) => `/category/${c.slug}`), '/privacy', '/terms', ...list.map((g) => `/games/${g.slug}`)];
       res.writeHead(200, { 'Content-Type': 'application/xml' }); res.end(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>https://${SITE}${u}</loc></url>`).join('')}</urlset>`); return;
     }
     notFound(res, user);
