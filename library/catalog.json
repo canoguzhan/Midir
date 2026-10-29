@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-29 15:11",
-  "count": 629,
+  "updated": "2026-10-29 22:46",
+  "count": 655,
   "assets": [
     {
       "path": "audio/angry.mp3",
@@ -2194,6 +2194,396 @@
         "juggernaut",
         "need",
         "tr"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_boss_en.mp3",
+      "prompt": "Ha! The dark is a little smaller now.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 36,
+      "tags": [
+        "boss",
+        "en",
+        "ld",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_boss_tr.mp3",
+      "prompt": "Ha! Karanlık artık biraz daha küçük.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 40,
+      "tags": [
+        "boss",
+        "ld",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_creep_en.mp3",
+      "prompt": "The dark is creeping in. Keep moving.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 38,
+      "tags": [
+        "creep",
+        "en",
+        "ld",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_creep_tr.mp3",
+      "prompt": "Karanlık yaklaşıyor. İlerle.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 35,
+      "tags": [
+        "creep",
+        "ld",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_dark_en.mp3",
+      "prompt": "The Last Dark. Everything you learned, now.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 44,
+      "tags": [
+        "dark",
+        "en",
+        "ld",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_dark_tr.mp3",
+      "prompt": "Son Karanlık. Öğrendiğin her şey, şimdi.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 42,
+      "tags": [
+        "dark",
+        "ld",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_intro_en.mp3",
+      "prompt": "Forty floors down, one little lamp. Mind the dark.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 55,
+      "tags": [
+        "en",
+        "intro",
+        "ld",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_intro_tr.mp3",
+      "prompt": "Kırk kat aşağı, tek bir küçük fener. Karanlığa dikkat.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 56,
+      "tags": [
+        "intro",
+        "ld",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_king_en.mp3",
+      "prompt": "The Gloom King. Keep him in your light.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 35,
+      "tags": [
+        "en",
+        "king",
+        "ld",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_king_tr.mp3",
+      "prompt": "Kasvet Kralı. Onu ışığında tut.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 38,
+      "tags": [
+        "king",
+        "ld",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_low_en.mp3",
+      "prompt": "Your lamp is flickering. Find oil.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 41,
+      "tags": [
+        "en",
+        "ld",
+        "low",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_low_tr.mp3",
+      "prompt": "Fenerin titriyor. Yağ bul.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 29,
+      "tags": [
+        "ld",
+        "low",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_out1_en.mp3",
+      "prompt": "Your lamp went out. Light it again.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 36,
+      "tags": [
+        "en",
+        "ld",
+        "out1",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_out1_tr.mp3",
+      "prompt": "Fenerin söndü. Yeniden yak.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 33,
+      "tags": [
+        "ld",
+        "out1",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_out2_en.mp3",
+      "prompt": "Every lamplighter falls once or twice.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 38,
+      "tags": [
+        "en",
+        "ld",
+        "out2",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_out2_tr.mp3",
+      "prompt": "Her fenerci bir iki kez düşer.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 31,
+      "tags": [
+        "ld",
+        "out2",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_pit_en.mp3",
+      "prompt": "Into the pit with you!",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 22,
+      "tags": [
+        "en",
+        "ld",
+        "pit",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_pit_tr.mp3",
+      "prompt": "Doğru çukura!",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 17,
+      "tags": [
+        "ld",
+        "pit",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_queen_en.mp3",
+      "prompt": "The Moth Queen. She loves a bright lamp.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 39,
+      "tags": [
+        "en",
+        "ld",
+        "queen",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_queen_tr.mp3",
+      "prompt": "Güve Kraliçesi. Parlak fenerlere bayılır.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 44,
+      "tags": [
+        "ld",
+        "queen",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_shrine_en.mp3",
+      "prompt": "A shrine. Take what helps you most.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 38,
+      "tags": [
+        "en",
+        "ld",
+        "shrine",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_shrine_tr.mp3",
+      "prompt": "Bir sunak. En çok işine yarayanı al.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 41,
+      "tags": [
+        "ld",
+        "shrine",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_soot_en.mp3",
+      "prompt": "Old Soot. Mind his pods.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 35,
+      "tags": [
+        "en",
+        "ld",
+        "soot",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_soot_tr.mp3",
+      "prompt": "Yaşlı İs. Tohumlarına dikkat.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 35,
+      "tags": [
+        "ld",
+        "soot",
+        "tr",
+        "vo"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_win_en.mp3",
+      "prompt": "You reached the Heart, and lit it. Well done, lamplighter.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 59,
+      "tags": [
+        "en",
+        "ld",
+        "vo",
+        "win"
+      ]
+    },
+    {
+      "path": "audio/voice/ld_vo_win_tr.mp3",
+      "prompt": "Kalbe ulaştın ve onu yaktın. Aferin, fenerci.",
+      "game": "lampdeep",
+      "source": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "voice",
+      "kb": 53,
+      "tags": [
+        "ld",
+        "tr",
+        "vo",
+        "win"
       ]
     },
     {
