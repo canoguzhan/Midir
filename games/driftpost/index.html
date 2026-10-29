@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Driftpost</title>
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+<script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div id="hud" hidden>
+  <div class="pill lvl"><b id="hudRoute">Route 1</b><span id="hudName"></span></div>
+  <div class="pill" id="hudParcelPill"><i class="ico ico-parcel"></i><b id="hudParcels">0/0</b><span class="sep"></span><i class="ico ico-basket"></i><b id="hudCarry">0/1</b></div>
+  <div class="pill" id="hudHearts"></div>
+  <div class="pill" id="hudTimePill" hidden><i class="ico ico-clock"></i><b id="hudTime">0:00</b></div>
+  <div class="pill"><i class="ico ico-stamp"></i><b id="hudCoinsN">0</b></div>
+  <div class="right">
+    <button id="btnRestart" class="icon" aria-label="Restart">↻</button>
+    <button id="btnPause" class="icon" aria-label="Pause"><span class="bars"></span></button>
+  </div>
+</div>
+
+<div id="alt" hidden>
+  <div id="altCompass"><i id="altNeedle"></i><b id="altDist"></b></div>
+  <div id="altBar"><div class="calm"></div><div id="altPick"><i class="ico ico-post"></i></div><div id="altMe"><i class="ico ico-balloon"></i></div></div>
+</div>
+
+<div id="controls" hidden>
+  <button id="btnDrop" class="ctl drop" aria-label="Drop"><i class="ico ico-drop"></i><span data-i18n="drop">Drop</span><kbd class="k">E</kbd></button>
+  <button id="btnVent" class="ctl vent" aria-label="Vent"><i class="ico ico-vent"></i><span data-i18n="vent">Vent</span><kbd class="k">S</kbd></button>
+  <button id="btnBurn" class="ctl burn" aria-label="Burner"><i class="ico ico-flame"></i><span data-i18n="burn">Burner</span><kbd class="k wide">Space</kbd></button>
+</div>
+
+<div id="ptrs"></div>
+<div id="pops"></div>
+<div id="banner" hidden><small id="bannerSmall"></small><b id="bannerBig"></b></div>
+<div id="arrow" hidden></div>
+<div id="tip" hidden>
+  <div id="tipIcon"></div>
+  <p id="tipText"></p>
+  <button id="btnSkipTips" data-i18n="skipTips">Skip tips</button>
+</div>
+
+<section id="menu" class="screen menu" hidden>
+  <div class="menu-col">
+    <h1 class="logo">Drift<span>post</span></h1>
+    <p class="tag" data-i18n="tagline">Ride the right wind. Drop the post!</p>
+    <button id="btnPlay" class="big"><span data-i18n="play">Play</span> <small id="playRoute"></small></button>
+    <div class="row">
+      <button id="btnRoutes" class="soft"><i class="ico ico-map"></i><span data-i18n="routes">Routes</span></button>
+      <button id="btnWorkshop" class="soft"><i class="ico ico-shop"></i><span data-i18n="workshop">Workshop</span></button>
+    </div>
+    <button id="btnEndless" class="soft long"><span data-i18n="endless">Sunset Rounds</span><small id="endlessInfo"></small></button>
+    <p class="stats"><i class="ico ico-star"></i><b id="menuStars">0</b><span class="dim">/<span id="menuStarsMax">45</span></span>
+      <i class="ico ico-stamp gap"></i><b id="menuCoins">0</b></p>
+  </div>
+</section>
+
+<section id="routesPanel" class="screen" hidden>
+  <div class="panel wide">
+    <h2 data-i18n="routes">Routes</h2>
+    <div id="routeGrid" class="route-grid"></div>
+    <button id="btnRoutesBack" class="soft" data-i18n="back">Back</button>
+  </div>
+</section>
+
+<section id="workshop" class="screen" hidden>
+  <div class="panel wide">
+    <h2 data-i18n="workshop">Workshop</h2>
+    <p class="wallet"><i class="ico ico-stamp"></i><b id="shopCoins">0</b></p>
+    <div id="upGrid" class="up-grid"></div>
+    <h3 data-i18n="paint">Balloon Paint</h3>
+    <div id="paintGrid" class="paint-grid"></div>
+    <button id="btnWorkshopBack" class="soft" data-i18n="back">Back</button>
+  </div>
+</section>
+
+<section id="paused" class="screen" hidden>
+  <div class="panel">
+    <h2 data-i18n="paused">Paused</h2>
+    <button id="btnResume" class="big" data-i18n="resume">Resume</button>
+    <div class="row">
+      <button id="btnPauseRestart" class="soft" data-i18n="restart">Restart</button>
+      <button id="btnPauseRoutes" class="soft" data-i18n="routes">Routes</button>
+    </div>
+    <button id="btnQuit" class="soft" data-i18n="menu">Menu</button>
+  </div>
+</section>
+
+<section id="results" class="screen" hidden>
+  <div class="panel">
+    <h2 id="resTitle">All delivered!</h2>
+    <p id="resSub" class="sub" hidden></p>
+    <div class="res-stars" id="resStars">
+      <div class="star" id="star0"><i></i><span data-i18n="starDone">All delivered</span></div>
+      <div class="star" id="star1"><i></i><span data-i18n="starClean">No bumps or misses</span></div>
+      <div class="star" id="star2"><i></i><span id="starParLabel"></span></div>
+    </div>
+    <p class="res-score" id="resScore" hidden><b id="resScoreN">0</b> <span data-i18n="score">parcels delivered</span><br>
+      <span class="dim"><span data-i18n="best">Best</span> <b id="resBest">0</b></span> <span id="resNewBest" class="new" data-i18n="newBest" hidden>New best!</span></p>
+    <p class="res-coins"><i class="ico ico-stamp"></i>+<b id="resCoins">0</b></p>
+    <button id="btnDouble" class="reward" hidden data-i18n="double">▶ Double stamps</button>
+    <button id="btnNext" class="big" data-i18n="next">Next route</button>
+    <button id="btnRetry" class="big" data-i18n="retry" hidden>Try again</button>
+    <div class="row">
+      <button id="btnReplay" class="soft" data-i18n="replay">Replay</button>
+      <button id="btnResRoutes" class="soft" data-i18n="routes">Routes</button>
+      <button id="btnResMenu" class="soft" data-i18n="menu">Menu</button>
+    </div>
+  </div>
+</section>
+
+<div id="loading"><div class="logo small">Drift<span>post</span></div><div class="bar"><i id="loadBar"></i></div></div>
+<div id="toast" hidden></div>
+<script type="module" src="game.js"></script>
+</body>
+</html>
