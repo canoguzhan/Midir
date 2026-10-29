@@ -314,6 +314,7 @@ function resetRope() { const [a, b] = W.c; ropePts.forEach((p, i) => { const k =
 const _q = new THREE.Quaternion(), _up = new THREE.Vector3(0, 1, 0), _d = new THREE.Vector3(), _m4 = new THREE.Matrix4(), _s = new THREE.Vector3(), _p = new THREE.Vector3();
 function stepRope(dt) { // a verlet chain hung between the two climbers' harnesses
   const [a, b] = W.c, seg = PHYS.rope / (ROPE_N - 1), g = 14 * dt * dt;
+  if (ropePts.some((p) => Math.hypot(p.x - a.x, p.y - a.y) > PHYS.rope + 2 && Math.hypot(p.x - b.x, p.y - b.y) > PHYS.rope + 2)) resetRope(); // after a jump (campfire, resume, skipped time)
   for (let i = 1; i < ROPE_N - 1; i++) { const p = ropePts[i], vx = (p.x - p.px) * 0.97, vy = (p.y - p.py) * 0.97; p.px = p.x; p.py = p.y; p.x += vx; p.y += vy - g; }
   for (let it = 0; it < 14; it++) {
     ropePts[0].x = a.x; ropePts[0].y = a.y - 0.05; ropePts[ROPE_N - 1].x = b.x; ropePts[ROPE_N - 1].y = b.y - 0.05;
